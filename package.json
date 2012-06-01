@@ -1,0 +1,19 @@
+{
+  "author": "Dan Jenkins <dan.jenkins@holidayextras.com> (www.dan-jenkins.co.uk)",
+  "name": "saucelabs",
+  "description": "A wrapper around Saucelabs REST API",
+  "version": "0.0.1-alpha",
+  "homepage": "https://github.com/holidayextras/node-saucelabs",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/holidayextras/node-saucelabs.git"
+  },
+  "main": "index.js",
+  "dependencies": {
+  },
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
