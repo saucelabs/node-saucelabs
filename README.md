@@ -16,18 +16,32 @@ npm install saucelabs
 var sauce = require('./index');
 
 var myAccount = new sauce({
-    username: "your sauceusername",
-    password: "your sauce api key",
+    username: "your-sauce-username",
+    password: "your-sauce-api-key",
 })
 
 myAccount.getAccountDetails( function (err, res) {
-  console.log(res);
-  myAccount.getServiceStatus( function (err, res) {
     console.log(res);
-    myAccount.getBrowsers( function (err, res) {
+    myAccount.getServiceStatus( function (err, res) {
+	//Status of the Sauce Labs services
+	console.log(res);
+	myAccount.getBrowsers( function (err, res) {
+	    //List of all browser/os combinations currently supported on Sauce Labs.
 	    console.log(res);
+	    myAccount.getJobs( function (err, res) {
+		//Get a list of all your jobs
+		for (k in jobs) {
+		    myAccount.showJob(jobs[k].id, function (err, res) {
+			var str = res.id +": Status: "+ res.status;
+			if (res.error) {
+			    str += "\033[31m Error: "+res.error+" \033[0m";
+			}
+			console.log(str);
+		    })
+		}
+	    })
+	})
     })
-  })
 });
 ```
 
