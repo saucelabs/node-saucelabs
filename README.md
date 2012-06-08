@@ -79,7 +79,7 @@ myAccount.getAccountDetails( function (err, res) {
 	GET /users/:username/usage <br />
 	Access historical account usage data.
       </td>
-      <td> ... </td>
+      <td> getAccountUsage(cb) -> cb(err, res)</td>
     </tr>
     <tr>
       <td>
