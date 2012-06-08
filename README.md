@@ -65,7 +65,7 @@ myAccount.getAccountDetails( function (err, res) {
 	GET /:username/limits <br />
 	Access account details
       </td>
-      <td> ... </td>
+      <td> getAccountLimits(cb) -> cb(err, res) </td>
     </tr>
     <tr>
       <td>
