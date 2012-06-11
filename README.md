@@ -10,6 +10,11 @@ http://nodejs.org/#download
 npm install saucelabs
 ```
 
+## Authors
+
+- Dan Jenkins ([danjenkins](https://github.com/danjenkins))
+- Mathieu Sabourin ([OniOni](https://github.com/OniOni))
+
 ## Writting a script
 
 ```javascript
