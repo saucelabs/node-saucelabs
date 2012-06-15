@@ -13,7 +13,7 @@ npm install saucelabs
 ## Writting a script
 
 ```javascript
-var sauce = require('./index');
+var sauce = require('saucelabs');
 
 var myAccount = new sauce({
     username: "your-sauce-username",
