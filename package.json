@@ -2,7 +2,7 @@
   "author": "Dan Jenkins <dan.jenkins@holidayextras.com> (www.dan-jenkins.co.uk)",
   "name": "saucelabs",
   "description": "A wrapper around Saucelabs REST API",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "https://github.com/holidayextras/node-saucelabs",
   "repository": {
     "type": "git",
