@@ -162,6 +162,14 @@ myAccount.getAccountDetails( function (err, res) {
       <td>POST /users/:id/subscription</td>
       <td> ... </td>
     </tr>
+    <tr>
+      <td>
+  Make a public link to a private job, no need to login
+      </td>
+      <td>createPublicLink(job_id, date, hour, cb) -> cb(err, url)<br />
+        createPublicLink(job_id, date, cb) -> cb(err, url)<br />
+        createPublicLink(job_id, cb) -> cb(err, url)</td>
+    </tr>
   </tbody>
 </table>
 	
