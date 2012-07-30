@@ -171,8 +171,8 @@ myAccount.getAccountDetails( function (err, res) {
       <td>
   Make a public link to a private job, no need to login
       </td>
-      <td>createPublicLink(job_id, date, hour, cb) -> cb(err, url)<br />
-        createPublicLink(job_id, date, cb) -> cb(err, url)<br />
+      <td>createPublicLink(job_id, datetime, use_hour, cb) -> cb(err, url)<br />
+        createPublicLink(job_id, datetime, cb) -> cb(err, url)<br />
         createPublicLink(job_id, cb) -> cb(err, url)</td>
     </tr>
   </tbody>
