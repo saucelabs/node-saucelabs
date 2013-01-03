@@ -182,3 +182,7 @@ myAccount.getAccountDetails( function (err, res) {
 
 Check out the [Sauce REST API](http://saucelabs.com/docs/saucerest)
 for more information
+
+## License
+
+saucelabs is licensed under the MIT license.
