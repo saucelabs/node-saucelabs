@@ -1,24 +1,8 @@
 var nock  = require('nock');
-var slice = Array.prototype.slice;
+var utils = require('../../lib/utils');
 
-function extend(obj) {
-  slice.call(arguments, 1).forEach(function (props) {
-    var prop;
-    for (prop in props) {
-      obj[prop] = props[prop];
-    }
-  });
-  return obj;
-}
-
-function replace(str, values) {
-  var name, value;
-  for (name in values) {
-    value = values[name];
-    str = str.replace(new RegExp(':' + name, 'g'), value);
-  }
-  return str;
-}
+var extend  = utils.extend;
+var replace = utils.replace;
 
 function Nockle(base, config) {
   if (!(this instanceof Nockle)) {
@@ -29,26 +13,48 @@ function Nockle(base, config) {
   this.config = extend({}, config);
 }
 
-Nockle.prototype.api = function (method, api, values) {
+Nockle.prototype.succeed = function (method, api, values, reply) {
   values = extend({}, this.config, values);
   return nock(replace(this.base, values))[method](replace(api, values))
-    .reply(200, {});
+    .reply(200, reply || {});
 };
 
-Nockle.prototype.get = function (api, values) {
-  return this.api('get', api, values);
+Nockle.prototype.fail = function (method, api, values, reply) {
+  values = extend({}, this.config, values);
+  return nock(replace(this.base, values))[method](replace(api, values))
+    .reply(404, reply || { error: 'error' });
 };
 
-Nockle.prototype.post = function (api, values) {
-  return this.api('post', api, values);
+Nockle.prototype.get = function (api, values, reply) {
+  return this.succeed('get', api, values, reply);
 };
 
-Nockle.prototype.put = function (api, values) {
-  return this.api('put', api, values);
+Nockle.prototype.post = function (api, values, reply) {
+  return this.succeed('post', api, values, reply);
 };
 
-Nockle.prototype.delete = function (api, values) {
-  return this.api('delete', api, values);
+Nockle.prototype.put = function (api, values, reply) {
+  return this.succeed('put', api, values, reply);
+};
+
+Nockle.prototype.delete = function (api, values, reply) {
+  return this.succeed('delete', api, values, reply);
+};
+
+Nockle.prototype.failget = function (api, values, reply) {
+  return this.fail('get', api, values, reply);
+};
+
+Nockle.prototype.failpost = function (api, values, reply) {
+  return this.fail('post', api, values, reply);
+};
+
+Nockle.prototype.failput = function (api, values, reply) {
+  return this.fail('put', api, values, reply);
+};
+
+Nockle.prototype.faildelete = function (api, values, reply) {
+  return this.fail('delete', api, values, reply);
 };
 
 module.exports = function (chai) {

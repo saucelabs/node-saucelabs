@@ -1,6 +1,5 @@
-var SauceLabs = require('..');
-
 describe('SauceLabs', function () {
+  var SauceLabs = require('..');
   var sauce;
   var nockle;
 
@@ -11,7 +10,7 @@ describe('SauceLabs', function () {
     });
   });
 
-  describe('with credentials', function () {
+  describe('once instantiated', function () {
     beforeEach(function () {
       var base = 'https://:username::password@saucelabs.com';
       var config = {
@@ -23,38 +22,89 @@ describe('SauceLabs', function () {
       nockle = new chai.Nockle(base, config);
     });
 
+    afterEach(function () {
+      sauce  = null;
+      nockle = null;
+    });
+
+    describe('when the response status is not 200', function () {
+      it('notifies the callback', function (done) {
+        var error = { error: 'foobar' };
+        var mock = nockle.failget('/rest/v1/users/:username', null, error);
+        sauce.getAccountDetails(verifyFailure(error, done));
+      });
+    });
+
+    describe('when the response body cannot be parsed', function () {
+      it('notifies the callback', function (done) {
+        var error = 'foobar';
+        var mock = nockle.failget('/rest/v1/users/:username', null, error);
+        sauce.getAccountDetails(verifyFailure('Could not parse response: ' + error, done));
+      });
+    });
+
     describe('#getAccountDetails', function () {
       it('GETs `/rest/v1/users/:username`', function (done) {
         var mock = nockle.get('/rest/v1/users/:username');
-        sauce.getAccountDetails(verifyRequest(mock, done));
+        sauce.getAccountDetails(verifySuccess(mock, done));
       });
     });
 
     describe('#getAccountLimits', function () {
       it('GETs `/rest/v1/:username/limits`', function (done) {
         var mock = nockle.get('/rest/v1/:username/limits');
-        sauce.getAccountLimits(verifyRequest(mock, done));
+        sauce.getAccountLimits(verifySuccess(mock, done));
       });
     });
 
     describe('#getUserActivity', function () {
-      it('GETs `/rest/v1/:username/activity`', function (done) {
-        var mock = nockle.get('/rest/v1/:username/activity');
-        sauce.getUserActivity(verifyRequest(mock, done));
+      describe('without start and end dates', function () {
+        it('GETs `/rest/v1/:username/activity`', function (done) {
+          var mock = nockle.get('/rest/v1/:username/activity');
+          sauce.getUserActivity(verifySuccess(mock, done));
+        });
+      });
+
+      describe('with start date', function () {
+        var start = new Date('Jan 1, 1970 00:00:00');
+
+        it('GETs `/rest/v1/:username/activity?start=1970-01-01`', function (done) {
+          var mock = nockle.get('/rest/v1/:username/activity?start=1970-01-01');
+          sauce.getUserActivity(start, verifySuccess(mock, done));
+        });
+      });
+
+      describe('with end date', function () {
+        var end = new Date('Jan 1, 1971 00:00:00');
+
+        it('GETs `/rest/v1/:username/activity?end=1971-01-01`', function (done) {
+          var mock = nockle.get('/rest/v1/:username/activity?end=1971-01-01');
+          sauce.getUserActivity(null, end, verifySuccess(mock, done));
+        });
+      });
+
+      describe('with start and end dates', function () {
+        var start = new Date('Jan 1, 1970 00:00:00');
+        var end   = new Date('Jan 1, 1971 00:00:00');
+
+        it('GETs `/rest/v1/:username/activity?start=1970-01-01&end=1971-01-01`', function (done) {
+          var mock = nockle.get('/rest/v1/:username/activity?start=1970-01-01&end=1971-01-01');
+          sauce.getUserActivity(start, end, verifySuccess(mock, done));
+        });
       });
     });
 
     describe('#getAccountUsage', function () {
       it('GETs `/rest/v1/users/:username/usage`', function (done) {
         var mock = nockle.get('/rest/v1/users/:username/usage');
-        sauce.getAccountUsage(verifyRequest(mock, done));
+        sauce.getAccountUsage(verifySuccess(mock, done));
       });
     });
 
     describe('#getJobs', function () {
-      it('GETs `/rest/v1/:username/jobs?full=1`', function (done) {
-        var mock = nockle.get('/rest/v1/:username/jobs?full=1');
-        sauce.getJobs(verifyRequest(mock, done));
+      it('GETs `/rest/v1/:username/jobs?full=true`', function (done) {
+        var mock = nockle.get('/rest/v1/:username/jobs?full=true');
+        sauce.getJobs(verifySuccess(mock, done));
       });
     });
 
@@ -62,7 +112,7 @@ describe('SauceLabs', function () {
       it('GETs `/rest/v1/:username/jobs/:id`', function (done) {
         var id = '01230123-example-id-1234';
         var mock = nockle.get('/rest/v1/:username/jobs/:id', { id: id });
-        sauce.showJob(id, verifyRequest(mock, done));
+        sauce.showJob(id, verifySuccess(mock, done));
       });
     });
 
@@ -70,7 +120,7 @@ describe('SauceLabs', function () {
       it('PUTs `/rest/v1/:username/jobs/:id`', function (done) {
         var id = '01230123-example-id-1234';
         var mock = nockle.put('/rest/v1/:username/jobs/:id', { id: id });
-        sauce.updateJob(id, {}, verifyRequest(mock, done));
+        sauce.updateJob(id, {}, verifySuccess(mock, done));
       });
     });
 
@@ -78,14 +128,14 @@ describe('SauceLabs', function () {
       it('PUTs `/rest/v1/:username/jobs/:id/stop`', function (done) {
         var id = '01230123-example-id-1234';
         var mock = nockle.put('/rest/v1/:username/jobs/:id/stop', { id: id });
-        sauce.stopJob(id, {}, verifyRequest(mock, done));
+        sauce.stopJob(id, {}, verifySuccess(mock, done));
       });
     });
 
     describe('#getActiveTunnels', function () {
       it('GETs `/rest/v1/:username/tunnels`', function (done) {
         var mock = nockle.get('/rest/v1/:username/tunnels');
-        sauce.getActiveTunnels(verifyRequest(mock, done));
+        sauce.getActiveTunnels(verifySuccess(mock, done));
       });
     });
 
@@ -93,7 +143,7 @@ describe('SauceLabs', function () {
       it('GETs `/rest/v1/:username/tunnels/:id`', function (done) {
         var id = '01230123-example-id-1234';
         var mock = nockle.get('/rest/v1/:username/tunnels/:id', { id: id });
-        sauce.getTunnel(id, verifyRequest(mock, done));
+        sauce.getTunnel(id, verifySuccess(mock, done));
       });
     });
 
@@ -101,56 +151,70 @@ describe('SauceLabs', function () {
       it('DELETEs `/rest/v1/:username/tunnels/:id`', function (done) {
         var id = '01230123-example-id-1234';
         var mock = nockle.delete('/rest/v1/:username/tunnels/:id', { id: id });
-        sauce.deleteTunnel(id, verifyRequest(mock, done));
+        sauce.deleteTunnel(id, verifySuccess(mock, done));
       });
     });
 
     describe('#getServiceStatus', function () {
       it('GETs `/rest/v1/info/status`', function (done) {
         var mock = nockle.get('/rest/v1/info/status');
-        sauce.getServiceStatus(verifyRequest(mock, done));
+        sauce.getServiceStatus(verifySuccess(mock, done));
       });
     });
 
     describe('#getBrowsers', function () {
       it('GETs `/rest/v1/info/browsers`', function (done) {
         var mock = nockle.get('/rest/v1/info/browsers');
-        sauce.getBrowsers(verifyRequest(mock, done));
+        sauce.getBrowsers(verifySuccess(mock, done));
       });
     });
 
     describe('#getAllBrowsers', function () {
       it('GETs `/rest/v1/info/browsers/all`', function (done) {
         var mock = nockle.get('/rest/v1/info/browsers/all');
-        sauce.getAllBrowsers(verifyRequest(mock, done));
+        sauce.getAllBrowsers(verifySuccess(mock, done));
       });
     });
 
     describe('#getSeleniumBrowsers', function () {
       it('GETs `/rest/v1/info/browsers/selenium-rc`', function (done) {
         var mock = nockle.get('/rest/v1/info/browsers/selenium-rc');
-        sauce.getSeleniumBrowsers(verifyRequest(mock, done));
+        sauce.getSeleniumBrowsers(verifySuccess(mock, done));
       });
     });
 
     describe('#getWebDriverBrowsers', function () {
       it('GETs `/rest/v1/info/browsers/webdriver`', function (done) {
         var mock = nockle.get('/rest/v1/info/browsers/webdriver');
-        sauce.getWebDriverBrowsers(verifyRequest(mock, done));
+        sauce.getWebDriverBrowsers(verifySuccess(mock, done));
       });
     });
 
     describe('#getTestCounter', function () {
       it('GETs `/rest/v1/info/counter`', function (done) {
         var mock = nockle.get('/rest/v1/info/counter');
-        sauce.getTestCounter(verifyRequest(mock, done));
+        sauce.getTestCounter(verifySuccess(mock, done));
       });
     });
 
     describe('#createSubAccount', function () {
       it('POSTs `/rest/v1/users/:username`', function (done) {
         var mock = nockle.post('/rest/v1/users/:username');
-        sauce.createSubAccount({}, verifyRequest(mock, done));
+        sauce.createSubAccount({}, verifySuccess(mock, done));
+      });
+    });
+
+    describe('#updateSubAccount', function () {
+      it('POSTs `/rest/v1/users/:username/subscription`', function (done) {
+        var mock = nockle.post('/rest/v1/users/:username/subscription');
+        sauce.updateSubAccount({}, verifySuccess(mock, done));
+      });
+    });
+
+    describe('#deleteSubAccount', function () {
+      it('DELETEs `/rest/v1/users/:username/subscription`', function (done) {
+        var mock = nockle.delete('/rest/v1/users/:username/subscription');
+        sauce.deleteSubAccount(verifySuccess(mock, done));
       });
     });
 
@@ -182,7 +246,7 @@ describe('SauceLabs', function () {
   });
 });
 
-function verifyRequest(mock, done) {
+function verifySuccess(mock, done) {
   return function (err, data) {
     if (err) return done(new Error(err.error));
     mock.isDone().should.be.true;
@@ -190,9 +254,17 @@ function verifyRequest(mock, done) {
   };
 }
 
+function verifyFailure(error, done) {
+  return function (err, data) {
+    if (!err) return done(new Error('Request succeeded'));
+    err.should.deep.equal(error);
+    done();
+  };
+}
+
 function verifyLink(url, done) {
   return function (err, data) {
-    if (err) return done(new Error(err.error));
+    if (err) return done(new Error(err));
     data.should.equal(url);
     done();
   };

@@ -24,6 +24,6 @@
   },
 
   "scripts": {
-    "test": "make test"
+    "test": "make lint test"
   }
 }
