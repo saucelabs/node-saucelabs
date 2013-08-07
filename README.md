@@ -36,7 +36,7 @@ var SauceLabs = require('saucelabs');
 var myAccount = new SauceLabs({
   username: "your-sauce-username",
   password: "your-sauce-api-key"
-})
+});
 
 myAccount.getAccountDetails(function (err, res) {
   console.log(res);
@@ -46,20 +46,22 @@ myAccount.getAccountDetails(function (err, res) {
     myAccount.getAllBrowsers(function (err, res) {
       // List of all browser/os combinations currently supported on Sauce Labs
       console.log(res);
-      myAccount.getJobs(function (err, res) {
+      myAccount.getJobs(function (err, jobs) {
         // Get a list of all your jobs
-        for (k in jobs) {
-          myAccount.showJob(jobs[k].id, function (err, res) {
-            var str = res.id + ": Status: " + res.status;
-            if (res.error) {
-              str += "\033[31m Error: " + res.error + " \033[0m";
-            }
-            console.log(str);
-          });
+        for (var k in jobs) {
+          if ( jobs.hasOwnProperty( k )) {
+            myAccount.showJob(jobs[k].id, function (err, res) {
+              var str = res.id + ": Status: " + res.status;
+              if (res.error) {
+                str += "\033[31m Error: " + res.error + " \033[0m";
+              }
+              console.log(str);
+            });
+          }
         }
-      })
-    })
-  })
+      });
+    });
+  });
 });
 ```
 
