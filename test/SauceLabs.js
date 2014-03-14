@@ -116,6 +116,14 @@ describe('SauceLabs', function () {
       });
     });
 
+    describe('#showJobAssets', function () {
+      it('GETs `/rest/v1/:username/jobs/:id/assets`', function (done) {
+        var id = '01230123-example-id-1234';
+        var mock = nockle.get('/rest/v1/:username/jobs/:id/assets', { id: id });
+        sauce.showJobAssets(id, verifySuccess(mock, done));
+      });
+    });
+
     describe('#updateJob', function () {
       it('PUTs `/rest/v1/:username/jobs/:id`', function (done) {
         var id = '01230123-example-id-1234';
