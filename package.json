@@ -9,10 +9,11 @@
     "url": "git://github.com/holidayextras/node-saucelabs.git"
   },
   "devDependencies": {
+    "chai": "1.5.x",
     "jshint": "*",
     "mocha": "1.9.x",
-    "chai": "1.5.x",
-    "nock": "0.17.x"
+    "nock": "0.17.x",
+    "request": "~2.53.0"
   },
   "engines": {
     "node": "*"
