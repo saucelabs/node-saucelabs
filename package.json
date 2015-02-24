@@ -16,7 +16,7 @@
     "request": "~2.53.0"
   },
   "engines": {
-    "node": "*"
+    "node": ">=0.10.0"
   },
   "scripts": {
     "test": "make lint test"
