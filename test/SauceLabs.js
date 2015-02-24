@@ -232,7 +232,7 @@ describe('SauceLabs', function () {
 
       describe('with job ID, date and hour', function () {
         it('creates the proper link', function (done) {
-          var expected = 'https://saucelabs.com/jobs/01230123-example-id-1234?auth=8bcfe0b2e888794a63050ea74ad12005';
+          var expected = 'https://saucelabs.com/jobs/01230123-example-id-1234?auth=15bde01e92658151c7bef31b62403e71';
           sauce.createPublicLink(id, date, true, verifyLink(expected, done));
         });
       });
