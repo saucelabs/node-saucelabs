@@ -251,6 +251,30 @@ describe('SauceLabs', function () {
         });
       });
     });
+
+    describe('#getStoredFiles', function () {
+      it('GETs `/rest/v1/storage/:username`', function (done) {
+        var mock = nockle.get('/rest/v1/storage/:username');
+        sauce.getStoredFiles(verifySuccess(mock, done));
+      });
+    });
+
+    describe('#uploadFile', function () {
+      describe('#with overwrite', function () {
+        it('POSTs `/rest/v1/storage/:username/:filename?overwrite=true`', function (done) {
+          var testFile = 'test/testFile.txt';
+          var mock = nockle.post('/rest/v1/storage/:username/' + require('path').basename(testFile) + '?overwrite=true');
+          sauce.uploadFile(testFile, true, verifySuccess(mock, done));
+        });
+      });
+      describe('#without overwrite', function () {
+        it('POSTs `/rest/v1/storage/:username/:filename?overwrite=false`', function (done) {
+          var testFile = 'test/testFile.txt';
+          var mock = nockle.post('/rest/v1/storage/:username/' + require('path').basename(testFile) + '?overwrite=false');
+          sauce.uploadFile(testFile, false, verifySuccess(mock, done));
+        });
+      });
+    });
   });
 });
 
