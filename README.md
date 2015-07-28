@@ -258,6 +258,24 @@ myAccount.getAccountDetails(function (err, res) {
         createPublicLink(job_id, cb) -> cb(err, url)
       </td>
     </tr>
+    <tr>
+      <td>
+        GET /storage/:username <br />
+        Get list of all files in storage
+      </td>
+      <td>
+        getStoredFiles(cb) -> cb(err, res)
+      </td>
+    </tr>
+    <tr>
+      <td>
+        POST /storage/:username/:filename <br />
+        Upload file to storage
+      </td>
+      <td>
+        uploadFile(file, overwrite, cb) -> cb(err, res)
+      </td>
+    </tr>
   </tbody>
 </table>
 
