@@ -12,7 +12,8 @@
     "jshint": "*",
     "mocha": "1.9.x",
     "chai": "1.5.x",
-    "nock": "0.17.x"
+    "nock": "0.17.x",
+    "https-proxy-agent": "^0.3.5"
   },
   "engines": {
     "node": "*"
