@@ -261,7 +261,7 @@ myAccount.getAccountDetails(function (err, res) {
     <tr>
       <td>
         GET /storage/:username <br />
-        Get list of all files in storage
+        Get list of all files in storage.
       </td>
       <td>
         getStoredFiles(cb) -> cb(err, res)
@@ -270,10 +270,10 @@ myAccount.getAccountDetails(function (err, res) {
     <tr>
       <td>
         POST /storage/:username/:filename <br />
-        Upload file to storage
+        Upload file to storage.
       </td>
       <td>
-        uploadFile(file, overwrite, cb) -> cb(err, res)
+        uploadFile(filename, data, overwrite, cb) -> cb(err, res)
       </td>
     </tr>
   </tbody>

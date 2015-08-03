@@ -260,18 +260,20 @@ describe('SauceLabs', function () {
     });
 
     describe('#uploadFile', function () {
+      var testFilename = 'test/testFile.txt';
+      var testFileBasename = require('path').basename(testFilename);
+      var testData = require('fs').readFileSync(testFilename);
       describe('#with overwrite', function () {
         it('POSTs `/rest/v1/storage/:username/:filename?overwrite=true`', function (done) {
-          var testFile = 'test/testFile.txt';
-          var mock = nockle.post('/rest/v1/storage/:username/' + require('path').basename(testFile) + '?overwrite=true');
-          sauce.uploadFile(testFile, true, verifySuccess(mock, done));
+          var mock = nockle.post('/rest/v1/storage/:username/' + testFileBasename + '?overwrite=true');
+          sauce.uploadFile(testFileBasename, testData, true, verifySuccess(mock, done));
         });
       });
       describe('#without overwrite', function () {
         it('POSTs `/rest/v1/storage/:username/:filename?overwrite=false`', function (done) {
           var testFile = 'test/testFile.txt';
-          var mock = nockle.post('/rest/v1/storage/:username/' + require('path').basename(testFile) + '?overwrite=false');
-          sauce.uploadFile(testFile, false, verifySuccess(mock, done));
+          var mock = nockle.post('/rest/v1/storage/:username/' + testFileBasename + '?overwrite=false');
+          sauce.uploadFile(testFileBasename, testData, false, verifySuccess(mock, done));
         });
       });
     });
