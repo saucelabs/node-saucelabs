@@ -232,7 +232,7 @@ describe('SauceLabs', function () {
       var date = new Date('Jan 1, 1970 00:00:00');
       describe('with job ID, date and hour', function () {
         it('creates the proper link', function (done) {
-          var expected = 'https://saucelabs.com/jobs/01230123-example-id-1234?auth=150ea455ef69f8cd495bed6b505bd23a';
+          var expected = 'https://saucelabs.com/jobs/01230123-example-id-1234?auth=8bcfe0b2e888794a63050ea74ad12005';
           sauce.createPublicLink(id, date, true, verifyLink(expected, done));
         });
       });
