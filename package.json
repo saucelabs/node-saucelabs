@@ -13,7 +13,6 @@
     "mocha": "1.9.x",
     "chai": "1.5.x",
     "nock": "0.17.x",
-    "https-proxy-agent": "1.0.0",
     "url": "0.11.0"
   },
   "engines": {
@@ -21,5 +20,8 @@
   },
   "scripts": {
     "test": "make lint test"
+  },
+  "dependencies": {
+    "https-proxy-agent": "^1.0.0"
   }
 }
