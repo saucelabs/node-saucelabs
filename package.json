@@ -8,12 +8,14 @@
     "type": "git",
     "url": "git://github.com/holidayextras/node-saucelabs.git"
   },
+  "dependencies": {
+    "https-proxy-agent": "1.0.0"
+  },
   "devDependencies": {
     "jshint": "*",
     "mocha": "1.9.x",
     "chai": "1.5.x",
     "nock": "0.17.x",
-    "https-proxy-agent": "1.0.0",
     "url": "0.11.0"
   },
   "engines": {
