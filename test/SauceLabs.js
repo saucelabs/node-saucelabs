@@ -15,7 +15,8 @@ describe('SauceLabs', function () {
       var base = 'https://:username::password@saucelabs.com';
       var config = {
         username: 'johndoe',
-        password: '550e8400-e29b-41d4-a716-446655440000'
+        password: '550e8400-e29b-41d4-a716-446655440000',
+        proxy: 'http://google.com'
       };
 
       sauce  = new SauceLabs(config);
@@ -229,7 +230,6 @@ describe('SauceLabs', function () {
     describe('#createPublicLink', function () {
       var id = '01230123-example-id-1234';
       var date = new Date('Jan 1, 1970 00:00:00');
-
       describe('with job ID, date and hour', function () {
         it('creates the proper link', function (done) {
           var expected = 'https://saucelabs.com/jobs/01230123-example-id-1234?auth=8bcfe0b2e888794a63050ea74ad12005';

@@ -64,6 +64,17 @@ myAccount.getAccountDetails(function (err, res) {
   });
 });
 ```
+## Using a proxy
+If you're behind a corporate firewall or would like to utilize a proxy, define it in the constructor like this:
+
+```javascript
+var sauce = new SauceLabs({
+  username: "your-sauce-username",
+  password: "your-sauce-api-key",
+  proxy: "https://your-proxy.com:8000"
+});
+```
+
 
 ## Supported Methods
 
