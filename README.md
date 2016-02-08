@@ -75,6 +75,29 @@ var sauce = new SauceLabs({
 });
 ```
 
+## Request log
+If you need to log requests with responses:
+
+```javascript
+var sauce new SauceLabs({
+    requestLog: function(err, request) {
+    ...
+    }
+});
+```
+
+## Custom headers
+Custom headers can be specified as array in constructor parameter:
+
+```javascript
+var sauce = new SauceLabs({
+  username: "your-sauce-username",
+  password: "your-sauce-api-key",
+  proxy: "https://your-proxy.com:8000"
+}, {
+    'X-RateLimit-Enable': 'true'
+});
+```
 
 ## Supported Methods
 
