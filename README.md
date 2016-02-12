@@ -153,6 +153,15 @@ var sauce = new SauceLabs({
     </tr>
     <tr>
       <td>
+        DELETE /:username/jobs/:id <br />
+        Removes the job from the system with all the linked assets.
+      </td>
+      <td>
+        deleteJob(id, cb) -> cb(err, res)
+      </td>
+    </tr>
+    <tr>
+      <td>
         PUT /:username/jobs/:id/stop <br />
         Terminates a running job.
       </td>
