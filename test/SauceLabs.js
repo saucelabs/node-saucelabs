@@ -141,6 +141,14 @@ describe('SauceLabs', function () {
       });
     });
 
+    describe('#deleteJob', function () {
+      it('DELETEs `/rest/v1/:username/jobs/:id`', function (done) {
+        var id = '01230123-example-id-1234';
+        var mock = nockle.delete('/rest/v1/:username/jobs/:id', { id: id });
+        sauce.deleteJob(id, verifySuccess(mock, done));
+      });
+    });
+
     describe('#getActiveTunnels', function () {
       it('GETs `/rest/v1/:username/tunnels`', function (done) {
         var mock = nockle.get('/rest/v1/:username/tunnels');
