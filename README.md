@@ -117,6 +117,15 @@ var sauce = new SauceLabs({
     </tr>
     <tr>
       <td>
+        GET /users/:username/concurrency <br />
+        Get currently running job counts broken down by account and job status
+      </td>
+      <td>
+        getUserConcurrency(cb) -> cb(err, res)
+      </td>
+    </tr>
+    <tr>
+      <td>
         GET /users/:username/usage <br />
         Access historical account usage data.
       </td>

@@ -95,6 +95,13 @@ describe('SauceLabs', function () {
       });
     });
 
+    describe('#getUserConcurrency', function () {
+      it('GETs `/rest/v1/users/:username/concurrency`', function (done) {
+        var mock = nockle.get('/rest/v1/users/:username/concurrency');
+        sauce.getUserConcurrency(verifySuccess(mock, done));
+      });
+    });
+
     describe('#getAccountUsage', function () {
       it('GETs `/rest/v1/users/:username/usage`', function (done) {
         var mock = nockle.get('/rest/v1/users/:username/usage');
