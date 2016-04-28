@@ -1,4 +1,4 @@
-# node-saucelabs [![Build Status](https://secure.travis-ci.org/holidayextras/node-saucelabs.png)](http://travis-ci.org/holidayextras/node-saucelabs)[![Build Status](https://www.codeship.io/projects/83c9b290-21de-0131-e459-3688c4e23c72/status)](https://www.codeship.io/projects/83c9b290-21de-0131-e459-3688c4e23c72/status)
+# node-saucelabs [![Build Status](https://secure.travis-ci.org/danjenkins/node-saucelabs.png)](http://travis-ci.org/danjenkins/node-saucelabs)[![Build Status](https://www.codeship.io/projects/83c9b290-21de-0131-e459-3688c4e23c72/status)](https://www.codeship.io/projects/83c9b290-21de-0131-e459-3688c4e23c72/status)
 
 Wrapper around the Sauce Labs REST API for [Node.js](http://nodejs.org/).
 
@@ -140,6 +140,15 @@ var sauce = new SauceLabs({
     </tr>
     <tr>
       <td>
+        GET /users/:username/concurrency <br />
+        Get currently running job counts broken down by account and job status
+      </td>
+      <td>
+        getUserConcurrency(cb) -> cb(err, res)
+      </td>
+    </tr>
+    <tr>
+      <td>
         GET /users/:username/usage <br />
         Access historical account usage data.
       </td>
@@ -172,6 +181,15 @@ var sauce = new SauceLabs({
       </td>
       <td>
         updateJob(id, data, cb) -> cb(err, res)
+      </td>
+    </tr>
+    <tr>
+      <td>
+        DELETE /:username/jobs/:id <br />
+        Removes the job from the system with all the linked assets.
+      </td>
+      <td>
+        deleteJob(id, cb) -> cb(err, res)
       </td>
     </tr>
     <tr>

@@ -95,6 +95,13 @@ describe('SauceLabs', function () {
       });
     });
 
+    describe('#getUserConcurrency', function () {
+      it('GETs `/rest/v1/users/:username/concurrency`', function (done) {
+        var mock = nockle.get('/rest/v1/users/:username/concurrency');
+        sauce.getUserConcurrency(verifySuccess(mock, done));
+      });
+    });
+
     describe('#getAccountUsage', function () {
       it('GETs `/rest/v1/users/:username/usage`', function (done) {
         var mock = nockle.get('/rest/v1/users/:username/usage');
@@ -138,6 +145,14 @@ describe('SauceLabs', function () {
         var id = '01230123-example-id-1234';
         var mock = nockle.put('/rest/v1/:username/jobs/:id/stop', { id: id });
         sauce.stopJob(id, {}, verifySuccess(mock, done));
+      });
+    });
+
+    describe('#deleteJob', function () {
+      it('DELETEs `/rest/v1/:username/jobs/:id`', function (done) {
+        var id = '01230123-example-id-1234';
+        var mock = nockle.delete('/rest/v1/:username/jobs/:id', { id: id });
+        sauce.deleteJob(id, verifySuccess(mock, done));
       });
     });
 
