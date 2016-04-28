@@ -94,8 +94,9 @@ var sauce = new SauceLabs({
   username: "your-sauce-username",
   password: "your-sauce-api-key",
   proxy: "https://your-proxy.com:8000"
-}, {
+  headers: {
     'X-RateLimit-Enable': 'true'
+  }
 });
 ```
 
