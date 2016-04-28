@@ -75,6 +75,30 @@ var sauce = new SauceLabs({
 });
 ```
 
+## Request log
+If you need to log requests with responses:
+
+```javascript
+var sauce new SauceLabs({
+    requestLog: function(err, request) {
+    ...
+    }
+});
+```
+
+## Custom headers
+Custom headers can be specified as array in constructor parameter:
+
+```javascript
+var sauce = new SauceLabs({
+  username: "your-sauce-username",
+  password: "your-sauce-api-key",
+  proxy: "https://your-proxy.com:8000"
+  headers: {
+    'X-RateLimit-Enable': 'true'
+  }
+});
+```
 
 ## Supported Methods
 
@@ -285,6 +309,24 @@ var sauce = new SauceLabs({
         createPublicLink(job_id, datetime, use_hour, cb) -> cb(err, url) <br />
         createPublicLink(job_id, datetime, cb) -> cb(err, url) <br />
         createPublicLink(job_id, cb) -> cb(err, url)
+      </td>
+    </tr>
+    <tr>
+      <td>
+        GET /storage/:username <br />
+        Get list of all files in storage.
+      </td>
+      <td>
+        getStoredFiles(cb) -> cb(err, res)
+      </td>
+    </tr>
+    <tr>
+      <td>
+        POST /storage/:username/:filename <br />
+        Upload file to storage.
+      </td>
+      <td>
+        uploadFile(filename, data, overwrite, cb) -> cb(err, res)
       </td>
     </tr>
   </tbody>
