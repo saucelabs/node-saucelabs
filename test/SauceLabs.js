@@ -138,6 +138,13 @@ describe('SauceLabs', function () {
         var mock = nockle.put('/rest/v1/:username/jobs/:id', { id: id });
         sauce.updateJob(id, {}, verifySuccess(mock, done));
       });
+
+      it('doesnt require a callback', function (done) {
+        var id = '01230123-example-id-1234';
+        var mock = nockle.put('/rest/v1/:username/jobs/:id', { id: id });
+        sauce.updateJob(id, {});
+        done();
+      });
     });
 
     describe('#stopJob', function () {
