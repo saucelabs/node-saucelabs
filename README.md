@@ -296,6 +296,15 @@ var sauce = new SauceLabs({
         getSubAccountList(cb) -> cb(err, res)
       </td>
     </tr>
+    <tr>
+      <td>
+        GET /users/:username/subaccounts <br />
+        Get information about a sub accounts
+      </td>
+      <td>
+        getSubAccounts(cb) -> cb(err, res)
+      </td>
+    </tr>
   </tbody>
 </table>
 
