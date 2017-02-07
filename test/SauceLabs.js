@@ -273,6 +273,13 @@ describe('SauceLabs', function () {
         });
       });
     });
+
+    describe('#getSubAccountList', function () {
+      it('GETs `/rest/v1/users/:username/list-subaccounts`', function (done) {
+        var mock = nockle.get('/rest/v1/users/:username/list-subaccounts');
+        sauce.getSubAccountList(verifySuccess(mock, done));
+      });
+    });
   });
 });
 
