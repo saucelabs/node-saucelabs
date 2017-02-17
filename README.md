@@ -110,8 +110,6 @@ var sauce = new SauceLabs({
         Access current account activity.
       </td>
       <td>
-        getUserActivity(start, end, cb) -> cb(err, res) <br />
-        getUserActivity(start, cb) -> cb(err, res) <br />
         getUserActivity(cb) -> cb(err, res)
       </td>
     </tr>
@@ -130,6 +128,8 @@ var sauce = new SauceLabs({
         Access historical account usage data.
       </td>
       <td>
+        getAccountUsage(start, end, cb) -> cb(err, res) <br />
+        getAccountUsage(start, cb) -> cb(err, res) <br />
         getAccountUsage(cb) -> cb(err, res)
       </td>
     </tr>
