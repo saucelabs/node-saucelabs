@@ -75,6 +75,17 @@ var sauce = new SauceLabs({
 });
 ```
 
+## Changing the default timeout
+If a 60 second request timeout is not desired, you can define it in the constructor options. The timeout is specified in milliseconds. For example, to set a 30 second timeout you would add timeout: 30000 to the configuration.
+
+```javascript
+var sauce = new SauceLabs({
+  username: "your-sauce-username",
+  password: "your-sauce-api-key",
+  timeout: 30000
+});
+```
+
 
 ## Supported Methods
 
