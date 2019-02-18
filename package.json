@@ -1,12 +1,15 @@
 {
   "author": "Dan Jenkins <dan.jenkins@holidayextras.com> (www.dan-jenkins.co.uk)",
+  "contributors": [
+    "wswebcreation <wim@wswebcreation> (http://www.wswebcreation)"
+  ],
   "name": "saucelabs",
   "description": "A wrapper around Sauce Labs REST API",
   "version": "1.5.0",
-  "homepage": "https://github.com/holidayextras/node-saucelabs",
+  "homepage": "https://github.com/saucelabs/node-saucelabs",
   "repository": {
     "type": "git",
-    "url": "git://github.com/holidayextras/node-saucelabs.git"
+    "url": "git://github.com/saucelabs/node-saucelabs.git"
   },
   "devDependencies": {
     "jshint": "*",
@@ -21,6 +24,7 @@
   "scripts": {
     "test": "make lint test"
   },
+  "license": "MIT",
   "dependencies": {
     "https-proxy-agent": "^2.2.1"
   }
