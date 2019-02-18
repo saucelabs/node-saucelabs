@@ -1,4 +1,4 @@
-# node-saucelabs [![Build Status](https://secure.travis-ci.org/danjenkins/node-saucelabs.png)](http://travis-ci.org/danjenkins/node-saucelabs)[![Build Status](https://www.codeship.io/projects/83c9b290-21de-0131-e459-3688c4e23c72/status)](https://www.codeship.io/projects/83c9b290-21de-0131-e459-3688c4e23c72/status)
+# node-saucelabs [![Build Status](https://travis-ci.org/saucelabs/node-saucelabs.svg?branch=master)](https://travis-ci.org/saucelabs/node-saucelabs)[![Build Status](https://www.codeship.io/projects/83c9b290-21de-0131-e459-3688c4e23c72/status)](https://www.codeship.io/projects/83c9b290-21de-0131-e459-3688c4e23c72/status)
 
 Wrapper around the Sauce Labs REST API for [Node.js](http://nodejs.org/).
 
