@@ -1,6 +1,22 @@
-# node-saucelabs [![Build Status](https://travis-ci.org/saucelabs/node-saucelabs.svg?branch=master)](https://travis-ci.org/saucelabs/node-saucelabs)[![Build Status](https://www.codeship.io/projects/83c9b290-21de-0131-e459-3688c4e23c72/status)](https://www.codeship.io/projects/83c9b290-21de-0131-e459-3688c4e23c72/status)
+# node-saucelabs [![Build Status](https://travis-ci.org/saucelabs/node-saucelabs.svg?branch=master)](https://travis-ci.org/saucelabs/node-saucelabs)
 
 Wrapper around the Sauce Labs REST API for [Node.js](http://nodejs.org/).
+
+> **NOTE:**. 
+>
+> This module was originally created by [Dan Jenkins](https://github.com/danjenkins). 
+With the help of multiple contributors ([Daniel Perez Alvarez](https://github.com/unindented), [Mathieu Sabourin](https://github.com/OniOni), [Michael J Feher](https://github.com/PhearZero), and many more) it became the module it is now.
+>
+> On the 18th of February 2019 Sauce Labs has been given the ownership and maintenance of this module and will enhance it in the near feature with support for:
+> - all new API features
+> - support for the US and European Date Center
+> - Real device cloud support
+> - and many more
+>
+> We would like to thank Dan and all contributors for their support and this beautiful module.
+
+![Trophy bot](./assets/trophy-bot.png)    
+
 
 ## Install
 
