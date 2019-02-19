@@ -1,0 +1,2253 @@
+{
+  "basePath": "/rest/",
+  "definitions": {
+    "Activity": {
+      "properties": {
+        "ccy_exec_peak": {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "datestamp": {
+          "items": {
+            "format": "date",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "jobs": {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "minutes": {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "ccy_exec_peak",
+        "datestamp",
+        "minutes",
+        "jobs"
+      ],
+      "type": "object"
+    },
+    "BaseConfig": {
+      "properties": {
+        "browserName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "Build": {
+      "properties": {
+        "creation_time": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "deletion_time": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "end_time": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "id": {
+          "type": "string"
+        },
+        "jobs": {
+          "properties": {
+            "completed": {
+              "type": "integer"
+            },
+            "errored": {
+              "type": "integer"
+            },
+            "failed": {
+              "type": "integer"
+            },
+            "finished": {
+              "type": "integer"
+            },
+            "passed": {
+              "type": "integer"
+            },
+            "public": {
+              "type": "integer"
+            },
+            "queued": {
+              "type": "integer"
+            },
+            "running": {
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "modification_time": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "number": {
+          "type": "integer"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "run": {
+          "type": "integer"
+        },
+        "start_time": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "CIStat": {
+      "properties": {
+        "platform": {
+          "description": "CI platform which is being used",
+          "example": "jenkins",
+          "type": "string"
+        },
+        "platform_version": {
+          "description": "platform version",
+          "example": "1.180",
+          "type": "string"
+        }
+      },
+      "required": [
+        "platform"
+      ],
+      "type": "object"
+    },
+    "CommandCountStats": {
+      "properties": {
+        "all": {
+          "type": "integer"
+        },
+        "error": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "Concurrency": {
+      "properties": {
+        "concurrency": {
+          "additionalProperties": {
+            "$ref": "#/definitions/SubAccountConcurrencyValues"
+          },
+          "type": "object"
+        },
+        "timestamp": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "timestamp",
+        "concurrency"
+      ],
+      "type": "object"
+    },
+    "ConcurrencyLimit": {
+      "properties": {
+        "mac": {
+          "description": "Number of concurrent mac VMs allowed",
+          "type": "integer"
+        },
+        "overall": {
+          "type": "integer"
+        },
+        "real_device": {
+          "type": "integer"
+        },
+        "scout": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "ConcurrencyValues": {
+      "properties": {
+        "mac": {
+          "type": "integer"
+        },
+        "manual": {
+          "type": "integer"
+        },
+        "overall": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "Error": {
+      "properties": {
+        "code": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "fields": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "File": {
+      "properties": {
+        "md5": {
+          "type": "string"
+        },
+        "mtime": {
+          "format": "int64",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "size": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name",
+        "md5",
+        "size",
+        "mtime"
+      ],
+      "type": "object"
+    },
+    "Job": {
+      "properties": {
+        "assigned_tunnel_id": {
+          "type": "string"
+        },
+        "automation_backend": {
+          "type": "string"
+        },
+        "base_config": {
+          "$ref": "#/definitions/BaseConfig"
+        },
+        "breakpointed": {
+          "type": "string"
+        },
+        "browser": {
+          "type": "string"
+        },
+        "browser_short_version": {
+          "type": "string"
+        },
+        "browser_version": {
+          "type": "string"
+        },
+        "build": {
+          "type": "string"
+        },
+        "collects_automator_log": {
+          "type": "boolean"
+        },
+        "command_counts": {
+          "$ref": "#/definitions/CommandCountStats"
+        },
+        "commands_not_successful": {
+          "type": "integer"
+        },
+        "consolidated_status": {
+          "enum": [
+            "error",
+            "passed",
+            "failed",
+            "complete"
+          ],
+          "type": "string"
+        },
+        "creation_time": {
+          "format": "int64",
+          "type": "string"
+        },
+        "custom-data": {
+          "type": "string"
+        },
+        "deletion_time": {
+          "format": "int64",
+          "type": "string"
+        },
+        "end_time": {
+          "format": "int64",
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "log_url": {
+          "type": "string"
+        },
+        "manual": {
+          "description": "Is manual testing",
+          "type": "boolean"
+        },
+        "modification_time": {
+          "format": "int64",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "os": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "proxied": {
+          "type": "boolean"
+        },
+        "proxy_host": {
+          "type": "boolean"
+        },
+        "public": {
+          "enum": [
+            "public",
+            "public restricted",
+            "share",
+            "team"
+          ],
+          "type": "string"
+        },
+        "record_screenshots": {
+          "type": "boolean"
+        },
+        "record_video": {
+          "type": "boolean"
+        },
+        "selenium_version": {
+          "type": "string"
+        },
+        "start_time": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "video_secret": {
+          "type": "string"
+        },
+        "video_url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "Platform": {
+      "description": "Platforms that sauce supports",
+      "properties": {
+        "api_name": {
+          "type": "string"
+        },
+        "automation_backend": {
+          "type": "string"
+        },
+        "deprecated_backend_versions": {
+          "description": "that thing",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "device": {
+          "type": "string"
+        },
+        "latest_stable_version": {
+          "type": "string"
+        },
+        "long_name": {
+          "type": "string"
+        },
+        "long_version": {
+          "description": "Image URL representing the product.",
+          "type": "string"
+        },
+        "os": {
+          "type": "string"
+        },
+        "recommended_backend_version": {
+          "type": "string"
+        },
+        "short_version": {
+          "description": "Image URL representing the product.",
+          "type": "string"
+        },
+        "supported_backend_versions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SauceStatus": {
+      "properties": {
+        "service_operational": {
+          "type": "boolean"
+        },
+        "status_message": {
+          "type": "string"
+        },
+        "wait_time": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "SubAccountConcurrencyValues": {
+      "properties": {
+        "current": {
+          "$ref": "#/definitions/ConcurrencyValues"
+        },
+        "remaining": {
+          "$ref": "#/definitions/ConcurrencyValues"
+        }
+      },
+      "type": "object"
+    },
+    "Tunnel": {
+      "properties": {
+        "creation_time": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "direct_domains": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "domain_names": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "host": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "last_connected": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "launch_time": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "metadata": {
+          "$ref": "#/definitions/TunnelMetaData"
+        },
+        "no_proxy_caching": {
+          "type": "boolean"
+        },
+        "no_ssl_bump_domains": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "shared_tunnel": {
+          "type": "boolean"
+        },
+        "shutdown_time": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "ssh_port": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "string"
+        },
+        "tunnel_identifier": {
+          "type": "string"
+        },
+        "use_caching_proxy": {
+          "type": "boolean"
+        },
+        "use_kgp": {
+          "type": "boolean"
+        },
+        "user_shutdown": {
+          "type": "boolean"
+        },
+        "vm_version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "TunnelMetaData": {
+      "properties": {
+        "build": {
+          "type": "string"
+        },
+        "command": {
+          "type": "string"
+        },
+        "git_version": {
+          "type": "string"
+        },
+        "hostname": {
+          "type": "string"
+        },
+        "nofile_limit": {
+          "type": "integer"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "release": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "User": {
+      "description": "User",
+      "properties": {
+        "access_key": {
+          "type": "string"
+        },
+        "ancestor_allows_subaccounts": {
+          "type": "boolean"
+        },
+        "ancestor_concurrency_limit": {
+          "$ref": "#/definitions/ConcurrencyLimit"
+        },
+        "can_run_manual": {
+          "type": "boolean"
+        },
+        "concurrency_limit": {
+          "$ref": "#/definitions/ConcurrencyLimit"
+        },
+        "creation_time": {
+          "format": "int64",
+          "type": "string"
+        },
+        "domain": {
+          "type": "string"
+        },
+        "email": {
+          "format": "email",
+          "type": "string"
+        },
+        "entity_type": {
+          "type": "string"
+        },
+        "first_name": {
+          "description": "First name of the Sauce user.",
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "is_admin": {
+          "type": "string"
+        },
+        "is_sso": {
+          "type": "boolean"
+        },
+        "last_name": {
+          "description": "Last name of the Sauce user.",
+          "type": "string"
+        },
+        "manual_minutes": {
+          "type": "integer"
+        },
+        "minutes": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "parent": {
+          "type": "string"
+        },
+        "prevent_emails": {
+          "items": {
+            "enum": [
+              "marketing"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "subscribed": {
+          "type": "boolean"
+        },
+        "title": {
+          "type": "string"
+        },
+        "user_type": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "vm_lockdown": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "WhoamiUser": {
+      "description": "User",
+      "properties": {
+        "access_key": {
+          "type": "string"
+        },
+        "ancestor_concurrency_limit": {
+          "$ref": "#/definitions/ConcurrencyLimit"
+        },
+        "can_run_manual": {
+          "type": "boolean"
+        },
+        "concurrency_limit": {
+          "$ref": "#/definitions/ConcurrencyLimit"
+        },
+        "email": {
+          "format": "email",
+          "type": "string"
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "manual_minutes": {
+          "type": "integer"
+        },
+        "minutes": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "parent": {
+          "type": "null"
+        },
+        "subscribed": {
+          "type": "boolean"
+        },
+        "user_type": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "verified": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "host": "saucelabs.com",
+  "info": {
+    "contact": {
+      "email": "support@saucelabs.com",
+      "name": "API Support",
+      "url": "https://saucelabs.com/support"
+    },
+    "description": "This is a REST API documentation provided by Sauce Labs",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "termsOfService": "https://saucelabs.com/terms-of-service",
+    "title": "Sauce Labs REST API",
+    "version": "0.0.1"
+  },
+  "parameters": {
+    "filename": {
+      "description": "filename",
+      "in": "path",
+      "name": "filename",
+      "required": true,
+      "type": "string"
+    },
+    "full": {
+      "description": "Should the return result contain everything or just the basics",
+      "in": "query",
+      "name": "full",
+      "required": false,
+      "type": "boolean"
+    },
+    "id": {
+      "description": "Object id",
+      "in": "path",
+      "name": "id",
+      "required": true,
+      "type": "string"
+    },
+    "limit": {
+      "default": 50,
+      "description": "Number of results to return",
+      "in": "query",
+      "name": "limit",
+      "type": "number"
+    },
+    "manual_capabilities": {
+      "description": "desired capabilities to start the session",
+      "in": "body",
+      "name": "capabilities",
+      "required": true,
+      "schema": {
+        "properties": {
+          "assets": {
+            "description": "if true it stores assets of the manual job",
+            "type": "boolean"
+          },
+          "browser": {
+            "description": "system browser name (e.g. \"chrome\")",
+            "type": "string"
+          },
+          "browserDisplay": {
+            "description": "sanitized browser name displayed in the UI (e.g. \"Google Chrome\")",
+            "type": "string"
+          },
+          "browserVersionDisplay": {
+            "description": "sanitized browser version (e.g. \"53\")",
+            "type": "string"
+          },
+          "device": {
+            "description": "device name if manual testing is on mobile",
+            "type": "string"
+          },
+          "os": {
+            "description": "system OS name (e.g. \"Windows 2012 R2\")",
+            "type": "string"
+          },
+          "osDisplay": {
+            "description": "sanitized OS name (e.g. \"Windows\")",
+            "type": "string"
+          },
+          "res": {
+            "description": "browser resolution (e.g. \"1400x1050\")",
+            "type": "string"
+          },
+          "tunnel": {
+            "description": "tunnel id to run manual test on (if available)",
+            "type": "string"
+          },
+          "url": {
+            "description": "url to navigate to",
+            "type": "string"
+          },
+          "version": {
+            "description": "system browser version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "assets",
+          "browser",
+          "browserDisplay",
+          "version",
+          "browserVersionDisplay",
+          "os",
+          "osDisplay",
+          "res",
+          "url"
+        ],
+        "type": "object"
+      }
+    },
+    "metric": {
+      "description": "name of the category",
+      "in": "body",
+      "name": "metric",
+      "required": true,
+      "schema": {
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "metric": {
+            "type": "string"
+          },
+          "properties": {
+            "properties": {
+              "source": {
+                "description": "event source",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "category",
+          "metric",
+          "properties"
+        ],
+        "type": "object"
+      }
+    },
+    "subaccounts": {
+      "default": false,
+      "description": "Include subaccounts in list of jobs",
+      "in": "query",
+      "name": "subaccounts",
+      "type": "boolean"
+    },
+    "taskId": {
+      "description": "task id of manual task",
+      "in": "path",
+      "name": "taskId",
+      "required": true,
+      "type": "string"
+    },
+    "username": {
+      "description": "username",
+      "in": "path",
+      "name": "username",
+      "required": true,
+      "type": "string"
+    }
+  },
+  "paths": {
+    "/rest/v1.1/jobs/{id}": {
+      "get": {
+        "operationId": "get_job_v1.1",
+        "parameters": [
+          {
+            "$ref": "#/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Job",
+            "schema": {
+              "$ref": "#/definitions/Job"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Get Job Information",
+        "tags": [
+          "Job"
+        ]
+      }
+    },
+    "/rest/v1.1/users/{username}/concurrency": {
+      "get": {
+        "operationId": "get_user_concurrency",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User",
+            "schema": {
+              "$ref": "#/definitions/Concurrency"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "User concurrency",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/rest/v1.1/users/{username}/organization": {
+      "get": {
+        "operationId": "list_user_organization",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "organization information",
+            "schema": {
+              "properties": {
+                "count": {
+                  "type": "number"
+                },
+                "is_ancestor": {
+                  "type": "boolean"
+                },
+                "users": {
+                  "description": "list of usernames in the organization",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Org information",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/rest/v1.1/{username}/available_tunnels": {
+      "get": {
+        "operationId": "list_available_tunnels",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tunnels",
+            "schema": {
+              "additionalProperties": {
+                "items": {
+                  "$ref": "#/definitions/Tunnel"
+                },
+                "type": "array"
+              },
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Get Tunnels",
+        "tags": [
+          "Tunnel"
+        ]
+      }
+    },
+    "/rest/v1.1/{username}/builds": {
+      "get": {
+        "operationId": "list_builds",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          },
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/subaccounts"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of builds",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Build"
+              },
+              "type": "array"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Get all of a users builds",
+        "tags": [
+          "Build"
+        ]
+      }
+    },
+    "/rest/v1.1/{username}/jobs": {
+      "get": {
+        "operationId": "list_jobs",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          },
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/subaccounts"
+          },
+          {
+            "$ref": "#/parameters/full"
+          },
+          {
+            "default": false,
+            "description": "Only return manual jobs",
+            "in": "query",
+            "name": "manual_only",
+            "type": "boolean"
+          },
+          {
+            "default": false,
+            "description": "FIXME ---- ?",
+            "in": "query",
+            "name": "auto_only",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of jobs",
+            "schema": {
+              "properties": {
+                "jobs": {
+                  "items": {
+                    "$ref": "#/definitions/Job"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Get all of a users jobs",
+        "tags": [
+          "Job"
+        ]
+      }
+    },
+    "/rest/v1/dashboard_messages/{username}": {
+      "get": {
+        "operationId": "get_dashboard_message_for_user",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dashboard messages",
+            "schema": {
+              "properties": {
+                "response": {
+                  "properties": {
+                    "cta": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "status": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Dashboard messages from Django",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/rest/v1/info/platforms/{platform}": {
+      "get": {
+        "description": "returns a list of supported platforms in the Sauce cloud",
+        "operationId": "list_platforms",
+        "parameters": [
+          {
+            "description": "username",
+            "enum": [
+              "appium",
+              "webdriver",
+              "all"
+            ],
+            "in": "path",
+            "name": "platform",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of platforms",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Platform"
+              },
+              "type": "array"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Appium Platform Selections",
+        "tags": [
+          "Info"
+        ]
+      }
+    },
+    "/rest/v1/info/status": {
+      "get": {
+        "operationId": "get_status",
+        "responses": {
+          "200": {
+            "description": "Sauce Status",
+            "schema": {
+              "$ref": "#/definitions/SauceStatus"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Sauce Labs Status",
+        "tags": [
+          "Info"
+        ]
+      }
+    },
+    "/rest/v1/manual": {
+      "delete": {
+        "description": "complete manual task",
+        "operationId": "delete_manual_job",
+        "parameters": [
+          {
+            "description": "list of task ids that to complete",
+            "in": "body",
+            "name": "ids",
+            "required": true,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          }
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "no response payload",
+            "schema": {
+              "type": "null"
+            }
+          }
+        },
+        "summary": "complete manual task",
+        "tags": [
+          "Manual"
+        ]
+      },
+      "post": {
+        "description": "Creates a manual job",
+        "operationId": "create_manual_job",
+        "parameters": [
+          {
+            "$ref": "#/parameters/manual_capabilities"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "manual job was created successfully",
+            "schema": {
+              "description": "desired capabilities of manual job",
+              "properties": {
+                "error": {
+                  "description": "false if job got created successfully",
+                  "type": "boolean"
+                },
+                "job_id": {
+                  "description": "id of the job (available when created, otherwise \"null\")"
+                },
+                "metadata": {
+                  "description": "capabilities of the manual job",
+                  "properties": {
+                    "browser": {
+                      "description": "system browser name (e.g. \"chrome\")",
+                      "type": "string"
+                    },
+                    "os": {
+                      "description": "system OS name (e.g. \"Windows 2012 R2\")",
+                      "type": "string"
+                    },
+                    "resolution": {
+                      "description": "browser resolution (e.g. \"1400x1050\")",
+                      "type": "string"
+                    },
+                    "tunnel": {
+                      "description": "tunnel id to run manual test on (if available)"
+                    },
+                    "url": {
+                      "description": "start url of manual job",
+                      "type": "string"
+                    },
+                    "version": {
+                      "description": "system browser version",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "url",
+                    "browser",
+                    "os",
+                    "version",
+                    "resolution"
+                  ],
+                  "type": "object"
+                },
+                "task_id": {
+                  "description": "id of the manual task",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "task_id",
+                "metadata"
+              ],
+              "type": "object"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Manual job creation",
+        "tags": [
+          "Manual"
+        ]
+      }
+    },
+    "/rest/v1/manual/options/": {
+      "get": {
+        "description": "returns a list of supported platforms in the Sauce cloud",
+        "operationId": "list_manual_platforms",
+        "responses": {
+          "200": {
+            "description": "object with list of supported platforms",
+            "schema": {
+              "additionalProperties": {
+                "additionalProperties": {
+                  "description": "operating system",
+                  "properties": {
+                    "browser": {
+                      "type": "string"
+                    },
+                    "platform": {
+                      "type": "string"
+                    },
+                    "resolutions": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "version": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "description": "browser version",
+                "type": "object"
+              },
+              "description": "browser type (firefox, opera, chrome etc.)",
+              "type": "object"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Platform list with options for desired capabilities",
+        "tags": [
+          "Manual",
+          "Platform"
+        ]
+      }
+    },
+    "/rest/v1/manual/{taskId}": {
+      "get": {
+        "description": "get manual task",
+        "operationId": "get_manual_job",
+        "parameters": [
+          {
+            "$ref": "#/parameters/taskId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "returns manual task",
+            "schema": {
+              "description": "desired capabilities of manual job",
+              "properties": {
+                "browser": {
+                  "description": "system browser name (e.g. \"chrome\")",
+                  "type": "string"
+                },
+                "members": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "os": {
+                  "description": "system OS name (e.g. \"Windows 2012 R2\")",
+                  "type": "string"
+                },
+                "owner": {
+                  "description": "owner of manual job",
+                  "type": "string"
+                },
+                "resolution": {
+                  "description": "browser resolution (e.g. \"1400x1050\")",
+                  "type": "string"
+                },
+                "tunnel": {
+                  "description": "tunnel id to run manual test on (if available)"
+                },
+                "url": {
+                  "description": "start url of manual job",
+                  "type": "string"
+                },
+                "version": {
+                  "description": "system browser version",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "owner",
+                "url",
+                "browser",
+                "os",
+                "version",
+                "resolution",
+                "members"
+              ],
+              "type": "object"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "get manual task",
+        "tags": [
+          "Manual"
+        ]
+      }
+    },
+    "/rest/v1/manual/{taskId}/screenshot": {
+      "post": {
+        "consumes": [
+          "text/plain; charset=utf-8",
+          "application/octet-stream"
+        ],
+        "description": "Take screenshot in manual session",
+        "operationId": "create_manual_job_screenshot",
+        "parameters": [
+          {
+            "$ref": "#/parameters/taskId"
+          }
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "201": {
+            "description": "screenshot successfully taken",
+            "schema": {
+              "type": "null"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Take screenshot in manual session",
+        "tags": [
+          "Manual"
+        ]
+      }
+    },
+    "/rest/v1/me": {
+      "get": {
+        "operationId": "get_current_user",
+        "responses": {
+          "200": {
+            "description": "Get current user session info",
+            "schema": {
+              "properties": {
+                "exp": {
+                  "type": "integer"
+                },
+                "iat": {
+                  "type": "integer"
+                },
+                "username": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "User is not authorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Authenticated user cookie information"
+      }
+    },
+    "/rest/v1/tasks": {
+      "delete": {
+        "description": "complete manual task",
+        "operationId": "delete_manual_job_legacy",
+        "parameters": [
+          {
+            "description": "list of task ids that to complete",
+            "in": "body",
+            "name": "ids",
+            "required": true,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          }
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "no response payload",
+            "schema": {
+              "type": "null"
+            }
+          }
+        },
+        "summary": "complete manual task",
+        "tags": [
+          "Manual"
+        ]
+      },
+      "post": {
+        "description": "Creates a manual job",
+        "operationId": "create_manual_job_legacy",
+        "parameters": [
+          {
+            "$ref": "#/parameters/manual_capabilities"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "manual job was created successfully",
+            "schema": {
+              "description": "desired capabilities of manual job",
+              "properties": {
+                "error": {
+                  "description": "false if job got created successfully",
+                  "type": "boolean"
+                },
+                "job_id": {
+                  "description": "id of the job (available when created, otherwise \"null\")"
+                },
+                "metadata": {
+                  "description": "capabilities of the manual job",
+                  "properties": {
+                    "browser": {
+                      "description": "system browser name (e.g. \"chrome\")",
+                      "type": "string"
+                    },
+                    "os": {
+                      "description": "system OS name (e.g. \"Windows 2012 R2\")",
+                      "type": "string"
+                    },
+                    "resolution": {
+                      "description": "browser resolution (e.g. \"1400x1050\")",
+                      "type": "string"
+                    },
+                    "tunnel": {
+                      "description": "tunnel id to run manual test on (if available)"
+                    },
+                    "url": {
+                      "description": "start url of manual job",
+                      "type": "string"
+                    },
+                    "version": {
+                      "description": "system browser version",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "url",
+                    "browser",
+                    "os",
+                    "version",
+                    "resolution"
+                  ],
+                  "type": "object"
+                },
+                "task_id": {
+                  "description": "id of the manual task",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "task_id",
+                "metadata"
+              ],
+              "type": "object"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Manual job creation",
+        "tags": [
+          "Manual"
+        ]
+      }
+    },
+    "/rest/v1/users/{username}": {
+      "get": {
+        "operationId": "get_user",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "User information",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/rest/v1/users/{username}/activity": {
+      "get": {
+        "operationId": "get_user_activity",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The result shows real-time numbers for the parent account and all of its sub-accounts. There is also a \"totals\" section at the end which tallies the numbers across all accounts.",
+            "schema": {
+              "$ref": "#/definitions/Activity"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Get currently running job counts broken down by account and job status",
+        "tags": [
+          "User",
+          "Activity"
+        ]
+      }
+    },
+    "/rest/v1/users/{username}/monthly-minutes": {
+      "get": {
+        "operationId": "get_user_minutes",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User",
+            "schema": {
+              "properties": {
+                "automated": {
+                  "type": "string"
+                },
+                "manual": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "User's monthly-minutes",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/rest/v1/users_activity": {
+      "get": {
+        "operationId": "get_users_activity",
+        "responses": {
+          "200": {
+            "description": "Get history of minutes and jobs for all listed users for the last X days.",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Get job statistics for usernames",
+        "tags": [
+          "User",
+          "Activity"
+        ]
+      }
+    },
+    "/rest/v1/users_last_job": {
+      "get": {
+        "operationId": "users_last_job",
+        "responses": {
+          "200": {
+            "description": "Get timestamp of latest started job for given usernames",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "The result returns dict of usersnames and time when they started last job.",
+        "tags": [
+          "User",
+          "Activity"
+        ]
+      }
+    },
+    "/rest/v1/whoami": {
+      "get": {
+        "operationId": "get_current_user_full",
+        "responses": {
+          "200": {
+            "description": "WhoamiUser",
+            "schema": {
+              "$ref": "#/definitions/WhoamiUser"
+            }
+          },
+          "401": {
+            "description": "User is not authorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Authenticated user information",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/rest/v1/{username}/all_tunnels": {
+      "get": {
+        "operationId": "list_all_tunnels",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tunnels",
+            "schema": {
+              "properties": {
+                "tunnels": {
+                  "items": {
+                    "$ref": "#/definitions/Tunnel"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Get all Tunnels",
+        "tags": [
+          "Tunnel"
+        ]
+      }
+    },
+    "/rest/v1/{username}/builds/{id}/failed-jobs": {
+      "get": {
+        "operationId": "list_build_failed_jobs",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          },
+          {
+            "$ref": "#/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of jobs",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Job"
+              },
+              "type": "array"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Get all of the jobs associated with a build that have failed",
+        "tags": [
+          "Build",
+          "Job"
+        ]
+      }
+    },
+    "/rest/v1/{username}/builds/{id}/jobs": {
+      "get": {
+        "operationId": "list_build_jobs",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          },
+          {
+            "$ref": "#/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of jobs",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Job"
+              },
+              "type": "array"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Get all of the jobs associated with a build",
+        "tags": [
+          "Build",
+          "Job"
+        ]
+      }
+    },
+    "/rest/v1/{username}/jobs/{id}": {
+      "get": {
+        "operationId": "get_job",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          },
+          {
+            "$ref": "#/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Job",
+            "schema": {
+              "$ref": "#/definitions/Job"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Get Job Information",
+        "tags": [
+          "Job"
+        ]
+      },
+      "put": {
+        "operationId": "update_job",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          },
+          {
+            "$ref": "#/parameters/id"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Job"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Job",
+            "schema": {
+              "$ref": "#/definitions/Job"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Update Job Information",
+        "tags": [
+          "Job"
+        ]
+      }
+    },
+    "/rest/v1/{username}/jobs/{id}/stop": {
+      "put": {
+        "operationId": "stop_job",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          },
+          {
+            "$ref": "#/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "description": "Failure"
+          }
+        },
+        "summary": "Stop Job Information",
+        "tags": [
+          "Job"
+        ]
+      }
+    },
+    "/rest/v1/{username}/tunnels": {
+      "get": {
+        "operationId": "list_tunnels",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          },
+          {
+            "$ref": "#/parameters/full"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tunnels",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Get Tunnels",
+        "tags": [
+          "Tunnel"
+        ]
+      }
+    },
+    "/rest/v1/{username}/tunnels/{id}": {
+      "delete": {
+        "operationId": "delete_tunnel",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          },
+          {
+            "$ref": "#/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully delete tunnel"
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Delete a Tunnel",
+        "tags": [
+          "Tunnel"
+        ]
+      },
+      "get": {
+        "operationId": "get_tunnel",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          },
+          {
+            "$ref": "#/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tunnels",
+            "schema": {
+              "$ref": "#/definitions/Tunnel"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Get Tunnels",
+        "tags": [
+          "Tunnel"
+        ]
+      }
+    }
+  },
+  "responses": {
+    "400": {
+      "description": "Bad request - typically some request parameter error",
+      "schema": {
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "type": "object"
+      }
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "securityDefinitions": {
+    "BasicAuth": {
+      "type": "basic"
+    },
+    "PrivApiKey": {
+      "in": "header",
+      "name": "Signature",
+      "type": "apiKey"
+    }
+  },
+  "swagger": "2.0"
+}
