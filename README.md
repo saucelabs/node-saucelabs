@@ -1,4 +1,4 @@
-# node-saucelabs
+# node-saucelabs [![Build Status](https://travis-ci.org/saucelabs/node-saucelabs.svg?branch=master)](https://travis-ci.org/saucelabs/node-saucelabs)
 
 Wrapper around the Sauce Labs REST API for [Node.js](http://nodejs.org/).
 
