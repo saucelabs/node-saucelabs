@@ -9,7 +9,7 @@ With the help of multiple contributors ([Daniel Perez Alvarez](https://github.co
 >
 > On the 18th of February 2019 Sauce Labs has been given the ownership and maintenance of this module and will enhance it in the near feature with support for:
 > - all new API features
-> - support for the US and European Date Center
+> - support for the US and European Data Center
 > - Real device cloud support
 > - and many more
 >
