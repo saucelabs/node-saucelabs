@@ -1,6 +1,6 @@
 {
   "name": "saucelabs",
-  "version": "2.0.0-beta.0",
+  "version": "2.0.0-beta.1",
   "author": "Dan Jenkins <dan.jenkins@holidayextras.com> (www.dan-jenkins.co.uk)",
   "description": "A wrapper around Sauce Labs REST API",
   "homepage": "https://github.com/saucelabs/node-saucelabs",
