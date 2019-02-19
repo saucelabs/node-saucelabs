@@ -1,31 +1,73 @@
 {
-  "author": "Dan Jenkins <dan.jenkins@holidayextras.com> (www.dan-jenkins.co.uk)",
-  "contributors": [
-    "wswebcreation <wim@wswebcreation> (http://www.wswebcreation)"
-  ],
   "name": "saucelabs",
+  "version": "2.0.0",
+  "author": "Dan Jenkins <dan.jenkins@holidayextras.com> (www.dan-jenkins.co.uk)",
   "description": "A wrapper around Sauce Labs REST API",
-  "version": "1.5.0",
   "homepage": "https://github.com/saucelabs/node-saucelabs",
+  "license": "Apache-2.0",
+  "contributors": [
+    "wswebcreation <wim@wswebcreation> (http://www.wswebcreation)",
+    "christian-bromann <christian@saucelabs.com>"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/saucelabs/node-saucelabs.git"
   },
-  "devDependencies": {
-    "jshint": "*",
-    "mocha": "1.9.x",
-    "chai": "1.5.x",
-    "nock": "0.17.x",
-    "url": "0.11.0"
-  },
-  "engines": {
-    "node": "*"
-  },
   "scripts": {
-    "test": "make lint test"
+    "build": "run-s clean compile",
+    "clean": "rm -rf ./build ./coverage",
+    "compile": "babel src -d build",
+    "eslint": "eslint ./src ./test",
+    "release": "npm run release:patch",
+    "release:patch": "NODE_ENV=production np patch",
+    "release:minor": "NODE_ENV=production np minor",
+    "release:major": "NODE_ENV=production np major",
+    "test": "run-s eslint test:unit",
+    "test:unit": "jest --coverage",
+    "watch": "npm run compile -- --watch"
   },
-  "license": "MIT",
   "dependencies": {
-    "https-proxy-agent": "^2.2.1"
+    "change-case": "^3.1.0",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.1.2",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0",
+    "@babel/plugin-proposal-function-bind": "^7.0.0",
+    "@babel/plugin-proposal-optional-catch-binding": "^7.2.0",
+    "@babel/plugin-syntax-export-default-from": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/register": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.1.0",
+    "babel-plugin-source-map-support": "^2.0.1",
+    "codecov": "^3.0.0",
+    "eslint": "^4.7.2",
+    "eslint-plugin-import": "^2.8.0",
+    "jest": "^24.1.0",
+    "np": "^2.18.2",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^2.6.2",
+    "source-map-support": "^0.5.9"
+  },
+  "jest": {
+    "testMatch": [
+      "<rootDir>/tests/**/*.test.js"
+    ],
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true,
+    "coverageThreshold": {
+      "global": {
+        "branches": 95,
+        "functions": 96,
+        "lines": 96,
+        "statements": 96
+      }
+    },
+    "testEnvironment": "node"
   }
 }
