@@ -1111,6 +1111,41 @@
             "in": "query",
             "name": "auto_only",
             "type": "boolean"
+          },
+          {
+            "description": "name of the job",
+            "in": "query",
+            "name": "name",
+            "type": "string",
+            "required": false
+          },
+          {
+            "description": "owner type for jobs",
+            "in": "query",
+            "name": "owner_type",
+            "type": "string",
+            "required": false
+          },
+          {
+            "description": "username of owner of the jobs",
+            "in": "query",
+            "name": "owner",
+            "type": "string",
+            "required": false
+          },
+          {
+            "description": "receive jobs beginning of a specific timestamp",
+            "in": "query",
+            "name": "from",
+            "type": "number",
+            "required": false
+          },
+          {
+            "description": "receive jobs until specific timestamp",
+            "in": "query",
+            "name": "to",
+            "type": "number",
+            "required": false
           }
         ],
         "responses": {
