@@ -1,0 +1,4 @@
+assets
+src
+tests
+!build
