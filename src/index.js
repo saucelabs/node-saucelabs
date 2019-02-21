@@ -1,12 +1,21 @@
+import fs from 'fs'
+import path from 'path'
 import request from 'request'
 import changeCase from 'change-case'
 
-import { PROTOCOL_MAP, PARAMETERS_MAP } from './constants'
+import { createHMAC } from './utils'
+
+import { PROTOCOL_MAP, PARAMETERS_MAP, JOB_ASSET_NAMES } from './constants'
 
 export default class SauceLabs {
     constructor (username, accessKey) {
         this.username = username
         this.accessKey = accessKey
+        this.host = 'saucelabs.com'
+        this.auth = {
+            user: this.username,
+            pass: this.accessKey
+        }
         return new Proxy({}, { get: ::this.get })
     }
 
@@ -20,6 +29,13 @@ export default class SauceLabs {
 
         if (!PROTOCOL_MAP.has(propName)) {
             throw new Error(`Couldn't find API endpoint for command "${propName}"`)
+        }
+
+        /**
+         * handle special commands not defined in the protocol
+         */
+        if (propName === 'downloadJobAsset') {
+            return ::this.downloadJobAsset
         }
 
         return (...args) => {
@@ -78,10 +94,7 @@ export default class SauceLabs {
                 method: method.toUpperCase(),
                 [method === 'post' ? 'json' : 'qs']: body,
                 json: true,
-                auth: {
-                    user: this.username,
-                    pass: this.accessKey
-                }
+                auth: this.auth
             }, (err, response, body) => {
                 if (err) {
                     return reject(err)
@@ -94,5 +107,44 @@ export default class SauceLabs {
                 return resolve(body)
             }))
         }
+    }
+
+    async downloadJobAsset (jobId, assetName, downloadPath) {
+        /**
+         * check job id
+         */
+        if (typeof jobId !== 'string') {
+            throw new Error('You need to define a job id')
+        }
+
+        /**
+         * throw if asset is not know
+         */
+        if (!JOB_ASSET_NAMES.includes(assetName)) {
+            throw new Error(`Unknown asset '${assetName}', the following assets are available: ${JOB_ASSET_NAMES.join(', ')}`)
+        }
+
+        const fd = fs.createWriteStream(path.resolve(process.cwd(), downloadPath))
+        const hmac = await createHMAC(this.username, this.accessKey, jobId)
+        return new Promise((resolve, reject) => request({
+            method: 'GET',
+            uri: `https://assets.${this.host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`,
+        }, (err, res, body) => {
+            /**
+             * check if request was successful
+             */
+            if (err) {
+                return reject(err)
+            }
+
+            /**
+             * check if we received the asset
+             */
+            if (res.statusCode !== 200) {
+                return reject(new Error(`There was an error downloading asset ${assetName}, status code: ${res.statusCode}`))
+            }
+
+            return resolve(body)
+        }).pipe(fd))
     }
 }

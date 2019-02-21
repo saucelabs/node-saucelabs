@@ -23,3 +23,12 @@ for (const { paths, parameters, host } of protocols) {
 
 export const PROTOCOL_MAP = protocolFlattened
 export const PARAMETERS_MAP = parametersFlattened
+export const JOB_ASSET_NAMES = [
+    'console.json',
+    'performance.json',
+    'automator.log',
+    'selenium-server.log',
+    'log.json',
+    'logcat.log',
+    'video.mp4'
+]
