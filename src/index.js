@@ -1,11 +1,12 @@
 import fs from 'fs'
+import zlib from 'zlib'
 import path from 'path'
 import request from 'request'
 import changeCase from 'change-case'
 
 import { createHMAC } from './utils'
 
-import { PROTOCOL_MAP, PARAMETERS_MAP, JOB_ASSET_NAMES } from './constants'
+import { PROTOCOL_MAP, PARAMETERS_MAP } from './constants'
 
 export default class SauceLabs {
     constructor (username, accessKey) {
@@ -117,18 +118,11 @@ export default class SauceLabs {
             throw new Error('You need to define a job id')
         }
 
-        /**
-         * throw if asset is not know
-         */
-        if (!JOB_ASSET_NAMES.includes(assetName)) {
-            throw new Error(`Unknown asset '${assetName}', the following assets are available: ${JOB_ASSET_NAMES.join(', ')}`)
-        }
-
         const hmac = await createHMAC(this.username, this.accessKey, jobId)
         return new Promise((resolve, reject) => {
             const req = request({
                 method: 'GET',
-                uri: `https://assets.${this.host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`,
+                uri: `https://assets.${this.host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`
             }, (err, res, body) => {
                 /**
                  * check if request was successful
@@ -152,7 +146,18 @@ export default class SauceLabs {
              */
             if (downloadPath) {
                 const fd = fs.createWriteStream(path.resolve(process.cwd(), downloadPath))
-                req.pipe(fd)
+
+                /**
+                 * unzip gzipped logs
+                 * ToDo: this only affects tracing logs which are uploaded gzipped,
+                 *       there should be seperate api definition for extended debugging
+                 */
+                if (assetName.endsWith('.gz')) {
+                    const gunzip = zlib.createGunzip()
+                    req.pipe(gunzip).pipe(fd)
+                } else {
+                    req.pipe(fd)
+                }
             }
         })
     }
