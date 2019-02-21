@@ -40,7 +40,7 @@ export default class SauceLabs {
 
         return (...args) => {
             const { description, method, endpoint, host } = PROTOCOL_MAP.get(propName)
-            const params = description.parameters.map(
+            const params = (description.parameters || []).map(
                 (urlParameter) => urlParameter.$ref
                     ? PARAMETERS_MAP.get(urlParameter.$ref.split('/').slice(-1)[0])
                     : urlParameter)
@@ -57,7 +57,7 @@ export default class SauceLabs {
                     throw new Error(`Expected parameter for url param '${urlParam.name}' from type '${type}', found '${typeof param}'`)
                 }
 
-                url = endpoint.replace(`{${urlParam.name}}`, param)
+                url = url.replace(`{${urlParam.name}}`, param)
             }
 
             /**
@@ -124,27 +124,36 @@ export default class SauceLabs {
             throw new Error(`Unknown asset '${assetName}', the following assets are available: ${JOB_ASSET_NAMES.join(', ')}`)
         }
 
-        const fd = fs.createWriteStream(path.resolve(process.cwd(), downloadPath))
         const hmac = await createHMAC(this.username, this.accessKey, jobId)
-        return new Promise((resolve, reject) => request({
-            method: 'GET',
-            uri: `https://assets.${this.host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`,
-        }, (err, res, body) => {
-            /**
-             * check if request was successful
-             */
-            if (err) {
-                return reject(err)
-            }
+        return new Promise((resolve, reject) => {
+            const req = request({
+                method: 'GET',
+                uri: `https://assets.${this.host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`,
+            }, (err, res, body) => {
+                /**
+                 * check if request was successful
+                 */
+                if (err) {
+                    return reject(err)
+                }
+
+                /**
+                 * check if we received the asset
+                 */
+                if (res.statusCode !== 200) {
+                    return reject(new Error(`There was an error downloading asset ${assetName}, status code: ${res.statusCode}`))
+                }
+
+                return resolve(body)
+            })
 
             /**
-             * check if we received the asset
+             * only pipe asset to file if path is given
              */
-            if (res.statusCode !== 200) {
-                return reject(new Error(`There was an error downloading asset ${assetName}, status code: ${res.statusCode}`))
+            if (downloadPath) {
+                const fd = fs.createWriteStream(path.resolve(process.cwd(), downloadPath))
+                req.pipe(fd)
             }
-
-            return resolve(body)
-        }).pipe(fd))
+        })
     }
 }
