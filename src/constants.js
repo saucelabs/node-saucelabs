@@ -32,3 +32,15 @@ export const JOB_ASSET_NAMES = [
     'logcat.log',
     'video.mp4'
 ]
+
+export const DEFAULT_OPTIONS = {
+    user: process.env.SAUCE_USERNAME,
+    key: process.env.SAUCE_ACCESS_KEY,
+    headless: false,
+    region: 'us'
+}
+
+export const REGION_MAPPING = {
+    'us': '', // default endpoint
+    'eu': 'eu-central-1.'
+}

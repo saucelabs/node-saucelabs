@@ -1,5 +1,7 @@
 import crypto from 'crypto'
 
+import { REGION_MAPPING } from './constants'
+
 /**
  * Create HMAC token to receive job assets
  *
@@ -19,4 +21,9 @@ export const createHMAC = function (username, key, jobId) {
         }
         return resolve(data.toString('hex'))
     }))
+}
+
+export function getSauceEndpoint (region) {
+    const dcRegion = REGION_MAPPING[region] ? region : 'us'
+    return `${REGION_MAPPING[dcRegion]}saucelabs.com`
 }

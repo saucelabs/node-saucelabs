@@ -4,15 +4,15 @@ import path from 'path'
 import request from 'request'
 import changeCase from 'change-case'
 
-import { createHMAC } from './utils'
-
-import { PROTOCOL_MAP, PARAMETERS_MAP } from './constants'
+import { createHMAC, getSauceEndpoint } from './utils'
+import { PROTOCOL_MAP, PARAMETERS_MAP, DEFAULT_OPTIONS } from './constants'
 
 export default class SauceLabs {
-    constructor (username, accessKey) {
-        this.username = username
-        this.accessKey = accessKey
-        this.host = 'saucelabs.com'
+    constructor (options) {
+        this.options = Object.assign({}, DEFAULT_OPTIONS, options)
+        this.username = this.options.username
+        this.accessKey = this.options.accessKey
+        this.host = getSauceEndpoint(this.options.region)
         this.auth = {
             user: this.username,
             pass: this.accessKey
