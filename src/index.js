@@ -4,29 +4,61 @@ import path from 'path'
 import request from 'request'
 import changeCase from 'change-case'
 
-import { createHMAC, getSauceEndpoint } from './utils'
-import { PROTOCOL_MAP, PARAMETERS_MAP, DEFAULT_OPTIONS } from './constants'
+import { createHMAC, getSauceEndpoint, toString } from './utils'
+import {
+    PROTOCOL_MAP, PARAMETERS_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT,
+    SYMBOL_TOSTRING, SYMBOL_ITERATOR, TO_STRING_TAG
+} from './constants'
 
 export default class SauceLabs {
     constructor (options) {
-        this.options = Object.assign({}, DEFAULT_OPTIONS, options)
-        this.username = this.options.user
-        this.accessKey = this.options.key
-        this.headless = this.options.headless
-        this.auth = {
+        this._options = Object.assign({}, DEFAULT_OPTIONS, options)
+        this.username = this._options.user
+        this._accessKey = this._options.key
+        this._auth = {
             user: this.username,
-            pass: this.accessKey
+            pass: this._accessKey
         }
+
+        /**
+         * public fields
+         */
+        this.region = this._options.region
+        this.headless = this._options.headless
 
         return new Proxy({}, { get: ::this.get })
     }
 
     get (obj, propName) {
         /**
+         * print to string output
+         * https://nodejs.org/api/util.html#util_util_inspect_custom
+         */
+        if (propName === SYMBOL_INSPECT) {
+            return () => toString(this)
+        }
+
+        /**
+         * print to string tag
+         * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/toStringTag
+         */
+        if (propName === SYMBOL_TOSTRING) {
+            return TO_STRING_TAG
+        }
+
+        /**
+         * return instance iterator
+         * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/iterator
+         */
+        if (propName === SYMBOL_ITERATOR) {
+            return
+        }
+
+        /**
          * allow to return publicly registered class properties
          */
         if (this[propName]) {
-            return this[propName]
+            return !propName.startsWith('_') ? this[propName] : undefined
         }
 
         if (!PROTOCOL_MAP.has(propName)) {
@@ -71,7 +103,7 @@ export default class SauceLabs {
                 const expectedType = optionParam.type.replace('integer', 'number')
                 const option = options[changeCase.camelCase(optionParam.name)]
                 const isRequired = Boolean(optionParam.required) || (typeof optionParam.required === 'undefined' && typeof optionParam.default === 'undefined')
-                if (isRequired && (!option || typeof option !== expectedType)) {
+                if ((isRequired || option) && (!option || typeof option !== expectedType)) {
                     throw new Error(`Expected parameter for option '${optionParam.name}' from type '${expectedType}', found '${typeof option}'`)
                 }
 
@@ -91,18 +123,20 @@ export default class SauceLabs {
             /**
              * make request
              */
-            const uri = getSauceEndpoint(host, this.options.region, this.headless) + url
+            const uri = getSauceEndpoint(host, this._options.region, this._options.headless) + url
             return new Promise((resolve, reject) => request({
                 uri,
                 method: method.toUpperCase(),
                 [method === 'post' ? 'json' : 'qs']: body,
                 json: true,
-                auth: this.auth
+                auth: this._auth
             }, (err, response, body) => {
+                /* istanbul ignore if */
                 if (err) {
                     return reject(err)
                 }
 
+                /* istanbul ignore if */
                 if (response.statusCode !== 200) {
                     return reject(new Error(body.message || 'unknown error'))
                 }
@@ -120,7 +154,7 @@ export default class SauceLabs {
             throw new Error('You need to define a job id')
         }
 
-        const hmac = await createHMAC(this.username, this.accessKey, jobId)
+        const hmac = await createHMAC(this.username, this._accessKey, jobId)
         return new Promise((resolve, reject) => {
             const req = request({
                 method: 'GET',
