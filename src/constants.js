@@ -44,3 +44,8 @@ export const REGION_MAPPING = {
     'us': '', // default endpoint
     'eu': 'eu-central-1.'
 }
+
+export const SYMBOL_INSPECT = Symbol.for('nodejs.util.inspect.custom')
+export const SYMBOL_TOSTRING = Symbol.toStringTag
+export const SYMBOL_ITERATOR = Symbol.iterator
+export const TO_STRING_TAG = 'SauceLabs API Client'
