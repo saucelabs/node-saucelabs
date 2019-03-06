@@ -10,13 +10,14 @@ import { PROTOCOL_MAP, PARAMETERS_MAP, DEFAULT_OPTIONS } from './constants'
 export default class SauceLabs {
     constructor (options) {
         this.options = Object.assign({}, DEFAULT_OPTIONS, options)
-        this.username = this.options.username
-        this.accessKey = this.options.accessKey
-        this.host = getSauceEndpoint(this.options.region)
+        this.username = this.options.user
+        this.accessKey = this.options.key
+        this.headless = this.options.headless
         this.auth = {
             user: this.username,
             pass: this.accessKey
         }
+
         return new Proxy({}, { get: ::this.get })
     }
 
@@ -90,8 +91,9 @@ export default class SauceLabs {
             /**
              * make request
              */
+            const uri = getSauceEndpoint(host, this.options.region, this.headless) + url
             return new Promise((resolve, reject) => request({
-                uri: `https://${host}${url}`,
+                uri,
                 method: method.toUpperCase(),
                 [method === 'post' ? 'json' : 'qs']: body,
                 json: true,

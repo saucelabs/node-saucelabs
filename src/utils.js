@@ -23,7 +23,8 @@ export const createHMAC = function (username, key, jobId) {
     }))
 }
 
-export function getSauceEndpoint (region) {
+export function getSauceEndpoint (hostname, region, headless, protocol = 'https://') {
     const dcRegion = REGION_MAPPING[region] ? region : 'us'
-    return `${REGION_MAPPING[dcRegion]}saucelabs.com`
+    const prefix = headless ? 'us-east1.headless.' : REGION_MAPPING[dcRegion]
+    return protocol + prefix + hostname
 }
