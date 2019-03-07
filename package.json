@@ -14,6 +14,9 @@
     "url": "git://github.com/saucelabs/node-saucelabs.git"
   },
   "main": "./build/index",
+  "bin": {
+    "wdio": "./bin/sl"
+  },
   "scripts": {
     "build": "run-s clean compile",
     "clean": "rm -rf ./build ./coverage",
