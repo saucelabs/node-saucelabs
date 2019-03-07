@@ -1,6 +1,6 @@
-<center>
-    ![Trophy bot](./assets/trophy-bot.png)
-</center>
+<p align="center">
+    <img src="./assets/trophy-bot.png" alt="Trophy bot" />
+</p>
 
 # Node Sauce Labs [![Build Status](https://travis-ci.org/saucelabs/node-saucelabs.svg?branch=master)](https://travis-ci.org/saucelabs/node-saucelabs)
 
