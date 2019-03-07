@@ -35,6 +35,7 @@ export const run = () => {
             const requiredParams = params.filter((p) => p.required).map((p) => argv[p.name])
             api[commandName](...requiredParams, argv).then(
                 (result) => {
+                    /* istanbul ignore if */
                     if (typeof result === 'object') {
                         // eslint-disable-next-line no-console
                         return console.log(JSON.stringify(result, null, 4))
@@ -43,6 +44,7 @@ export const run = () => {
                     // eslint-disable-next-line no-console
                     console.log(result)
                 },
+                /* istanbul ignore next */
                 (error) => {
                     // eslint-disable-next-line no-console
                     console.error(error)

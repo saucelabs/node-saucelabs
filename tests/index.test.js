@@ -113,7 +113,7 @@ test('should handle asset response properly', async () => {
     await api.downloadJobAsset('some-id', 'performance.json')
     const cb = request.mock.calls[0][1]
     expect(cb(new Error('ups'))).toBe(undefined)
-    expect(cb(null, { statusCode: 404 })).toBe(undefined)
+    expect(cb(null, { statusCode: 404 }, '{}')).toBe(undefined)
 })
 
 test('should put asset into file', async () => {
