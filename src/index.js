@@ -169,7 +169,8 @@ export default class SauceLabs {
                  * check if we received the asset
                  */
                 if (res.statusCode !== 200) {
-                    return reject(new Error(`There was an error downloading asset ${assetName}, status code: ${res.statusCode}`))
+                    const reason = JSON.parse(body).message || 'unknown'
+                    return reject(new Error(`There was an error downloading asset ${assetName}, status code: ${res.statusCode}, reason: ${reason}`))
                 }
 
                 /**
