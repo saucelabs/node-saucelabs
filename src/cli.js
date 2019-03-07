@@ -34,8 +34,15 @@ export const run = () => {
             const api = new SauceLabs({ user, key, headless, region })
             const requiredParams = params.filter((p) => p.required).map((p) => argv[p.name])
             api[commandName](...requiredParams, argv).then(
-                // eslint-disable-next-line no-console
-                (result) => console.log(result),
+                (result) => {
+                    if (typeof result === 'object') {
+                        // eslint-disable-next-line no-console
+                        return console.log(JSON.stringify(result, null, 4))
+                    }
+
+                    // eslint-disable-next-line no-console
+                    console.log(result)
+                },
                 (error) => {
                     // eslint-disable-next-line no-console
                     console.error(error)

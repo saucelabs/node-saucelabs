@@ -69,7 +69,7 @@ export default class SauceLabs {
          * handle special commands not defined in the protocol
          */
         if (propName === 'downloadJobAsset') {
-            return ::this.downloadJobAsset
+            return ::this._downloadJobAsset
         }
 
         return (...args) => {
@@ -143,7 +143,7 @@ export default class SauceLabs {
         }
     }
 
-    async downloadJobAsset (jobId, assetName, downloadPath) {
+    async _downloadJobAsset (jobId, assetName, downloadPath) {
         /**
          * check job id
          */
@@ -152,10 +152,11 @@ export default class SauceLabs {
         }
 
         const hmac = await createHMAC(this.username, this._accessKey, jobId)
+        const host = getSauceEndpoint('saucelabs.com', this._options.region, this._options.headless, 'https://assets.')
         return new Promise((resolve, reject) => {
             const req = request({
                 method: 'GET',
-                uri: `https://assets.${this.host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`
+                uri: `${host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`
             }, (err, res, body) => {
                 /**
                  * check if request was successful
@@ -171,13 +172,24 @@ export default class SauceLabs {
                     return reject(new Error(`There was an error downloading asset ${assetName}, status code: ${res.statusCode}`))
                 }
 
+                /**
+                 * parse asset as json if proper content type is given
+                 */
+                if (res.headers['content-type'] === 'application/json') {
+                    try {
+                        body = JSON.parse(body)
+                    } catch (e) {
+                        // do nothing
+                    }
+                }
+
                 return resolve(body)
             })
 
             /**
              * only pipe asset to file if path is given
              */
-            if (downloadPath) {
+            if (typeof downloadPath === 'string') {
                 const fd = fs.createWriteStream(path.resolve(process.cwd(), downloadPath))
 
                 /**
