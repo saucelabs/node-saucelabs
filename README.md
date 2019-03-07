@@ -46,6 +46,8 @@ Default: `false`
 
 ## Usage
 
+All accessible API commands with descriptions can be found [here](./docs/Interface.md).
+
 ### As CLI Tool
 
 This package if installed globally can be used as CLI tool to access the API from the command line:
