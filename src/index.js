@@ -4,9 +4,9 @@ import path from 'path'
 import request from 'request'
 import changeCase from 'change-case'
 
-import { createHMAC, getSauceEndpoint, toString } from './utils'
+import { createHMAC, getSauceEndpoint, toString, getParameters } from './utils'
 import {
-    PROTOCOL_MAP, PARAMETERS_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT,
+    PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT,
     SYMBOL_TOSTRING, SYMBOL_ITERATOR, TO_STRING_TAG
 } from './constants'
 
@@ -74,10 +74,7 @@ export default class SauceLabs {
 
         return (...args) => {
             const { description, method, endpoint, host } = PROTOCOL_MAP.get(propName)
-            const params = (description.parameters || []).map(
-                (urlParameter) => urlParameter.$ref
-                    ? PARAMETERS_MAP.get(urlParameter.$ref.split('/').slice(-1)[0])
-                    : urlParameter)
+            const params = getParameters(description.parameters)
 
             /**
              * validate required url params

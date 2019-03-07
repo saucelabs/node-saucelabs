@@ -1,6 +1,6 @@
 import crypto from 'crypto'
 
-import { REGION_MAPPING, TO_STRING_TAG } from './constants'
+import { REGION_MAPPING, TO_STRING_TAG, PARAMETERS_MAP } from './constants'
 
 /**
  * Create HMAC token to receive job assets
@@ -49,4 +49,16 @@ export function toString (scope) {
   region: '${scope._options.region}',
   headless: ${scope._options.headless}
 }`
+}
+
+/**
+ * get list of parameters with full description
+ * @param  {Array}    [parameters=[]]  parameter defined in endpoint
+ * @return {[Object]}                  full description of parameters
+ */
+export function getParameters (parameters = []) {
+    return parameters.map(
+        (urlParameter) => urlParameter.$ref
+            ? PARAMETERS_MAP.get(urlParameter.$ref.split('/').slice(-1)[0])
+            : urlParameter)
 }
