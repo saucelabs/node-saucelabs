@@ -34,7 +34,7 @@ export default class SauceLabs {
          * print to string output
          * https://nodejs.org/api/util.html#util_util_inspect_custom
          */
-        if (propName === SYMBOL_INSPECT) {
+        if (propName === SYMBOL_INSPECT || propName === 'inspect') {
             return () => toString(this)
         }
 
@@ -62,6 +62,12 @@ export default class SauceLabs {
         }
 
         if (!PROTOCOL_MAP.has(propName)) {
+            /**
+             * just return if propName is a symbol (Node 8 and lower)
+             */
+            if (typeof propName !== 'string') {
+                return
+            }
             throw new Error(`Couldn't find API endpoint for command "${propName}"`)
         }
 
