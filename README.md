@@ -46,6 +46,32 @@ Default: `false`
 
 ## Usage
 
+### As CLI Tool
+
+This package if installed globally can be used as CLI tool to access the API from the command line:
+
+```sh
+$ npm install -g saucelabs
+...
+$ sl listJobs $SAUCE_USERNAME --limit 5
+{ jobs:
+   [ { id: '19dab74f8fd848518f8d2c2cee3a6fbd' },
+     { id: 'dc08ca0c7fa14eee909a093d11567328' },
+     { id: '5bc6f70c777b4ae3bf7909a40f5ee41b' },
+     { id: 'f40fe7b044754eaaa5f5a130406549b5' },
+     { id: 'd1553f71f910402893f1e82a4dcb6ca6' } ] }
+```
+
+You can find all available commands and options with description by calling:
+
+```sh
+sl --help
+# show description for specific command
+sl listJobs --help
+```
+
+### As NPM Package
+
 The following example shows how to access details of the last job you were running with your account that is being exposed as environment variables as `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY`.
 
 ```js
