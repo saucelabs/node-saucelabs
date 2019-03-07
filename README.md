@@ -46,7 +46,7 @@ Default: `false`
 
 ## Usage
 
-All accessible API commands with descriptions can be found [here](./docs/Interface.md).
+All accessible API commands with descriptions can be found [here](docs/interface.md).
 
 ### As CLI Tool
 
