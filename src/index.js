@@ -147,8 +147,8 @@ export default class SauceLabs {
         /**
          * check job id
          */
-        if (typeof jobId !== 'string') {
-            throw new Error('You need to define a job id')
+        if (typeof jobId !== 'string' || typeof assetName !== 'string') {
+            throw new Error('You need to define a job id and the file name of the asset as a string')
         }
 
         const hmac = await createHMAC(this.username, this._accessKey, jobId)

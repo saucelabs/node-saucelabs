@@ -3,6 +3,11 @@ import request from 'request'
 
 import SauceLabs from '../src'
 
+jest.mock('fs')
+const fs = require('fs')
+jest.mock('zlib')
+const zlib = require('zlib').default
+
 test('should be inspectable', () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     expect(util.inspect(api)).toBe(`SauceLabs API Client {
@@ -84,6 +89,43 @@ test('should fail if option has wrong type', async () => {
         limit: '123',
         full: true
     })).toThrow('Expected parameter for option \'limit\' from type \'number\', found \'string\'')
+})
+
+test('should be able to download assets', async () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    await api.downloadJobAsset('some-id', 'performance.json')
+    const req = request.mock.calls[0][0]
+    expect(req.method).toBe('GET')
+    expect(req.uri).toContain('https://assets.saucelabs.com/jobs/some-id/performance.json')
+    expect(req.uri).toContain('auth=a2600100e3d1990721be97c093f64567')
+})
+
+it('should fail if parameters are not given properly', async () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    const error = new Error('You need to define a job id and the file name of the asset as a string')
+    await expect(api.downloadJobAsset()).rejects.toEqual(error)
+    await expect(api.downloadJobAsset('foo')).rejects.toEqual(error)
+    await expect(api.downloadJobAsset(123, 'bar')).rejects.toEqual(error)
+})
+
+test('should handle asset response properly', async () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    await api.downloadJobAsset('some-id', 'performance.json')
+    const cb = request.mock.calls[0][1]
+    expect(cb(new Error('ups'))).toBe(undefined)
+    expect(cb(null, { statusCode: 404 })).toBe(undefined)
+})
+
+test('should put asset into file', async () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    await api.downloadJobAsset('some-id', 'performance.json', '/asset.json')
+    expect(fs.createWriteStream).toBeCalledWith('/asset.json')
+})
+
+test('should unzip file', async () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    await api.downloadJobAsset('some-id', 'performance.json.gz', '/asset.json')
+    expect(zlib.createGunzip).toBeCalledTimes(1)
 })
 
 afterEach(() => {
