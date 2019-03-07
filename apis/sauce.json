@@ -749,7 +749,7 @@
       "type": "boolean"
     },
     "id": {
-      "description": "Object id",
+      "description": "job id",
       "in": "path",
       "name": "id",
       "required": true,
@@ -2246,6 +2246,43 @@
         "summary": "Get Tunnels",
         "tags": [
           "Tunnel"
+        ]
+      }
+    },
+    "/rest/v1/jobs/{id}/{assetName}": {
+      "get": {
+        "operationId": "download_job_asset",
+        "parameters": [
+          {
+            "$ref": "#/parameters/id"
+          },
+          {
+            "$ref": "#/parameters/filename"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "job asset",
+            "schema": {
+              "$ref": "#/definitions/File"
+            }
+          },
+          "404": {
+            "description": "Asset not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Get job asset",
+        "tags": [
+          "Asset"
         ]
       }
     }
