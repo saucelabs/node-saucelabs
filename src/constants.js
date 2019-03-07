@@ -49,3 +49,33 @@ export const SYMBOL_INSPECT = Symbol.for('nodejs.util.inspect.custom')
 export const SYMBOL_TOSTRING = Symbol.toStringTag
 export const SYMBOL_ITERATOR = Symbol.iterator
 export const TO_STRING_TAG = 'SauceLabs API Client'
+
+export const USAGE = `Sauce Labs API CLI
+
+Usage: sl <command> [options]`
+
+export const EPILOG = 'Copyright 2019 © Sauce Labs'
+
+export const CLI_PARAMS = [{
+    alias: 'h',
+    name: 'help',
+    description: 'prints help menu'
+}, {
+    alias: 'u',
+    name: 'user',
+    description: 'your Sauce Labs username'
+}, {
+    alias: 'k',
+    name: 'key',
+    description: 'your Sauce Labs user key'
+}, {
+    alias: 'r',
+    name: 'region',
+    default: DEFAULT_OPTIONS.region,
+    description: 'your Sauce Labs datacenter region, the following regions are available: `us-west-1` (short `us`), `eu-central-1` (short `eu`)'
+}, {
+    alias: 'h',
+    name: 'headless',
+    default: DEFAULT_OPTIONS.headless,
+    description: 'if set to true you are accessing the headless Sauce instances (this discards the `region` option)'
+}]
