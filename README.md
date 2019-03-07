@@ -32,7 +32,10 @@ Default: `process.env.SAUCE_ACCESS_KEY`
 
 ### region
 
-Your Sauce Labs datacenter region. The following regions are available: `us-west-1` (short `us`), `eu-central-1` (short `eu`).
+Your Sauce Labs datacenter region. The following regions are available:
+
+- `us-west-1` (short `us`)
+- `eu-central-1` (short `eu`)
 
 Type: `string`<br>
 Default: `us`

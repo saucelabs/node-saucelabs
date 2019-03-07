@@ -54,7 +54,7 @@ export const USAGE = `Sauce Labs API CLI
 
 Usage: sl <command> [options]`
 
-export const EPILOG = 'Copyright 2019 © Sauce Labs'
+export const EPILOG = `Copyright ${(new Date()).getUTCFullYear()} © Sauce Labs`
 
 export const CLI_PARAMS = [{
     alias: 'h',
