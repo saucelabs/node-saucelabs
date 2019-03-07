@@ -61,5 +61,5 @@ export const run = () => {
         argv = argv.option(param.name, param)
     }
 
-    return argv
+    return argv.argv
 }
