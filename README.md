@@ -4,7 +4,7 @@
 
 # Node Sauce Labs [![Build Status](https://travis-ci.org/saucelabs/node-saucelabs.svg?branch=master)](https://travis-ci.org/saucelabs/node-saucelabs)
 
-Wrapper around the Sauce Labs REST APIs for [Node.js](http://nodejs.org/).
+Wrapper around the Sauce Labs REST APIs for [Node.js](http://nodejs.org/) (v8 or higher).
 
 ## Install
 
