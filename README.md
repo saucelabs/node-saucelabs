@@ -85,7 +85,7 @@ import SauceLabs from 'saucelabs';
     // get job details of last run job
     const job = await user.listJobs(
         process.env.SAUCE_USERNAME,
-        { limit: 1 }
+        { limit: 1, full: true }
     );
 
     console.log(job);
