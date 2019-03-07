@@ -49,6 +49,8 @@ export const run = () => {
                     process.exit(1)
                 }
             )
+
+            return api
         })
     }
 
@@ -59,5 +61,5 @@ export const run = () => {
         argv = argv.option(param.name, param)
     }
 
-    return argv.argv
+    return argv
 }
