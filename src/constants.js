@@ -1,13 +1,14 @@
 import changeCase from 'change-case'
 
 const protocols = [
-    require('../apis/sauce.json')
+    require('../apis/sauce.json'),
+    require('../apis/rdc.json')
 ]
 
 const protocolFlattened = new Map()
 const parametersFlattened = new Map()
 for (const { paths, parameters, host } of protocols) {
-    for (const [name, description] of Object.entries(parameters)) {
+    for (const [name, description] of Object.entries(parameters || {})) {
         parametersFlattened.set(name, description)
     }
 
