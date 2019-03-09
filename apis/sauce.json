@@ -1,5 +1,5 @@
 {
-  "basePath": "/rest/",
+  "basePath": "/rest",
   "definitions": {
     "Activity": {
       "properties": {
