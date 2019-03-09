@@ -882,7 +882,7 @@
     }
   },
   "paths": {
-    "/rest/v1.1/jobs/{id}": {
+    "/v1.1/jobs/{id}": {
       "get": {
         "operationId": "get_job_v1.1",
         "parameters": [
@@ -916,7 +916,7 @@
         ]
       }
     },
-    "/rest/v1.1/users/{username}/concurrency": {
+    "/v1.1/users/{username}/concurrency": {
       "get": {
         "operationId": "get_user_concurrency",
         "parameters": [
@@ -950,7 +950,7 @@
         ]
       }
     },
-    "/rest/v1.1/users/{username}/organization": {
+    "/v1.1/users/{username}/organization": {
       "get": {
         "operationId": "list_user_organization",
         "parameters": [
@@ -999,7 +999,7 @@
         ]
       }
     },
-    "/rest/v1.1/{username}/available_tunnels": {
+    "/v1.1/{username}/available_tunnels": {
       "get": {
         "operationId": "list_available_tunnels",
         "parameters": [
@@ -1039,7 +1039,7 @@
         ]
       }
     },
-    "/rest/v1.1/{username}/builds": {
+    "/v1.1/{username}/builds": {
       "get": {
         "operationId": "list_builds",
         "parameters": [
@@ -1082,7 +1082,7 @@
         ]
       }
     },
-    "/rest/v1.1/{username}/jobs": {
+    "/v1.1/{username}/jobs": {
       "get": {
         "operationId": "list_jobs",
         "parameters": [
@@ -1182,7 +1182,7 @@
         ]
       }
     },
-    "/rest/v1/dashboard_messages/{username}": {
+    "/v1/dashboard_messages/{username}": {
       "get": {
         "operationId": "get_dashboard_message_for_user",
         "parameters": [
@@ -1229,7 +1229,7 @@
         ]
       }
     },
-    "/rest/v1/info/platforms/{platform}": {
+    "/v1/info/platforms/{platform}": {
       "get": {
         "description": "returns a list of supported platforms in the Sauce cloud",
         "operationId": "list_platforms",
@@ -1270,7 +1270,7 @@
         ]
       }
     },
-    "/rest/v1/info/status": {
+    "/v1/info/status": {
       "get": {
         "operationId": "get_status",
         "responses": {
@@ -1293,7 +1293,7 @@
         ]
       }
     },
-    "/rest/v1/manual": {
+    "/v1/manual": {
       "delete": {
         "description": "complete manual task",
         "operationId": "delete_manual_job",
@@ -1409,7 +1409,7 @@
         ]
       }
     },
-    "/rest/v1/manual/options/": {
+    "/v1/manual/options/": {
       "get": {
         "description": "returns a list of supported platforms in the Sauce cloud",
         "operationId": "list_manual_platforms",
@@ -1460,7 +1460,7 @@
         ]
       }
     },
-    "/rest/v1/manual/{taskId}": {
+    "/v1/manual/{taskId}": {
       "get": {
         "description": "get manual task",
         "operationId": "get_manual_job",
@@ -1534,7 +1534,7 @@
         ]
       }
     },
-    "/rest/v1/manual/{taskId}/screenshot": {
+    "/v1/manual/{taskId}/screenshot": {
       "post": {
         "consumes": [
           "text/plain; charset=utf-8",
@@ -1570,7 +1570,7 @@
         ]
       }
     },
-    "/rest/v1/me": {
+    "/v1/me": {
       "get": {
         "operationId": "get_current_user",
         "responses": {
@@ -1607,7 +1607,7 @@
         "summary": "Authenticated user cookie information"
       }
     },
-    "/rest/v1/tasks": {
+    "/v1/tasks": {
       "delete": {
         "description": "complete manual task",
         "operationId": "delete_manual_job_legacy",
@@ -1723,7 +1723,7 @@
         ]
       }
     },
-    "/rest/v1/users/{username}": {
+    "/v1/users/{username}": {
       "get": {
         "operationId": "get_user",
         "parameters": [
@@ -1757,7 +1757,7 @@
         ]
       }
     },
-    "/rest/v1/users/{username}/activity": {
+    "/v1/users/{username}/activity": {
       "get": {
         "operationId": "get_user_activity",
         "parameters": [
@@ -1792,7 +1792,7 @@
         ]
       }
     },
-    "/rest/v1/users/{username}/monthly-minutes": {
+    "/v1/users/{username}/monthly-minutes": {
       "get": {
         "operationId": "get_user_minutes",
         "parameters": [
@@ -1834,7 +1834,7 @@
         ]
       }
     },
-    "/rest/v1/users_activity": {
+    "/v1/users_activity": {
       "get": {
         "operationId": "get_users_activity",
         "responses": {
@@ -1858,7 +1858,7 @@
         ]
       }
     },
-    "/rest/v1/users_last_job": {
+    "/v1/users_last_job": {
       "get": {
         "operationId": "users_last_job",
         "responses": {
@@ -1882,7 +1882,7 @@
         ]
       }
     },
-    "/rest/v1/whoami": {
+    "/v1/whoami": {
       "get": {
         "operationId": "get_current_user_full",
         "responses": {
@@ -1911,7 +1911,7 @@
         ]
       }
     },
-    "/rest/v1/{username}/all_tunnels": {
+    "/v1/{username}/all_tunnels": {
       "get": {
         "operationId": "list_all_tunnels",
         "parameters": [
@@ -1953,7 +1953,7 @@
         ]
       }
     },
-    "/rest/v1/{username}/builds/{id}/failed-jobs": {
+    "/v1/{username}/builds/{id}/failed-jobs": {
       "get": {
         "operationId": "list_build_failed_jobs",
         "parameters": [
@@ -1994,7 +1994,7 @@
         ]
       }
     },
-    "/rest/v1/{username}/builds/{id}/jobs": {
+    "/v1/{username}/builds/{id}/jobs": {
       "get": {
         "operationId": "list_build_jobs",
         "parameters": [
@@ -2035,7 +2035,7 @@
         ]
       }
     },
-    "/rest/v1/{username}/jobs/{id}": {
+    "/v1/{username}/jobs/{id}": {
       "get": {
         "operationId": "get_job",
         "parameters": [
@@ -2115,7 +2115,7 @@
         ]
       }
     },
-    "/rest/v1/{username}/jobs/{id}/stop": {
+    "/v1/{username}/jobs/{id}/stop": {
       "put": {
         "operationId": "stop_job",
         "parameters": [
@@ -2140,7 +2140,7 @@
         ]
       }
     },
-    "/rest/v1/{username}/tunnels": {
+    "/v1/{username}/tunnels": {
       "get": {
         "operationId": "list_tunnels",
         "parameters": [
@@ -2180,7 +2180,7 @@
         ]
       }
     },
-    "/rest/v1/{username}/tunnels/{id}": {
+    "/v1/{username}/tunnels/{id}": {
       "delete": {
         "operationId": "delete_tunnel",
         "parameters": [
@@ -2249,7 +2249,7 @@
         ]
       }
     },
-    "/rest/v1/jobs/{id}/{assetName}": {
+    "/v1/jobs/{id}/{assetName}": {
       "get": {
         "operationId": "download_job_asset",
         "parameters": [

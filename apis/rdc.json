@@ -65,13 +65,6 @@
             ],
             "parameters":[
                {
-                  "name":"Authorization",
-                  "in":"header",
-                  "description":"Authorization header for authentication",
-                  "required":false,
-                  "type":"string"
-               },
-               {
                   "name":"App-Type",
                   "in":"header",
                   "description":"Application type",
@@ -205,12 +198,6 @@
             ],
             "parameters":[
                {
-                  "name":"Authorization",
-                  "in":"header",
-                  "required":false,
-                  "type":"string"
-               },
-               {
                   "name":"suiteId",
                   "in":"path",
                   "description":"The ID of the suite",
@@ -254,12 +241,6 @@
             ],
             "parameters":[
                {
-                  "name":"Authorization",
-                  "in":"header",
-                  "required":false,
-                  "type":"string"
-               },
-               {
                   "name":"suiteId",
                   "in":"path",
                   "description":"The ID of the suite",
@@ -298,12 +279,6 @@
                "application/json"
             ],
             "parameters":[
-               {
-                  "name":"Authorization",
-                  "in":"header",
-                  "required":false,
-                  "type":"string"
-               },
                {
                   "name":"suiteId",
                   "in":"path",
@@ -359,12 +334,6 @@
             ],
             "parameters":[
                {
-                  "name":"Authorization",
-                  "in":"header",
-                  "required":false,
-                  "type":"string"
-               },
-               {
                   "name":"suiteId",
                   "in":"path",
                   "description":"The ID of the suite",
@@ -407,12 +376,6 @@
                "application/json"
             ],
             "parameters":[
-               {
-                  "name":"Authorization",
-                  "in":"header",
-                  "required":false,
-                  "type":"string"
-               },
                {
                   "name":"suiteId",
                   "in":"path",
@@ -472,12 +435,6 @@
                "application/json"
             ],
             "parameters":[
-               {
-                  "name":"Authorization",
-                  "in":"header",
-                  "required":false,
-                  "type":"string"
-               },
                {
                   "name":"suiteId",
                   "in":"path",
@@ -853,12 +810,6 @@
             ],
             "parameters":[
                {
-                  "name":"Authorization",
-                  "in":"header",
-                  "required":false,
-                  "type":"string"
-               },
-               {
                   "name":"suiteId",
                   "in":"path",
                   "description":"The ID of the suite",
@@ -901,12 +852,6 @@
             ],
             "parameters":[
                {
-                  "name":"Authorization",
-                  "in":"header",
-                  "required":false,
-                  "type":"string"
-               },
-               {
                   "name":"suiteId",
                   "in":"path",
                   "description":"The ID of the suite",
@@ -944,12 +889,6 @@
                "application/json"
             ],
             "parameters":[
-               {
-                  "name":"Authorization",
-                  "in":"header",
-                  "required":false,
-                  "type":"string"
-               },
                {
                   "name":"suiteId",
                   "in":"path",
@@ -1004,12 +943,6 @@
             ],
             "parameters":[
                {
-                  "name":"Authorization",
-                  "in":"header",
-                  "required":false,
-                  "type":"string"
-               },
-               {
                   "name":"suiteId",
                   "in":"path",
                   "description":"The ID of the suite",
@@ -1051,12 +984,6 @@
                "application/json"
             ],
             "parameters":[
-               {
-                  "name":"Authorization",
-                  "in":"header",
-                  "required":false,
-                  "type":"string"
-               },
                {
                   "name":"suiteId",
                   "in":"path",
@@ -1115,12 +1042,6 @@
                "application/json"
             ],
             "parameters":[
-               {
-                  "name":"Authorization",
-                  "in":"header",
-                  "required":false,
-                  "type":"string"
-               },
                {
                   "name":"suiteId",
                   "in":"path",
@@ -1344,13 +1265,6 @@
             ],
             "parameters":[
                {
-                  "name":"Authorization",
-                  "in":"header",
-                  "description":"Authorization header for authentication",
-                  "required":false,
-                  "type":"string"
-               },
-               {
                   "name":"testReportId",
                   "in":"path",
                   "description":"The ID of the test report",
@@ -1381,13 +1295,6 @@
                "application/json"
             ],
             "parameters":[
-               {
-                  "name":"Authorization",
-                  "in":"header",
-                  "description":"Authorization header for authentication",
-                  "required":false,
-                  "type":"string"
-               },
                {
                   "name":"testReportId",
                   "in":"path",
@@ -1420,13 +1327,6 @@
             ],
             "parameters":[
                {
-                  "name":"Authorization",
-                  "in":"header",
-                  "description":"Authorization header for authentication",
-                  "required":false,
-                  "type":"string"
-               },
-               {
                   "name":"testReportId",
                   "in":"path",
                   "description":"The ID of the test report",
@@ -1457,13 +1357,6 @@
                "application/json"
             ],
             "parameters":[
-               {
-                  "name":"Authorization",
-                  "in":"header",
-                  "description":"Authorization header for authentication",
-                  "required":false,
-                  "type":"string"
-               },
                {
                   "name":"testReportId",
                   "in":"path",
@@ -1505,13 +1398,6 @@
                   "required":true,
                   "type":"integer",
                   "format":"int64"
-               },
-               {
-                  "name":"Authorization",
-                  "in":"header",
-                  "description":"Authorization header for authentication",
-                  "required":false,
-                  "type":"string"
                }
             ],
             "responses":{
@@ -1536,13 +1422,6 @@
                "image/png"
             ],
             "parameters":[
-               {
-                  "name":"Authorization",
-                  "in":"header",
-                  "description":"Authorization header for authentication",
-                  "required":false,
-                  "type":"string"
-               },
                {
                   "name":"testReportId",
                   "in":"path",
@@ -1587,13 +1466,6 @@
                {
                   "name":"Range",
                   "in":"header",
-                  "required":false,
-                  "type":"string"
-               },
-               {
-                  "name":"Authorization",
-                  "in":"header",
-                  "description":"Authorization header for authentication",
                   "required":false,
                   "type":"string"
                }
