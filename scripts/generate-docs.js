@@ -11,12 +11,6 @@ let docs = `SauceLabs Interface
 The following commands are available via package or cli tool:
 
 <table>
-  <thead>
-    <tr>
-      <th width="50%">REST</td>
-      <th width="50%">Node Wrapper</td>
-    </tr>
-  </thead>
   <tbody>
 `
 
@@ -28,10 +22,9 @@ for (const [commandName, options] of PROTOCOL_MAP) {
 
     docs += '    <tr>\n'
     docs += '      <td>\n'
-    docs += `        ${options.method.toUpperCase()} <code>${options.endpoint}</code><br>\n`
+    docs += `        <b>${options.method.toUpperCase()}</b> <code>${options.endpoint}</code><br>\n`
     docs += `        ${options.description.description || 'No description available.'}\n`
-    docs += '      </td>\n'
-    docs += '      <td>\n'
+    docs += '        <h3>Example:</h3>\n'
     docs += `        <code>${example}</code>\n`
 
     if (commandOptions.length) {
