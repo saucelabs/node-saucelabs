@@ -52,13 +52,23 @@ export function toString (scope) {
 }
 
 /**
- * get list of parameters with full description
+ * get sorted list of parameters with full description
  * @param  {Array}    [parameters=[]]  parameter defined in endpoint
  * @return {[Object]}                  full description of parameters
  */
 export function getParameters (parameters = []) {
-    return parameters.map(
+    const params = parameters.map(
         (urlParameter) => urlParameter.$ref
             ? PARAMETERS_MAP.get(urlParameter.$ref.split('/').slice(-1)[0])
             : urlParameter)
+
+    return params.sort((a, b) => {
+        if (a.required && b.required) {
+            return 0
+        }
+        if (a.required && !b.required) {
+            return -1
+        }
+        return 1
+    })
 }
