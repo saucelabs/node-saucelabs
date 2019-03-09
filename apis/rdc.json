@@ -123,6 +123,7 @@
             "tags":[
                "Appium Watcher API V1 (Deprecated)"
             ],
+            "deprecated": true,
             "summary":"Skip Test Report",
             "description":"Report the result of a test as skipped.",
             "operationId":"markTestAsSkipped",
@@ -153,6 +154,7 @@
             "tags":[
                "Appium Watcher API V1 (Deprecated)"
             ],
+            "deprecated": true,
             "summary":"Report Test Result",
             "description":"Report the result of a test.",
             "operationId":"updateTest",
@@ -191,6 +193,7 @@
             "tags":[
                "Appium Suites API V1 (Deprecated)"
             ],
+            "deprecated": true,
             "summary":"Update Suite",
             "description":"Updates the properties of a suite.",
             "operationId":"updateSuite",
@@ -239,6 +242,7 @@
             "tags":[
                "Appium Suites API V1 (Deprecated)"
             ],
+            "deprecated": true,
             "summary":"Read Device IDs",
             "description":"Returns the IDs of the devices which you had selected for the specified suite.",
             "operationId":"readDeviceIds",
@@ -283,6 +287,7 @@
             "tags":[
                "Appium Suites API V1 (Deprecated)"
             ],
+            "deprecated": true,
             "summary":"Start Suite Execution",
             "description":"Start a new suite execution including its test executions.",
             "operationId":"startSuite",
@@ -342,6 +347,7 @@
             "tags":[
                "Appium Suites API V1 (Deprecated)"
             ],
+            "deprecated": true,
             "summary":"Finish Suite Execution",
             "description":"Marks all test executions contained in the specified suite execution as finished.",
             "operationId":"finishSuite",
@@ -390,6 +396,7 @@
             "tags":[
                "Appium Suites API V1 (Deprecated)"
             ],
+            "deprecated": true,
             "summary":"Finish Test Execution",
             "description":"Sets the status of the specific test execution and marks it as finished.",
             "operationId":"finishTestReport",
@@ -454,6 +461,7 @@
             "tags":[
                "Appium Suites API V1 (Deprecated)"
             ],
+            "deprecated": true,
             "summary":"Skip Test Execution",
             "description":"Mark test execution as skipped",
             "operationId":"skipTestReport",
@@ -510,6 +518,7 @@
             "tags":[
                "Devices API V1 (Deprecated)"
             ],
+            "deprecated": true,
             "summary":"Get All Devices",
             "description":"Returns a list containing all devices, including those not currently available for testing",
             "operationId":"getDescriptors",
@@ -541,6 +550,7 @@
             "tags":[
                "Devices API V1 (Deprecated)"
             ],
+            "deprecated": true,
             "summary":"Get All Devices",
             "description":"Returns a list containing all devices, including those not currently unavailable for testing.\nThis endpoint requires API Key authentication and will also return your private devices.",
             "operationId":"getDescriptorsApi",
@@ -572,6 +582,7 @@
             "tags":[
                "Devices API V1 (Deprecated)"
             ],
+            "deprecated": true,
             "summary":"Get Available Devices",
             "description":"Returns a list containing the IDs of all devices currently available for testing.\nThis endpoint requires API Key authentication and will also return your private devices.",
             "operationId":"getAvailableDescriptorIdsApi",
@@ -603,6 +614,7 @@
             "tags":[
                "Devices API V1 (Deprecated)"
             ],
+            "deprecated": true,
             "summary":"Get Available Devices",
             "description":"Returns a list containing the IDs of all devices currently available for testing",
             "operationId":"getAvailableDescriptorIds",
@@ -691,6 +703,7 @@
             "tags":[
                "Devices API V1 (Deprecated)"
             ],
+            "deprecated": true,
             "summary":"Get Device",
             "description":"Returns information for a particular device.\nThis endpoint requires API Key authentication.",
             "operationId":"getDescriptor",
@@ -724,6 +737,7 @@
             "tags":[
                "Devices API V1 (Deprecated)"
             ],
+            "deprecated": true,
             "summary":"Get Device Status",
             "description":"Returns a list containing device status infos for all device instances with the specified device ID on all pools.\nThis endpoint requires API Key authentication and will also return your private devices.",
             "operationId":"getDeviceStatusInfos",

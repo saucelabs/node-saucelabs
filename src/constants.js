@@ -14,8 +14,24 @@ for (const { paths, parameters, host } of protocols) {
 
     for (const [endpoint, methods] of Object.entries(paths)) {
         for (const [method, description] of Object.entries(methods)) {
+            let commandName = changeCase.camelCase(description.operationId)
+
+            /**
+             * mark commands as depcrecated in the command names
+             */
+            if (description.deprecated) {
+                commandName += 'Deprecated'
+            }
+
+            /**
+             * ensure we don't double registet commands
+             */
+            if (protocolFlattened.has(commandName)) {
+                throw new Error(`command ${commandName} already registered`)
+            }
+
             protocolFlattened.set(
-                changeCase.camelCase(description.operationId),
+                commandName,
                 { method, endpoint, description, host }
             )
         }
