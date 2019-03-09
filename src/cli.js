@@ -16,7 +16,7 @@ export const run = () => {
             p.required ? `<${p.name}>` : `[${p.name}]`
         )).join(' ')}`
 
-        yargs.command(command, options.description.summary, (yargs) => {
+        yargs.command(command.trim(), options.description.summary, (yargs) => {
             for (const param of params) {
                 const paramDescription = {
                     describe: param.description,
