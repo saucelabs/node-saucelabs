@@ -7,7 +7,7 @@ const protocols = [
 
 const protocolFlattened = new Map()
 const parametersFlattened = new Map()
-for (const { paths, parameters, host } of protocols) {
+for (const { paths, parameters, host, basePath } of protocols) {
     for (const [name, description] of Object.entries(parameters || {})) {
         parametersFlattened.set(name, description)
     }
@@ -32,7 +32,7 @@ for (const { paths, parameters, host } of protocols) {
 
             protocolFlattened.set(
                 commandName,
-                { method, endpoint, description, host }
+                { method, endpoint, description, host, basePath }
             )
         }
     }

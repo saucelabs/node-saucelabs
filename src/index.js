@@ -79,7 +79,7 @@ export default class SauceLabs {
         }
 
         return (...args) => {
-            const { description, method, endpoint, host } = PROTOCOL_MAP.get(propName)
+            const { description, method, endpoint, host, basePath } = PROTOCOL_MAP.get(propName)
             const params = getParameters(description.parameters)
 
             /**
@@ -126,7 +126,7 @@ export default class SauceLabs {
             /**
              * make request
              */
-            const uri = getSauceEndpoint(host, this._options.region, this._options.headless) + url
+            const uri = getSauceEndpoint(host + basePath, this._options.region, this._options.headless) + url
             return new Promise((resolve, reject) => request({
                 uri,
                 method: method.toUpperCase(),
