@@ -1,5 +1,6 @@
 assets
 coverage
+scripts
 src
 tests
 !build
