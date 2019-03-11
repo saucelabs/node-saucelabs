@@ -578,4 +578,55 @@ This endpoint requires API Key authentication and will also return your private 
         <br><h4>Options</h4>
         <ul>          <li><b>Range</b>: No description available.</li>        </ul>      </td>
     </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/metrics/{job_id}/</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getPerformanceMetrics(job_id)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/metrics/{job_id}/baseline/history/</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getBaselineHistory(job_id, metric_names, order_index, { ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>window_size</b>: No description available.</li>          <li><b>limit</b>: No description available.</li>        </ul>      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/metrics/{job_id}/baseline/command/</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getRecentBaselineHistory(job_id, metric_names, order_index, { ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>window_size</b>: No description available.</li>        </ul>      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>PATCH</b> <code>/metrics/{job_id}/regime_acknowledge/</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.acknowledgeRegime(job_id, body)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/metrics/{job_id}/regressions/</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.assertPerformanceRegression(job_id, metric_names, { ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>window_size</b>: No description available.</li>        </ul>      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/metrics/{job_id}/dataset/</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getPerformanceDataset(job_id, metric_names)</code>
+      </td>
+    </tr>
   </tbody></table>

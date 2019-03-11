@@ -1,0 +1,617 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Performance API",
+    "version": "0.94.0"
+  },
+  "host": "api.staging.saucelabs.net",
+  "basePath": "/v1/performance",
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/metrics/{job_id}/": {
+      "get": {
+        "operationId": "get_performance_metrics",
+        "summary": "Get performance metrics of specific test.",
+        "parameters": [
+          {
+            "$ref": "#/parameters/JobId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gets performance metrics for a given job id",
+            "schema": {
+              "$ref": "#/definitions/PerformanceMetricsListView"
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/metrics/{job_id}/baseline/history/": {
+      "get": {
+        "operationId": "get_baseline_history",
+        "summary": "Get baseline history of specific test.",
+        "parameters": [
+          {
+            "$ref": "#/parameters/JobId"
+          },
+          {
+            "$ref": "#/parameters/MetricNames"
+          },
+          {
+            "$ref": "#/parameters/OrderIndex"
+          },
+          {
+            "$ref": "#/parameters/Limit"
+          },
+          {
+            "$ref": "#/parameters/WindowSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gets baseline history based on job_id and given parameters",
+            "schema": {
+              "$ref": "#/definitions/BaselineHistoryView"
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/metrics/{job_id}/baseline/command/": {
+      "get": {
+        "operationId": "get_recent_baseline_history",
+        "summary": "Gets recent baseline based on job_id and given parameters",
+        "parameters": [
+          {
+            "$ref": "#/parameters/JobId"
+          },
+          {
+            "$ref": "#/parameters/MetricNames"
+          },
+          {
+            "$ref": "#/parameters/OrderIndex"
+          },
+          {
+            "$ref": "#/parameters/WindowSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gets recent baseline based on job_id and given parameters",
+            "schema": {
+              "$ref": "#/definitions/BaselineCommandView"
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/metrics/{job_id}/regime_acknowledge/": {
+      "patch": {
+        "operationId": "acknowledge_regime",
+        "summary": "Acknowledge Regime.",
+        "parameters": [
+          {
+            "$ref": "#/parameters/JobId"
+          },
+          {
+            "$ref": "#/parameters/RegimeAcknowledgeBody"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Regime acknowledged.",
+            "schema": {
+              "$ref": "#/definitions/PerformanceMetricsListViewItems"
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/metrics/{job_id}/regressions/": {
+      "get": {
+        "operationId": "assert_performance_regression",
+        "summary": "Shows if there's a regression detected for given job_id and metric_names",
+        "parameters": [
+          {
+            "$ref": "#/parameters/JobId"
+          },
+          {
+            "$ref": "#/parameters/MetricNames"
+          },
+          {
+            "$ref": "#/parameters/WindowSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Shows if there's a regression detected for given job_id and metric_names",
+            "schema": {
+              "$ref": "#/definitions/PerformanceMetricsRegressionListView"
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/metrics/{job_id}/dataset/": {
+      "get": {
+        "operationId": "get_performance_dataset",
+        "parameters": [
+          {
+            "$ref": "#/parameters/JobId"
+          },
+          {
+            "$ref": "#/parameters/MetricNames"
+          }
+        ],
+        "summary": "Returns a dataset used to calculate regressions and baselines",
+        "responses": {
+          "200": {
+            "description": "Returns a dataset used to calculate regressions and baselines",
+            "schema": {
+              "$ref": "#/definitions/PerformanceMetricsDataSetListView"
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "JobId": {
+      "name": "job_id",
+      "in": "path",
+      "type": "string",
+      "required": true
+    },
+    "JobOwner": {
+      "name": "job_owner",
+      "in": "query",
+      "type": "string",
+      "required": false
+    },
+    "MetricNames": {
+      "name": "metric_names",
+      "in": "query",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "required": true
+    },
+    "MetricName": {
+      "name": "metric_names",
+      "in": "query",
+      "type": "string",
+      "required": true
+    },
+    "JobNameHash": {
+      "name": "job_name_hash",
+      "in": "query",
+      "type": "string",
+      "required": true
+    },
+    "OrderIndex": {
+      "name": "order_index",
+      "in": "query",
+      "type": "integer",
+      "required": true
+    },
+    "EndTime": {
+      "name": "end_time",
+      "in": "query",
+      "type": "string",
+      "format": "date-time",
+      "required": false
+    },
+    "Limit": {
+      "name": "limit",
+      "in": "query",
+      "type": "integer",
+      "required": false
+    },
+    "WindowSize": {
+      "name": "window_size",
+      "in": "query",
+      "type": "integer",
+      "required": false
+    },
+    "RegimeAcknowledgeBody": {
+      "name": "body",
+      "in": "body",
+      "description": "Data needed to acknowledge the regime",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/RegimeAcknowledgeList"
+      }
+    }
+  },
+  "definitions": {
+    "PerformanceMetricsListView": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PerformanceMetricsListViewItems"
+          }
+        }
+      }
+    },
+    "PerformanceMetricsListViewItems": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "job_id": {
+          "type": "string"
+        },
+        "job_owner": {
+          "type": "string"
+        },
+        "page_url": {
+          "type": "string"
+        },
+        "order_index": {
+          "type": "integer"
+        },
+        "job_creation_time": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "metric_data": {
+          "$ref": "#/definitions/PerformanceMetricsDetails"
+        },
+        "regime_acknowledge": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "PerformanceMetricsDetails": {
+      "type": "object",
+      "properties": {
+        "load": {
+          "type": "number",
+          "format": "float"
+        },
+        "font_size": {
+          "type": "integer"
+        },
+        "firstPaint": {
+          "type": "number",
+          "format": "float"
+        },
+        "font_count": {
+          "type": "integer"
+        },
+        "image_size": {
+          "type": "integer"
+        },
+        "other_size": {
+          "type": "integer"
+        },
+        "pageWeight": {
+          "type": "integer"
+        },
+        "speedIndex": {
+          "type": "number",
+          "format": "float"
+        },
+        "image_count": {
+          "type": "integer"
+        },
+        "other_count": {
+          "type": "integer"
+        },
+        "script_size": {
+          "type": "integer"
+        },
+        "requestsSize": {
+          "type": "integer"
+        },
+        "script_count": {
+          "type": "integer"
+        },
+        "document_size": {
+          "type": "integer"
+        },
+        "requestsCount": {
+          "type": "integer"
+        },
+        "document_count": {
+          "type": "integer"
+        },
+        "timeToFirstByte": {
+          "type": "integer"
+        },
+        "domContentLoaded": {
+          "type": "number",
+          "format": "float"
+        },
+        "pageWeightEncoded": {
+          "type": "integer"
+        },
+        "firstContentfulPaint": {
+          "type": "number",
+          "format": "float"
+        },
+        "firstMeaningfulPaint": {
+          "type": "number",
+          "format": "float"
+        },
+        "perceptualSpeedIndex": {
+          "type": "number",
+          "format": "float"
+        },
+        "timeToFirstInteractive": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "BaselineHistoryView": {
+      "type": "object",
+      "properties": {
+        "load": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BaselineDetails"
+          }
+        },
+        "requestsCount": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BaselineDetails"
+          }
+        },
+        "pageWeight": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BaselineDetails"
+          }
+        },
+        "speedIndex": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BaselineDetails"
+          }
+        }
+      }
+    },
+    "BaselineCommandView": {
+      "type": "object",
+      "properties": {
+        "load": {
+          "$ref": "#/definitions/BaselineDetails"
+        },
+        "requestsCount": {
+          "$ref": "#/definitions/BaselineDetails"
+        },
+        "pageWeight": {
+          "$ref": "#/definitions/BaselineDetails"
+        },
+        "speedIndex": {
+          "$ref": "#/definitions/BaselineDetails"
+        }
+      }
+    },
+    "BaselineDetails": {
+      "type": "object",
+      "properties": {
+        "b": {
+          "type": "number",
+          "format": "float",
+          "description": "Baseline"
+        },
+        "u": {
+          "type": "number",
+          "format": "float",
+          "description": "Upper boundry"
+        },
+        "l": {
+          "type": "number",
+          "format": "float",
+          "description": "Lower boundry"
+        },
+        "r": {
+          "type": "number",
+          "format": "float",
+          "description": "Real value"
+        },
+        "job_id": {
+          "type": "string"
+        },
+        "datetime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "new_regime": {
+          "type": "number",
+          "format": "integer",
+          "enum": [
+            0,
+            1
+          ],
+          "description": "positive means a datapoint belongs to the new regime"
+        },
+        "accepted": {
+          "type": "number",
+          "format": "integer",
+          "enum": [
+            0,
+            1
+          ],
+          "description": "positive means a datapoint regime is accepted"
+        }
+      }
+    },
+    "RegimeAcknowledge": {
+      "type": "object",
+      "properties": {
+        "page_url": {
+          "type": "string"
+        },
+        "order_index": {
+          "type": "integer"
+        },
+        "metric_names": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "load",
+              "font_size",
+              "firstPaint",
+              "font_count",
+              "image_size",
+              "other_size",
+              "pageWeight",
+              "speedIndex",
+              "image_count",
+              "other_count",
+              "script_size",
+              "requestsSize",
+              "script_count",
+              "document_size",
+              "requestsCount",
+              "document_count",
+              "timeToFirstByte",
+              "domContentLoaded",
+              "pageWeightEncoded",
+              "firstContentfulPaint",
+              "firstMeaningfulPaint",
+              "perceptualSpeedIndex",
+              "timeToFirstInteractive"
+            ]
+          }
+        }
+      },
+      "required": [
+        "page_url",
+        "order_index",
+        "metric_names"
+      ]
+    },
+    "RegimeAcknowledgeList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/RegimeAcknowledge"
+      },
+      "minItems": 1
+    },
+    "PerformanceMetricsRegressionListView": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "page_url": {
+                "type": "string"
+              },
+              "order_index": {
+                "type": "integer"
+              },
+              "is_regression_detected": {
+                "type": "boolean"
+              },
+              "metrics": {
+                "$ref": "#/definitions/PerformanceMetricsDetails"
+              }
+            }
+          }
+        }
+      }
+    },
+    "PerformanceMetricsDataSetListView": {
+      "type": "object",
+      "properties": {
+        "load": {
+          "type": "object",
+          "properties": {
+            "https://www.saucedemo.com/": {
+              "type": "object",
+              "properties": {
+                "0": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/BaselineItemInput"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "BaselineItemInput": {
+      "type": "object",
+      "properties": {
+        "job_id": {
+          "type": "string"
+        },
+        "datetime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "value": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "details": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

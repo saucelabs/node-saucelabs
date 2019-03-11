@@ -2,7 +2,8 @@ import changeCase from 'change-case'
 
 const protocols = [
     require('../apis/sauce.json'),
-    require('../apis/rdc.json')
+    require('../apis/rdc.json'),
+    require('../apis/performance.json')
 ]
 
 const protocolFlattened = new Map()
@@ -27,7 +28,7 @@ for (const { paths, parameters, host, basePath } of protocols) {
              * ensure we don't double registet commands
              */
             if (protocolFlattened.has(commandName)) {
-                throw new Error(`command ${commandName} already registered`)
+                throw new Error(`command ${commandName} alreadyasss registered`)
             }
 
             protocolFlattened.set(
