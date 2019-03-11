@@ -141,7 +141,8 @@ export default class SauceLabs {
 
                 /* istanbul ignore if */
                 if (response.statusCode !== 200) {
-                    return reject(new Error((body && body.message) || `Unknown Error (${response.statusCode})`))
+                    const reason = JSON.parse(body).message || 'unknown'
+                    return reject(new Error(`Failed calling ${propName}, status code: ${response.statusCode}, reason: ${reason}`))
                 }
 
                 return resolve(body)
