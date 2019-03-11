@@ -2000,6 +2000,9 @@
         "parameters": [
           {
             "$ref": "#/parameters/id"
+          },
+          {
+            "$ref": "#/parameters/full"
           }
         ],
         "responses": {
