@@ -7,7 +7,7 @@ The following commands are available via package or cli tool:
   <tbody>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1.1/jobs/{id}</code><br>
+        <b>GET</b> <code>/v1.1/jobs/{id}</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.getJobV1_1(id)</code>
@@ -15,7 +15,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1.1/users/{username}/concurrency</code><br>
+        <b>GET</b> <code>/v1.1/users/{username}/concurrency</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.getUserConcurrency(username)</code>
@@ -23,7 +23,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1.1/users/{username}/organization</code><br>
+        <b>GET</b> <code>/v1.1/users/{username}/organization</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.listUserOrganization(username)</code>
@@ -31,7 +31,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1.1/{username}/available_tunnels</code><br>
+        <b>GET</b> <code>/v1.1/{username}/available_tunnels</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.listAvailableTunnels(username)</code>
@@ -39,7 +39,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1.1/{username}/builds</code><br>
+        <b>GET</b> <code>/v1.1/{username}/builds</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.listBuilds(username, { ...options })</code>
@@ -48,7 +48,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1.1/{username}/jobs</code><br>
+        <b>GET</b> <code>/v1.1/{username}/jobs</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.listJobs(username, { ...options })</code>
@@ -57,7 +57,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/dashboard_messages/{username}</code><br>
+        <b>GET</b> <code>/v1/dashboard_messages/{username}</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.getDashboardMessageForUser(username)</code>
@@ -65,7 +65,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/info/platforms/{platform}</code><br>
+        <b>GET</b> <code>/v1/info/platforms/{platform}</code><br>
         returns a list of supported platforms in the Sauce cloud
         <h3>Example:</h3>
         <code>api.listPlatforms(platform)</code>
@@ -73,7 +73,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/info/status</code><br>
+        <b>GET</b> <code>/v1/info/status</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.getStatus()</code>
@@ -81,7 +81,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>DELETE</b> <code>/rest/v1/manual</code><br>
+        <b>DELETE</b> <code>/v1/manual</code><br>
         complete manual task
         <h3>Example:</h3>
         <code>api.deleteManualJob(ids)</code>
@@ -89,7 +89,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>POST</b> <code>/rest/v1/manual</code><br>
+        <b>POST</b> <code>/v1/manual</code><br>
         Creates a manual job
         <h3>Example:</h3>
         <code>api.createManualJob(capabilities)</code>
@@ -97,7 +97,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/manual/options/</code><br>
+        <b>GET</b> <code>/v1/manual/options/</code><br>
         returns a list of supported platforms in the Sauce cloud
         <h3>Example:</h3>
         <code>api.listManualPlatforms()</code>
@@ -105,7 +105,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/manual/{taskId}</code><br>
+        <b>GET</b> <code>/v1/manual/{taskId}</code><br>
         get manual task
         <h3>Example:</h3>
         <code>api.getManualJob(taskId)</code>
@@ -113,7 +113,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>POST</b> <code>/rest/v1/manual/{taskId}/screenshot</code><br>
+        <b>POST</b> <code>/v1/manual/{taskId}/screenshot</code><br>
         Take screenshot in manual session
         <h3>Example:</h3>
         <code>api.createManualJobScreenshot(taskId)</code>
@@ -121,7 +121,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/me</code><br>
+        <b>GET</b> <code>/v1/me</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.getCurrentUser()</code>
@@ -129,7 +129,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>DELETE</b> <code>/rest/v1/tasks</code><br>
+        <b>DELETE</b> <code>/v1/tasks</code><br>
         complete manual task
         <h3>Example:</h3>
         <code>api.deleteManualJobLegacy(ids)</code>
@@ -137,7 +137,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>POST</b> <code>/rest/v1/tasks</code><br>
+        <b>POST</b> <code>/v1/tasks</code><br>
         Creates a manual job
         <h3>Example:</h3>
         <code>api.createManualJobLegacy(capabilities)</code>
@@ -145,7 +145,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/users/{username}</code><br>
+        <b>GET</b> <code>/v1/users/{username}</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.getUser(username)</code>
@@ -153,7 +153,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/users/{username}/activity</code><br>
+        <b>GET</b> <code>/v1/users/{username}/activity</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.getUserActivity(username)</code>
@@ -161,7 +161,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/users/{username}/monthly-minutes</code><br>
+        <b>GET</b> <code>/v1/users/{username}/monthly-minutes</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.getUserMinutes(username)</code>
@@ -169,7 +169,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/users_activity</code><br>
+        <b>GET</b> <code>/v1/users_activity</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.getUsersActivity()</code>
@@ -177,7 +177,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/users_last_job</code><br>
+        <b>GET</b> <code>/v1/users_last_job</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.usersLastJob()</code>
@@ -185,7 +185,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/whoami</code><br>
+        <b>GET</b> <code>/v1/whoami</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.getCurrentUserFull()</code>
@@ -193,7 +193,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/{username}/all_tunnels</code><br>
+        <b>GET</b> <code>/v1/{username}/all_tunnels</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.listAllTunnels(username)</code>
@@ -201,7 +201,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/{username}/builds/{id}/failed-jobs</code><br>
+        <b>GET</b> <code>/v1/{username}/builds/{id}/failed-jobs</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.listBuildFailedJobs(username, id)</code>
@@ -209,15 +209,15 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/{username}/builds/{id}/jobs</code><br>
+        <b>GET</b> <code>/v1/builds/{id}/jobs</code><br>
         No description available.
         <h3>Example:</h3>
-        <code>api.listBuildJobs(username, id)</code>
+        <code>api.listBuildJobs(id)</code>
       </td>
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/{username}/jobs/{id}</code><br>
+        <b>GET</b> <code>/v1/{username}/jobs/{id}</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.getJob(username, id)</code>
@@ -225,7 +225,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>PUT</b> <code>/rest/v1/{username}/jobs/{id}</code><br>
+        <b>PUT</b> <code>/v1/{username}/jobs/{id}</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.updateJob(username, id, body)</code>
@@ -233,7 +233,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>PUT</b> <code>/rest/v1/{username}/jobs/{id}/stop</code><br>
+        <b>PUT</b> <code>/v1/{username}/jobs/{id}/stop</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.stopJob(username, id)</code>
@@ -241,7 +241,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/{username}/tunnels</code><br>
+        <b>GET</b> <code>/v1/{username}/tunnels</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.listTunnels(username, { ...options })</code>
@@ -250,7 +250,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>DELETE</b> <code>/rest/v1/{username}/tunnels/{id}</code><br>
+        <b>DELETE</b> <code>/v1/{username}/tunnels/{id}</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.deleteTunnel(username, id)</code>
@@ -258,7 +258,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/{username}/tunnels/{id}</code><br>
+        <b>GET</b> <code>/v1/{username}/tunnels/{id}</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.getTunnel(username, id)</code>
@@ -266,7 +266,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/rest/v1/jobs/{id}/{assetName}</code><br>
+        <b>GET</b> <code>/v1/jobs/{id}/{assetName}</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.downloadJobAsset(id, filename)</code>
@@ -279,7 +279,7 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.uploadApp(, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>body</b>: No description available.</li>          <li><b>App-Active</b>: If true makes uploaded application active one</li>          <li><b>App-DisplayName</b>: Your custom display name</li>          <li><b>App-Identifier</b>: Your custom unique identifier for your app</li>          <li><b>App-Type</b>: Application type</li>          <li><b>Authorization</b>: Authorization header for authentication</li>        </ul>      </td>
+        <ul>          <li><b>body</b>: No description available.</li>          <li><b>App-Active</b>: If true makes uploaded application active one</li>          <li><b>App-DisplayName</b>: Your custom display name</li>          <li><b>App-Identifier</b>: Your custom unique identifier for your app</li>          <li><b>App-Type</b>: Application type</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -305,16 +305,15 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.updateSuiteDeprecated(suiteId, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>body</b>: No description available.</li>          <li><b>Authorization</b>: No description available.</li>        </ul>      </td>
+        <ul>          <li><b>body</b>: No description available.</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
         <b>GET</b> <code>/v1/appium/suites/{batchId}/deviceIds</code><br>
         Returns the IDs of the devices which you had selected for the specified suite.
         <h3>Example:</h3>
-        <code>api.readDeviceIdsDeprecated(suiteId, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>Authorization</b>: No description available.</li>        </ul>      </td>
+        <code>api.readDeviceIdsDeprecated(suiteId)</code>
+      </td>
     </tr>
     <tr>
       <td>
@@ -323,16 +322,15 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.startSuiteDeprecated(suiteId, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>body</b>: No description available.</li>          <li><b>appId</b>: The ID of the app version you wish to test</li>          <li><b>Authorization</b>: No description available.</li>        </ul>      </td>
+        <ul>          <li><b>body</b>: No description available.</li>          <li><b>appId</b>: The ID of the app version you wish to test</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
         <b>PUT</b> <code>/v1/appium/suites/{batchId}/reports/{batchReportId}/finish</code><br>
         Marks all test executions contained in the specified suite execution as finished.
         <h3>Example:</h3>
-        <code>api.finishSuiteDeprecated(suiteId, batchReportId, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>Authorization</b>: No description available.</li>        </ul>      </td>
+        <code>api.finishSuiteDeprecated(suiteId, batchReportId)</code>
+      </td>
     </tr>
     <tr>
       <td>
@@ -341,16 +339,15 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.finishTestReportDeprecated(suiteId, suiteReportId, testReportId, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>body</b>: No description available.</li>          <li><b>Authorization</b>: No description available.</li>        </ul>      </td>
+        <ul>          <li><b>body</b>: No description available.</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
         <b>PUT</b> <code>/v1/appium/suites/{batchId}/reports/{batchReportId}/results/{testReportId}/skip</code><br>
         Mark test execution as skipped
         <h3>Example:</h3>
-        <code>api.skipTestReportDeprecated(suiteId, suiteReportId, testReportId, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>Authorization</b>: No description available.</li>        </ul>      </td>
+        <code>api.skipTestReportDeprecated(suiteId, suiteReportId, testReportId)</code>
+      </td>
     </tr>
     <tr>
       <td>
@@ -438,16 +435,15 @@ This endpoint requires API Key authentication and will also return your private 
         <h3>Example:</h3>
         <code>api.updateSuite(suiteId, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>body</b>: No description available.</li>          <li><b>Authorization</b>: No description available.</li>        </ul>      </td>
+        <ul>          <li><b>body</b>: No description available.</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
         <b>GET</b> <code>/v2/appium/suites/{batchId}/deviceIds</code><br>
         Returns the IDs of the devices which you had selected for the specified suite.
         <h3>Example:</h3>
-        <code>api.readDeviceIds(suiteId, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>Authorization</b>: No description available.</li>        </ul>      </td>
+        <code>api.readDeviceIds(suiteId)</code>
+      </td>
     </tr>
     <tr>
       <td>
@@ -456,16 +452,15 @@ This endpoint requires API Key authentication and will also return your private 
         <h3>Example:</h3>
         <code>api.startSuite(suiteId, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>body</b>: No description available.</li>          <li><b>appId</b>: The ID of the app version you wish to test</li>          <li><b>Authorization</b>: No description available.</li>        </ul>      </td>
+        <ul>          <li><b>body</b>: No description available.</li>          <li><b>appId</b>: The ID of the app version you wish to test</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
         <b>PUT</b> <code>/v2/appium/suites/{batchId}/reports/{batchReportId}/finish</code><br>
         Marks all test executions contained in the specified suite execution as finished.
         <h3>Example:</h3>
-        <code>api.finishSuite(suiteId, batchReportId, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>Authorization</b>: No description available.</li>        </ul>      </td>
+        <code>api.finishSuite(suiteId, batchReportId)</code>
+      </td>
     </tr>
     <tr>
       <td>
@@ -474,16 +469,15 @@ This endpoint requires API Key authentication and will also return your private 
         <h3>Example:</h3>
         <code>api.finishTestReport(suiteId, suiteReportId, testReportId, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>body</b>: No description available.</li>          <li><b>Authorization</b>: No description available.</li>        </ul>      </td>
+        <ul>          <li><b>body</b>: No description available.</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
         <b>PUT</b> <code>/v2/appium/suites/{batchId}/reports/{batchReportId}/results/{testReportId}/skip</code><br>
         Mark test execution as skipped
         <h3>Example:</h3>
-        <code>api.skipTestReport(suiteId, suiteReportId, testReportId, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>Authorization</b>: No description available.</li>        </ul>      </td>
+        <code>api.skipTestReport(suiteId, suiteReportId, testReportId)</code>
+      </td>
     </tr>
     <tr>
       <td>
@@ -532,54 +526,48 @@ This endpoint requires API Key authentication and will also return your private 
         <b>GET</b> <code>/v2/logs/{testReportId}/appium</code><br>
         Returns Appium log for the specified test report
         <h3>Example:</h3>
-        <code>api.readAppiumLog(testReportId, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>Authorization</b>: Authorization header for authentication</li>        </ul>      </td>
+        <code>api.readAppiumLog(testReportId)</code>
+      </td>
     </tr>
     <tr>
       <td>
         <b>GET</b> <code>/v2/logs/{testReportId}/device</code><br>
         Returns device log for the specified test report
         <h3>Example:</h3>
-        <code>api.readDeviceLog(testReportId, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>Authorization</b>: Authorization header for authentication</li>        </ul>      </td>
+        <code>api.readDeviceLog(testReportId)</code>
+      </td>
     </tr>
     <tr>
       <td>
         <b>GET</b> <code>/v2/logs/{testReportId}/vitals</code><br>
         Returns device vitals of a test session after completion
         <h3>Example:</h3>
-        <code>api.readVitalsLog(testReportId, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>Authorization</b>: Authorization header for authentication</li>        </ul>      </td>
+        <code>api.readVitalsLog(testReportId)</code>
+      </td>
     </tr>
     <tr>
       <td>
         <b>GET</b> <code>/v2/logs/{testReportId}/xcuitest</code><br>
         Returns XCUITest log for the specified test report
         <h3>Example:</h3>
-        <code>api.readXcuiTestLog(testReportId, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>Authorization</b>: Authorization header for authentication</li>        </ul>      </td>
+        <code>api.readXcuiTestLog(testReportId)</code>
+      </td>
     </tr>
     <tr>
       <td>
         <b>GET</b> <code>/v2/reports/{testReportId}</code><br>
         Returns test report and artifacts for a test session after completion
         <h3>Example:</h3>
-        <code>api.readReport(testReportId, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>Authorization</b>: Authorization header for authentication</li>        </ul>      </td>
+        <code>api.readReport(testReportId)</code>
+      </td>
     </tr>
     <tr>
       <td>
         <b>GET</b> <code>/v2/screenshots/{testReportId}/{screenshotId}.png</code><br>
         Returns a PNG screenshot from a test
         <h3>Example:</h3>
-        <code>api.getScreenshot(testReportId, screenshotId, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>Authorization</b>: Authorization header for authentication</li>        </ul>      </td>
+        <code>api.getScreenshot(testReportId, screenshotId)</code>
+      </td>
     </tr>
     <tr>
       <td>
@@ -588,6 +576,6 @@ This endpoint requires API Key authentication and will also return your private 
         <h3>Example:</h3>
         <code>api.getScreenRecording(videoId, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>Authorization</b>: Authorization header for authentication</li>          <li><b>Range</b>: No description available.</li>        </ul>      </td>
+        <ul>          <li><b>Range</b>: No description available.</li>        </ul>      </td>
     </tr>
   </tbody></table>
