@@ -1994,13 +1994,10 @@
         ]
       }
     },
-    "/v1/{username}/builds/{id}/jobs": {
+    "/v1/builds/{id}/jobs": {
       "get": {
         "operationId": "list_build_jobs",
         "parameters": [
-          {
-            "$ref": "#/parameters/username"
-          },
           {
             "$ref": "#/parameters/id"
           }
