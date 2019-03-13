@@ -73,6 +73,7 @@ test('should allow to call an API method with param as option', async () => {
         limit: 123,
         full: true
     })
+    expect(request.mock.calls[0][0].useQuerystring).toBe(true)
 })
 
 test('should fail if param has wrong type', () => {

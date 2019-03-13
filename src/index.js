@@ -134,7 +134,8 @@ export default class SauceLabs {
                 method: method.toUpperCase(),
                 [method === 'post' ? 'json' : 'qs']: body,
                 json: true,
-                auth: this._auth
+                auth: this._auth,
+                useQuerystring: true
             }, (err, response, body) => {
                 /* istanbul ignore if */
                 if (err) {
