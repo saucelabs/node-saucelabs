@@ -4,7 +4,7 @@ import path from 'path'
 import request from 'request'
 import changeCase from 'change-case'
 
-import { createHMAC, getSauceEndpoint, toString, getParameters } from './utils'
+import { createHMAC, getSauceEndpoint, toString, getParameters, isValidType, getErrorReason } from './utils'
 import {
     PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT,
     SYMBOL_TOSTRING, SYMBOL_ITERATOR, TO_STRING_TAG
@@ -81,12 +81,13 @@ export default class SauceLabs {
         return (...args) => {
             const { description, method, endpoint, host, basePath } = PROTOCOL_MAP.get(propName)
             const params = getParameters(description.parameters)
+            const pathParams = params.filter(p => p.in === 'path')
 
             /**
              * validate required url params
              */
             let url = endpoint
-            for (const [i, urlParam] of Object.entries(params.filter(p => p.in === 'path'))) {
+            for (const [i, urlParam] of Object.entries(pathParams)) {
                 const param = args[i]
                 const type = urlParam.type.replace('integer', 'number')
 
@@ -101,13 +102,14 @@ export default class SauceLabs {
              * validate required options
              */
             const bodyMap = new Map()
-            const options = args.slice(params.filter(p => p.required).length)[0] || {}
+            const options = args.slice(pathParams.length)[0] || {}
             for (const optionParam of params.filter(p => p.in === 'query')) {
                 const expectedType = optionParam.type.replace('integer', 'number')
-                const option = options[changeCase.camelCase(optionParam.name)]
+                const optionName = changeCase.camelCase(optionParam.name)
+                const option = options[optionName]
                 const isRequired = Boolean(optionParam.required) || (typeof optionParam.required === 'undefined' && typeof optionParam.default === 'undefined')
-                if ((isRequired || option) && (!option || typeof option !== expectedType)) {
-                    throw new Error(`Expected parameter for option '${optionParam.name}' from type '${expectedType}', found '${typeof option}'`)
+                if ((isRequired || option) && !isValidType(option, expectedType)) {
+                    throw new Error(`Expected parameter for option '${optionName}' from type '${expectedType}', found '${typeof option}'`)
                 }
 
                 if (option) {
@@ -141,7 +143,7 @@ export default class SauceLabs {
 
                 /* istanbul ignore if */
                 if (response.statusCode !== 200) {
-                    const reason = JSON.parse(body).message || 'unknown'
+                    const reason = getErrorReason(body)
                     return reject(new Error(`Failed calling ${propName}, status code: ${response.statusCode}, reason: ${reason}`))
                 }
 
@@ -176,7 +178,7 @@ export default class SauceLabs {
                  * check if we received the asset
                  */
                 if (res.statusCode !== 200) {
-                    const reason = JSON.parse(body).message || 'unknown'
+                    const reason = getErrorReason(body)
                     return reject(new Error(`There was an error downloading asset ${assetName}, status code: ${res.statusCode}, reason: ${reason}`))
                 }
 

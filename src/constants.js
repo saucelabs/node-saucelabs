@@ -28,7 +28,7 @@ for (const { paths, parameters, host, basePath } of protocols) {
              * ensure we don't double registet commands
              */
             if (protocolFlattened.has(commandName)) {
-                throw new Error(`command ${commandName} alreadyasss registered`)
+                throw new Error(`command ${commandName} already registered`)
             }
 
             protocolFlattened.set(
@@ -59,7 +59,7 @@ export const DEFAULT_OPTIONS = {
 }
 
 export const REGION_MAPPING = {
-    'us': '', // default endpoint
+    'us': 'us-west-1.', // default endpoint
     'eu': 'eu-central-1.'
 }
 

@@ -4,7 +4,7 @@
     "title": "Performance API",
     "version": "0.94.0"
   },
-  "host": "api.staging.saucelabs.net",
+  "host": "api.saucelabs.com",
   "basePath": "/v1/performance",
   "schemes": [
     "https"

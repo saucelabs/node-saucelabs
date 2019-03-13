@@ -33,8 +33,21 @@ export function createHMAC (username, key, jobId) {
  */
 export function getSauceEndpoint (hostname, region, headless, protocol = 'https://') {
     const dcRegion = REGION_MAPPING[region] ? region : 'us'
-    const prefix = headless ? 'us-east1.headless.' : REGION_MAPPING[dcRegion]
-    return protocol + prefix + hostname
+    let locale = headless ? 'us-east1.headless.' : REGION_MAPPING[dcRegion]
+    let subdomain = ''
+
+    /**
+     * check if endpoint base has subdomain
+     * e.g. api.saucelabs.com
+     */
+    if (!headless && hostname.split('.').length > 2) {
+        subdomain = hostname.split('.')[0] + '.'
+        hostname = hostname.split('.').slice(-2).join('.')
+    } else if (!headless && region === 'us') {
+        locale = ''
+    }
+
+    return protocol + subdomain + locale + hostname
 }
 
 /**
@@ -71,4 +84,41 @@ export function getParameters (parameters = []) {
         }
         return 1
     })
+}
+
+/**
+ * type check for endpoint parameters
+ * @param  {*}      option        given command parameters
+ * @param  {String} expectedType  expected parameter type
+ * @return {Boolean}              true if typecheck was ok
+ */
+export function isValidType (option, expectedType) {
+    if (expectedType === 'array') {
+        return Array.isArray(option)
+    }
+    return option && typeof option === expectedType
+}
+
+/**
+ * get error message from API call
+ * @param  {*} body    body message of response
+ * @return {String}    error message
+ */
+export function getErrorReason (body = {}) {
+    if (typeof body === 'string') {
+        try {
+            body = JSON.parse(body)
+        } catch (e) {
+            body = { message: body }
+        }
+    }
+
+    /**
+     * due to a bug in the performance API we need to workaround this
+     */
+    if (Array.isArray(body)) {
+        body = { message: body[0] }
+    }
+
+    return body.message || body.detail || 'unknown'
 }
