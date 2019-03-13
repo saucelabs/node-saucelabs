@@ -67,13 +67,33 @@ test('should allow to call an API method with param as option', async () => {
         limit: 123,
         full: true
     })
-    expect(request.mock.calls[0][0].uri)
+
+    const req = request.mock.calls[0][0]
+    expect(req.uri)
         .toBe('https://saucelabs.com/rest/v1.1/someuser/jobs')
-    expect(request.mock.calls[0][0].qs).toEqual({
+    expect(req.qs).toEqual({
         limit: 123,
         full: true
     })
-    expect(request.mock.calls[0][0].useQuerystring).toBe(true)
+    expect(req.useQuerystring).toBe(true)
+})
+
+test('should allow to make a request with body param', async () =>  {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    await api.updateJob('foobaruser', '690c5877710c422d8be4c622b40c747f', { passed: true })
+
+    const req = request.mock.calls[0][0]
+    expect(req.method).toBe('PUT')
+    expect(req.body).toEqual({ passed: true })
+})
+
+test('should allow to make a request with body param via CLI call', async () =>  {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    await api.updateJob('foobaruser', '690c5877710c422d8be4c622b40c747f', '{ "passed": false }')
+
+    const req = request.mock.calls[0][0]
+    expect(req.method).toBe('PUT')
+    expect(req.body).toEqual({ passed: false })
 })
 
 test('should fail if param has wrong type', () => {

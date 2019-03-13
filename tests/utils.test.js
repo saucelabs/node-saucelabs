@@ -36,6 +36,7 @@ test('toString', () => {
 })
 
 test('isValidType', () => {
+    expect(isValidType(0, 'number')).toBe(true)
     expect(isValidType(1, 'number')).toBe(true)
     expect(isValidType('1', 'number')).toBe(false)
     expect(isValidType(['foo', 123], 'array')).toBe(true)

@@ -96,7 +96,7 @@ export function isValidType (option, expectedType) {
     if (expectedType === 'array') {
         return Array.isArray(option)
     }
-    return option && typeof option === expectedType
+    return typeof option === expectedType
 }
 
 /**

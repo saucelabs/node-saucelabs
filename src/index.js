@@ -4,10 +4,13 @@ import path from 'path'
 import request from 'request'
 import changeCase from 'change-case'
 
-import { createHMAC, getSauceEndpoint, toString, getParameters, isValidType, getErrorReason } from './utils'
 import {
-    PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT,
-    SYMBOL_TOSTRING, SYMBOL_ITERATOR, TO_STRING_TAG
+    createHMAC, getSauceEndpoint, toString, getParameters,
+    isValidType, getErrorReason
+} from './utils'
+import {
+    PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT, SYMBOL_TOSTRING,
+    SYMBOL_ITERATOR, TO_STRING_TAG
 } from './constants'
 
 export default class SauceLabs {
@@ -99,6 +102,18 @@ export default class SauceLabs {
             }
 
             /**
+             * check for body param (as last parameter as we don't expect request
+             * parameters for non idempotent requests)
+             */
+            let bodyOption = params.find(p => p.in === 'body')
+                ? args[pathParams.length]
+                : null
+
+            if (bodyOption && typeof bodyOption === 'string') {
+                bodyOption = JSON.parse(bodyOption)
+            }
+
+            /**
              * validate required options
              */
             const bodyMap = new Map()
@@ -112,15 +127,16 @@ export default class SauceLabs {
                     throw new Error(`Expected parameter for option '${optionName}' from type '${expectedType}', found '${typeof option}'`)
                 }
 
-                if (option) {
+                if (typeof option !== 'undefined') {
                     bodyMap.set(optionParam.name, option)
                 }
             }
 
             /**
-             * convert map into json object
+             * get request body by using the body parameter or convert the parameter
+             * map into json object
              */
-            const body = [...bodyMap.entries()].reduce((e, [k, v]) => {
+            const body = bodyOption || [...bodyMap.entries()].reduce((e, [k, v]) => {
                 e[k] = v
                 return e
             }, {})
@@ -132,7 +148,7 @@ export default class SauceLabs {
             return new Promise((resolve, reject) => request({
                 uri,
                 method: method.toUpperCase(),
-                [method === 'post' ? 'json' : 'qs']: body,
+                [method === 'get' ? 'qs' : 'body']: body,
                 json: true,
                 auth: this._auth,
                 useQuerystring: true

@@ -75,6 +75,12 @@ sl --help
 sl listJobs --help
 ```
 
+or update the job status by calling:
+
+```sh
+sl updateJob cb-onboarding 690c5877710c422d8be4c622b40c747f "{\"passed\":false}"
+```
+
 ### As NPM Package
 
 The following example shows how to access details of the last job you were running with your account that is being exposed as environment variables as `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY`.
