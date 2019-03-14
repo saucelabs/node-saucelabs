@@ -212,8 +212,9 @@ The following commands are available via package or cli tool:
         <b>GET</b> <code>/v1/builds/{id}/jobs</code><br>
         No description available.
         <h3>Example:</h3>
-        <code>api.listBuildJobs(id)</code>
-      </td>
+        <code>api.listBuildJobs(id, { ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>full</b>: Should the return result contain everything or just the basics</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
