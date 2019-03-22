@@ -15,7 +15,7 @@
   },
   "main": "./build/index",
   "bin": {
-    "wdio": "./bin/sl"
+    "sl": "./bin/sl"
   },
   "scripts": {
     "build": "run-s clean compile",
