@@ -6,7 +6,7 @@ import changeCase from 'change-case'
 
 import {
     createHMAC, getSauceEndpoint, toString, getParameters,
-    isValidType, getErrorReason
+    isValidType, getErrorReason, getStrictSsl
 } from './utils'
 import {
     PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT, SYMBOL_TOSTRING,
@@ -151,6 +151,7 @@ export default class SauceLabs {
                 [method === 'get' ? 'qs' : 'body']: body,
                 json: true,
                 auth: this._auth,
+                strictSSL: getStrictSsl(),
                 useQuerystring: true
             }, (err, response, body) => {
                 /* istanbul ignore if */
@@ -182,6 +183,7 @@ export default class SauceLabs {
         return new Promise((resolve, reject) => {
             const req = request({
                 method: 'GET',
+                strictSSL: getStrictSsl(),
                 uri: `${host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`
             }, (err, res, body) => {
                 /**
