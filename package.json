@@ -23,6 +23,7 @@
     "compile": "babel src -d build",
     "eslint": "eslint ./src ./test",
     "generate:docs": "babel-node ./scripts/generate-docs",
+    "prepublishOnly": "npm prune && run-s build",
     "release": "npm run release:patch",
     "release:patch": "NODE_ENV=production np patch",
     "release:minor": "NODE_ENV=production np minor",
