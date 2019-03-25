@@ -1,6 +1,6 @@
 {
   "name": "saucelabs",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "author": "Christian Bromann <christian@saucelabs.com>",
   "description": "A wrapper around Sauce Labs REST API",
   "homepage": "https://github.com/saucelabs/node-saucelabs",
@@ -23,11 +23,11 @@
     "compile": "babel src -d build",
     "eslint": "eslint ./src ./test",
     "generate:docs": "babel-node ./scripts/generate-docs",
-    "prepublishOnly": "npm prune && run-s build",
+    "prepublishOnly": "NODE_ENV=production run-s build",
     "release": "npm run release:patch",
-    "release:patch": "NODE_ENV=production np patch",
-    "release:minor": "NODE_ENV=production np minor",
-    "release:major": "NODE_ENV=production np major",
+    "release:patch": "np patch",
+    "release:minor": "np minor",
+    "release:major": "np major",
     "test": "run-s eslint test:unit",
     "test:unit": "jest --coverage",
     "watch": "npm run compile -- --watch"
