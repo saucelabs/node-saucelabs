@@ -33,7 +33,7 @@ export function createHMAC (username, key, jobId) {
  */
 export function getSauceEndpoint (hostname, region, headless, protocol = 'https://') {
     const dcRegion = REGION_MAPPING[region] ? region : 'us'
-    let locale = headless ? 'us-east1.headless.' : REGION_MAPPING[dcRegion]
+    let locale = headless ? 'us-east-1.' : REGION_MAPPING[dcRegion]
     let subdomain = ''
 
     /**

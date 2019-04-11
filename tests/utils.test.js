@@ -15,7 +15,7 @@ test('getSauceEndpoint', () => {
     expect(getSauceEndpoint('saucelabs.com', 'eu', false))
         .toBe('https://eu-central-1.saucelabs.com')
     expect(getSauceEndpoint('saucelabs.com', 'us', true))
-        .toBe('https://us-east1.headless.saucelabs.com')
+        .toBe('https://us-east-1.saucelabs.com')
     expect(getSauceEndpoint('api.saucelabs.com', 'us', false))
         .toBe('https://api.us-west-1.saucelabs.com')
     expect(getSauceEndpoint('api.saucelabs.com', 'eu', false))
