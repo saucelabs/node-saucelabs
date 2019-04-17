@@ -20,6 +20,10 @@ test('getSauceEndpoint', () => {
         .toBe('https://api.us-west-1.saucelabs.com')
     expect(getSauceEndpoint('api.saucelabs.com', 'eu', false))
         .toBe('https://api.eu-central-1.saucelabs.com')
+    expect(getSauceEndpoint('app.testobject.com', 'eu', false))
+        .toBe('https://app.testobject.com')
+    expect(getSauceEndpoint('app.testobject.com', 'us', false))
+        .toBe('https://app.testobject.com')
 })
 
 test('toString', () => {

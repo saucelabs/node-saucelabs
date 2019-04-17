@@ -43,6 +43,8 @@ export function getSauceEndpoint (hostname, region, headless, protocol = 'https:
     if (!headless && hostname.split('.').length > 2) {
         subdomain = hostname.split('.')[0] + '.'
         hostname = hostname.split('.').slice(-2).join('.')
+        // RDC only has 1 endpoint for both DC's, so if the url contains `testobject` clear the `locale`
+        locale = hostname.includes('testobject') ? '' : locale
     } else if (!headless && region === 'us') {
         locale = ''
     }
