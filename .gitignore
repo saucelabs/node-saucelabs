@@ -65,3 +65,4 @@ package-lock.json
 /*.js
 !.eslintrc.js
 !babel.config.js
+.idea/
