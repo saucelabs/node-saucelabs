@@ -47,6 +47,8 @@ export function getSauceEndpoint (hostname, region, headless, protocol = 'https:
         locale = hostname.includes('testobject') ? '' : locale
     } else if (!headless && region === 'us') {
         locale = ''
+    } else if (locale === 'us-west-1.') { // us-west-1 is currently not a valid endpoint for Sauce
+        locale = ''
     }
 
     return protocol + subdomain + locale + hostname

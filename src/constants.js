@@ -60,7 +60,9 @@ export const DEFAULT_OPTIONS = {
 
 export const REGION_MAPPING = {
     'us': 'us-west-1.', // default endpoint
-    'eu': 'eu-central-1.'
+    'eu': 'eu-central-1.',
+    'us-west-1': 'us-west-1.',
+    'eu-central-1': 'eu-central-1.'
 }
 
 export const SYMBOL_INSPECT = Symbol.for('nodejs.util.inspect.custom')
