@@ -132,7 +132,7 @@ import SauceLabs from 'saucelabs';
             breakpointed: null,
             browser: 'googlechrome' } ] }
      */
-})
+})()
 ```
 
 ## Test
