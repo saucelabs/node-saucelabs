@@ -87,6 +87,8 @@ The following example shows how to access details of the last job you were runni
 
 ```js
 import SauceLabs from 'saucelabs';
+// if imports are not supported by your Node.js version, import the package as follows:
+// const SauceLabs = require('saucelabs').default;
 
 (async () => {
     const myAccount = new SauceLabs();
