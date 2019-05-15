@@ -1757,6 +1757,40 @@
         ]
       }
     },
+    "/v1/users/{username}/subaccounts": {
+      "get": {
+        "operationId": "get_subaccounts",
+        "parameters": [
+          {
+            "$ref": "#/parameters/username"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "User is not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "User information",
+        "tags": [
+          "User"
+        ]
+      }
+    },
     "/v1/users/{username}/activity": {
       "get": {
         "operationId": "get_user_activity",
