@@ -160,7 +160,7 @@ export default class SauceLabs {
                 }
 
                 /* istanbul ignore if */
-                if (response.statusCode !== 200) {
+                if (response.statusCode !== 200 && response.statusCode !== 204) {
                     const reason = getErrorReason(body)
                     return reject(new Error(`Failed calling ${propName}, status code: ${response.statusCode}, reason: ${reason}`))
                 }
