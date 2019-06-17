@@ -1,0 +1,37 @@
+{{#imports}}
+/// <reference path="{{&.}}" />
+{{/imports}}
+
+
+{{#definitions}}
+export type {{&name}} = {{#tsType}}{{> type}}{{/tsType}};
+
+{{/definitions}}
+
+export type Logger = { log: (line: string) => any };
+
+export interface ResponseWithBody<S, T> extends Response {
+    status: S;
+    body: T;
+}
+
+export interface CommonRequestOptions {
+  $queryParameters?: {[param: string]: any};
+  $domain?: string;
+  $path?: string | ((path: string) => string);
+}
+
+/**
+ * {{&description}}
+ * @class {{&className}}
+ * @param {(string)} [domainOrOptions] - The project domain.
+ */
+declare class {{&className}} {
+
+{{#methods}}
+    {{> method}}
+
+{{/methods}}
+}
+
+export default {{&className}};
