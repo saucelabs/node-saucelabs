@@ -35,10 +35,16 @@ fs.readdir(path.join(__dirname, '../apis'), (err, files) => {
         throw err
     }
 
+    const regions = Object.keys(require('../src/constants').REGION_MAPPING)
+        .map( key => `"${key}"`)
+        .join(' | ')
+
     let result = `
 export interface SauceLabsOptions {
     user: string;
     key: string;
+    region: ${regions};
+    headless: boolean;
 }
 
 export type Logger = { log: (line: string) => any };
