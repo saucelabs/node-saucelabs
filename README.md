@@ -83,7 +83,7 @@ sl updateJob cb-onboarding 690c5877710c422d8be4c622b40c747f "{\"passed\":false}"
 
 ### As NPM Package
 
-The following example shows how to access details of the last job you were running with your account that is being exposed as environment variables as `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY`.
+The following example shows how to access details of the last job you were running with your account that is being exposed as environment variables as `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY`. Alternatively you can pass the credentials via `options` to the constructor:
 
 ```js
 import SauceLabs from 'saucelabs';
@@ -92,9 +92,11 @@ import SauceLabs from 'saucelabs';
 
 (async () => {
     const myAccount = new SauceLabs();
+    // using constructor options
+    // const myAccount = new SauceLabs({ user: "YOUR-USER", key: "YOUR-ACCESS-KEY"}); 
 
     // get job details of last run job
-    const job = await user.listJobs(
+    const job = await myAccount.listJobs(
         process.env.SAUCE_USERNAME,
         { limit: 1, full: true }
     );
@@ -136,6 +138,8 @@ import SauceLabs from 'saucelabs';
      */
 })()
 ```
+
+> You may wonder why `listJobs` requires a `username` as first parameter since you've already defined the process.env. The reason for this is that Sauce Labs supports a concept of Team Accounts, so-called sub-accounts, grouped together. As such functions like the mentioned could list jobs not only for the requesting account, but also for the individual team account. Learn more about it [here](https://wiki.saucelabs.com/display/DOCS/Managing+Team+Members+and+Accounts)
 
 ## Breaking changes from v1 to v2
 
