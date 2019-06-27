@@ -93,7 +93,7 @@ import SauceLabs from 'saucelabs';
 (async () => {
     const myAccount = new SauceLabs();
     // using constructor options
-    // const myAccount = new SauceLabs({ user: "YourUser", key: "YOUR-ACCESS-KEY"}); 
+    // const myAccount = new SauceLabs({ user: "YOUR-USER", key: "YOUR-ACCESS-KEY"}); 
 
     // get job details of last run job
     const job = await myAccount.listJobs(
