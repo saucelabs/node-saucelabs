@@ -25,7 +25,7 @@
     "eslint": "eslint ./src ./test",
     "generate:docs": "babel-node ./scripts/generate-docs",
     "generate:typings": "babel-node ./scripts/generate-typings",
-    "prepublishOnly": "NODE_ENV=production run-s build",
+    "prepublishOnly": "NODE_ENV=production run-s build generate:typings",
     "release": "npm run release:patch",
     "release:patch": "np patch",
     "release:minor": "np minor",
