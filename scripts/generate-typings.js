@@ -30,6 +30,18 @@ function generateTypingsForApi(file) {
     }
 }
 
+function sanitizeIndividualMethods(result) {
+    const readBatchReport = `readBatchReport(
+        body?: number | string
+    ): Promise<BatchReport >`
+    const junitStyleXmlReport = `junitStyleXmlReport(
+        body?: number | string
+    ): Promise<JunitXMLReport >`
+
+    return result.replace(/readBatchReport\(\n([\s\S]*?)\): Promise<BatchReport >/, readBatchReport)
+        .replace(/junitStyleXmlReport\(\n([\s\S]*?)\): Promise<JunitXMLReport >/, junitStyleXmlReport)
+}
+
 fs.readdir(path.join(__dirname, '../apis'), (err, files) => {
     if (err) {
         throw err
@@ -67,6 +79,9 @@ export default SauceLabs;`
 
     result = result.replace(/ \| ResponseWithBody < (number|\d{3}), (Error|ErrorResponse|void) >/g, '')
         .replace(/Promise < ResponseWithBody < (?:\d{3}|number), ([\s\S]*?)>>\n(\n|})/g, 'Promise<$1>\n$2')
+
+    // fix duplicate body params
+    result = sanitizeIndividualMethods(result)
 
     fs.writeFileSync('build/index.d.ts', result, { encoding: 'utf-8' })
 })
