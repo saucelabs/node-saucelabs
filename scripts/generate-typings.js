@@ -18,7 +18,7 @@ function generateTypingsForApi(file) {
         swagger,
         template: {
             class: fs.readFileSync('./scripts/class-methods.mustache', 'utf-8'),
-            method: fs.readFileSync('./scripts/method.mustache', 'utf-8'),
+            method: fs.readFileSync('./scripts/method.mustache', 'utf-8')
         }
     })
 
@@ -43,21 +43,8 @@ fs.readdir(path.join(__dirname, '../apis'), (err, files) => {
 export interface SauceLabsOptions {
     user: string;
     key: string;
-    region: ${regions};
-    headless: boolean;
-}
-
-export type Logger = { log: (line: string) => any };
-
-export interface ResponseWithBody<S, T> extends Response {
-    status: S;
-    body: T;
-}
-
-export interface CommonRequestOptions {
-    $queryParameters?: {[param: string]: any};
-    $domain?: string;
-    $path?: string | ((path: string) => string);
+    region?: ${regions};
+    headless?: boolean;
 }`
 
     const methods = files.map((api) => {
@@ -74,9 +61,12 @@ export interface CommonRequestOptions {
 
 export default SauceLabs;`
 
-    result = result.replace(/~PARAMSSTART~([\s\S]*?)~QPSTART~/g, '$1options: {\n')
+    result = result.replace(/~PARAMSSTART~([\s\S]*?)~QPSTART~/g, '$1options?: {\n')
         .replace(/~QPEND~([^~]*?)~PARAMSEND~/g, '\n}$1')
         .replace(/(~QPEND~|~QPSTART~|~PARAMSEND~\n|~PARAMSSTART~)/g, '')
+
+    result = result.replace(/ \| ResponseWithBody < (number|\d{3}), (Error|ErrorResponse|void) >/g, '')
+        .replace(/Promise < ResponseWithBody < (?:\d{3}|number), ([\s\S]*?)>>\n(\n|})/g, 'Promise<$1>\n$2')
 
     fs.writeFileSync('build/index.d.ts', result, { encoding: 'utf-8' })
 })
