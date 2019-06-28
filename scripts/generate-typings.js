@@ -36,7 +36,7 @@ fs.readdir(path.join(__dirname, '../apis'), (err, files) => {
     }
 
     const regions = Object.keys(require('../src/constants').REGION_MAPPING)
-        .map( key => `"${key}"`)
+        .map(key => `"${key}"`)
         .join(' | ')
 
     let result = `
@@ -73,6 +73,10 @@ export interface CommonRequestOptions {
 }
 
 export default SauceLabs;`
+
+    result = result.replace(/~PARAMSSTART~([\s\S]*?)~QPSTART~/g, '$1options: {\n')
+        .replace(/~QPEND~([^~]*?)~PARAMSEND~/g, '\n}$1')
+        .replace(/(~QPEND~|~QPSTART~|~PARAMSEND~\n|~PARAMSSTART~)/g, '')
 
     fs.writeFileSync('build/index.d.ts', result, { encoding: 'utf-8' })
 })
