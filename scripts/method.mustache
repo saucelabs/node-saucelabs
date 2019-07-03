@@ -1,0 +1,18 @@
+/**
+* {{&summary}}
+* @method
+{{#isDeprecated}}
+* @deprecated
+{{/isDeprecated}}
+{{#externalDocs}}
+* @see {@link {{&url}}|{{#description}}{{&description}}{{/description}}{{^description}}External docs{{/description}}}
+{{/externalDocs}}
+* @name {{&className}}#~~~{{&methodName}}~~~
+{{#parameters}}
+    {{^isSingleton}} * @param {{=<% %>=}}{<%&type%>}<%={{ }}=%> {{&camelCaseName}} - {{&description}}{{#isQueryParameter}}Option{{/isQueryParameter}}{{/isSingleton}}
+{{/parameters}}
+*/
+~~~{{&methodName}}~~~(~PARAMSSTART~
+{{#parameters}}{{^isSingleton}}{{#isQueryParameter}}~QPSTART~{{/isQueryParameter}}{{&camelCaseName}}{{&cardinality}}: {{> type}}{{#isQueryParameter}}~QPEND~{{/isQueryParameter}},
+{{/isSingleton}}{{/parameters}}~PARAMSEND~
+): Promise<{{&responseTypes}}>
