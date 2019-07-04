@@ -96,6 +96,24 @@ test('should allow to make a request with body param via CLI call', async () => 
     expect(req.body).toEqual({ passed: false })
 })
 
+test('should update RDC job status with body param', async () =>  {
+    const api = new SauceLabs({})
+    await api.updateTest('89ec3cca-7092-41f1-8037-d035579fb8d1', { passed: true })
+
+    const req = request.mock.calls[0][0]
+    expect(req.method).toBe('PUT')
+    expect(req.body).toEqual({ passed: true })
+})
+
+test('should update RDC job status with body param via CLI call', async () =>  {
+    const api = new SauceLabs({})
+    await api.updateTest('89ec3cca-7092-41f1-8037-d035579fb8d1', '{ "passed": false }')
+
+    const req = request.mock.calls[0][0]
+    expect(req.method).toBe('PUT')
+    expect(req.body).toEqual({ passed: false })
+})
+
 test('should fail if param has wrong type', () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     expect(() => api.listJobs(123, {

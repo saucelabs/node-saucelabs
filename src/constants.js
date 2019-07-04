@@ -25,7 +25,7 @@ for (const { paths, parameters, host, basePath } of protocols) {
             }
 
             /**
-             * ensure we don't double registet commands
+             * ensure we don't double register commands
              */
             if (protocolFlattened.has(commandName)) {
                 throw new Error(`command ${commandName} already registered`)
