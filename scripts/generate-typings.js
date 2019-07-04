@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const changeCase = require('change-case')
 const CodeGen = require('swagger-typescript-codegen').CodeGen
+const prettier = require('prettier')
 
 function generateTypingsForApi(file) {
     const swagger = JSON.parse(fs.readFileSync(file, 'UTF-8'))
@@ -83,5 +84,9 @@ export default SauceLabs;`
     // fix duplicate body params
     result = sanitizeIndividualMethods(result)
 
-    fs.writeFileSync('build/index.d.ts', result, { encoding: 'utf-8' })
+    fs.writeFileSync(
+        'build/index.d.ts',
+        prettier.format(result, {parser: 'typescript'}),
+        { encoding: 'utf-8' }
+    )
 })
