@@ -165,9 +165,9 @@ Below, you can find the list of the mapped method names:
 | deleteTunnel(id, callback) | async deleteTunnel(username, id) |
 | getServiceStatus(callback) |async getStatus() |
 | getBrowsers(callback) | ? |
-| getAllBrowsers(callback) | ? |
-| getSeleniumBrowsers(callback) | ? |
-| getWebDriverBrowsers(callback) | ? |
+| getAllBrowsers(callback) | async listPlatforms(platform)  // pass "all" |
+| getSeleniumBrowsers(callback) | Selenium-RC no longer supported |
+| getWebDriverBrowsers(callback) | async listPlatforms(platform) // pass "webdriver" |
 | getTestCounter(callback) | ? |
 | updateSubAccount(data, callback) | ? |
 | deleteSubAccount(callback) | ? |
