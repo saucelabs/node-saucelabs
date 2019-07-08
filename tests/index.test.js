@@ -147,6 +147,16 @@ it('should fail if parameters are not given properly', async () => {
     await expect(api.downloadJobAsset(123, 'bar')).rejects.toEqual(error)
 })
 
+test('should support proxy options', async () => {
+    const proxy = 'https://my.proxy.com'
+    const api = new SauceLabs({ user: 'foo', key: 'bar', proxy })
+    await api.downloadJobAsset('some-id', 'performance.json')
+    const requestOptions = request.mock.calls[0][0]
+
+    await expect(requestOptions.proxy).toBeDefined()
+    await expect(requestOptions.proxy).toEqual(proxy)
+})
+
 test('should handle asset response properly', async () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     await api.downloadJobAsset('some-id', 'performance.json')

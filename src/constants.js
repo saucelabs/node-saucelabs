@@ -98,4 +98,8 @@ export const CLI_PARAMS = [{
     name: 'headless',
     default: DEFAULT_OPTIONS.headless,
     description: 'if set to true you are accessing the headless Sauce instances (this discards the `region` option)'
+}, {
+    alias: 'p',
+    name: 'proxy',
+    description: 'use a proxy for fetching data instead of environment variables'
 }]

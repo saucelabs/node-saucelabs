@@ -58,6 +58,7 @@ export interface SauceLabsOptions {
     key: string;
     region?: ${regions};
     headless?: boolean;
+    proxy?: string;
 }`
 
     const methods = files.map((api) => {

@@ -49,7 +49,15 @@ Default: `false`
 
 ## Usage
 
-All accessible API commands with descriptions can be found [here](docs/interface.md). In order to route requests through a proxy set `HTTP_PROXY`, `HTTPS_PROXY` or `NO_PROXY` as environment variable. For more information on this, read [here](https://github.com/request/request#controlling-proxy-behaviour-using-environment-variables).
+All accessible API commands with descriptions can be found [here](docs/interface.md). In order to route requests through a proxy set `HTTP_PROXY`, `HTTPS_PROXY` or `NO_PROXY` as environment variable. For more information on this, read [here](https://github.com/request/request#controlling-proxy-behaviour-using-environment-variables). Alternatively you can pass the proxy to be used during initialization:
+
+```js
+import SauceLabs from 'saucelabs';
+
+...
+
+const myAccount = new SauceLabs({ proxy: 'http://localproxy.com' });
+```
 
 ### As CLI Tool
 
@@ -93,7 +101,7 @@ import SauceLabs from 'saucelabs';
 (async () => {
     const myAccount = new SauceLabs();
     // using constructor options
-    // const myAccount = new SauceLabs({ user: "YOUR-USER", key: "YOUR-ACCESS-KEY"}); 
+    // const myAccount = new SauceLabs({ user: "YOUR-USER", key: "YOUR-ACCESS-KEY"});
 
     // get job details of last run job
     const job = await myAccount.listJobs(
