@@ -22,6 +22,7 @@ export default class SauceLabs {
             user: this.username,
             pass: this._accessKey
         }
+        this.proxy = this._options.proxy
 
         /**
          * public fields
@@ -152,6 +153,7 @@ export default class SauceLabs {
                 json: true,
                 auth: this._auth,
                 strictSSL: getStrictSsl(),
+                proxy: this.proxy,
                 useQuerystring: true
             }, (err, response, body) => {
                 /* istanbul ignore if */
@@ -184,6 +186,7 @@ export default class SauceLabs {
             const req = request({
                 method: 'GET',
                 strictSSL: getStrictSsl(),
+                proxy: this.proxy,
                 uri: `${host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`
             }, (err, res, body) => {
                 /**
