@@ -101,6 +101,5 @@ export const CLI_PARAMS = [{
 }, {
     alias: 'p',
     name: 'proxy',
-    default: undefined,
     description: 'use a proxy for fetching data instead of environment variables'
 }]
