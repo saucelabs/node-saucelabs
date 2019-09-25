@@ -5,8 +5,8 @@
       "version":"0.247.0",
       "description":"Performance API provides essential information about performance of tested web application."
    },
-   "host":"host-depends-on-env",
-   "basePath":"/v2",
+   "host":"api.us-west-1.saucelabs.com",
+   "basePath":"/v2/performance",
    "schemes":[
       "https"
    ],
