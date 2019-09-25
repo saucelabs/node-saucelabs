@@ -278,7 +278,7 @@ The following commands are available via package or cli tool:
         <b>POST</b> <code>/storage/upload</code><br>
         Returns new application id after the upload.
         <h3>Example:</h3>
-        <code>api.uploadApp(, { ...options })</code>
+        <code>api.uploadApp({ ...options })</code>
         <br><h4>Options</h4>
         <ul>          <li><b>body</b>: No description available.</li>          <li><b>App-Active</b>: If true makes uploaded application active one</li>          <li><b>App-DisplayName</b>: Your custom display name</li>          <li><b>App-Identifier</b>: Your custom unique identifier for your app</li>          <li><b>App-Type</b>: Application type</li>        </ul>      </td>
     </tr>
@@ -390,7 +390,7 @@ This endpoint requires API Key authentication and will also return your private 
         The session history reports provide information about user sessions. This includes device usage and test reports. By default reports of the last 30 days will be retrieved - limited to a maximum of 50 reports.
 If the authenticated user is the owner of the account, session reports of the entire team will be retrieved. Team members can only retrieve their own session history. This endpoint requires Password authentication.
         <h3>Example:</h3>
-        <code>api.getSessionReports(, { ...options })</code>
+        <code>api.getSessionReports({ ...options })</code>
         <br><h4>Options</h4>
         <ul>          <li><b>limit</b>: Max number of results per page</li>          <li><b>offset</b>: Offset for pagination</li>          <li><b>lastDays</b>: Number of days to report</li>          <li><b>userId</b>: Your username.</li>        </ul>      </td>
     </tr>
@@ -485,7 +485,7 @@ This endpoint requires API Key authentication and will also return your private 
         <b>GET</b> <code>/v2/batchReports/{batchReportId}</code><br>
         Returns the test report of a suite
         <h3>Example:</h3>
-        <code>api.readBatchReport(, { ...options })</code>
+        <code>api.readBatchReport({ ...options })</code>
         <br><h4>Options</h4>
         <ul>          <li><b>body</b>: No description available.</li>          <li><b>body</b>: No description available.</li>        </ul>      </td>
     </tr>
@@ -494,7 +494,7 @@ This endpoint requires API Key authentication and will also return your private 
         <b>GET</b> <code>/v2/batchReports/{batchReportId}/xml</code><br>
         Returns the test report of a suite as XML
         <h3>Example:</h3>
-        <code>api.junitStyleXmlReport(, { ...options })</code>
+        <code>api.junitStyleXmlReport({ ...options })</code>
         <br><h4>Options</h4>
         <ul>          <li><b>body</b>: No description available.</li>          <li><b>body</b>: No description available.</li>        </ul>      </td>
     </tr>
@@ -581,53 +581,103 @@ This endpoint requires API Key authentication and will also return your private 
     </tr>
     <tr>
       <td>
+        <b>GET</b> <code>/metrics/</code><br>
+        Provides a list of paginated raw performance metrics for the logged user
+        <h3>Example:</h3>
+        <code>api.getPerformanceMetrics({ ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>page_url</b>: No description available.</li>        </ul>      </td>
+    </tr>
+    <tr>
+      <td>
         <b>GET</b> <code>/metrics/{job_id}/</code><br>
-        No description available.
+        Provides performance metrics and job basic data for a given job_id
         <h3>Example:</h3>
-        <code>api.getPerformanceMetrics(job_id)</code>
+        <code>api.getPerformanceMetricsByJobId(job_id, { ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>full</b>: When set to false, basic job data will be returned, excluding performance metrics</li>        </ul>      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/metrics/{job_id}/assert/</code><br>
+        Provides information if there is an outlier for the given job_id and metric
+        <h3>Example:</h3>
+        <code>api.assertPerformance(job_id, metric_names, order_index)</code>
       </td>
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/metrics/{job_id}/baseline/history/</code><br>
-        No description available.
+        <b>GET</b> <code>/metrics/{job_id}/baseline/</code><br>
+        Provides baseline based on metrics history, where the reference point is a given job_id
         <h3>Example:</h3>
-        <code>api.getBaselineHistory(job_id, metric_names, order_index, { ...options })</code>
+        <code>api.getBaseline(job_id, metric_names, order_index, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>window_size</b>: No description available.</li>          <li><b>limit</b>: No description available.</li>        </ul>      </td>
+        <ul>          <li><b>regime_end</b>: No description available.</li>          <li><b>regime_start</b>: No description available.</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/metrics/{job_id}/baseline/command/</code><br>
-        No description available.
+        <b>GET</b> <code>/metrics/{job_id}/baseline/reset/</code><br>
+        Returns true if a baseline was resetted for a give job_id
         <h3>Example:</h3>
-        <code>api.getRecentBaselineHistory(job_id, metric_names, order_index, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>window_size</b>: No description available.</li>        </ul>      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>PATCH</b> <code>/metrics/{job_id}/regime_acknowledge/</code><br>
-        No description available.
-        <h3>Example:</h3>
-        <code>api.acknowledgeRegime(job_id, body)</code>
+        <code>api.hasBaselineReset(job_id)</code>
       </td>
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/metrics/{job_id}/regressions/</code><br>
-        No description available.
+        <b>POST</b> <code>/metrics/{job_id}/baseline/reset/</code><br>
+        Sets a reset point market at job_id, previous jobs will not be taken into account in calculating baseline
         <h3>Example:</h3>
-        <code>api.assertPerformanceRegression(job_id, metric_names, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>window_size</b>: No description available.</li>        </ul>      </td>
+        <code>api.acknowledgeBaseline(job_id)</code>
+      </td>
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/metrics/{job_id}/dataset/</code><br>
-        No description available.
+        <b>GET</b> <code>/metrics/{job_id}/discarded/</code><br>
+        Provides lists outliers marked as discarded
         <h3>Example:</h3>
-        <code>api.getPerformanceDataset(job_id, metric_names)</code>
+        <code>api.getDiscardedOutliers(job_id, order_index)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>POST</b> <code>/metrics/{job_id}/discarded/</code><br>
+        Marks outlier for a given {job_id} as not relevant/flaky
+        <h3>Example:</h3>
+        <code>api.discardOutliers(job_id, order_index)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/metrics/{job_id}/history/</code><br>
+        Provides a list of raw performance metrics up to point where the reference is a given job_id and order_index
+        <h3>Example:</h3>
+        <code>api.getBaselineHistory(job_id, order_index, { ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>limit</b>: No description available.</li>        </ul>      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/metrics/{job_id}/regimes/</code><br>
+        Provides regimes per metric calculated for a set of jobs, where the reference point is a given job_id
+        <h3>Example:</h3>
+        <code>api.getRegimes(job_id, metric_names, order_index, { ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>include_baseline</b>: No description available.</li>        </ul>      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>POST</b> <code>/metrics/{job_id}/regimes/acknowledge/</code><br>
+        Acknowledge regime. Confirm values in new regime are acceptable.
+        <h3>Example:</h3>
+        <code>api.acknowledgeRegime(job_id, order_index)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/metrics/swagger/</code><br>
+        Provides json documentation for the performance API
+        <h3>Example:</h3>
+        <code>api.getApiDefinition()</code>
       </td>
     </tr>
   </tbody></table>

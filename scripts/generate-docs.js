@@ -18,7 +18,9 @@ for (const [commandName, options] of PROTOCOL_MAP) {
     const params = getParameters(options.description.parameters)
     const requiredParams = params.filter((p) => p.required)
     const commandOptions = params.filter((p) => !p.required)
-    const example = `api.${commandName}(${requiredParams.map((p) => p.name).join(', ')}${commandOptions.length ? ', { ...options }' : ''})`
+    const inlineParameters = requiredParams.map((p) => p.name).join(', ')
+    const separator = inlineParameters && commandOptions.length ? ', ' : ''
+    const example = `api.${commandName}(${inlineParameters}${separator}${commandOptions.length ? '{ ...options }' : ''})`
 
     docs += '    <tr>\n'
     docs += '      <td>\n'
