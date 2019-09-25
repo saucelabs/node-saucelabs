@@ -21,6 +21,7 @@
             }
          ],
          "get":{
+            "operationId": "get_performance_metrics",
             "responses":{
                "200":{
                   "description":"Provides a list of paginated raw performance metrics for the logged user",
@@ -47,6 +48,7 @@
             }
          ],
          "get":{
+            "operationId": "get_performance_metrics_by_jobID",
             "responses":{
                "200":{
                   "description":"Provides performance metrics and job basic data for a given job_id",
@@ -65,6 +67,7 @@
       },
       "/metrics/{job_id}/assert/":{
          "get":{
+            "operationId": "assert_performance",
             "parameters":[
                {
                   "$ref":"#/parameters/JobId"
@@ -111,6 +114,7 @@
             }
          ],
          "get":{
+            "operationId": "get_baseline",
             "responses":{
                "200":{
                   "description":"Provides baseline based on metrics history, where the reference point is a given job_id",
@@ -134,6 +138,7 @@
             }
          ],
          "get":{
+            "operationId": "has_baseline_reset",
             "responses":{
                "200":{
                   "description":"Returns true if a baseline was resetted for a give job_id"
@@ -147,6 +152,7 @@
             }
          },
          "post":{
+            "operationId": "acknowledge_baseline",
             "responses":{
                "201":{
                   "description":"Sets a reset point market at job_id, previous jobs will not be taken into account in calculating baseline"
@@ -170,6 +176,7 @@
             }
          ],
          "get":{
+            "operationId": "get_discarded_outliers",
             "responses":{
                "200":{
                   "description":"Provides lists outliers marked as discarded",
@@ -186,6 +193,7 @@
             }
          },
          "post":{
+            "operationId": "discard_outliers",
             "responses":{
                "201":{
                   "description":"Marks outlier for a given {job_id} as not relevant/flaky"
@@ -212,6 +220,7 @@
             }
          ],
          "get":{
+            "operationId": "get_baseline_history",
             "responses":{
                "200":{
                   "description":"Provides a list of raw performance metrics up to point where the reference is a given job_id and order_index",
@@ -230,6 +239,7 @@
       },
       "/metrics/{job_id}/regimes/":{
          "get":{
+            "operationId": "get_regimes",
             "parameters":[
                {
                   "$ref":"#/parameters/JobId"
@@ -270,6 +280,7 @@
             }
          ],
          "post":{
+            "operationId": "acknowledge_regime",
             "responses":{
                "201":{
                   "description":"Acknowledge regime. Confirm values in new regime are acceptable."
