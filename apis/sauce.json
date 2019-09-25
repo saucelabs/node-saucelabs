@@ -2321,22 +2321,6 @@
       }
     }
   },
-  "responses": {
-    "400": {
-      "description": "Bad request - typically some request parameter error",
-      "schema": {
-        "properties": {
-          "message": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "message"
-        ],
-        "type": "object"
-      }
-    }
-  },
   "schemes": [
     "https"
   ],
