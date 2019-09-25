@@ -1,617 +1,832 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "title": "Performance API",
-    "version": "0.94.0"
-  },
-  "host": "api.saucelabs.com",
-  "basePath": "/v1/performance",
-  "schemes": [
-    "https"
-  ],
-  "produces": [
-    "application/json"
-  ],
-  "paths": {
-    "/metrics/{job_id}/": {
-      "get": {
-        "operationId": "get_performance_metrics",
-        "summary": "Get performance metrics of specific test.",
-        "parameters": [
-          {
-            "$ref": "#/parameters/JobId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Gets performance metrics for a given job id",
-            "schema": {
-              "$ref": "#/definitions/PerformanceMetricsListView"
+   "swagger":"2.0",
+   "info":{
+      "title":"Performance API",
+      "version":"0.247.0",
+      "description":"Performance API provides essential information about performance of tested web application."
+   },
+   "host":"host-depends-on-env",
+   "basePath":"/v2",
+   "schemes":[
+      "https"
+   ],
+   "produces":[
+      "application/json"
+   ],
+   "paths":{
+      "/metrics/":{
+         "parameters":[
+            {
+               "$ref":"#/parameters/PageUrl"
             }
-          },
-          "default": {
-            "description": "Error response",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/metrics/{job_id}/baseline/history/": {
-      "get": {
-        "operationId": "get_baseline_history",
-        "summary": "Get baseline history of specific test.",
-        "parameters": [
-          {
-            "$ref": "#/parameters/JobId"
-          },
-          {
-            "$ref": "#/parameters/MetricNames"
-          },
-          {
-            "$ref": "#/parameters/OrderIndex"
-          },
-          {
-            "$ref": "#/parameters/Limit"
-          },
-          {
-            "$ref": "#/parameters/WindowSize"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Gets baseline history based on job_id and given parameters",
-            "schema": {
-              "$ref": "#/definitions/BaselineHistoryView"
-            }
-          },
-          "default": {
-            "description": "Error response",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/metrics/{job_id}/baseline/command/": {
-      "get": {
-        "operationId": "get_recent_baseline_history",
-        "summary": "Gets recent baseline based on job_id and given parameters",
-        "parameters": [
-          {
-            "$ref": "#/parameters/JobId"
-          },
-          {
-            "$ref": "#/parameters/MetricNames"
-          },
-          {
-            "$ref": "#/parameters/OrderIndex"
-          },
-          {
-            "$ref": "#/parameters/WindowSize"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Gets recent baseline based on job_id and given parameters",
-            "schema": {
-              "$ref": "#/definitions/BaselineCommandView"
-            }
-          },
-          "default": {
-            "description": "Error response",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/metrics/{job_id}/regime_acknowledge/": {
-      "patch": {
-        "operationId": "acknowledge_regime",
-        "summary": "Acknowledge Regime.",
-        "parameters": [
-          {
-            "$ref": "#/parameters/JobId"
-          },
-          {
-            "$ref": "#/parameters/RegimeAcknowledgeBody"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Regime acknowledged.",
-            "schema": {
-              "$ref": "#/definitions/PerformanceMetricsListViewItems"
-            }
-          },
-          "default": {
-            "description": "Error response",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/metrics/{job_id}/regressions/": {
-      "get": {
-        "operationId": "assert_performance_regression",
-        "summary": "Shows if there's a regression detected for given job_id and metric_names",
-        "parameters": [
-          {
-            "$ref": "#/parameters/JobId"
-          },
-          {
-            "$ref": "#/parameters/MetricNames"
-          },
-          {
-            "$ref": "#/parameters/WindowSize"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Shows if there's a regression detected for given job_id and metric_names",
-            "schema": {
-              "$ref": "#/definitions/PerformanceMetricsRegressionListView"
-            }
-          },
-          "default": {
-            "description": "Error response",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/metrics/{job_id}/dataset/": {
-      "get": {
-        "operationId": "get_performance_dataset",
-        "parameters": [
-          {
-            "$ref": "#/parameters/JobId"
-          },
-          {
-            "$ref": "#/parameters/MetricNames"
-          }
-        ],
-        "summary": "Returns a dataset used to calculate regressions and baselines",
-        "responses": {
-          "200": {
-            "description": "Returns a dataset used to calculate regressions and baselines",
-            "schema": {
-              "$ref": "#/definitions/PerformanceMetricsDataSetListView"
-            }
-          },
-          "default": {
-            "description": "Error response",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        }
-      }
-    }
-  },
-  "parameters": {
-    "JobId": {
-      "name": "job_id",
-      "in": "path",
-      "type": "string",
-      "required": true
-    },
-    "JobOwner": {
-      "name": "job_owner",
-      "in": "query",
-      "type": "string",
-      "required": false
-    },
-    "MetricNames": {
-      "name": "metric_names",
-      "in": "query",
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "required": true
-    },
-    "MetricName": {
-      "name": "metric_names",
-      "in": "query",
-      "type": "string",
-      "required": true
-    },
-    "JobNameHash": {
-      "name": "job_name_hash",
-      "in": "query",
-      "type": "string",
-      "required": true
-    },
-    "OrderIndex": {
-      "name": "order_index",
-      "in": "query",
-      "type": "integer",
-      "required": true
-    },
-    "EndTime": {
-      "name": "end_time",
-      "in": "query",
-      "type": "string",
-      "format": "date-time",
-      "required": false
-    },
-    "Limit": {
-      "name": "limit",
-      "in": "query",
-      "type": "integer",
-      "required": false
-    },
-    "WindowSize": {
-      "name": "window_size",
-      "in": "query",
-      "type": "integer",
-      "required": false
-    },
-    "RegimeAcknowledgeBody": {
-      "name": "body",
-      "in": "body",
-      "description": "Data needed to acknowledge the regime",
-      "required": true,
-      "schema": {
-        "$ref": "#/definitions/RegimeAcknowledgeList"
-      }
-    }
-  },
-  "definitions": {
-    "PerformanceMetricsListView": {
-      "type": "object",
-      "properties": {
-        "items": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/PerformanceMetricsListViewItems"
-          }
-        }
-      }
-    },
-    "PerformanceMetricsListViewItems": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "job_id": {
-          "type": "string"
-        },
-        "job_owner": {
-          "type": "string"
-        },
-        "page_url": {
-          "type": "string"
-        },
-        "order_index": {
-          "type": "integer"
-        },
-        "job_creation_time": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "metric_data": {
-          "$ref": "#/definitions/PerformanceMetricsDetails"
-        },
-        "regime_acknowledge": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "PerformanceMetricsDetails": {
-      "type": "object",
-      "properties": {
-        "load": {
-          "type": "number",
-          "format": "float"
-        },
-        "font_size": {
-          "type": "integer"
-        },
-        "firstPaint": {
-          "type": "number",
-          "format": "float"
-        },
-        "font_count": {
-          "type": "integer"
-        },
-        "image_size": {
-          "type": "integer"
-        },
-        "other_size": {
-          "type": "integer"
-        },
-        "pageWeight": {
-          "type": "integer"
-        },
-        "speedIndex": {
-          "type": "number",
-          "format": "float"
-        },
-        "image_count": {
-          "type": "integer"
-        },
-        "other_count": {
-          "type": "integer"
-        },
-        "script_size": {
-          "type": "integer"
-        },
-        "requestsSize": {
-          "type": "integer"
-        },
-        "script_count": {
-          "type": "integer"
-        },
-        "document_size": {
-          "type": "integer"
-        },
-        "requestsCount": {
-          "type": "integer"
-        },
-        "document_count": {
-          "type": "integer"
-        },
-        "timeToFirstByte": {
-          "type": "integer"
-        },
-        "domContentLoaded": {
-          "type": "number",
-          "format": "float"
-        },
-        "pageWeightEncoded": {
-          "type": "integer"
-        },
-        "firstContentfulPaint": {
-          "type": "number",
-          "format": "float"
-        },
-        "firstMeaningfulPaint": {
-          "type": "number",
-          "format": "float"
-        },
-        "perceptualSpeedIndex": {
-          "type": "number",
-          "format": "float"
-        },
-        "timeToFirstInteractive": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "BaselineHistoryView": {
-      "type": "object",
-      "properties": {
-        "load": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/BaselineDetails"
-          }
-        },
-        "requestsCount": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/BaselineDetails"
-          }
-        },
-        "pageWeight": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/BaselineDetails"
-          }
-        },
-        "speedIndex": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/BaselineDetails"
-          }
-        }
-      }
-    },
-    "BaselineCommandView": {
-      "type": "object",
-      "properties": {
-        "load": {
-          "$ref": "#/definitions/BaselineDetails"
-        },
-        "requestsCount": {
-          "$ref": "#/definitions/BaselineDetails"
-        },
-        "pageWeight": {
-          "$ref": "#/definitions/BaselineDetails"
-        },
-        "speedIndex": {
-          "$ref": "#/definitions/BaselineDetails"
-        }
-      }
-    },
-    "BaselineDetails": {
-      "type": "object",
-      "properties": {
-        "b": {
-          "type": "number",
-          "format": "float",
-          "description": "Baseline"
-        },
-        "u": {
-          "type": "number",
-          "format": "float",
-          "description": "Upper boundry"
-        },
-        "l": {
-          "type": "number",
-          "format": "float",
-          "description": "Lower boundry"
-        },
-        "r": {
-          "type": "number",
-          "format": "float",
-          "description": "Real value"
-        },
-        "job_id": {
-          "type": "string"
-        },
-        "datetime": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "new_regime": {
-          "type": "number",
-          "format": "integer",
-          "enum": [
-            0,
-            1
-          ],
-          "description": "positive means a datapoint belongs to the new regime"
-        },
-        "accepted": {
-          "type": "number",
-          "format": "integer",
-          "enum": [
-            0,
-            1
-          ],
-          "description": "positive means a datapoint regime is accepted"
-        }
-      }
-    },
-    "RegimeAcknowledge": {
-      "type": "object",
-      "properties": {
-        "page_url": {
-          "type": "string"
-        },
-        "order_index": {
-          "type": "integer"
-        },
-        "metric_names": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "load",
-              "font_size",
-              "firstPaint",
-              "font_count",
-              "image_size",
-              "other_size",
-              "pageWeight",
-              "speedIndex",
-              "image_count",
-              "other_count",
-              "script_size",
-              "requestsSize",
-              "script_count",
-              "document_size",
-              "requestsCount",
-              "document_count",
-              "timeToFirstByte",
-              "domContentLoaded",
-              "pageWeightEncoded",
-              "firstContentfulPaint",
-              "firstMeaningfulPaint",
-              "perceptualSpeedIndex",
-              "timeToFirstInteractive"
-            ]
-          }
-        }
-      },
-      "required": [
-        "page_url",
-        "order_index",
-        "metric_names"
-      ]
-    },
-    "RegimeAcknowledgeList": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/RegimeAcknowledge"
-      },
-      "minItems": 1
-    },
-    "PerformanceMetricsRegressionListView": {
-      "type": "object",
-      "properties": {
-        "items": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "page_url": {
-                "type": "string"
-              },
-              "order_index": {
-                "type": "integer"
-              },
-              "is_regression_detected": {
-                "type": "boolean"
-              },
-              "metrics": {
-                "$ref": "#/definitions/PerformanceMetricsDetails"
-              }
-            }
-          }
-        }
-      }
-    },
-    "PerformanceMetricsDataSetListView": {
-      "type": "object",
-      "properties": {
-        "load": {
-          "type": "object",
-          "properties": {
-            "https://www.saucedemo.com/": {
-              "type": "object",
-              "properties": {
-                "0": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/BaselineItemInput"
+         ],
+         "get":{
+            "responses":{
+               "200":{
+                  "description":"Provides a list of paginated raw performance metrics for the logged user",
+                  "schema":{
+                     "$ref":"#/definitions/PerformanceUserMetricsView"
                   }
-                }
-              }
+               },
+               "default":{
+                  "description":"Error response",
+                  "schema":{
+                     "$ref":"#/definitions/ErrorResponse"
+                  }
+               }
             }
-          }
-        }
+         }
+      },
+      "/metrics/{job_id}/":{
+         "parameters":[
+            {
+               "$ref":"#/parameters/JobId"
+            },
+            {
+               "$ref":"#/parameters/Full"
+            }
+         ],
+         "get":{
+            "responses":{
+               "200":{
+                  "description":"Provides performance metrics and job basic data for a given job_id",
+                  "schema":{
+                     "$ref":"#/definitions/PerformanceMetricsListView"
+                  }
+               },
+               "default":{
+                  "description":"Error response",
+                  "schema":{
+                     "$ref":"#/definitions/ErrorResponse"
+                  }
+               }
+            }
+         }
+      },
+      "/metrics/{job_id}/assert/":{
+         "get":{
+            "parameters":[
+               {
+                  "$ref":"#/parameters/JobId"
+               },
+               {
+                  "$ref":"#/parameters/MetricNames"
+               },
+               {
+                  "$ref":"#/parameters/OrderIndex"
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"Provides information if there is an outlier for the given job_id and metric",
+                  "schema":{
+                     "$ref":"#/definitions/AssertView"
+                  }
+               },
+               "default":{
+                  "description":"Error response",
+                  "schema":{
+                     "$ref":"#/definitions/ErrorResponse"
+                  }
+               }
+            }
+         }
+      },
+      "/metrics/{job_id}/baseline/":{
+         "parameters":[
+            {
+               "$ref":"#/parameters/JobId"
+            },
+            {
+               "$ref":"#/parameters/MetricNames"
+            },
+            {
+               "$ref":"#/parameters/OrderIndex"
+            },
+            {
+               "$ref":"#/parameters/RegimeStart"
+            },
+            {
+               "$ref":"#/parameters/RegimeEnd"
+            }
+         ],
+         "get":{
+            "responses":{
+               "200":{
+                  "description":"Provides baseline based on metrics history, where the reference point is a given job_id",
+                  "schema":{
+                     "$ref":"#/definitions/BaselineView"
+                  }
+               },
+               "default":{
+                  "description":"Error response",
+                  "schema":{
+                     "$ref":"#/definitions/ErrorResponse"
+                  }
+               }
+            }
+         }
+      },
+      "/metrics/{job_id}/baseline/reset/":{
+         "parameters":[
+            {
+               "$ref":"#/parameters/JobId"
+            }
+         ],
+         "get":{
+            "responses":{
+               "200":{
+                  "description":"Returns true if a baseline was resetted for a give job_id"
+               },
+               "default":{
+                  "description":"Error response",
+                  "schema":{
+                     "$ref":"#/definitions/ErrorResponse"
+                  }
+               }
+            }
+         },
+         "post":{
+            "responses":{
+               "201":{
+                  "description":"Sets a reset point market at job_id, previous jobs will not be taken into account in calculating baseline"
+               },
+               "default":{
+                  "description":"Error response",
+                  "schema":{
+                     "$ref":"#/definitions/ErrorResponse"
+                  }
+               }
+            }
+         }
+      },
+      "/metrics/{job_id}/discarded/":{
+         "parameters":[
+            {
+               "$ref":"#/parameters/JobId"
+            },
+            {
+               "$ref":"#/parameters/OrderIndex"
+            }
+         ],
+         "get":{
+            "responses":{
+               "200":{
+                  "description":"Provides lists outliers marked as discarded",
+                  "schema":{
+                     "$ref":"#/definitions/DiscardedView"
+                  }
+               },
+               "default":{
+                  "description":"Error response",
+                  "schema":{
+                     "$ref":"#/definitions/ErrorResponse"
+                  }
+               }
+            }
+         },
+         "post":{
+            "responses":{
+               "201":{
+                  "description":"Marks outlier for a given {job_id} as not relevant/flaky"
+               },
+               "default":{
+                  "description":"Error response",
+                  "schema":{
+                     "$ref":"#/definitions/ErrorResponse"
+                  }
+               }
+            }
+         }
+      },
+      "/metrics/{job_id}/history/":{
+         "parameters":[
+            {
+               "$ref":"#/parameters/JobId"
+            },
+            {
+               "$ref":"#/parameters/OrderIndex"
+            },
+            {
+               "$ref":"#/parameters/Limit"
+            }
+         ],
+         "get":{
+            "responses":{
+               "200":{
+                  "description":"Provides a list of raw performance metrics up to point where the reference is a given job_id and order_index",
+                  "schema":{
+                     "$ref":"#/definitions/PerformanceMetricsHistoryView"
+                  }
+               },
+               "default":{
+                  "description":"Error response",
+                  "schema":{
+                     "$ref":"#/definitions/ErrorResponse"
+                  }
+               }
+            }
+         }
+      },
+      "/metrics/{job_id}/regimes/":{
+         "get":{
+            "parameters":[
+               {
+                  "$ref":"#/parameters/JobId"
+               },
+               {
+                  "$ref":"#/parameters/MetricNames"
+               },
+               {
+                  "$ref":"#/parameters/OrderIndex"
+               },
+               {
+                  "$ref":"#/parameters/IncludeBaseline"
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"Provides regimes per metric calculated for a set of jobs, where the reference point is a given job_id",
+                  "schema":{
+                     "$ref":"#/definitions/RegimesView"
+                  }
+               },
+               "default":{
+                  "description":"Error response",
+                  "schema":{
+                     "$ref":"#/definitions/ErrorResponse"
+                  }
+               }
+            }
+         }
+      },
+      "/metrics/{job_id}/regimes/acknowledge/":{
+         "parameters":[
+            {
+               "$ref":"#/parameters/JobId"
+            },
+            {
+               "$ref":"#/parameters/OrderIndex"
+            }
+         ],
+         "post":{
+            "responses":{
+               "201":{
+                  "description":"Acknowledge regime. Confirm values in new regime are acceptable."
+               },
+               "default":{
+                  "description":"Error response",
+                  "schema":{
+                     "$ref":"#/definitions/ErrorResponse"
+                  }
+               }
+            }
+         }
+      },
+      "/metrics/swagger/":{
+         "parameters":[
+
+         ],
+         "get":{
+            "responses":{
+               "200":{
+                  "description":"Provides json documentation for the performance API"
+               },
+               "default":{
+                  "description":"Error response",
+                  "schema":{
+                     "$ref":"#/definitions/ErrorResponse"
+                  }
+               }
+            }
+         }
       }
-    },
-    "BaselineItemInput": {
-      "type": "object",
-      "properties": {
-        "job_id": {
-          "type": "string"
-        },
-        "datetime": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "value": {
-          "type": "number",
-          "format": "float"
-        }
+   },
+   "parameters":{
+      "JobId":{
+         "name":"job_id",
+         "in":"path",
+         "type":"string",
+         "required":true
+      },
+      "Full":{
+         "name":"full",
+         "in":"query",
+         "type":"boolean",
+         "required":false,
+         "default":true,
+         "description":"When set to false, basic job data will be returned, excluding performance metrics"
+      },
+      "MetricNames":{
+         "name":"metric_names",
+         "in":"query",
+         "type":"array",
+         "items":{
+            "type":"string"
+         },
+         "required":true
+      },
+      "OrderIndex":{
+         "name":"order_index",
+         "in":"query",
+         "type":"integer",
+         "required":true
+      },
+      "PageUrl":{
+         "name":"page_url",
+         "in":"query",
+         "type":"string",
+         "required":false
+      },
+      "Limit":{
+         "name":"limit",
+         "in":"query",
+         "type":"integer",
+         "required":false
+      },
+      "RegimeStart":{
+         "name":"regime_start",
+         "in":"query",
+         "type":"integer",
+         "required":false
+      },
+      "RegimeEnd":{
+         "name":"regime_end",
+         "in":"query",
+         "type":"integer",
+         "required":false
+      },
+      "IncludeBaseline":{
+         "name":"include_baseline",
+         "in":"query",
+         "type":"boolean",
+         "default":false,
+         "required":false
       }
-    },
-    "ErrorResponse": {
-      "type": "object",
-      "properties": {
-        "details": {
-          "type": "string"
-        }
+   },
+   "definitions":{
+      "PerformanceMetricsListView":{
+         "type":"object",
+         "properties":{
+            "items":{
+               "type":"array",
+               "items":{
+                  "$ref":"#/definitions/PerformanceMetricsListViewItems"
+               }
+            }
+         }
+      },
+      "PerformanceMetricsListViewItems":{
+         "type":"object",
+         "properties":{
+            "job_id":{
+               "type":"string"
+            },
+            "job_owner":{
+               "type":"string"
+            },
+            "job_name_hash":{
+               "type":"string"
+            },
+            "page_url":{
+               "type":"string"
+            },
+            "order_index":{
+               "type":"integer"
+            },
+            "job_creation_time":{
+               "type":"string",
+               "format":"date-time"
+            },
+            "load_id":{
+               "type":"string"
+            },
+            "loader_id":{
+               "type":"string"
+            },
+            "error":{
+               "type":"string"
+            },
+            "metric_data":{
+               "$ref":"#/definitions/PerformanceMetricsDetails"
+            }
+         }
+      },
+      "PerformanceMetricsHistoryView":{
+         "type":"object",
+         "properties":{
+            "items":{
+               "type":"array",
+               "items":{
+                  "$ref":"#/definitions/PerformanceMetricsListViewItems"
+               }
+            }
+         }
+      },
+      "PerformanceUserMetricsView":{
+         "type":"object",
+         "properties":{
+            "items":{
+               "type":"array",
+               "items":{
+                  "$ref":"#/definitions/PerformanceMetricsListViewItems"
+               }
+            },
+            "next":{
+               "type":"string"
+            },
+            "previous":{
+               "type":"string"
+            }
+         }
+      },
+      "PerformanceMetricsDetails":{
+         "type":"object",
+         "properties":{
+            "rtt":{
+               "type":"number",
+               "format":"float"
+            },
+            "load":{
+               "type":"number",
+               "format":"float"
+            },
+            "score":{
+               "type":"number",
+               "format":"integer"
+            },
+            "maxRtt":{
+               "type":"number",
+               "format":"integer"
+            },
+            "numFonts":{
+               "type":"number",
+               "format":"integer"
+            },
+            "numTasks":{
+               "type":"number",
+               "format":"integer"
+            },
+            "font_size":{
+               "type":"number",
+               "format":"integer"
+            },
+            "firstPaint":{
+               "type":"number",
+               "format":"integer"
+            },
+            "font_count":{
+               "type":"number",
+               "format":"integer"
+            },
+            "image_size":{
+               "type":"number",
+               "format":"integer"
+            },
+            "numScripts":{
+               "type":"number",
+               "format":"integer"
+            },
+            "other_size":{
+               "type":"number",
+               "format":"integer"
+            },
+            "speedIndex":{
+               "type":"number",
+               "format":"integer"
+            },
+            "throughput":{
+               "type":"number",
+               "format":"float"
+            },
+            "image_count":{
+               "type":"number",
+               "format":"integer"
+            },
+            "numRequests":{
+               "type":"number",
+               "format":"integer"
+            },
+            "other_count":{
+               "type":"number",
+               "format":"integer"
+            },
+            "script_size":{
+               "type":"number",
+               "format":"integer"
+            },
+            "firstCPUIdle":{
+               "type":"number",
+               "format":"integer"
+            },
+            "requestsSize":{
+               "type":"number",
+               "format":"integer"
+            },
+            "script_count":{
+               "type":"number",
+               "format":"integer"
+            },
+            "document_size":{
+               "type":"number",
+               "format":"integer"
+            },
+            "requestsCount":{
+               "type":"number",
+               "format":"integer"
+            },
+            "totalTaskTime":{
+               "type":"number",
+               "format":"integer"
+            },
+            "document_count":{
+               "type":"number",
+               "format":"integer"
+            },
+            "numStylesheets":{
+               "type":"number",
+               "format":"integer"
+            },
+            "stylesheet_size":{
+               "type":"number",
+               "format":"integer"
+            },
+            "timeToFirstByte":{
+               "type":"number",
+               "format":"integer"
+            },
+            "totalByteWeight":{
+               "type":"number",
+               "format":"integer"
+            },
+            "domContentLoaded":{
+               "type":"number",
+               "format":"integer"
+            },
+            "firstInteractive":{
+               "type":"number",
+               "format":"integer"
+            },
+            "lastVisualChange":{
+               "type":"number",
+               "format":"integer"
+            },
+            "maxServerLatency":{
+               "type":"number",
+               "format":"integer"
+            },
+            "numTasksOver10ms":{
+               "type":"number",
+               "format":"integer"
+            },
+            "numTasksOver25ms":{
+               "type":"number",
+               "format":"integer"
+            },
+            "numTasksOver50ms":{
+               "type":"number",
+               "format":"integer"
+            },
+            "stylesheet_count":{
+               "type":"number",
+               "format":"integer"
+            },
+            "firstVisualChange":{
+               "type":"number",
+               "format":"integer"
+            },
+            "numTasksOver100ms":{
+               "type":"number",
+               "format":"integer"
+            },
+            "numTasksOver500ms":{
+               "type":"number",
+               "format":"integer"
+            },
+            "firstContentfulPaint":{
+               "type":"number",
+               "format":"integer"
+            },
+            "firstMeaningfulPaint":{
+               "type":"number",
+               "format":"integer"
+            },
+            "estimatedInputLatency":{
+               "type":"number",
+               "format":"integer"
+            },
+            "mainDocumentTransferSize":{
+               "type":"number",
+               "format":"integer"
+            }
+         }
+      },
+      "BaselineView":{
+         "type":"object",
+         "properties":{
+            "metric_name":{
+               "description":"metric name is one of the metrics provided in /metrics/{job_id}/",
+               "$ref":"#/definitions/BaselineDetails"
+            }
+         }
+      },
+      "BaselineDetails":{
+         "type":"object",
+         "properties":{
+            "baseline":{
+               "type":"number",
+               "format":"float",
+               "description":"Baseline"
+            },
+            "upper_boundary":{
+               "type":"number",
+               "format":"float",
+               "description":"Upper boundry"
+            },
+            "lower_boundary":{
+               "type":"number",
+               "format":"float",
+               "description":"Lower boundry"
+            },
+            "values":{
+               "type":"array",
+               "items":{
+                  "$ref":"#/definitions/BaselineValues"
+               }
+            }
+         }
+      },
+      "BaselineValues":{
+         "type":"object",
+         "properties":{
+            "real_value":{
+               "type":"number",
+               "format":"float",
+               "description":"Real value"
+            },
+            "job_id":{
+               "type":"string"
+            },
+            "datetime":{
+               "type":"string",
+               "format":"date-time"
+            }
+         }
+      },
+      "OutlierDetails":{
+         "type":"object",
+         "properties":{
+            "status":{
+               "type":"boolean"
+            },
+            "reason":{
+               "type":"string",
+               "enum":[
+                  "baseline",
+                  "new_regime"
+               ]
+            }
+         }
+      },
+      "AssertView":{
+         "type":"object",
+         "properties":{
+            "metric_name":{
+               "$ref":"#/definitions/AssertDetails"
+            }
+         }
+      },
+      "AssertDetails":{
+         "type":"object",
+         "properties":{
+            "baseline":{
+               "type":"number",
+               "format":"float",
+               "description":"Baseline"
+            },
+            "upper_boundary":{
+               "type":"number",
+               "format":"float",
+               "description":"Upper boundry"
+            },
+            "lower_boundary":{
+               "type":"number",
+               "format":"float",
+               "description":"Lower boundry"
+            },
+            "real_value":{
+               "type":"number",
+               "format":"float",
+               "description":"Real value"
+            },
+            "job_id":{
+               "type":"string"
+            },
+            "datetime":{
+               "type":"string",
+               "format":"date-time"
+            },
+            "order_index":{
+               "type":"integer"
+            },
+            "outlier":{
+               "$ref":"#/definitions/OutlierDetails"
+            }
+         }
+      },
+      "RegimesView":{
+         "type":"object",
+         "properties":{
+            "metric_name":{
+               "type":"array",
+               "items":{
+                  "type":"object",
+                  "required":[
+                     "regime_start",
+                     "regime_end",
+                     "baseline_url",
+                     "active"
+                  ],
+                  "properties":{
+                     "regime_start":{
+                        "type":"integer",
+                        "description":"Left regime boundry"
+                     },
+                     "regime_end":{
+                        "type":"integer",
+                        "description":"Right regime boundry"
+                     },
+                     "baseline_url":{
+                        "type":"string",
+                        "description":"Path to baseline endpoint for given regime"
+                     },
+                     "active":{
+                        "type":"boolean",
+                        "description":"Informs if given regime is active - in force"
+                     },
+                     "baseline":{
+                        "type":"object",
+                        "properties":{
+                           "upper_boundary":{
+                              "type":"number",
+                              "format":"float",
+                              "description":"Upper boundry"
+                           },
+                           "lower_boundary":{
+                              "type":"number",
+                              "format":"float",
+                              "description":"Lower boundry"
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      },
+      "DiscardedView":{
+         "type":"object",
+         "properties":{
+            "job_ids":{
+               "type":"array",
+               "items":{
+                  "type":"string"
+               }
+            }
+         }
+      },
+      "ErrorResponse":{
+         "type":"object",
+         "properties":{
+            "status":{
+               "type":"string"
+            },
+            "message":{
+               "type":"string"
+            }
+         }
+      },
+      "RegimeAcknowledge":{
+         "type":"object",
+         "properties":{
+            "page_url":{
+               "type":"string"
+            },
+            "order_index":{
+               "type":"integer"
+            },
+            "metric_names":{
+               "type":"array",
+               "items":{
+                  "type":"string"
+               }
+            }
+         },
+         "required":[
+            "page_url",
+            "order_index",
+            "metric_names"
+         ]
       }
-    }
-  }
+   }
 }
