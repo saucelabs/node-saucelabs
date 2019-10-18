@@ -1107,7 +1107,6 @@
           },
           {
             "default": false,
-            "description": "FIXME ---- ?",
             "in": "query",
             "name": "auto_only",
             "type": "boolean"
