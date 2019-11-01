@@ -1,12 +1,10 @@
 import util from 'util'
-import request from 'request'
+import got from 'got'
 
 import SauceLabs from '../src'
 
 jest.mock('fs')
 const fs = require('fs')
-jest.mock('zlib')
-const zlib = require('zlib').default
 
 test('should be inspectable', () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
@@ -57,7 +55,7 @@ test('should throw if API command is unknown', () => {
 test('should allow to call an API method with param in url', async () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     await api.getUserConcurrency('someuser')
-    expect(request.mock.calls[0][0].uri)
+    expect(got.mock.calls[0][0])
         .toBe('https://saucelabs.com/rest/v1.1/users/someuser/concurrency')
 })
 
@@ -68,22 +66,21 @@ test('should allow to call an API method with param as option', async () => {
         full: true
     })
 
-    const req = request.mock.calls[0][0]
-    expect(req.uri)
-        .toBe('https://saucelabs.com/rest/v1.1/someuser/jobs')
-    expect(req.qs).toEqual({
+    const uri = got.mock.calls[0][0]
+    const req = got.mock.calls[0][1]
+    expect(uri).toBe('https://saucelabs.com/rest/v1.1/someuser/jobs')
+    expect(req.searchParams).toEqual({
         limit: 123,
         full: true
     })
-    expect(req.useQuerystring).toBe(true)
 })
 
 test('should allow to make a request with body param', async () =>  {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     await api.updateJob('foobaruser', '690c5877710c422d8be4c622b40c747f', { passed: true })
 
-    const req = request.mock.calls[0][0]
-    expect(req.method).toBe('PUT')
+    const req = got.mock.calls[0][1]
+    expect(got.put).toBeCalled()
     expect(req.body).toEqual({ passed: true })
 })
 
@@ -91,8 +88,8 @@ test('should allow to make a request with body param via CLI call', async () => 
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     await api.updateJob('foobaruser', '690c5877710c422d8be4c622b40c747f', '{ "passed": false }')
 
-    const req = request.mock.calls[0][0]
-    expect(req.method).toBe('PUT')
+    const req = got.mock.calls[0][1]
+    expect(got.put).toBeCalled()
     expect(req.body).toEqual({ passed: false })
 })
 
@@ -100,8 +97,8 @@ test('should update RDC job status with body param', async () =>  {
     const api = new SauceLabs({})
     await api.updateTest('89ec3cca-7092-41f1-8037-d035579fb8d1', { passed: true })
 
-    const req = request.mock.calls[0][0]
-    expect(req.method).toBe('PUT')
+    const req = got.mock.calls[0][1]
+    expect(got.put).toBeCalled()
     expect(req.body).toEqual({ passed: true })
 })
 
@@ -109,34 +106,74 @@ test('should update RDC job status with body param via CLI call', async () =>  {
     const api = new SauceLabs({})
     await api.updateTest('89ec3cca-7092-41f1-8037-d035579fb8d1', '{ "passed": false }')
 
-    const req = request.mock.calls[0][0]
-    expect(req.method).toBe('PUT')
+    const req = got.mock.calls[0][1]
+    expect(got.put).toBeCalled()
     expect(req.body).toEqual({ passed: false })
 })
 
-test('should fail if param has wrong type', () => {
+test('should fail if param has wrong type', async () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
-    expect(() => api.listJobs(123, {
+    const error = await api.listJobs(123, {
         limit: 123,
         full: true
-    })).toThrow('Expected parameter for url param \'username\' from type \'string\', found \'number\'')
+    }).catch((err) => err)
+    expect(error.message).toBe('Expected parameter for url param \'username\' from type \'string\', found \'number\'')
 })
 
 test('should fail if option has wrong type', async () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
-    expect(() => api.listJobs('someuser', {
+    const error = await api.listJobs('someuser', {
         limit: '123',
         full: true
-    })).toThrow('Expected parameter for option \'limit\' from type \'number\', found \'string\'')
+    }).catch((err) => err)
+    expect(error.message).toBe('Expected parameter for option \'limit\' from type \'number\', found \'string\'')
+})
+
+test('should handle error case', async () => {
+    const response = new Error('Not Found')
+    response.statusCode = 404
+    response.body = { message: 'Not Found' }
+    got.get.mockReturnValueOnce(Promise.reject(response))
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    const error = await api.listJobs('someuser', {
+        limit: 123,
+        full: true
+    }).catch((err) => err)
+    expect(error.message).toBe('Failed calling listJobs, status code: 404, reason: Not Found')
 })
 
 test('should be able to download assets', async () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     await api.downloadJobAsset('some-id', 'performance.json')
-    const req = request.mock.calls[0][0]
+    const req = got.mock.calls[0][1]
+    const uri = got.mock.calls[0][0]
     expect(req.method).toBe('GET')
-    expect(req.uri).toContain('https://assets.saucelabs.com/jobs/some-id/performance.json')
-    expect(req.uri).toContain('auth=a2600100e3d1990721be97c093f64567')
+    expect(uri).toContain('https://assets.saucelabs.com/jobs/some-id/performance.json')
+    expect(uri).toContain('auth=a2600100e3d1990721be97c093f64567')
+})
+
+test('should handle errors when downloading assets', async () => {
+    const response = new Error('Not Found')
+    response.statusCode = 404
+    response.body = { message: 'Not Found' }
+    got.get.mockReturnValueOnce(Promise.reject(response))
+
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    const error = await api.downloadJobAsset('some-id', 'performance.json').catch((err) => err)
+    expect(error.message).toBe('There was an error downloading asset performance.json, status code: 404, reason: Not Found')
+})
+
+it('should parse text responses if headers expect json', async () => {
+    const reqRespond = { foo: 'bar' }
+    got.get.mockReturnValueOnce(Promise.resolve({
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(reqRespond)
+    }))
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    const result = await api.downloadJobAsset('some-id', 'performance.json')
+    expect(result).toEqual(reqRespond)
 })
 
 it('should fail if parameters are not given properly', async () => {
@@ -151,32 +188,18 @@ test('should support proxy options', async () => {
     const proxy = 'https://my.proxy.com'
     const api = new SauceLabs({ user: 'foo', key: 'bar', proxy })
     await api.downloadJobAsset('some-id', 'performance.json')
-    const requestOptions = request.mock.calls[0][0]
+    const requestOptions = got.mock.calls[0][1]
 
     await expect(requestOptions.proxy).toBeDefined()
     await expect(requestOptions.proxy).toEqual(proxy)
 })
 
-test('should handle asset response properly', async () => {
-    const api = new SauceLabs({ user: 'foo', key: 'bar' })
-    await api.downloadJobAsset('some-id', 'performance.json')
-    const cb = request.mock.calls[0][1]
-    expect(cb(new Error('ups'))).toBe(undefined)
-    expect(cb(null, { statusCode: 404 }, '{}')).toBe(undefined)
-})
-
 test('should put asset into file', async () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     await api.downloadJobAsset('some-id', 'performance.json', '/asset.json')
-    expect(fs.createWriteStream).toBeCalledWith('/asset.json')
-})
-
-test('should unzip file', async () => {
-    const api = new SauceLabs({ user: 'foo', key: 'bar' })
-    await api.downloadJobAsset('some-id', 'performance.json.gz', '/asset.json')
-    expect(zlib.createGunzip).toBeCalledTimes(1)
+    expect(fs.writeFileSync).toBeCalledWith('/asset.json', undefined)
 })
 
 afterEach(() => {
-    request.mockClear()
+    got.mockClear()
 })

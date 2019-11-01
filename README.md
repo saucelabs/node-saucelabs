@@ -47,17 +47,16 @@ If set to true you are accessing the headless Sauce instances (this discards the
 Type: `boolean`<br>
 Default: `false`
 
+### proxy
+
+If you want to tunnel your API request through a proxy please see the [got proxy docs](https://github.com/sindresorhus/got/blob/master/readme.md#proxies) for more information.
+
+Type: `object`<br>
+Default: `null`
+
 ## Usage
 
-All accessible API commands with descriptions can be found [here](docs/interface.md). In order to route requests through a proxy set `HTTP_PROXY`, `HTTPS_PROXY` or `NO_PROXY` as environment variable. For more information on this, read [here](https://github.com/request/request#controlling-proxy-behaviour-using-environment-variables). Alternatively you can pass the proxy to be used during initialization:
-
-```js
-import SauceLabs from 'saucelabs';
-
-...
-
-const myAccount = new SauceLabs({ proxy: 'http://localproxy.com' });
-```
+All accessible API commands with descriptions can be found [here](docs/interface.md).
 
 ### As CLI Tool
 
