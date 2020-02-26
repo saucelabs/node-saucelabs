@@ -3,7 +3,8 @@ import changeCase from 'change-case'
 const protocols = [
     require('../apis/sauce.json'),
     require('../apis/rdc.json'),
-    require('../apis/performance.json')
+    require('../apis/performance.json'),
+    require('../apis/orchestrator.json')
 ]
 
 const protocolFlattened = new Map()

@@ -3,6 +3,7 @@ import zlib from 'zlib'
 import path from 'path'
 import request from 'request'
 import changeCase from 'change-case'
+import FormData from 'form-data'
 
 import {
     createHMAC, getSauceEndpoint, toString, getParameters,
@@ -80,6 +81,13 @@ export default class SauceLabs {
          */
         if (propName === 'downloadJobAsset') {
             return ::this._downloadJobAsset
+        }
+
+        /**
+         * have special implementations for certain operations
+         */
+        if (propName === 'uploadJobAssets') {
+            return ::this.uploadJobAssets
         }
 
         return (...args) => {
@@ -236,6 +244,45 @@ export default class SauceLabs {
                     req.pipe(fd)
                 }
             }
+        })
+    }
+
+    async uploadJobAssets (jobId, filePaths) {
+        const base = 'http://localhost:3000' // getSauceEndpoint('saucelabs.com', this._options.region, this._options.headless)
+        const uri = base + `/v1/job/${jobId}/upload`
+        const form = new FormData()
+
+        for (const filePath of filePaths) {
+            const readStream = fs.createReadStream(filePath.startsWith('/')
+                ? filePath
+                : path.join(process.cwd(), filePath)
+            )
+            form.append('file[]', readStream)
+        }
+
+        return new Promise((resolve, reject) => {
+            const req = request({
+                uri,
+                auth: {
+                    /**
+                     * ToDo get real auth
+                     */
+                    user: 'admin',
+                    pass: 'foobar'
+                },
+                method: 'PUT',
+                headers: form.getHeaders()
+            }, (err, res, body) => {
+                /**
+                 * check if request was successful
+                 */
+                if (err) {
+                    return reject(err)
+                }
+
+                return resolve(body)
+            })
+            form.pipe(req)
         })
     }
 }

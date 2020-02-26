@@ -1,0 +1,187 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "description": "A service that orchestrates the Sauce cloud as well as test runner packages.",
+        "version": "0.0.1",
+        "title": "Testrunner Orchestrator",
+        "termsOfService": "https://saucelabs.com/terms-of-service",
+        "contact": {
+            "name": "Open Source Program Office at Sauce",
+            "email": "oss@saucelabs.com",
+            "url": "https://saucelabs.com"
+        }
+    },
+    "externalDocs": {
+        "description": "Sauce Labs Wiki",
+        "url": "https://wiki.saucelabs.com"
+    },
+    "servers": [
+        {
+            "url": "https://eds.us-west-1.saucelabs.com",
+            "description": "US Data Center"
+        },
+        {
+            "url": "https://eds.eu-central-1.saucelabs.com",
+            "description": "EU Data Center (Frankfurt)"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Log Files",
+            "description": "Log files that were captured while the test was running."
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            },
+            "basicAuth": {
+                "type": "http",
+                "scheme": "basic"
+            }
+        }
+    },
+    "paths": {
+        "/v1/job": {
+            "post": {
+                "operationId": "createJob",
+                "summary": "Creates Job Shell",
+                "externalDocs": {
+                    "description": "TBD",
+                    "url": "https://wiki.saucelabs.com"
+                },
+                "tags": [
+                    "Job"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "jobShell",
+                        "description": "Metadata to describe job",
+                        "schema": {
+                            "type": "object",
+                            "description": "A job shell",
+                            "properties": {
+                                "capabilities": {
+                                    "type": "object",
+                                    "description": "Shell job capabilities",
+                                    "properties": {
+                                        "browserName": {
+                                            "type": "string"
+                                        },
+                                        "browserVersion": {
+                                            "type": "string"
+                                        },
+                                        "platformName": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "build": {
+                                    "type": "string"
+                                },
+                                "isPublic": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Object containing sessionId and capabilities of created WebDriver session.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "Response for creating a job shell",
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "description": "created job id"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "TBD"
+            }
+        },
+        "/v1/job/{jobId}/upload": {
+            "put": {
+                "operationId": "uploadJobAssets",
+                "summary": "Upload job assets",
+                "externalDocs": {
+                    "description": "TBD",
+                    "url": "https://wiki.saucelabs.com"
+                },
+                "tags": [
+                    "Job"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "jobId",
+                        "required": true,
+                        "description": "id of the job that was run on Sauce Labs",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Object containing sessionId and capabilities of created WebDriver session.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "Response for creating a job shell",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string",
+                                        "description": "uploaded file name"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "TBD"
+            }
+        }
+    },
+    "security": [
+        {
+            "basicAuth": []
+        },
+        {
+            "bearerAuth": []
+        }
+    ]
+}
