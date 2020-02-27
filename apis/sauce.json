@@ -733,6 +733,20 @@
     "title": "Sauce Labs REST API",
     "version": "0.0.1"
   },
+  "servers": [
+    {
+      "url": "https://api.us-west-1.saucelabs.com",
+      "description": "US Data Center"
+    },
+    {
+      "url": "https://api.eu-central-1.saucelabs.com",
+      "description": "EU Data Center (Frankfurt)"
+    },
+    {
+      "url": "https://api.staging.saucelabs.net",
+      "description": "Staging Environment (internal use only)"
+    }
+  ],
   "parameters": {
     "filename": {
       "description": "filename",

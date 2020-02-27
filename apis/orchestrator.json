@@ -2,12 +2,12 @@
     "openapi": "3.0.0",
     "info": {
         "description": "A service that orchestrates the Sauce cloud as well as test runner packages.",
-        "version": "0.0.1",
+        "version": "0.1.7",
         "title": "Testrunner Orchestrator",
         "termsOfService": "https://saucelabs.com/terms-of-service",
         "contact": {
             "name": "Open Source Program Office at Sauce",
-            "email": "oss@saucelabs.com",
+            "email": "opensource@saucelabs.com",
             "url": "https://saucelabs.com"
         }
     },
@@ -17,14 +17,19 @@
     },
     "servers": [
         {
-            "url": "https://eds.us-west-1.saucelabs.com",
+            "url": "https://api.us-west-1.saucelabs.com",
             "description": "US Data Center"
         },
         {
-            "url": "https://eds.eu-central-1.saucelabs.com",
+            "url": "https://api.eu-central-1.saucelabs.com",
             "description": "EU Data Center (Frankfurt)"
+        },
+        {
+          "url": "https://api.staging.saucelabs.net",
+          "description": "Staging Environment (internal use only)"
         }
     ],
+    "basePath":"/orchestrator/",
     "tags": [
         {
             "name": "Log Files",
@@ -56,43 +61,56 @@
                 "tags": [
                     "Job"
                 ],
-                "consumes": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "jobShell",
-                        "description": "Metadata to describe job",
-                        "schema": {
-                            "type": "object",
-                            "description": "A job shell",
-                            "properties": {
-                                "capabilities": {
-                                    "type": "object",
-                                    "description": "Shell job capabilities",
-                                    "properties": {
-                                        "browserName": {
-                                            "type": "string"
-                                        },
-                                        "browserVersion": {
-                                            "type": "string"
-                                        },
-                                        "platformName": {
-                                            "type": "string"
+                "requestBody": {
+                    "required": true,
+                    "description": "Metadata to describe job",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "description": "A job shell",
+                                "properties": {
+                                    "capabilities": {
+                                        "type": "object",
+                                        "description": "Shell job capabilities",
+                                        "properties": {
+                                            "browserName": {
+                                                "type": "string",
+                                                "description": "Identifies the user agent.",
+                                                "example": "Chrome"
+                                            },
+                                            "browserVersion": {
+                                                "type": "string",
+                                                "description": "Identifies the version of the user agent.",
+                                                "example": 80
+                                            },
+                                            "platformName": {
+                                                "type": "string",
+                                                "description": "Identifies the operating system of the endpoint node.",
+                                                "example": "Windows 10"
+                                            }
                                         }
+                                    },
+                                    "build": {
+                                        "type": "string",
+                                        "description": "identifier for the build to attach to job to",
+                                        "example": "my build"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "description": "name of the test on Sauce Labs",
+                                        "example": "test feature xyz"
+                                    },
+                                    "isPublic": {
+                                        "type": "boolean",
+                                        "description": "whether or not the job is visible to not logged in user",
+                                        "example": false
                                     }
-                                },
-                                "build": {
-                                    "type": "string"
-                                },
-                                "isPublic": {
-                                    "type": "boolean"
                                 }
                             }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "Object containing sessionId and capabilities of created WebDriver session.",
@@ -104,7 +122,30 @@
                                     "properties": {
                                         "id": {
                                             "type": "string",
-                                            "description": "created job id"
+                                            "description": "created job id",
+                                            "example": "1dddf75a8cd8412da962898fb431b091"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Returned if shell job could not be created due to internal issues",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "Failure Response",
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Couldn't create job"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "Specific error message",
+                                            "example": "System is currently down and can't create jobs"
                                         }
                                     }
                                 }
@@ -166,7 +207,11 @@
                                     "items": {
                                         "type": "string",
                                         "description": "uploaded file name"
-                                    }
+                                    },
+                                    "example": [
+                                        "log.json",
+                                        "video.mp4"
+                                    ]
                                 }
                             }
                         }
