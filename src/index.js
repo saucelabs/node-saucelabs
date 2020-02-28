@@ -115,7 +115,7 @@ export default class SauceLabs {
              * check for body param (as last parameter as we don't expect request
              * parameters for non idempotent requests)
              */
-            let bodyOption = params.find(p => p.in === 'body')
+            let bodyOption = params.find(p => p.in === 'body') || description.requestBody
                 ? args[pathParams.length]
                 : null
 
