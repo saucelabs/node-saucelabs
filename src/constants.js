@@ -9,7 +9,7 @@ const protocols = [
 
 const protocolFlattened = new Map()
 const parametersFlattened = new Map()
-for (const { paths, parameters, host, basePath } of protocols) {
+for (const { paths, parameters, basePath, servers } of protocols) {
     for (const [name, description] of Object.entries(parameters || {})) {
         parametersFlattened.set(name, description)
     }
@@ -34,7 +34,7 @@ for (const { paths, parameters, host, basePath } of protocols) {
 
             protocolFlattened.set(
                 commandName,
-                { method, endpoint, description, host, basePath }
+                { method, endpoint, description, servers, basePath }
             )
         }
     }
@@ -59,11 +59,13 @@ export const DEFAULT_OPTIONS = {
     region: 'us'
 }
 
-export const REGION_MAPPING = {
-    'us': 'us-west-1.', // default endpoint
+export const ASSET_REGION_MAPPING = {
+    'us': '',
     'eu': 'eu-central-1.',
-    'us-west-1': 'us-west-1.',
-    'eu-central-1': 'eu-central-1.'
+    'us-west-1': '',
+    'us-east-1': 'us-east-1.',
+    'eu-central-1': 'eu-central-1.',
+    'staging': 'staging.'
 }
 
 export const SYMBOL_INSPECT = Symbol.for('nodejs.util.inspect.custom')

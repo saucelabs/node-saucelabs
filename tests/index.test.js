@@ -1,5 +1,6 @@
 import util from 'util'
 import request from 'request'
+import { instances } from 'form-data'
 
 import SauceLabs from '../src'
 
@@ -54,11 +55,17 @@ test('should throw if API command is unknown', () => {
         .toThrow('Couldn\'t find API endpoint for command "doSomethingCool"')
 })
 
+test('should return nothing if Symbol was accessed', () => {
+    const sym = Symbol('foo')
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    expect(typeof api[sym]).toBe('undefined')
+})
+
 test('should allow to call an API method with param in url', async () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     await api.getUserConcurrency('someuser')
     expect(request.mock.calls[0][0].uri)
-        .toBe('https://saucelabs.com/rest/v1.1/users/someuser/concurrency')
+        .toBe('https://api.us-west-1.saucelabs.com/rest/v1.1/users/someuser/concurrency')
 })
 
 test('should allow to call an API method with param as option', async () => {
@@ -70,7 +77,7 @@ test('should allow to call an API method with param as option', async () => {
 
     const req = request.mock.calls[0][0]
     expect(req.uri)
-        .toBe('https://saucelabs.com/rest/v1.1/someuser/jobs')
+        .toBe('https://api.us-west-1.saucelabs.com/rest/v1.1/someuser/jobs')
     expect(req.qs).toEqual({
         limit: 123,
         full: true
@@ -175,6 +182,21 @@ test('should unzip file', async () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     await api.downloadJobAsset('some-id', 'performance.json.gz', '/asset.json')
     expect(zlib.createGunzip).toBeCalledTimes(1)
+})
+
+test('should allow to upload files', async () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    await api.uploadJobAssets('some-id', ['log.json', 'selenium-server.json'])
+
+    const instance = instances[0]
+    expect(instance.append).toBeCalledTimes(2)
+    expect(instance.append).toBeCalledWith('file[]', undefined)
+    expect(instance.pipe).toBeCalledTimes(1)
+
+    const req = request.mock.calls[0][0]
+    expect(req.uri).toBe('https://api.us-west-1.saucelabs.com/orchestrator/v1/job/some-id/upload')
+    expect(req.auth).toEqual({ user: 'foo', pass: 'bar' })
+    expect(req.headers).toEqual({ some: 'headers' })
 })
 
 afterEach(() => {

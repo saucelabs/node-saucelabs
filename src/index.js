@@ -6,7 +6,7 @@ import changeCase from 'change-case'
 import FormData from 'form-data'
 
 import {
-    createHMAC, getSauceEndpoint, toString, getParameters,
+    createHMAC, getAPIHost, getAssetHost, toString, getParameters,
     isValidType, getErrorReason, getStrictSsl
 } from './utils'
 import {
@@ -17,19 +17,20 @@ import {
 export default class SauceLabs {
     constructor (options) {
         this._options = Object.assign({}, DEFAULT_OPTIONS, options)
-        this.username = this._options.user
         this._accessKey = this._options.key
+        this.username = this._options.user
         this._auth = {
             user: this.username,
             pass: this._accessKey
         }
-        this.proxy = this._options.proxy
 
         /**
          * public fields
          */
         this.region = this._options.region
+        this.tld = this._options.tld
         this.headless = this._options.headless
+        this.proxy = this._options.proxy
 
         return new Proxy({}, { get: ::this.get })
     }
@@ -87,11 +88,11 @@ export default class SauceLabs {
          * have special implementations for certain operations
          */
         if (propName === 'uploadJobAssets') {
-            return ::this.uploadJobAssets
+            return ::this._uploadJobAssets
         }
 
         return (...args) => {
-            const { description, method, endpoint, host, basePath } = PROTOCOL_MAP.get(propName)
+            const { description, method, endpoint, servers, basePath } = PROTOCOL_MAP.get(propName)
             const params = getParameters(description.parameters)
             const pathParams = params.filter(p => p.in === 'path')
 
@@ -153,7 +154,7 @@ export default class SauceLabs {
             /**
              * make request
              */
-            const uri = getSauceEndpoint(host + basePath, this._options.region, this._options.headless) + url
+            const uri = getAPIHost(servers, basePath, this._options) + url
             return new Promise((resolve, reject) => request({
                 uri,
                 method: method.toUpperCase(),
@@ -189,7 +190,7 @@ export default class SauceLabs {
         }
 
         const hmac = await createHMAC(this.username, this._accessKey, jobId)
-        const host = getSauceEndpoint('saucelabs.com', this._options.region, this._options.headless, 'https://assets.')
+        const host = getAssetHost(this._options)
         return new Promise((resolve, reject) => {
             const req = request({
                 method: 'GET',
@@ -247,9 +248,9 @@ export default class SauceLabs {
         })
     }
 
-    async uploadJobAssets (jobId, filePaths) {
-        const base = 'http://localhost:3000' // getSauceEndpoint('saucelabs.com', this._options.region, this._options.headless)
-        const uri = base + `/v1/job/${jobId}/upload`
+    async _uploadJobAssets (jobId, filePaths) {
+        const { servers, basePath, method, endpoint } = PROTOCOL_MAP.get('uploadJobAssets')
+        const uri = getAPIHost(servers, basePath, this._options) + endpoint.replace('{jobId}', jobId)
         const form = new FormData()
 
         for (const filePath of filePaths) {
@@ -263,14 +264,8 @@ export default class SauceLabs {
         return new Promise((resolve, reject) => {
             const req = request({
                 uri,
-                auth: {
-                    /**
-                     * ToDo get real auth
-                     */
-                    user: 'admin',
-                    pass: 'foobar'
-                },
-                method: 'PUT',
+                method,
+                auth: this._auth,
                 headers: form.getHeaders()
             }, (err, res, body) => {
                 /**

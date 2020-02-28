@@ -1,6 +1,7 @@
+import path from 'path'
 import crypto from 'crypto'
 
-import { REGION_MAPPING, TO_STRING_TAG, PARAMETERS_MAP } from './constants'
+import { ASSET_REGION_MAPPING, TO_STRING_TAG, PARAMETERS_MAP } from './constants'
 
 /**
  * Create HMAC token to receive job assets
@@ -31,27 +32,55 @@ export function createHMAC (username, key, jobId) {
  * @param  {string}  protocol  protcol to be used
  * @return {string}            endpoint base url (e.g. `https://us-east1.headless.saucelabs.com`)
  */
-export function getSauceEndpoint (hostname, region, headless, protocol = 'https://') {
-    const dcRegion = REGION_MAPPING[region] ? region : 'us'
-    let locale = headless ? 'us-east-1.' : REGION_MAPPING[dcRegion]
-    let subdomain = ''
+export function getAPIHost (servers, basePath, options) {
+    const protocol = 'https://'
+    let host = protocol + path.join(servers[0].url.slice(protocol.length), basePath)
 
     /**
-     * check if endpoint base has subdomain
-     * e.g. api.saucelabs.com
+     * allow short region handles to stay backwards compatible
+     * ToDo(Christian): consider to remove when making a breaking update
      */
-    if (!headless && hostname.split('.').length > 2) {
-        subdomain = hostname.split('.')[0] + '.'
-        hostname = hostname.split('.').slice(-2).join('.')
-        // RDC only has 1 endpoint for both DC's, so if the url contains `testobject` clear the `locale`
-        locale = hostname.includes('testobject') ? '' : locale
-    } else if (!headless && region === 'us') {
-        locale = ''
-    } else if (locale === 'us-west-1.') { // us-west-1 is currently not a valid endpoint for Sauce
-        locale = ''
+    if (options.region) {
+        if (options.region === 'us') options.region = 'us-west-1'
+        if (options.region === 'eu') options.region = 'eu-central-1'
+        if (options.headless) options.region = 'us-east-1'
     }
 
-    return protocol + subdomain + locale + hostname
+    for (const [option, value] of Object.entries(servers[0].variables)) {
+        const hostOption = options[option] || value.default
+
+        /**
+         * check if option is valid
+         */
+        if (!value.enum.includes(hostOption)) {
+            throw new Error(`Option "${option}" contains invalid value ("${hostOption}"), allowed are: ${value.enum.join(', ')}`)
+        }
+
+        host = host.replace(`{${option}}`, hostOption)
+    }
+
+    return host
+}
+
+/**
+ * helper to generate host for assets, like:
+ * https://assets.saucelabs.com/jobs/<jobId>/selenium-server.log
+ * https://assets.eu-central-1.saucelabs.com/jobs/<jobId>/log.json
+ * https://assets.us-east-1.saucelabs.com/jobs/<jobId>/log.json
+ * https://assets.staging.saucelabs.net/jobs/<jobId>/log.json
+ */
+export function getAssetHost (options) {
+    if (options.headless) {
+        options.region = 'us-east-1'
+    }
+
+    if (options.region === 'staging') {
+        options.tld = options.tld || 'net'
+    }
+
+    const tld = options.tld || 'com'
+    const region = ASSET_REGION_MAPPING[options.region] || ''
+    return `https://assets.${region}saucelabs.${tld}`
 }
 
 /**
