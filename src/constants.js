@@ -72,6 +72,7 @@ export const SYMBOL_INSPECT = Symbol.for('nodejs.util.inspect.custom')
 export const SYMBOL_TOSTRING = Symbol.toStringTag
 export const SYMBOL_ITERATOR = Symbol.iterator
 export const TO_STRING_TAG = 'SauceLabs API Client'
+export const DEFAULT_PROTOCOL = 'https://'
 
 export const USAGE = `Sauce Labs API CLI
 

@@ -1,7 +1,7 @@
 import path from 'path'
 import crypto from 'crypto'
 
-import { ASSET_REGION_MAPPING, TO_STRING_TAG, PARAMETERS_MAP } from './constants'
+import { ASSET_REGION_MAPPING, TO_STRING_TAG, PARAMETERS_MAP, DEFAULT_PROTOCOL } from './constants'
 
 /**
  * Create HMAC token to receive job assets
@@ -33,8 +33,14 @@ export function createHMAC (username, key, jobId) {
  * @return {string}            endpoint base url (e.g. `https://us-east1.headless.saucelabs.com`)
  */
 export function getAPIHost (servers, basePath, options) {
-    const protocol = 'https://'
-    let host = protocol + path.join(servers[0].url.slice(protocol.length), basePath)
+    /**
+     * allows to set an arbitrary host (for internal use only)
+     */
+    if (typeof options.host === 'string') {
+        return options.host
+    }
+
+    let host = DEFAULT_PROTOCOL + path.join(servers[0].url.slice(DEFAULT_PROTOCOL.length), basePath)
 
     /**
      * allow short region handles to stay backwards compatible
