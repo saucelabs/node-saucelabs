@@ -4,6 +4,14 @@ const changeCase = require('change-case')
 const CodeGen = require('swagger-typescript-codegen').CodeGen
 const prettier = require('prettier')
 
+const { ASSET_REGION_MAPPING } = require('../src/constants')
+
+/**
+ * don't generate for the testrunner service yet as it is OpenAPI
+ * see also: https://github.com/mtennoe/swagger-typescript-codegen/issues/66
+ */
+const UNSUPPORTED_APIS = ['testrunner.json']
+
 function generateTypingsForApi(file) {
     const swagger = JSON.parse(fs.readFileSync(file, 'UTF-8'))
     const definitions = CodeGen.getTypescriptCode({
@@ -48,10 +56,7 @@ fs.readdir(path.join(__dirname, '../apis'), (err, files) => {
         throw err
     }
 
-    const regions = Object.keys(require('../src/constants').REGION_MAPPING)
-        .map(key => `"${key}"`)
-        .join(' | ')
-
+    const regions = Object.keys(ASSET_REGION_MAPPING).map(key => `"${key}"`).join(' | ')
     let result = `
 export interface SauceLabsOptions {
     user: string;
@@ -60,6 +65,11 @@ export interface SauceLabsOptions {
     headless?: boolean;
     proxy?: string;
 }`
+
+    /**
+     * ensure type definition is only done for supported APIs
+     */
+    files = files.filter((api) => !UNSUPPORTED_APIS.includes(api))
 
     const methods = files.map((api) => {
         const typings = generateTypingsForApi('./apis/' + api)

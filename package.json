@@ -24,7 +24,7 @@
     "compile": "babel src -d build",
     "eslint": "eslint ./src ./test",
     "generate:docs": "babel-node ./scripts/generate-docs",
-    "generate:typings": "",
+    "generate:typings": "babel-node ./scripts/generate-typings",
     "prepublishOnly": "NODE_ENV=production run-s build generate:typings",
     "release": "npm run release:patch",
     "release:patch": "np patch",
