@@ -4,7 +4,7 @@ const protocols = [
     require('../apis/sauce.json'),
     require('../apis/rdc.json'),
     require('../apis/performance.json'),
-    require('../apis/orchestrator.json')
+    require('../apis/testrunner.json')
 ]
 
 const protocolFlattened = new Map()

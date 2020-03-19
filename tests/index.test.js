@@ -194,7 +194,7 @@ test('should allow to upload files', async () => {
     expect(instance.pipe).toBeCalledTimes(1)
 
     const req = request.mock.calls[0][0]
-    expect(req.uri).toBe('https://api.us-west-1.saucelabs.com/orchestrator/v1/job/some-id/upload')
+    expect(req.uri).toBe('https://api.us-west-1.saucelabs.com/v1/testrunner/jobs/some-id/assets')
     expect(req.auth).toEqual({ user: 'foo', pass: 'bar' })
     expect(req.headers).toEqual({ some: 'headers' })
 })
