@@ -36,7 +36,7 @@ test('toString', () => {
         _accessKey: '50fc1a11-3231-4240-9707-8f34682b17b0',
         _options: { region: 'us', headless: false }
     })).toBe(`SauceLabs API Client {
-  user: 'foobar',
+  username: 'foobar',
   key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX2b17b0',
   region: 'us',
   headless: false

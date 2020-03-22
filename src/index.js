@@ -39,6 +39,7 @@ export default class SauceLabs {
          * print to string output
          * https://nodejs.org/api/util.html#util_util_inspect_custom
          */
+        /* istanbul ignore next */
         if (propName === SYMBOL_INSPECT || propName === 'inspect') {
             return () => toString(this)
         }
@@ -70,6 +71,7 @@ export default class SauceLabs {
             /**
              * just return if propName is a symbol (Node 8 and lower)
              */
+            /* istanbul ignore next */
             if (typeof propName !== 'string') {
                 return
             }
