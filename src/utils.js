@@ -61,7 +61,7 @@ export function getSauceEndpoint (hostname, region, headless, protocol = 'https:
  */
 export function toString (scope) {
     return `${TO_STRING_TAG} {
-  user: '${scope.username}',
+  username: '${scope.username}',
   key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX${scope._accessKey.slice(-6)}',
   region: '${scope._options.region}',
   headless: ${scope._options.headless}

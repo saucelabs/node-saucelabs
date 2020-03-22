@@ -26,10 +26,15 @@ export default class SauceLabs {
         this.region = this._options.region
         this.headless = this._options.headless
 
-        return new Proxy({}, { get: ::this.get })
+        return new Proxy({
+            username: this.username,
+            key: `XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX${this._accessKey.slice(-6)}`,
+            region: this._options.region,
+            headless: this._options.headless
+        }, { get: ::this.get })
     }
 
-    get (obj, propName) {
+    get (_, propName) {
         /**
          * print to string output
          * https://nodejs.org/api/util.html#util_util_inspect_custom

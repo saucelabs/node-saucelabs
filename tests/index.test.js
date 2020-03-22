@@ -8,8 +8,8 @@ const fs = require('fs')
 
 test('should be inspectable', () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
-    expect(util.inspect(api)).toBe(`SauceLabs API Client {
-  user: 'foo',
+    expect(util.inspect(api)).toContain(`{
+  username: 'foo',
   key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXbar',
   region: 'us',
   headless: false
@@ -24,7 +24,7 @@ test('should have to string tag', () => {
 
 test('should not provide an iterator', () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
-    expect(() => [...api]).toThrow('api is not iterable')
+    expect(() => [...api]).toThrow('is not iterable')
 })
 
 test('should return public properties', () => {
@@ -41,7 +41,7 @@ test('should grab username and access key from env variable', () => {
     const SauceLabsNew = require('../src').default
     const api = new SauceLabsNew()
     expect(util.inspect(api))
-        .toContain('user: \'barfoo\'')
+        .toContain('username: \'barfoo\'')
     expect(util.inspect(api))
         .toContain('key: \'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXfoobar\'')
 })
