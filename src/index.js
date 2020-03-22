@@ -1,8 +1,7 @@
 import fs from 'fs'
-import zlib from 'zlib'
 import path from 'path'
-import request from 'request'
-import changeCase from 'change-case'
+import got from 'got'
+import { camelCase } from 'change-case'
 
 import {
     createHMAC, getSauceEndpoint, toString, getParameters,
@@ -18,10 +17,7 @@ export default class SauceLabs {
         this._options = Object.assign({}, DEFAULT_OPTIONS, options)
         this.username = this._options.user
         this._accessKey = this._options.key
-        this._auth = {
-            user: this.username,
-            pass: this._accessKey
-        }
+        this._auth = `${this.username}:${this._accessKey}`
         this.proxy = this._options.proxy
 
         /**
@@ -30,14 +26,20 @@ export default class SauceLabs {
         this.region = this._options.region
         this.headless = this._options.headless
 
-        return new Proxy({}, { get: ::this.get })
+        return new Proxy({
+            username: this.username,
+            key: `XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX${(this._accessKey || '').slice(-6)}`,
+            region: this._options.region,
+            headless: this._options.headless
+        }, { get: ::this.get })
     }
 
-    get (obj, propName) {
+    get (_, propName) {
         /**
          * print to string output
          * https://nodejs.org/api/util.html#util_util_inspect_custom
          */
+        /* istanbul ignore next */
         if (propName === SYMBOL_INSPECT || propName === 'inspect') {
             return () => toString(this)
         }
@@ -69,6 +71,7 @@ export default class SauceLabs {
             /**
              * just return if propName is a symbol (Node 8 and lower)
              */
+            /* istanbul ignore next */
             if (typeof propName !== 'string') {
                 return
             }
@@ -82,7 +85,7 @@ export default class SauceLabs {
             return ::this._downloadJobAsset
         }
 
-        return (...args) => {
+        return async (...args) => {
             const { description, method, endpoint, host, basePath } = PROTOCOL_MAP.get(propName)
             const params = getParameters(description.parameters)
             const pathParams = params.filter(p => p.in === 'path')
@@ -121,7 +124,7 @@ export default class SauceLabs {
             const options = args.slice(pathParams.length)[0] || {}
             for (const optionParam of params.filter(p => p.in === 'query')) {
                 const expectedType = optionParam.type.replace('integer', 'number')
-                const optionName = changeCase.camelCase(optionParam.name)
+                const optionName = camelCase(optionParam.name)
                 const option = options[optionName]
                 const isRequired = Boolean(optionParam.required) || (typeof optionParam.required === 'undefined' && typeof optionParam.default === 'undefined')
                 if ((isRequired || option) && !isValidType(option, expectedType)) {
@@ -146,29 +149,20 @@ export default class SauceLabs {
              * make request
              */
             const uri = getSauceEndpoint(host + basePath, this._options.region, this._options.headless) + url
-            return new Promise((resolve, reject) => request({
-                uri,
-                method: method.toUpperCase(),
-                [method === 'get' ? 'qs' : 'body']: body,
-                json: true,
-                auth: this._auth,
-                strictSSL: getStrictSsl(),
-                proxy: this.proxy,
-                useQuerystring: true
-            }, (err, response, body) => {
-                /* istanbul ignore if */
-                if (err) {
-                    return reject(err)
-                }
+            try {
+                const response = await got[method](uri, {
+                    [method === 'get' ? 'searchParams' : 'body']: body,
+                    json: true,
+                    auth: this._auth,
+                    rejectUnauthorized: getStrictSsl(),
+                    proxy: this.proxy
+                })
 
-                /* istanbul ignore if */
-                if (response.statusCode !== 200 && response.statusCode !== 204) {
-                    const reason = getErrorReason(body)
-                    return reject(new Error(`Failed calling ${propName}, status code: ${response.statusCode}, reason: ${reason}`))
-                }
-
-                return resolve(body)
-            }))
+                return response.body
+            } catch (err) {
+                const reason = getErrorReason(err.body)
+                throw new Error(`Failed calling ${propName}, status code: ${err.statusCode}, reason: ${reason}`)
+            }
         }
     }
 
@@ -182,60 +176,32 @@ export default class SauceLabs {
 
         const hmac = await createHMAC(this.username, this._accessKey, jobId)
         const host = getSauceEndpoint('saucelabs.com', this._options.region, this._options.headless, 'https://assets.')
-        return new Promise((resolve, reject) => {
-            const req = request({
+
+        try {
+            const res = await got.get(`${host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`, {
                 method: 'GET',
-                strictSSL: getStrictSsl(),
-                proxy: this.proxy,
-                uri: `${host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`
-            }, (err, res, body) => {
-                /**
-                 * check if request was successful
-                 */
-                if (err) {
-                    return reject(err)
-                }
-
-                /**
-                 * check if we received the asset
-                 */
-                if (res.statusCode !== 200) {
-                    const reason = getErrorReason(body)
-                    return reject(new Error(`There was an error downloading asset ${assetName}, status code: ${res.statusCode}, reason: ${reason}`))
-                }
-
-                /**
-                 * parse asset as json if proper content type is given
-                 */
-                if (res.headers['content-type'] === 'application/json') {
-                    try {
-                        body = JSON.parse(body)
-                    } catch (e) {
-                        // do nothing
-                    }
-                }
-
-                return resolve(body)
+                rejectUnauthorized: getStrictSsl(),
+                proxy: this.proxy
             })
+
+            /**
+             * parse asset as json if proper content type is given
+             */
+            if (res.headers['content-type'] === 'application/json' && typeof res.body === 'string') {
+                res.body = JSON.parse(res.body)
+            }
 
             /**
              * only pipe asset to file if path is given
              */
             if (typeof downloadPath === 'string') {
-                const fd = fs.createWriteStream(path.resolve(process.cwd(), downloadPath))
-
-                /**
-                 * unzip gzipped logs
-                 * ToDo: this only affects tracing logs which are uploaded gzipped,
-                 *       there should be seperate api definition for extended debugging
-                 */
-                if (assetName.endsWith('.gz')) {
-                    const gunzip = zlib.createGunzip()
-                    req.pipe(gunzip).pipe(fd)
-                } else {
-                    req.pipe(fd)
-                }
+                fs.writeFileSync(path.resolve(process.cwd(), downloadPath), res.body)
             }
-        })
+
+            return res.body
+        } catch (err) {
+            const reason = getErrorReason(err.body)
+            throw new Error(`There was an error downloading asset ${assetName}, status code: ${err.statusCode}, reason: ${reason}`)
+        }
     }
 }

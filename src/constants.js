@@ -1,4 +1,4 @@
-import changeCase from 'change-case'
+import { camelCase } from 'change-case'
 
 const protocols = [
     require('../apis/sauce.json'),
@@ -15,7 +15,7 @@ for (const { paths, parameters, host, basePath } of protocols) {
 
     for (const [endpoint, methods] of Object.entries(paths)) {
         for (const [method, description] of Object.entries(methods)) {
-            let commandName = changeCase.camelCase(description.operationId)
+            let commandName = camelCase(description.operationId)
 
             /**
              * mark commands as depcrecated in the command names

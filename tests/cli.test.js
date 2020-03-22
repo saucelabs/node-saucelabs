@@ -26,7 +26,9 @@ test('should be able to execute a command', () => {
     })
 
     const [command, description, handler, cb] = yargs.command.mock.calls[4]
-    expect(command).toBe('listBuilds <username> [subaccounts] [limit]')
+    expect(command).toContain('listBuilds <username>')
+    expect(command).toContain('[limit]')
+    expect(command).toContain('[subaccounts]')
     expect(description).toBe('Get all of a users builds')
 
     handler(yargs)

@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const changeCase = require('change-case')
+const { camelCase } = require('change-case')
 const CodeGen = require('swagger-typescript-codegen').CodeGen
 const prettier = require('prettier')
 
@@ -25,9 +25,9 @@ function generateTypingsForApi(file) {
 
     return {
         defintions: definitions
-            .replace(/~~~(.*)~~~/g, (_, group) => changeCase.camel(group)),
+            .replace(/~~~(.*)~~~/g, (_, group) => camelCase(group)),
         methods: methods
-            .replace(/~~~(.*)~~~/g, (_, group) => changeCase.camel(group))
+            .replace(/~~~(.*)~~~/g, (_, group) => camelCase(group))
     }
 }
 
