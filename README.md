@@ -4,7 +4,7 @@
 
 # Node Sauce Labs [![Build Status](https://travis-ci.org/saucelabs/node-saucelabs.svg?branch=master)](https://travis-ci.org/saucelabs/node-saucelabs)
 
-Wrapper around the Sauce Labs REST APIs for [Node.js](http://nodejs.org/) (v8 or higher).
+Wrapper around all Sauce Labs REST APIs for [Node.js](http://nodejs.org/) (v8 or higher) and the browser.
 
 ## Install
 
@@ -36,6 +36,7 @@ Your Sauce Labs datacenter region. The following regions are available:
 
 - `us-west-1` (short `us`)
 - `eu-central-1` (short `eu`)
+- `us-east-1` (headless)
 
 Type: `string`<br>
 Default: `us`

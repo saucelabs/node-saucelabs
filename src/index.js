@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import got from 'got'
-import changeCase from 'change-case'
+import { camelCase } from 'change-case'
 
 import {
     createHMAC, getSauceEndpoint, toString, getParameters,
@@ -117,7 +117,7 @@ export default class SauceLabs {
             const options = args.slice(pathParams.length)[0] || {}
             for (const optionParam of params.filter(p => p.in === 'query')) {
                 const expectedType = optionParam.type.replace('integer', 'number')
-                const optionName = changeCase.camelCase(optionParam.name)
+                const optionName = camelCase(optionParam.name)
                 const option = options[optionName]
                 const isRequired = Boolean(optionParam.required) || (typeof optionParam.required === 'undefined' && typeof optionParam.default === 'undefined')
                 if ((isRequired || option) && !isValidType(option, expectedType)) {

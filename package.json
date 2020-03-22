@@ -35,10 +35,10 @@
     "watch": "npm run compile -- --watch"
   },
   "dependencies": {
-    "change-case": "^3.1.0",
-    "got": "^9.6.0",
+    "change-case": "^4.1.1",
+    "got": "^10.6.0",
     "hash.js": "^1.1.7",
-    "yargs": "^13.2.2"
+    "yargs": "^15.3.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
