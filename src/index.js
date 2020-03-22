@@ -28,7 +28,7 @@ export default class SauceLabs {
 
         return new Proxy({
             username: this.username,
-            key: `XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX${this._accessKey.slice(-6)}`,
+            key: `XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX${(this._accessKey || '').slice(-6)}`,
             region: this._options.region,
             headless: this._options.headless
         }, { get: ::this.get })
