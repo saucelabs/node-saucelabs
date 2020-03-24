@@ -11,4 +11,7 @@ const api = new SauceLabs({
 async function foobar () {
     const job = await api.getJobV1_1('foobar')
     console.log(job.selenium_version)
+
+    await api.downloadJobAsset( 'job_id', 'video.mp4')
+    await api.downloadJobAsset( 'job_id', 'video.mp4', './video.mp4')
 }

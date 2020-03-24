@@ -734,11 +734,18 @@
     "version": "0.0.1"
   },
   "parameters": {
-    "filename": {
-      "description": "filename",
+    "assetName": {
+      "description": "filename of the asset",
       "in": "path",
-      "name": "filename",
+      "name": "assetName",
       "required": true,
+      "type": "string"
+    },
+    "filepath": {
+      "description": "file path to store the asset at",
+      "in": "path",
+      "name": "filepath",
+      "required": false,
       "type": "string"
     },
     "full": {
@@ -2290,7 +2297,10 @@
             "$ref": "#/parameters/id"
           },
           {
-            "$ref": "#/parameters/filename"
+            "$ref": "#/parameters/assetName"
+          },
+          {
+            "$ref": "#/parameters/filepath"
           }
         ],
         "responses": {

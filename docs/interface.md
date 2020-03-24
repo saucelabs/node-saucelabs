@@ -53,7 +53,7 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.listJobs(username, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>auto_only</b>: FIXME ---- ?</li>          <li><b>to</b>: receive jobs until specific timestamp</li>          <li><b>from</b>: receive jobs beginning of a specific timestamp</li>          <li><b>owner</b>: username of owner of the jobs</li>          <li><b>owner_type</b>: owner type for jobs</li>          <li><b>name</b>: name of the job</li>          <li><b>limit</b>: Number of results to return</li>          <li><b>manual_only</b>: Only return manual jobs</li>          <li><b>full</b>: Should the return result contain everything or just the basics</li>          <li><b>subaccounts</b>: Include subaccounts in list of jobs</li>        </ul>      </td>
+        <ul>          <li><b>auto_only</b>: No description available.</li>          <li><b>to</b>: receive jobs until specific timestamp</li>          <li><b>from</b>: receive jobs beginning of a specific timestamp</li>          <li><b>owner</b>: username of owner of the jobs</li>          <li><b>owner_type</b>: owner type for jobs</li>          <li><b>name</b>: name of the job</li>          <li><b>limit</b>: Number of results to return</li>          <li><b>manual_only</b>: Only return manual jobs</li>          <li><b>full</b>: Should the return result contain everything or just the basics</li>          <li><b>subaccounts</b>: Include subaccounts in list of jobs</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -149,6 +149,14 @@ The following commands are available via package or cli tool:
         No description available.
         <h3>Example:</h3>
         <code>api.getUser(username)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/v1/users/{username}/subaccounts</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getSubaccounts(username)</code>
       </td>
     </tr>
     <tr>
@@ -270,8 +278,9 @@ The following commands are available via package or cli tool:
         <b>GET</b> <code>/v1/jobs/{id}/{assetName}</code><br>
         No description available.
         <h3>Example:</h3>
-        <code>api.downloadJobAsset(id, filename)</code>
-      </td>
+        <code>api.downloadJobAsset(id, assetName, { ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>filepath</b>: file path to store the asset at</li>        </ul>      </td>
     </tr>
     <tr>
       <td>

@@ -171,7 +171,7 @@ export default class SauceLabs {
         }
     }
 
-    async _downloadJobAsset (jobId, assetName, downloadPath) {
+    async _downloadJobAsset (jobId, assetName, { filepath } = {}) {
         /**
          * check job id
          */
@@ -181,9 +181,11 @@ export default class SauceLabs {
 
         const hmac = await createHMAC(this.username, this._accessKey, jobId)
         const host = getSauceEndpoint('saucelabs.com', this._options.region, this._options.headless, 'https://assets.')
+        const responseType = assetName.endsWith('mp4') ? 'buffer' : 'text'
+        const uri = `${host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`
 
         try {
-            const res = await this._api.get(`${host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`)
+            const res = await this._api.get(uri, { responseType })
 
             /**
              * parse asset as json if proper content type is given
@@ -195,8 +197,16 @@ export default class SauceLabs {
             /**
              * only pipe asset to file if path is given
              */
-            if (typeof downloadPath === 'string') {
-                fs.writeFileSync(path.resolve(process.cwd(), downloadPath), res.body)
+            if (typeof filepath === 'string') {
+                let data = res.body
+                const downloadPath = path.resolve(process.cwd(), filepath)
+                const encoding = res.headers['content-type'] === 'application/json' ? 'utf8' : 'binary'
+
+                if (res.headers['content-type'] === 'application/json') {
+                    data = JSON.stringify(res.body, null, 4)
+                }
+
+                fs.writeFileSync(downloadPath, data, { encoding })
             }
 
             return res.body

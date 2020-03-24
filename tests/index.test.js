@@ -192,13 +192,21 @@ test('should support proxy options', async () => {
     await expect(requestOptions.proxy).toEqual(proxy)
 })
 
-test('should put asset into file', async () => {
+test('should put asset into file as binary', async () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
-    await api.downloadJobAsset('some-id', 'performance.json', '/asset.json')
-    expect(fs.writeFileSync).toBeCalledWith('/asset.json', undefined)
+    await api.downloadJobAsset('some-id', 'performance.json', { filepath: '/asset.json' })
+    expect(fs.writeFileSync).toBeCalledWith('/asset.json', undefined, { encoding: 'binary' })
+})
+
+test('should put asset into file as json file', async () => {
+    got.setHeader({ 'content-type': 'application/json' })
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    await api.downloadJobAsset('some-id', 'performance.json', { filepath: '/asset.json' })
+    expect(fs.writeFileSync).toBeCalledWith('/asset.json', undefined, { encoding: 'utf8' })
 })
 
 afterEach(() => {
+    fs.writeFileSync.mockClear()
     got.mockClear()
     got.extend.mockClear()
     got.put.mockClear()
