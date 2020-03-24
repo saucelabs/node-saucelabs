@@ -30,7 +30,7 @@
     "release:patch": "np patch",
     "release:minor": "np minor",
     "release:major": "np major",
-    "test": "run-s eslint test:typings test:unit",
+    "test": "run-s build eslint test:typings test:unit",
     "test:unit": "jest --coverage",
     "test:typings": "run-s test:typings:*",
     "test:typings:setup": "mkdir -p ./tests/typings/node_modules/saucelabs && cp ./package.json ./tests/typings/node_modules/saucelabs && cp -r ./build ./tests/typings/node_modules/saucelabs",
