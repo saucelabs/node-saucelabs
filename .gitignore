@@ -66,3 +66,4 @@ package-lock.json
 !.eslintrc.js
 !babel.config.js
 .idea/
+.DS_Store

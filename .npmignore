@@ -4,3 +4,9 @@ scripts
 src
 tests
 !build
+/*.js
+/*.yml
+/*.tgz
+.gitignore
+.editorconfig
+.nvmrc
