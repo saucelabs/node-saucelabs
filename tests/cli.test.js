@@ -13,7 +13,7 @@ jest.mock('../src/index.js', () => {
     return SauceLabsMock
 })
 
-test('should be able to execute a command', () => {
+test('should be able to execute a command', async () => {
     run()
     expect(yargs.usage).toBeCalledTimes(1)
     expect(yargs.epilog).toBeCalledTimes(1)
@@ -55,7 +55,7 @@ test('should be able to execute a command', () => {
         subaccounts: true,
         returnValue: 'some result'
     }
-    const api = cb(params)
+    const api = await cb(params)
 
     expect(api.options).toEqual({
         user: 'foobaruser',

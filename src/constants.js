@@ -27,6 +27,7 @@ for (const { paths, parameters, host, basePath } of protocols) {
             /**
              * ensure we don't double register commands
              */
+            /* istanbul ignore if */
             if (protocolFlattened.has(commandName)) {
                 throw new Error(`command ${commandName} already registered`)
             }

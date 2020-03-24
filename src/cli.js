@@ -34,28 +34,26 @@ export const run = () => {
 
                 yargs.positional(param.name, paramDescription)
             }
-        }, (argv) => {
+        }, async (argv) => {
             const { user, key, headless, region } = Object.assign({}, DEFAULT_OPTIONS, argv)
             const api = new SauceLabs({ user, key, headless, region })
             const requiredParams = params.filter((p) => p.required).map((p) => argv[p.name])
-            api[commandName](...requiredParams, argv).then(
-                (result) => {
-                    /* istanbul ignore if */
-                    if (typeof result === 'object') {
-                        // eslint-disable-next-line no-console
-                        return console.log(JSON.stringify(result, null, 4))
-                    }
 
+            try {
+                const result = await api[commandName](...requiredParams, argv)
+
+                if (typeof result === 'object') {
                     // eslint-disable-next-line no-console
-                    console.log(result)
-                },
-                /* istanbul ignore next */
-                (error) => {
-                    // eslint-disable-next-line no-console
-                    console.error(error)
-                    process.exit(1)
+                    return console.log(JSON.stringify(result, null, 4))
                 }
-            )
+
+                // eslint-disable-next-line no-console
+                console.log(result)
+            } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error)
+                return process.exit(1)
+            }
 
             return api
         })

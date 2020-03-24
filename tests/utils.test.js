@@ -1,4 +1,4 @@
-import { createHMAC, getSauceEndpoint, toString, isValidType, getErrorReason, getStrictSsl } from '../src/utils'
+import { createHMAC, getSauceEndpoint, toString, isValidType, getStrictSsl } from '../src/utils'
 
 test('createHMAC', async () => {
     expect(await createHMAC('foo', 'bar', 'loo123'))
@@ -49,15 +49,6 @@ test('isValidType', () => {
     expect(isValidType('1', 'number')).toBe(false)
     expect(isValidType(['foo', 123], 'array')).toBe(true)
     expect(isValidType(null, 'array')).toBe(false)
-})
-
-test('getErrorReason', () => {
-    expect(getErrorReason()).toBe('unknown')
-    expect(getErrorReason({ message: 'foobar' })).toBe('foobar')
-    expect(getErrorReason({ detail: 'barfoo' })).toBe('barfoo')
-    expect(getErrorReason({ message: 'foobar', detail: 'barfoo' })).toBe('foobar')
-    expect(getErrorReason('foobarloo')).toBe('foobarloo')
-    expect(getErrorReason(['some reason', 'some other reason'])).toBe('some reason')
 })
 
 describe('getStrictSsl', () => {

@@ -81,7 +81,7 @@ test('should allow to make a request with body param', async () =>  {
 
     const req = got.mock.calls[0][1]
     expect(got.put).toBeCalled()
-    expect(req.body).toEqual({ passed: true })
+    expect(req.json).toEqual({ passed: true })
 })
 
 test('should allow to make a request with body param via CLI call', async () =>  {
@@ -90,7 +90,7 @@ test('should allow to make a request with body param via CLI call', async () => 
 
     const req = got.mock.calls[0][1]
     expect(got.put).toBeCalled()
-    expect(req.body).toEqual({ passed: false })
+    expect(req.json).toEqual({ passed: false })
 })
 
 test('should update RDC job status with body param', async () =>  {
@@ -99,7 +99,7 @@ test('should update RDC job status with body param', async () =>  {
 
     const req = got.mock.calls[0][1]
     expect(got.put).toBeCalled()
-    expect(req.body).toEqual({ passed: true })
+    expect(req.json).toEqual({ passed: true })
 })
 
 test('should update RDC job status with body param via CLI call', async () =>  {
@@ -108,7 +108,7 @@ test('should update RDC job status with body param via CLI call', async () =>  {
 
     const req = got.mock.calls[0][1]
     expect(got.put).toBeCalled()
-    expect(req.body).toEqual({ passed: false })
+    expect(req.json).toEqual({ passed: false })
 })
 
 test('should fail if param has wrong type', async () => {
@@ -139,15 +139,13 @@ test('should handle error case', async () => {
         limit: 123,
         full: true
     }).catch((err) => err)
-    expect(error.message).toBe('Failed calling listJobs, status code: 404, reason: Not Found')
+    expect(error.message).toBe('Failed calling listJobs: Not Found')
 })
 
 test('should be able to download assets', async () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     await api.downloadJobAsset('some-id', 'performance.json')
-    const req = got.mock.calls[0][1]
-    const uri = got.mock.calls[0][0]
-    expect(req.method).toBe('GET')
+    const uri = got.get.mock.calls[0][0]
     expect(uri).toContain('https://assets.saucelabs.com/jobs/some-id/performance.json')
     expect(uri).toContain('auth=a2600100e3d1990721be97c093f64567')
 })
@@ -160,10 +158,10 @@ test('should handle errors when downloading assets', async () => {
 
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     const error = await api.downloadJobAsset('some-id', 'performance.json').catch((err) => err)
-    expect(error.message).toBe('There was an error downloading asset performance.json, status code: 404, reason: Not Found')
+    expect(error.message).toBe('There was an error downloading asset performance.json: Not Found')
 })
 
-it('should parse text responses if headers expect json', async () => {
+test('should parse text responses if headers expect json', async () => {
     const reqRespond = { foo: 'bar' }
     got.get.mockReturnValueOnce(Promise.resolve({
         headers: {
@@ -176,7 +174,7 @@ it('should parse text responses if headers expect json', async () => {
     expect(result).toEqual(reqRespond)
 })
 
-it('should fail if parameters are not given properly', async () => {
+test('should fail if parameters are not given properly', async () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     const error = new Error('You need to define a job id and the file name of the asset as a string')
     await expect(api.downloadJobAsset()).rejects.toEqual(error)
@@ -188,7 +186,7 @@ test('should support proxy options', async () => {
     const proxy = 'https://my.proxy.com'
     const api = new SauceLabs({ user: 'foo', key: 'bar', proxy })
     await api.downloadJobAsset('some-id', 'performance.json')
-    const requestOptions = got.mock.calls[0][1]
+    const requestOptions = got.extend.mock.calls[0][0]
 
     await expect(requestOptions.proxy).toBeDefined()
     await expect(requestOptions.proxy).toEqual(proxy)
@@ -202,4 +200,7 @@ test('should put asset into file', async () => {
 
 afterEach(() => {
     got.mockClear()
+    got.extend.mockClear()
+    got.put.mockClear()
+    got.get.mockClear()
 })

@@ -104,30 +104,6 @@ export function isValidType (option, expectedType) {
 }
 
 /**
- * get error message from API call
- * @param  {*} body    body message of response
- * @return {String}    error message
- */
-export function getErrorReason (body = {}) {
-    if (typeof body === 'string') {
-        try {
-            body = JSON.parse(body)
-        } catch (e) {
-            body = { message: body }
-        }
-    }
-
-    /**
-     * due to a bug in the performance API we need to workaround this
-     */
-    if (Array.isArray(body)) {
-        body = { message: body[0] }
-    }
-
-    return body.message || body.detail || 'unknown'
-}
-
-/**
  * If the environment variable "STRICT_SSL" is defined as "false", it doesn't require SSL certificates to be valid.
  * This is used in requests to define the value of the "strictSSL" option.
  */

@@ -5,7 +5,7 @@ import { camelCase } from 'change-case'
 
 import {
     createHMAC, getSauceEndpoint, toString, getParameters,
-    isValidType, getErrorReason, getStrictSsl
+    isValidType, getStrictSsl
 } from './utils'
 import {
     PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT, SYMBOL_TOSTRING,
@@ -17,8 +17,13 @@ export default class SauceLabs {
         this._options = Object.assign({}, DEFAULT_OPTIONS, options)
         this.username = this._options.user
         this._accessKey = this._options.key
-        this._auth = `${this.username}:${this._accessKey}`
-        this.proxy = this._options.proxy
+        this._api = got.extend({
+            username: this.username,
+            password: this._accessKey,
+            rejectUnauthorized: getStrictSsl(),
+            proxy: this._options.proxy,
+            followRedirect: true
+        })
 
         /**
          * public fields
@@ -150,18 +155,18 @@ export default class SauceLabs {
              */
             const uri = getSauceEndpoint(host + basePath, this._options.region, this._options.headless) + url
             try {
-                const response = await got[method](uri, {
-                    [method === 'get' ? 'searchParams' : 'body']: body,
-                    json: true,
-                    auth: this._auth,
-                    rejectUnauthorized: getStrictSsl(),
-                    proxy: this.proxy
+                const response = await this._api[method](uri, {
+                    ...(
+                        method === 'get'
+                            ? { searchParams: body }
+                            : { json: body }
+                    ),
+                    responseType: 'json'
                 })
 
                 return response.body
             } catch (err) {
-                const reason = getErrorReason(err.body)
-                throw new Error(`Failed calling ${propName}, status code: ${err.statusCode}, reason: ${reason}`)
+                throw new Error(`Failed calling ${propName}: ${err.message}`)
             }
         }
     }
@@ -178,11 +183,7 @@ export default class SauceLabs {
         const host = getSauceEndpoint('saucelabs.com', this._options.region, this._options.headless, 'https://assets.')
 
         try {
-            const res = await got.get(`${host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`, {
-                method: 'GET',
-                rejectUnauthorized: getStrictSsl(),
-                proxy: this.proxy
-            })
+            const res = await this._api.get(`${host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`)
 
             /**
              * parse asset as json if proper content type is given
@@ -200,8 +201,7 @@ export default class SauceLabs {
 
             return res.body
         } catch (err) {
-            const reason = getErrorReason(err.body)
-            throw new Error(`There was an error downloading asset ${assetName}, status code: ${err.statusCode}, reason: ${reason}`)
+            throw new Error(`There was an error downloading asset ${assetName}: ${err.message}`)
         }
     }
 }
