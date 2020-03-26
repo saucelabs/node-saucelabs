@@ -183,13 +183,13 @@ test('should fail if parameters are not given properly', async () => {
 })
 
 test('should support proxy options', async () => {
-    const proxy = 'https://my.proxy.com'
+    const proxy = 'http://my.proxy.com:8080'
     const api = new SauceLabs({ user: 'foo', key: 'bar', proxy })
     await api.downloadJobAsset('some-id', 'performance.json')
-    const requestOptions = got.extend.mock.calls[0][0]
+    const requestOptions = got.extend.mock.calls[1][0]
 
-    await expect(requestOptions.proxy).toBeDefined()
-    await expect(requestOptions.proxy).toEqual(proxy)
+    await expect(requestOptions.agent).toBeDefined()
+    // await expect(requestOptions.agent).toEqual(proxy)
 })
 
 test('should put asset into file as binary', async () => {

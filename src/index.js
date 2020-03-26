@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 import got from 'got'
+import tunnel from 'tunnel'
+import url from 'url'
 import { camelCase } from 'change-case'
 
 import {
@@ -21,9 +23,20 @@ export default class SauceLabs {
             username: this.username,
             password: this._accessKey,
             rejectUnauthorized: getStrictSsl(),
-            proxy: this._options.proxy,
-            followRedirect: true
+            followRedirect: true,
         })
+
+        if (this._options.proxy !== undefined) {
+            var proxyURL = url.parse(this._options.proxy)
+            this._api = got.extend({
+                agent: tunnel.httpsOverHttp({
+                    proxy: {
+                        host: proxyURL.hostname,
+                        port: proxyURL.port
+                    }
+                })
+            }, this._api)
+        }
 
         /**
          * public fields
