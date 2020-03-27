@@ -112,7 +112,6 @@ export function isValidType (option, expectedType) {
  */
 export function createProxyAgent (proxy) {
     var proxyURL = url.parse(proxy)
-
     if (proxyURL.protocol === 'https:') {
         return tunnel.httpsOverHttps({
             proxy: {
