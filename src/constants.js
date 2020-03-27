@@ -56,7 +56,8 @@ export const DEFAULT_OPTIONS = {
     user: process.env.SAUCE_USERNAME,
     key: process.env.SAUCE_ACCESS_KEY,
     headless: false,
-    region: 'us'
+    region: 'us',
+    proxy: process.env.HTTPS_PROXY || process.env.HTTP_PROXY
 }
 
 export const REGION_MAPPING = {
@@ -102,5 +103,6 @@ export const CLI_PARAMS = [{
 }, {
     alias: 'p',
     name: 'proxy',
-    description: 'use a proxy for fetching data instead of environment variables'
+    description: 'use a proxy for fetching data instead of environment variables',
+    default: DEFAULT_OPTIONS.proxy
 }]
