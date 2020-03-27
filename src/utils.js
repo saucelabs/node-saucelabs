@@ -1,4 +1,6 @@
 import crypto from 'crypto'
+import tunnel from 'tunnel'
+import url from 'url'
 
 import { REGION_MAPPING, TO_STRING_TAG, PARAMETERS_MAP } from './constants'
 
@@ -101,6 +103,35 @@ export function isValidType (option, expectedType) {
         return Array.isArray(option)
     }
     return typeof option === expectedType
+}
+
+/**
+ * get a tunnel Agent for proxy tunneling
+ * @param  {string}  proxy  proxy URL that traffic will be tunneled with
+ * @return {Agent} proxy Agent object
+ */
+export function createProxyAgent (proxy) {
+    var proxyURL = url.parse(proxy)
+
+    if (proxyURL.protocol === 'https:') {
+        return tunnel.httpsOverHttps({
+            proxy: {
+                host: proxyURL.hostname,
+                port: proxyURL.port
+            }
+        })
+    } else if (proxyURL.protocol === 'http:') {
+        return tunnel.httpsOverHttp({
+            proxy: {
+                host: proxyURL.hostname,
+                port: proxyURL.port
+            }
+        })
+    } else {
+        throw new Error('Only http and https protocols are supported for proxying traffic.'
+                        + `\nWe got ${proxyURL.protocol}`)
+    }
+
 }
 
 /**

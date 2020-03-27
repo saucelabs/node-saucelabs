@@ -1,13 +1,11 @@
 import fs from 'fs'
 import path from 'path'
 import got from 'got'
-import tunnel from 'tunnel'
-import url from 'url'
 import { camelCase } from 'change-case'
 
 import {
     createHMAC, getSauceEndpoint, toString, getParameters,
-    isValidType, getStrictSsl
+    isValidType, createProxyAgent, getStrictSsl
 } from './utils'
 import {
     PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT, SYMBOL_TOSTRING,
@@ -27,14 +25,9 @@ export default class SauceLabs {
         })
 
         if (this._options.proxy !== undefined) {
-            var proxyURL = url.parse(this._options.proxy)
+            var proxyAgent = createProxyAgent(this._options.proxy)
             this._api = got.extend({
-                agent: tunnel.httpsOverHttp({
-                    proxy: {
-                        host: proxyURL.hostname,
-                        port: proxyURL.port
-                    }
-                })
+                agent: proxyAgent
             }, this._api)
         }
 
