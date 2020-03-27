@@ -189,7 +189,6 @@ test('should support proxy options', async () => {
     const requestOptions = got.extend.mock.calls[1][0]
 
     await expect(requestOptions.agent).toBeDefined()
-    // await expect(requestOptions.agent).toEqual(proxy)
 })
 
 test('should put asset into file as binary', async () => {
