@@ -12,7 +12,8 @@ test('should be inspectable', () => {
   username: 'foo',
   key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXbar',
   region: 'us',
-  headless: false
+  headless: false,
+  proxy: undefined
 }`)
 })
 
@@ -44,6 +45,15 @@ test('should grab username and access key from env variable', () => {
         .toContain('username: \'barfoo\'')
     expect(util.inspect(api))
         .toContain('key: \'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXfoobar\'')
+})
+
+test('should grab proxy from env variable', () => {
+    jest.resetModules()
+    process.env.HTTP_PROXY = 'http://my.proxy.com:8080'
+    const SauceLabsNew = require('../src').default
+    const api = new SauceLabsNew()
+    expect(util.inspect(api))
+        .toContain('proxy: \'http://my.proxy.com:8080\'')
 })
 
 test('should throw if API command is unknown', () => {

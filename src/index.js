@@ -41,7 +41,8 @@ export default class SauceLabs {
             username: this.username,
             key: `XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX${(this._accessKey || '').slice(-6)}`,
             region: this._options.region,
-            headless: this._options.headless
+            headless: this._options.headless,
+            proxy: this._options.proxy
         }, { get: ::this.get })
     }
 
