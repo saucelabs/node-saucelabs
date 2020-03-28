@@ -47,13 +47,23 @@ test('should grab username and access key from env variable', () => {
         .toContain('key: \'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXfoobar\'')
 })
 
-test('should grab proxy from env variable', () => {
+test('should grab http proxy from env variable', () => {
     jest.resetModules()
     process.env.HTTP_PROXY = 'http://my.proxy.com:8080'
     const SauceLabsNew = require('../src').default
     const api = new SauceLabsNew()
     expect(util.inspect(api))
-        .toMatch(/proxy: '??http:\/\/my\.proxy\.com:8080/) //
+        .toMatch(/proxy: '??http:\/\/my\.proxy\.com:8080/)
+    delete process.env.HTTP_PROXY
+})
+
+test('should grab https proxy from env variable', () => {
+    jest.resetModules()
+    process.env.HTTPS_PROXY = 'https://my.proxy.com:443'
+    const SauceLabsNew = require('../src').default
+    const api = new SauceLabsNew()
+    expect(util.inspect(api))
+        .toMatch(/proxy: '??https:\/\/my\.proxy\.com:443/)
 })
 
 test('should throw if API command is unknown', () => {

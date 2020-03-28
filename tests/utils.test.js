@@ -76,6 +76,7 @@ describe('createProxyAgent', ()=> {
     }).toThrowError(/Only http and https protocols are supported for proxying traffic./)
 
 })
+
 describe('getStrictSsl', () => {
     beforeEach(function() {
         delete process.env.STRICT_SSL
