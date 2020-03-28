@@ -5,7 +5,7 @@ import { camelCase } from 'change-case'
 
 import {
     createHMAC, getSauceEndpoint, toString, getParameters,
-    isValidType, getStrictSsl
+    isValidType, createProxyAgent, getStrictSsl
 } from './utils'
 import {
     PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT, SYMBOL_TOSTRING,
@@ -21,9 +21,15 @@ export default class SauceLabs {
             username: this.username,
             password: this._accessKey,
             rejectUnauthorized: getStrictSsl(),
-            proxy: this._options.proxy,
-            followRedirect: true
+            followRedirect: true,
         })
+
+        if (this._options.proxy !== undefined) {
+            var proxyAgent = createProxyAgent(this._options.proxy)
+            this._api = got.extend({
+                agent: proxyAgent
+            }, this._api)
+        }
 
         /**
          * public fields
@@ -35,7 +41,8 @@ export default class SauceLabs {
             username: this.username,
             key: `XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX${(this._accessKey || '').slice(-6)}`,
             region: this._options.region,
-            headless: this._options.headless
+            headless: this._options.headless,
+            proxy: this._options.proxy
         }, { get: ::this.get })
     }
 

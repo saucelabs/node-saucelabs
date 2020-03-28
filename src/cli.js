@@ -35,8 +35,8 @@ export const run = () => {
                 yargs.positional(param.name, paramDescription)
             }
         }, async (argv) => {
-            const { user, key, headless, region } = Object.assign({}, DEFAULT_OPTIONS, argv)
-            const api = new SauceLabs({ user, key, headless, region })
+            const { user, key, headless, region, proxy } = Object.assign({}, DEFAULT_OPTIONS, argv)
+            const api = new SauceLabs({ user, key, headless, region, proxy })
             const requiredParams = params.filter((p) => p.required).map((p) => argv[p.name])
 
             try {

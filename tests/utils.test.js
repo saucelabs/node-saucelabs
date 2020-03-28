@@ -1,4 +1,6 @@
-import { createHMAC, getSauceEndpoint, toString, isValidType, getStrictSsl } from '../src/utils'
+import { createHMAC, getSauceEndpoint, toString, isValidType, createProxyAgent, getStrictSsl } from '../src/utils'
+import http from 'http'
+import https from 'https'
 
 test('createHMAC', async () => {
     expect(await createHMAC('foo', 'bar', 'loo123'))
@@ -39,7 +41,8 @@ test('toString', () => {
   username: 'foobar',
   key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX2b17b0',
   region: 'us',
-  headless: false
+  headless: false,
+  proxy: undefined
 }`)
 })
 
@@ -49,6 +52,29 @@ test('isValidType', () => {
     expect(isValidType('1', 'number')).toBe(false)
     expect(isValidType(['foo', 123], 'array')).toBe(true)
     expect(isValidType(null, 'array')).toBe(false)
+})
+
+describe('createProxyAgent', ()=> {
+    expect(createProxyAgent('http://my.proxy.com:8080'))
+        .toEqual(expect.objectContaining({
+            proxyOptions: {
+                host: 'my.proxy.com',
+                port: '8080'
+            },
+            request: http.request
+        }))
+    expect(createProxyAgent('https://my.proxy.com:443'))
+        .toEqual(expect.objectContaining({
+            proxyOptions: {
+                host: 'my.proxy.com',
+                port: '443'
+            },
+            request: https.request
+        }))
+    expect(() => {
+        createProxyAgent('ftp://my.proxy.com:21')
+    }).toThrowError(/Only http and https protocols are supported for proxying traffic./)
+
 })
 
 describe('getStrictSsl', () => {

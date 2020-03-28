@@ -12,7 +12,8 @@ test('should be inspectable', () => {
   username: 'foo',
   key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXbar',
   region: 'us',
-  headless: false
+  headless: false,
+  proxy: undefined
 }`)
 })
 
@@ -44,6 +45,25 @@ test('should grab username and access key from env variable', () => {
         .toContain('username: \'barfoo\'')
     expect(util.inspect(api))
         .toContain('key: \'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXfoobar\'')
+})
+
+test('should grab http proxy from env variable', () => {
+    jest.resetModules()
+    process.env.HTTP_PROXY = 'http://my.proxy.com:8080'
+    const SauceLabsNew = require('../src').default
+    const api = new SauceLabsNew()
+    expect(util.inspect(api))
+        .toMatch(/proxy: '??http:\/\/my\.proxy\.com:8080/)
+    delete process.env.HTTP_PROXY
+})
+
+test('should grab https proxy from env variable', () => {
+    jest.resetModules()
+    process.env.HTTPS_PROXY = 'https://my.proxy.com:443'
+    const SauceLabsNew = require('../src').default
+    const api = new SauceLabsNew()
+    expect(util.inspect(api))
+        .toMatch(/proxy: '??https:\/\/my\.proxy\.com:443/)
 })
 
 test('should throw if API command is unknown', () => {
@@ -183,13 +203,12 @@ test('should fail if parameters are not given properly', async () => {
 })
 
 test('should support proxy options', async () => {
-    const proxy = 'https://my.proxy.com'
+    const proxy = 'http://my.proxy.com:8080'
     const api = new SauceLabs({ user: 'foo', key: 'bar', proxy })
     await api.downloadJobAsset('some-id', 'performance.json')
-    const requestOptions = got.extend.mock.calls[0][0]
+    const requestOptions = got.extend.mock.calls[1][0]
 
-    await expect(requestOptions.proxy).toBeDefined()
-    await expect(requestOptions.proxy).toEqual(proxy)
+    await expect(requestOptions.agent).toBeDefined()
 })
 
 test('should put asset into file as binary', async () => {
