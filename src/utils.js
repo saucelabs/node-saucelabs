@@ -127,11 +127,10 @@ export function createProxyAgent (proxy) {
                 port: proxyURL.port
             }
         })
-    } else {
-        throw new Error('Only http and https protocols are supported for proxying traffic.'
-                        + `\nWe got ${proxyURL.protocol}`)
     }
 
+    throw new Error('Only http and https protocols are supported for proxying traffic.'
+                        + `\nWe got ${proxyURL.protocol}`)
 }
 
 /**
