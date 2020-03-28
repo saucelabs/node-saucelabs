@@ -66,7 +66,8 @@ export function toString (scope) {
   username: '${scope.username}',
   key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX${scope._accessKey.slice(-6)}',
   region: '${scope._options.region}',
-  headless: ${scope._options.headless}
+  headless: ${scope._options.headless},
+  proxy: ${scope._options.proxy}
 }`
 }
 

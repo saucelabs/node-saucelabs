@@ -41,7 +41,8 @@ test('toString', () => {
   username: 'foobar',
   key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX2b17b0',
   region: 'us',
-  headless: false
+  headless: false,
+  proxy: undefined
 }`)
 })
 

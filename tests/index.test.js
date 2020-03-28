@@ -53,7 +53,7 @@ test('should grab proxy from env variable', () => {
     const SauceLabsNew = require('../src').default
     const api = new SauceLabsNew()
     expect(util.inspect(api))
-        .toContain('proxy: \'http://my.proxy.com:8080\'')
+        .toMatch(/proxy: '??http:\/\/my\.proxy\.com:8080/) //
 })
 
 test('should throw if API command is unknown', () => {
