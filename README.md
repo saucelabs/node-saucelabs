@@ -165,7 +165,7 @@ import SauceLabs from 'saucelabs';
     /**
      * start Sauce Connect Proxy
      */
-    const sc = await api.startSauceConnect({
+    const sc = await myAccount.startSauceConnect({
         /**
          * see all available parameters here: https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy+Command-Line+Quick+Reference+Guide
          * all parameters have to be applied camel cased instead of with hyphens, e.g.
