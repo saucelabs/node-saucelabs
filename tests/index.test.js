@@ -3,6 +3,7 @@ import got from 'got'
 import { spawn } from 'child_process'
 
 import SauceLabs from '../src'
+import { instances } from 'bin-wrapper'
 
 jest.mock('fs')
 const fs = require('fs')
@@ -251,9 +252,17 @@ describe('startSauceConnect', () => {
     it('should start sauce connect with proper parsed args', async () => {
         const api = new SauceLabs({ user: 'foo', key: 'bar', headless: true })
         setTimeout(() => stdoutEmitter.emit('data', 'Sauce Connect is up, you may start your tests'), 50)
-        await api.startSauceConnect({ tunnelIdentifier: 'my-tunnel', 'proxy-tunnel': 'abc' })
+        await api.startSauceConnect({
+            scVersion: '1.2.3',
+            tunnelIdentifier: 'my-tunnel',
+            'proxy-tunnel': 'abc'
+        })
         expect(spawn).toBeCalledTimes(1)
         expect(spawn.mock.calls).toMatchSnapshot()
+
+        expect(instances).toHaveLength(1)
+        expect(instances[0].dest.mock.calls[0][0].endsWith('.sc-v1.2.3'))
+            .toBe(true)
     })
 
     it('should close sauce connect', async () => {

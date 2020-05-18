@@ -1,4 +1,5 @@
 import fs from 'fs'
+import util from 'util'
 import path from 'path'
 import { spawn } from 'child_process'
 
@@ -12,9 +13,9 @@ import {
 } from './utils'
 import {
     PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT, SYMBOL_TOSTRING,
-    SYMBOL_ITERATOR, TO_STRING_TAG, SAUCE_CONNECT_VERSION,
-    SAUCE_CONNECT_DISTS, SC_PARAMS_TO_STRIP, SC_READY_MESSAGE,
-    SC_CLOSE_MESSAGE, SC_CLOSE_TIMEOUT
+    SYMBOL_ITERATOR, TO_STRING_TAG, SAUCE_CONNECT_DISTS,
+    SC_PARAMS_TO_STRIP, SC_READY_MESSAGE, SC_CLOSE_MESSAGE,
+    SC_CLOSE_TIMEOUT, DEFAULT_SAUCE_CONNECT_VERSION
 } from './constants'
 
 export default class SauceLabs {
@@ -200,13 +201,14 @@ export default class SauceLabs {
             }
         }
 
+        const sauceConnectVersion = argv.scVersion || DEFAULT_SAUCE_CONNECT_VERSION
         const { host, basePath } = PROTOCOL_MAP.get('listJobs')
         const restUrl = getSauceEndpoint(host + basePath, this._options.region, this._options.headless) + '/v1'
         const args = Object.entries(argv)
             /**
-             * filter out yargs and yargs params
+             * filter out yargs, yargs params and custom parameters
              */
-            .filter(([k]) => !['_', '$0', ...SC_PARAMS_TO_STRIP].includes(k))
+            .filter(([k]) => !['_', '$0', 'sc-version', ...SC_PARAMS_TO_STRIP].includes(k))
             /**
              * remove duplicate params by yargs
              */
@@ -217,15 +219,15 @@ export default class SauceLabs {
         args.push(`--api-key=${this._accessKey}`)
         args.push(`--rest-url=${restUrl}`)
 
-        const bin = SAUCE_CONNECT_DISTS.reduce((bin, dist) => {
-            bin.src(...dist)
+        const bin = SAUCE_CONNECT_DISTS.reduce((bin, [downloadUrl, ...args]) => {
+            bin.src(util.format(downloadUrl, sauceConnectVersion), ...args)
             return bin
         }, new BinWrapper())
 
         bin
-            .dest(path.join(__dirname, 'bin', 'bin'))
-            .use(process.platform.startsWith('win') ? 'sc.exe' : 'sc')
-            .version(`v${SAUCE_CONNECT_VERSION}`)
+            .dest(path.join(__dirname, `.sc-v${sauceConnectVersion}`))
+            .use('/bin/' + (process.platform.startsWith('win') ? 'sc.exe' : 'sc'))
+            .version(`v${sauceConnectVersion}`)
 
         await bin.run(['--version'])
         const cp = spawn(bin.path(), args)
@@ -245,7 +247,14 @@ export default class SauceLabs {
 
             cp.stderr.on('data', (data) => reject(new Error(data.toString())))
             cp.stdout.on('data', (data) => {
-                if (data.toString().includes(SC_READY_MESSAGE)) {
+                const output = data.toString()
+                /**
+                 * print to stdout if called via CLI
+                 */
+                if (fromCLI) {
+                    process.stdout.write(output)
+                }
+                if (output.includes(SC_READY_MESSAGE)) {
                     return resolve(returnObj)
                 }
             })
