@@ -4,7 +4,7 @@
 
 # Node Sauce Labs [![Build Status](https://travis-ci.org/saucelabs/node-saucelabs.svg?branch=master)](https://travis-ci.org/saucelabs/node-saucelabs)
 
-Wrapper around all Sauce Labs REST APIs for [Node.js](http://nodejs.org/) (v8 or higher) and the browser.
+Wrapper around all Sauce Labs REST APIs for [Node.js](http://nodejs.org/) (v8 or higher) including support for [Sauce Connect Proxy](https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy) TypeScript definitions.
 
 ## Install
 
@@ -93,6 +93,13 @@ or download a job asset:
 
 ```sh
 sl downloadJobAsset 690c5877710c422d8be4c622b40c747f video.mp4 --filepath ./video.mp4
+```
+
+or start Sauce Connect Proxy in EU datacenter:
+
+```sh
+sl sc --region eu --sePort 4445
+```
 
 ### As NPM Package
 
@@ -149,6 +156,17 @@ import SauceLabs from 'saucelabs';
             breakpointed: null,
             browser: 'googlechrome' } ] }
      */
+
+    /**
+     * start Sauce Connect Proxy
+     */
+    const sc = await api.startSauceConnect({
+        sePort: 1234
+    })
+
+    // run a test
+
+    await sc.close()
 })()
 ```
 
