@@ -136,7 +136,7 @@ export const SAUCE_CONNECT_CLI_PARAMS = [{
     description: 'Path to YAML config file. Please refer to https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Command+Line+Reference for a sample configuration file.'
 }, {
     alias: 'D',
-    name: 'direct-domains strings',
+    name: 'direct-domains',
     description: 'Comma-separated list of domains. Requests whose host matches one of these will be relayed directly through the internet, instead of through the tunnel.'
 }, {
     name: 'dns',
