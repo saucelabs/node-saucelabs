@@ -14,7 +14,7 @@ import {
     PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT, SYMBOL_TOSTRING,
     SYMBOL_ITERATOR, TO_STRING_TAG, SAUCE_CONNECT_VERSION,
     SAUCE_CONNECT_DISTS, SC_PARAMS_TO_STRIP, SC_READY_MESSAGE,
-    SC_CLOSE_MESSAGE
+    SC_CLOSE_MESSAGE, SC_CLOSE_TIMEOUT
 } from './constants'
 
 export default class SauceLabs {
@@ -232,7 +232,7 @@ export default class SauceLabs {
         return new Promise((resolve, reject) => {
             const close = () => new Promise((resolveClose) => {
                 process.kill(cp.pid, 'SIGINT')
-                const timeout = setTimeout(resolveClose, 13000)
+                const timeout = setTimeout(resolveClose, SC_CLOSE_TIMEOUT)
                 cp.stdout.on('data', (data) => {
                     const output = data.toString()
                     if (output.includes(SC_CLOSE_MESSAGE)) {

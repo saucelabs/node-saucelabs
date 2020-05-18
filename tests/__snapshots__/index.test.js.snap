@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`startSauceConnect should start sauce connect with proper parsed args 1`] = `
+Array [
+  Array [
+    "/foo/bar",
+    Array [
+      "--proxy-tunnel=abc",
+      "--se-port=1234",
+      "--user=foo",
+      "--api-key=bar",
+      "--rest-url=https://us-east-1.saucelabs.com/rest/v1",
+    ],
+  ],
+]
+`;

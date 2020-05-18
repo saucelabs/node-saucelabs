@@ -251,3 +251,4 @@ export const SC_PARAMS_TO_STRIP = [...CLI_PARAM_KEYS, ...CLI_PARAM_ALIASES, ...S
 
 export const SC_READY_MESSAGE = 'Sauce Connect is up, you may start your tests'
 export const SC_CLOSE_MESSAGE = 'Goodbye'
+export const SC_CLOSE_TIMEOUT = 5000
