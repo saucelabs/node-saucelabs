@@ -1,10 +1,33 @@
 import util from 'util'
 import got from 'got'
+import { spawn } from 'child_process'
 
 import SauceLabs from '../src'
 
 jest.mock('fs')
 const fs = require('fs')
+
+jest.mock('child_process', () => {
+    const EventEmitter = require('events')
+    const stdoutEmitter = new EventEmitter()
+    const stderrEmitter = new EventEmitter()
+    const spawnMock = {
+        pid: 123,
+        stderr: stderrEmitter,
+        stdout: stdoutEmitter,
+        on: jest.fn()
+    }
+    const spawn = jest.fn().mockReturnValue(spawnMock)
+    return { spawn }
+})
+
+const stdoutEmitter = spawn().stdout
+const stderrEmitter = spawn().stderr
+const origKill = ::process.kill
+beforeEach(() => {
+    spawn.mockClear()
+    process.kill = jest.fn()
+})
 
 test('should be inspectable', () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
@@ -224,10 +247,40 @@ test('should put asset into file as json file', async () => {
     expect(fs.writeFileSync).toBeCalledWith('/asset.json', undefined, { encoding: 'utf8' })
 })
 
+describe('startSauceConnect', () => {
+    it('should start sauce connect with proper parsed args', async () => {
+        const api = new SauceLabs({ user: 'foo', key: 'bar', headless: true })
+        setTimeout(() => stdoutEmitter.emit('data', 'Sauce Connect is up, you may start your tests'), 50)
+        await api.startSauceConnect({ sePort: 1234, 'proxy-tunnel': 'abc' })
+        expect(spawn).toBeCalledTimes(1)
+        expect(spawn.mock.calls).toMatchSnapshot()
+    })
+
+    it('should close sauce connect', async () => {
+        const api = new SauceLabs({ user: 'foo', key: 'bar', headless: true })
+        setTimeout(() => stdoutEmitter.emit('data', 'Sauce Connect is up, you may start your tests'), 50)
+        const sc = await api.startSauceConnect({ sePort: 1234 }, true)
+        setTimeout(() => {
+            sc.cp.stdout.emit('data', 'Some other message')
+            sc.cp.stdout.emit('data', 'Goodbye')
+        }, 100)
+        await sc.close()
+        expect(process.kill).toBeCalledWith(123, 'SIGINT')
+    })
+
+    it('should fail if stderr is emitted', async () => {
+        const api = new SauceLabs({ user: 'foo', key: 'bar', headless: true })
+        setTimeout(() => stderrEmitter.emit('data', 'Uuups'), 50)
+        const res = await api.startSauceConnect({ sePort: 1234 }).catch((err) => err)
+        expect(res).toEqual(new Error('Uuups'))
+    })
+})
+
 afterEach(() => {
     fs.writeFileSync.mockClear()
     got.mockClear()
     got.extend.mockClear()
     got.put.mockClear()
     got.get.mockClear()
+    process.kill = origKill
 })

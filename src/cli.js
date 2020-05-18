@@ -1,6 +1,5 @@
 import yargs from 'yargs'
-
-import { USAGE, CLI_PARAMS, EPILOG, PROTOCOL_MAP, DEFAULT_OPTIONS } from './constants'
+import { USAGE, CLI_PARAMS, EPILOG, PROTOCOL_MAP, DEFAULT_OPTIONS, SAUCE_VERSION_NOTE } from './constants'
 import { getParameters } from './utils'
 import SauceLabs from './'
 
@@ -8,7 +7,9 @@ export const run = () => {
     let argv = yargs.usage(USAGE)
         .epilog(EPILOG)
         .demandCommand()
+        .commandDir('commands')
         .help()
+        .version(SAUCE_VERSION_NOTE)
 
     for (const [commandName, options] of PROTOCOL_MAP) {
         const params = getParameters(options.description.parameters)

@@ -4,7 +4,7 @@
 
 # Node Sauce Labs [![Build Status](https://travis-ci.org/saucelabs/node-saucelabs.svg?branch=master)](https://travis-ci.org/saucelabs/node-saucelabs)
 
-Wrapper around all Sauce Labs REST APIs for [Node.js](http://nodejs.org/) (v8 or higher) and the browser.
+Wrapper around all Sauce Labs REST APIs for [Node.js](http://nodejs.org/) (v8 or higher) including support for [Sauce Connect Proxy](https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy) TypeScript definitions.
 
 ## Install
 
@@ -78,21 +78,33 @@ $ sl listJobs $SAUCE_USERNAME --limit 5 --region eu
 You can find all available commands and options with description by calling:
 
 ```sh
-sl --help
+$ sl --help
 # show description for specific command
-sl listJobs --help
+$ sl listJobs --help
 ```
 
 or update the job status by calling:
 
 ```sh
-sl updateJob cb-onboarding 690c5877710c422d8be4c622b40c747f "{\"passed\":false}"
+$ sl updateJob cb-onboarding 690c5877710c422d8be4c622b40c747f "{\"passed\":false}"
 ```
 
 or download a job asset:
 
 ```sh
-sl downloadJobAsset 690c5877710c422d8be4c622b40c747f video.mp4 --filepath ./video.mp4
+$ sl downloadJobAsset 690c5877710c422d8be4c622b40c747f video.mp4 --filepath ./video.mp4
+```
+
+or start Sauce Connect Proxy in EU datacenter:
+
+```sh
+$ sl sc --region eu --se-port 4445
+
+# see all available Sauce Connect parameters via:
+$ sl sc --help
+```
+
+You can see all available Sauce Connect parameters on the [Sauce Labs Wiki Page](https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy+Command-Line+Quick+Reference+Guide).
 
 ### As NPM Package
 
@@ -149,6 +161,22 @@ import SauceLabs from 'saucelabs';
             breakpointed: null,
             browser: 'googlechrome' } ] }
      */
+
+    /**
+     * start Sauce Connect Proxy
+     */
+    const sc = await api.startSauceConnect({
+        /**
+         * see all available parameters here: https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy+Command-Line+Quick+Reference+Guide
+         * all parameters have to be applied camel cased instead of with hyphens, e.g.
+         * to apply the `--se-port` parameter, set:
+         */
+        sePort: 1234
+    })
+
+    // run a test
+
+    await sc.close()
 })()
 ```
 
