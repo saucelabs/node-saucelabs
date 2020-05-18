@@ -98,7 +98,7 @@ $ sl downloadJobAsset 690c5877710c422d8be4c622b40c747f video.mp4 --filepath ./vi
 or start Sauce Connect Proxy in EU datacenter:
 
 ```sh
-$ sl sc --region eu --se-port 4445
+$ sl sc --region eu --tunnel-identifier "my-tunnel"
 
 # see all available Sauce Connect parameters via:
 $ sl sc --help
@@ -169,9 +169,9 @@ import SauceLabs from 'saucelabs';
         /**
          * see all available parameters here: https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy+Command-Line+Quick+Reference+Guide
          * all parameters have to be applied camel cased instead of with hyphens, e.g.
-         * to apply the `--se-port` parameter, set:
+         * to apply the `--tunnel-identifier` parameter, set:
          */
-        sePort: 1234
+        tunnelIdentifier: 'my-tunnel'
     })
 
     // run a test

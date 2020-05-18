@@ -251,7 +251,7 @@ describe('startSauceConnect', () => {
     it('should start sauce connect with proper parsed args', async () => {
         const api = new SauceLabs({ user: 'foo', key: 'bar', headless: true })
         setTimeout(() => stdoutEmitter.emit('data', 'Sauce Connect is up, you may start your tests'), 50)
-        await api.startSauceConnect({ sePort: 1234, 'proxy-tunnel': 'abc' })
+        await api.startSauceConnect({ tunnelIdentifier: 'my-tunnel', 'proxy-tunnel': 'abc' })
         expect(spawn).toBeCalledTimes(1)
         expect(spawn.mock.calls).toMatchSnapshot()
     })
@@ -259,7 +259,7 @@ describe('startSauceConnect', () => {
     it('should close sauce connect', async () => {
         const api = new SauceLabs({ user: 'foo', key: 'bar', headless: true })
         setTimeout(() => stdoutEmitter.emit('data', 'Sauce Connect is up, you may start your tests'), 50)
-        const sc = await api.startSauceConnect({ sePort: 1234 }, true)
+        const sc = await api.startSauceConnect({ tunnelIdentifier: 'my-tunnel' }, true)
         setTimeout(() => {
             sc.cp.stdout.emit('data', 'Some other message')
             sc.cp.stdout.emit('data', 'Goodbye')
@@ -271,7 +271,7 @@ describe('startSauceConnect', () => {
     it('should fail if stderr is emitted', async () => {
         const api = new SauceLabs({ user: 'foo', key: 'bar', headless: true })
         setTimeout(() => stderrEmitter.emit('data', 'Uuups'), 50)
-        const res = await api.startSauceConnect({ sePort: 1234 }).catch((err) => err)
+        const res = await api.startSauceConnect({ tunnelIdentifier: 'my-tunnel' }).catch((err) => err)
         expect(res).toEqual(new Error('Uuups'))
     })
 })
