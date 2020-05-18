@@ -221,7 +221,7 @@ export const SAUCE_CONNECT_CLI_PARAMS = [{
     alias: 'P',
     name: 'se-port',
     description: 'Port on which Sauce Connect\'s Selenium relay will listen for requests. Selenium commands reaching Connect on this port will be relayed to Sauce Labs securely and reliably through Connect\'s tunnel (default 4445)',
-    type: 'integer',
+    type: 'number',
     default: 4445
 }, {
     alias: 's',
