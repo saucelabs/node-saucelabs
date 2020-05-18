@@ -1,6 +1,9 @@
 import fs from 'fs'
 import path from 'path'
+import { spawn } from 'child_process'
+
 import got from 'got'
+import BinWrapper from 'bin-wrapper'
 import { camelCase } from 'change-case'
 
 import {
@@ -9,7 +12,9 @@ import {
 } from './utils'
 import {
     PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT, SYMBOL_TOSTRING,
-    SYMBOL_ITERATOR, TO_STRING_TAG
+    SYMBOL_ITERATOR, TO_STRING_TAG, SAUCE_CONNECT_VERSION,
+    SAUCE_CONNECT_DISTS, SC_PARAMS_TO_STRIP, SC_READY_MESSAGE,
+    SC_CLOSE_MESSAGE
 } from './constants'
 
 export default class SauceLabs {
@@ -70,6 +75,13 @@ export default class SauceLabs {
          */
         if (propName === SYMBOL_ITERATOR) {
             return
+        }
+
+        /**
+         * provide access to Sauce Connect interface
+         */
+        if (propName === 'startSauceConnect') {
+            return ::this._startSauceConnect
         }
 
         /**
@@ -176,6 +188,71 @@ export default class SauceLabs {
                 throw new Error(`Failed calling ${propName}: ${err.message}`)
             }
         }
+    }
+
+    async _startSauceConnect (argv, fromCLI) {
+        if (!fromCLI) {
+            for (const [k, v] of Object.entries(argv)) {
+                if (k.includes('-')) {
+                    continue
+                }
+                argv[k.split(/(?=[A-Z])/).join('-').toLowerCase()] = v
+            }
+        }
+
+        const { host, basePath } = PROTOCOL_MAP.get('listJobs')
+        const restUrl = getSauceEndpoint(host + basePath, this._options.region, this._options.headless) + '/v1'
+        const args = Object.entries(argv)
+            /**
+             * filter out yargs and yargs params
+             */
+            .filter(([k]) => !['_', '$0', ...SC_PARAMS_TO_STRIP].includes(k))
+            /**
+             * remove duplicate params by yargs
+             */
+            .filter(([k]) => !k.match(/[A-Z]/g))
+            .map(([k, v]) => `--${k}=${v}`)
+
+        args.push(`--user=${this.username}`)
+        args.push(`--api-key=${this._accessKey}`)
+        args.push(`--rest-url=${restUrl}`)
+
+        const bin = SAUCE_CONNECT_DISTS.reduce((bin, dist) => {
+            bin.src(...dist)
+            return bin
+        }, new BinWrapper())
+
+        bin
+            .dest(path.join(__dirname, 'bin', 'bin'))
+            .use(process.platform.startsWith('win') ? 'sc.exe' : 'sc')
+            .version(`v${SAUCE_CONNECT_VERSION}`)
+
+        await bin.run(['--version'])
+        const cp = spawn(bin.path(), args)
+        return new Promise((resolve, reject) => {
+            const close = () => new Promise((resolveClose) => {
+                process.kill(cp.pid, 'SIGINT')
+                const timeout = setTimeout(resolveClose, 13000)
+                cp.stdout.on('data', (data) => {
+                    const output = data.toString()
+                    if (output.includes(SC_CLOSE_MESSAGE)) {
+                        clearTimeout(timeout)
+                        return resolveClose(returnObj)
+                    }
+                })
+            })
+            const returnObj = { cp, close }
+
+            cp.stderr.on('data', (data) => reject(new Error(data.toString())))
+            cp.stdout.on('data', (data) => {
+                if (data.toString().includes(SC_READY_MESSAGE)) {
+                    return resolve(returnObj)
+                }
+            })
+
+            process.on('SIGINT', close)
+            return returnObj
+        })
     }
 
     async _downloadJobAsset (jobId, assetName, { filepath } = {}) {

@@ -39,6 +39,7 @@
     "watch": "npm run compile -- --watch"
   },
   "dependencies": {
+    "bin-wrapper": "^4.1.0",
     "change-case": "^4.1.1",
     "got": "^10.6.0",
     "hash.js": "^1.1.7",
