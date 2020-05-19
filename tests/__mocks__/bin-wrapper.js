@@ -1,3 +1,4 @@
+const instances = []
 class BinWrapperMock {
     constructor () {
         this.run = jest.fn().mockReturnValue(Promise.resolve()),
@@ -6,7 +7,9 @@ class BinWrapperMock {
         this.dest = jest.fn().mockReturnValue(this)
         this.use = jest.fn().mockReturnValue(this)
         this.version = jest.fn().mockReturnValue(this)
+        instances.push(this)
     }
 }
 
 export default BinWrapperMock
+export { instances }

@@ -98,8 +98,10 @@ $ sl downloadJobAsset 690c5877710c422d8be4c622b40c747f video.mp4 --filepath ./vi
 or start Sauce Connect Proxy in EU datacenter:
 
 ```sh
+# start Sauce Connect tunnel for eu-central-1 region
 $ sl sc --region eu --tunnel-identifier "my-tunnel"
-
+# run a specific Sauce Connect version
+$ sl sc --scVersion 4.5.4
 # see all available Sauce Connect parameters via:
 $ sl sc --help
 ```

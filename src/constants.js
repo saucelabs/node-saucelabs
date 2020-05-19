@@ -1,15 +1,15 @@
 import { camelCase } from 'change-case'
 import { version } from '../package.json'
 
-export const SAUCE_CONNECT_VERSION = '4.5.4'
+export const DEFAULT_SAUCE_CONNECT_VERSION = '4.5.4'
 export const SAUCE_CONNECT_BASE = 'https://saucelabs.com/downloads'
 export const SAUCE_CONNECT_DISTS = [
-    [`${SAUCE_CONNECT_BASE}/sc-${SAUCE_CONNECT_VERSION}-osx.zip`, 'darwin'],
-    [`${SAUCE_CONNECT_BASE}/sc-${SAUCE_CONNECT_VERSION}-win32.zip`, 'win32'],
-    [`${SAUCE_CONNECT_BASE}/sc-${SAUCE_CONNECT_VERSION}-linux.tar.gz`, 'linux', 'x64'],
-    [`${SAUCE_CONNECT_BASE}/sc-${SAUCE_CONNECT_VERSION}_linux32.tar.gz`, 'linux']
+    [`${SAUCE_CONNECT_BASE}/sc-%s-osx.zip`, 'darwin'],
+    [`${SAUCE_CONNECT_BASE}/sc-%s-win32.zip`, 'win32'],
+    [`${SAUCE_CONNECT_BASE}/sc-%s-linux.tar.gz`, 'linux', 'x64'],
+    [`${SAUCE_CONNECT_BASE}/sc-%s_linux32.tar.gz`, 'linux']
 ]
-export const SAUCE_VERSION_NOTE = `node-saucelabs v${version}\nSauce Connect v${SAUCE_CONNECT_VERSION}`
+export const SAUCE_VERSION_NOTE = `node-saucelabs v${version}\nSauce Connect v${DEFAULT_SAUCE_CONNECT_VERSION}`
 
 const protocols = [
     require('../apis/sauce.json'),
@@ -121,6 +121,16 @@ const CLI_PARAM_KEYS = CLI_PARAMS.map((param) => param.name)
 const CLI_PARAM_ALIASES = CLI_PARAMS.map((param) => param.alias).filter(Boolean)
 
 export const SAUCE_CONNECT_CLI_PARAMS = [{
+    /**
+     * custom parameter
+     */
+    name: 'sc-version',
+    description: 'Specify the Sauce Connect version you want to use.',
+    default: DEFAULT_SAUCE_CONNECT_VERSION
+}, {
+    /**
+     * Sauce Connect parameter
+     */
     alias: 'a',
     name: 'auth',
     description: 'Perform basic authentication when an URL on <host:port> asks for a username and password.'
