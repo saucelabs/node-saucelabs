@@ -1,6 +1,6 @@
 {
   "name": "saucelabs",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "author": "Christian Bromann <christian@saucelabs.com>",
   "description": "A wrapper around Sauce Labs REST API",
   "homepage": "https://github.com/saucelabs/node-saucelabs",
