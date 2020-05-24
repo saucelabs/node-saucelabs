@@ -15,7 +15,7 @@ import {
     PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT, SYMBOL_TOSTRING,
     SYMBOL_ITERATOR, TO_STRING_TAG, SAUCE_CONNECT_DISTS,
     SC_PARAMS_TO_STRIP, SC_READY_MESSAGE, SC_CLOSE_MESSAGE,
-    SC_CLOSE_TIMEOUT, DEFAULT_SAUCE_CONNECT_VERSION
+    SC_CLOSE_TIMEOUT, DEFAULT_SAUCE_CONNECT_VERSION, SC_FAILURE_MESSAGE
 } from './constants'
 
 export default class SauceLabs {
@@ -208,7 +208,7 @@ export default class SauceLabs {
             /**
              * filter out yargs, yargs params and custom parameters
              */
-            .filter(([k]) => !['_', '$0', 'sc-version', ...SC_PARAMS_TO_STRIP].includes(k))
+            .filter(([k]) => !['_', '$0', 'sc-version', 'logger', ...SC_PARAMS_TO_STRIP].includes(k))
             /**
              * remove duplicate params by yargs
              */
@@ -247,13 +247,25 @@ export default class SauceLabs {
 
             cp.stderr.on('data', (data) => reject(new Error(data.toString())))
             cp.stdout.on('data', (data) => {
+                const logger = fromCLI ? process.stdout.write.bind(process.stdout) : argv.logger
                 const output = data.toString()
                 /**
                  * print to stdout if called via CLI
                  */
-                if (fromCLI) {
-                    process.stdout.write(output)
+                if (typeof logger === 'function') {
+                    logger(output)
                 }
+
+                /**
+                 * fail if SauceConnect could not establish a connection
+                 */
+                if (output.includes(SC_FAILURE_MESSAGE)) {
+                    return reject(new Error(output))
+                }
+
+                /**
+                 * continue if connection was established
+                 */
                 if (output.includes(SC_READY_MESSAGE)) {
                     return resolve(returnObj)
                 }

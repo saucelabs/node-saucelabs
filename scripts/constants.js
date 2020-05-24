@@ -37,6 +37,10 @@ export interface SauceLabsOptions {
 
 exports.TC_SAUCE_CONNECT_OBJ = `
 export interface SauceConnectOptions {
+    /**
+     * A function to optionally write sauce-connect-launcher log messages, e.g. console.log
+     */
+    logger?: (output: string) => void;
 ${SAUCE_CONNECT_CLI_PARAMS.map((option) => `
     /**
      * ${option.description} ${option.default ? `(default: ${option.default})` : ''}

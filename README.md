@@ -169,6 +169,10 @@ import SauceLabs from 'saucelabs';
      */
     const sc = await myAccount.startSauceConnect({
         /**
+         * you can pass in a `logger` method to print Sauce Connect log messages
+         */
+        logger: (stdout) => console.log(stdout),
+        /**
          * see all available parameters here: https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy+Command-Line+Quick+Reference+Guide
          * all parameters have to be applied camel cased instead of with hyphens, e.g.
          * to apply the `--tunnel-identifier` parameter, set:

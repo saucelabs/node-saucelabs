@@ -250,19 +250,34 @@ test('should put asset into file as json file', async () => {
 
 describe('startSauceConnect', () => {
     it('should start sauce connect with proper parsed args', async () => {
+        const logs = []
         const api = new SauceLabs({ user: 'foo', key: 'bar', headless: true })
         setTimeout(() => stdoutEmitter.emit('data', 'Sauce Connect is up, you may start your tests'), 50)
         await api.startSauceConnect({
             scVersion: '1.2.3',
             tunnelIdentifier: 'my-tunnel',
-            'proxy-tunnel': 'abc'
+            'proxy-tunnel': 'abc',
+            logger: (log) => logs.push(log)
         })
         expect(spawn).toBeCalledTimes(1)
         expect(spawn.mock.calls).toMatchSnapshot()
 
+        expect(logs).toHaveLength(1)
         expect(instances).toHaveLength(1)
         expect(instances[0].dest.mock.calls[0][0].endsWith('.sc-v1.2.3'))
             .toBe(true)
+    })
+
+    it('should properly fail if connection could not be established', async () => {
+        const errMessage = 'Sauce Connect could not establish a connection'
+        const api = new SauceLabs({ user: 'foo', key: 'bar', headless: true })
+        setTimeout(() => stdoutEmitter.emit('data', errMessage), 50)
+        const err = await api.startSauceConnect({
+            scVersion: '1.2.3',
+            tunnelIdentifier: 'my-tunnel',
+            'proxy-tunnel': 'abc'
+        }).catch((err) => err)
+        expect(err.message).toBe(errMessage)
     })
 
     it('should close sauce connect', async () => {

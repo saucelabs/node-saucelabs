@@ -14,7 +14,8 @@ async function foobar () {
 
     const sc = await api.startSauceConnect({
         scVersion: '4.5.4',
-        tunnelIdentifier: '1234'
+        tunnelIdentifier: '1234',
+        logger: (output) => console.log(output)
     })
     sc.cp.pid
     await sc.close()
