@@ -7,7 +7,7 @@ export const SAUCE_CONNECT_DISTS = [
     [`${SAUCE_CONNECT_BASE}/sc-%s-osx.zip`, 'darwin'],
     [`${SAUCE_CONNECT_BASE}/sc-%s-win32.zip`, 'win32'],
     [`${SAUCE_CONNECT_BASE}/sc-%s-linux.tar.gz`, 'linux', 'x64'],
-    [`${SAUCE_CONNECT_BASE}/sc-%s_linux32.tar.gz`, 'linux']
+    [`${SAUCE_CONNECT_BASE}/sc-%s-linux32.tar.gz`, 'linux']
 ]
 export const SAUCE_VERSION_NOTE = `node-saucelabs v${version}\nSauce Connect v${DEFAULT_SAUCE_CONNECT_VERSION}`
 
