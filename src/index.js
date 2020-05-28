@@ -329,12 +329,16 @@ export default class SauceLabs {
         }
     }
 
-    async _uploadJobAssets (jobId, filePaths) {
+    async _uploadJobAssets (jobId, { files = [] } = {}) {
+        if (files.length === 0) {
+            throw new Error('No files to upload selected')
+        }
+
         const { servers, basePath, method, endpoint } = PROTOCOL_MAP.get('uploadJobAssets')
         const uri = getAPIHost(servers, basePath, this._options) + endpoint.replace('{jobId}', jobId)
         const body = new FormData()
 
-        for (const filePath of filePaths) {
+        for (const filePath of files) {
             const readStream = fs.createReadStream(filePath.startsWith('/')
                 ? filePath
                 : path.join(process.cwd(), filePath)
@@ -343,7 +347,7 @@ export default class SauceLabs {
         }
 
         try {
-            const res = await this._api.get(uri, { method, body })
+            const res = await this._api(uri, { method, body })
 
             /**
              * parse asset as json if proper content type is given

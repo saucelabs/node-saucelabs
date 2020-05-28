@@ -46,6 +46,24 @@
       "description":"Log files that were captured while the test was running."
     }
   ],
+  "parameters": {
+    "jobId": {
+      "in":"path",
+      "name":"jobId",
+      "required":true,
+      "description":"id of the job that was run on Sauce Labs",
+      "schema":{
+        "type":"string"
+      }
+    },
+    "files": {
+      "description": "s path to upload and attach to your job",
+      "in": "path",
+      "name": "files",
+      "required": false,
+      "type": "string"
+    }
+  },
   "components":{
     "securitySchemes":{
       "bearerAuth":{
@@ -73,13 +91,10 @@
         ],
         "parameters":[
           {
-            "in":"path",
-            "name":"jobId",
-            "required":true,
-            "description":"id of the job that was run on Sauce Labs",
-            "schema":{
-              "type":"string"
-            }
+            "$ref": "#/parameters/jobId"
+          },
+          {
+            "$ref": "#/parameters/files"
           }
         ],
         "requestBody":{

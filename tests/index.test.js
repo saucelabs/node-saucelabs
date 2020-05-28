@@ -263,19 +263,21 @@ test('should allow to upload files', async () => {
 
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     const body = { foo: 'bar' }
-    got.get = jest.fn().mockReturnValue(Promise.resolve({
+    got.mockReturnValue(Promise.resolve({
         headers: {
             'content-type': 'application/json'
         },
         body: JSON.stringify(body)
     }))
-    const result = await api.uploadJobAssets('some-id', ['log.json', 'selenium-server.json'])
+    const result = await api.uploadJobAssets('some-id', {
+        files: ['log.json', 'selenium-server.json']
+    })
 
     const { instances } = new FormData()
     expect(instances[0].append).toBeCalledTimes(2)
     expect(instances[0].append).toBeCalledWith('file[]', {name: '/somefile', path: 'somepath'})
 
-    const uri = got.get.mock.calls[0][0]
+    const uri = got.mock.calls[0][0]
     expect(uri).toBe('https://api.us-west-1.saucelabs.com/v1/testrunner/jobs/some-id/assets')
 
     expect(result).toEqual(body)
@@ -288,11 +290,21 @@ test('should throw if custom error if upload fails', async () => {
     })
 
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
-    got.get = jest.fn().mockReturnValue(Promise.reject(new Error('uups')))
-    const result = await api.uploadJobAssets('some-id', ['log.json', 'selenium-server.json'])
+    got.mockReturnValue(Promise.reject(new Error('uups')))
+    const result = await api.uploadJobAssets('some-id', {
+        files: ['log.json', '/selenium-server.json']
+    })
         .catch((err) => err)
 
     expect(result.message).toBe('There was an error uploading assets: uups')
+})
+
+test('should not even try to upload if no files were selected', async () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    const result = await api.uploadJobAssets('some-id')
+        .catch((err) => err)
+
+    expect(result.message).toBe('No files to upload selected')
 })
 
 describe('startSauceConnect', () => {
