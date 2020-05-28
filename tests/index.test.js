@@ -59,6 +59,12 @@ test('should return public properties', () => {
     expect(api._accessKey).toBe(undefined)
 })
 
+test('should return nothing if Symbol was accessed', () => {
+    const sym = Symbol('foo')
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    expect(typeof api[sym]).toBe('undefined')
+})
+
 test('should grab username and access key from env variable', () => {
     jest.resetModules()
     process.env.SAUCE_USERNAME = 'barfoo'

@@ -1,7 +1,5 @@
-const { REGION_MAPPING, SAUCE_CONNECT_CLI_PARAMS } = require('../src/constants')
-const regions = Object.keys(REGION_MAPPING)
-    .map(key => `"${key}"`)
-    .join(' | ')
+const { SAUCE_CONNECT_CLI_PARAMS, ASSET_REGION_MAPPING } = require('../src/constants')
+const regions = Object.keys(ASSET_REGION_MAPPING).map(key => `"${key}"`).join(' | ')
 
 exports.TS_IMPORTS = `
 import { ChildProcess } from 'child_process';

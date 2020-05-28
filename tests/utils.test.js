@@ -1,35 +1,66 @@
-import { createHMAC, getSauceEndpoint, toString, isValidType, createProxyAgent, getStrictSsl } from '../src/utils'
 import http from 'http'
 import https from 'https'
+import sauceAPI from '../apis/sauce.json'
+import rdcAPI from '../apis/rdc.json'
+import {
+    createHMAC, getAPIHost, toString, isValidType, getStrictSsl, getAssetHost, createProxyAgent
+} from '../src/utils'
 
 test('createHMAC', async () => {
     expect(await createHMAC('foo', 'bar', 'loo123'))
         .toBe('b975a69fa344ed43e1035b0698788705')
 })
 
-test('getSauceEndpoint', () => {
-    expect(getSauceEndpoint('saucelabs.com', 'us', false))
-        .toBe('https://saucelabs.com')
-    expect(getSauceEndpoint('saucelabs.com', 'us-west-1', false))
-        .toBe('https://saucelabs.com')
-    expect(getSauceEndpoint('saucelabs.com', 'I_DONT_EXIST', false))
-        .toBe('https://saucelabs.com')
-    expect(getSauceEndpoint('saucelabs.com', 'us', false, 'http://'))
-        .toBe('http://saucelabs.com')
-    expect(getSauceEndpoint('saucelabs.com', 'eu', false))
-        .toBe('https://eu-central-1.saucelabs.com')
-    expect(getSauceEndpoint('saucelabs.com', 'eu-central-1', false))
-        .toBe('https://eu-central-1.saucelabs.com')
-    expect(getSauceEndpoint('saucelabs.com', 'us', true))
-        .toBe('https://us-east-1.saucelabs.com')
-    expect(getSauceEndpoint('api.saucelabs.com', 'us', false))
-        .toBe('https://api.us-west-1.saucelabs.com')
-    expect(getSauceEndpoint('api.saucelabs.com', 'eu', false))
-        .toBe('https://api.eu-central-1.saucelabs.com')
-    expect(getSauceEndpoint('app.testobject.com', 'eu', false))
-        .toBe('https://app.testobject.com')
-    expect(getSauceEndpoint('app.testobject.com', 'us', false))
-        .toBe('https://app.testobject.com')
+test('getAPIHost', () => {
+    expect(getAPIHost(sauceAPI.servers, sauceAPI.basePath, {}))
+        .toBe('https://api.us-west-1.saucelabs.com/rest')
+    expect(getAPIHost(sauceAPI.servers, sauceAPI.basePath, { region: 'eu' }))
+        .toBe('https://api.eu-central-1.saucelabs.com/rest')
+    expect(getAPIHost(sauceAPI.servers, sauceAPI.basePath, { region: 'eu-central-1' }))
+        .toBe('https://api.eu-central-1.saucelabs.com/rest')
+    expect(getAPIHost(sauceAPI.servers, sauceAPI.basePath, { region: 'us' }))
+        .toBe('https://api.us-west-1.saucelabs.com/rest')
+    expect(getAPIHost(sauceAPI.servers, sauceAPI.basePath, { region: 'us-west-1' }))
+        .toBe('https://api.us-west-1.saucelabs.com/rest')
+    expect(getAPIHost(sauceAPI.servers, sauceAPI.basePath, { region: 'us-east-1' }))
+        .toBe('https://api.us-east-1.saucelabs.com/rest')
+    expect(getAPIHost(sauceAPI.servers, sauceAPI.basePath, { region: 'us-west-1', headless: true }))
+        .toBe('https://api.us-east-1.saucelabs.com/rest')
+    expect(() => getAPIHost(sauceAPI.servers, sauceAPI.basePath, { region: 'foobar' }))
+        .toThrow()
+
+    expect(getAPIHost(sauceAPI.servers, sauceAPI.basePath, { tld: 'net' }))
+        .toBe('https://api.us-west-1.saucelabs.net/rest')
+    expect(getAPIHost(sauceAPI.servers, sauceAPI.basePath, { tld: 'net', region: 'staging' }))
+        .toBe('https://api.staging.saucelabs.net/rest')
+    expect(() => getAPIHost(sauceAPI.servers, sauceAPI.basePath, { tld: 'info' }))
+        .toThrow()
+
+    expect(getAPIHost(rdcAPI.servers, rdcAPI.basePath, {}))
+        .toBe('https://app.testobject.com/api/rest')
+    expect(getAPIHost(rdcAPI.servers, rdcAPI.basePath, { region: 'us-west-1', headless: true }))
+        .toBe('https://app.testobject.com/api/rest')
+})
+
+test('getAssetHost', () => {
+    expect(getAssetHost({}))
+        .toBe('https://assets.saucelabs.com')
+    expect(getAssetHost({ region: 'us' }))
+        .toBe('https://assets.saucelabs.com')
+    expect(getAssetHost({ region: 'us-west-1' }))
+        .toBe('https://assets.saucelabs.com')
+    expect(getAssetHost({ region: 'eu' }))
+        .toBe('https://assets.eu-central-1.saucelabs.com')
+    expect(getAssetHost({ region: 'eu-central-1' }))
+        .toBe('https://assets.eu-central-1.saucelabs.com')
+    expect(getAssetHost({ headless: true }))
+        .toBe('https://assets.us-east-1.saucelabs.com')
+    expect(getAssetHost({ headless: true, region: 'eu' }))
+        .toBe('https://assets.us-east-1.saucelabs.com')
+    expect(getAssetHost({ region: 'staging' }))
+        .toBe('https://assets.staging.saucelabs.net')
+    expect(getAssetHost({ region: 'staging', tld: 'com' }))
+        .toBe('https://assets.staging.saucelabs.com')
 })
 
 test('toString', () => {
@@ -38,7 +69,7 @@ test('toString', () => {
         _accessKey: '50fc1a11-3231-4240-9707-8f34682b17b0',
         _options: { region: 'us', headless: false }
     })).toBe(`SauceLabs API Client {
-  username: 'foobar',
+  user: 'foobar',
   key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX2b17b0',
   region: 'us',
   headless: false,

@@ -5,7 +5,31 @@
     "version":"0.247.0",
     "description":"Performance API provides essential information about performance of tested web application."
   },
-  "host":"api.us-west-1.saucelabs.com",
+  "host":"saucelabs.com",
+  "servers":[
+    {
+      "url":"https://api.{region}.saucelabs.{tld}",
+      "variables":{
+        "region":{
+          "default":"us-west-1",
+          "description":"region of datacenter",
+          "enum":[
+            "us-west-1",
+            "eu-central-1",
+            "staging"
+          ]
+        },
+        "tld":{
+          "default":"com",
+          "description":"internal or external API",
+          "enum":[
+            "net",
+            "com"
+          ]
+        }
+      }
+    }
+  ],
   "basePath":"/v2/performance",
   "schemes":[
     "https"

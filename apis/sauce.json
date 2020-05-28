@@ -1,5 +1,60 @@
 {
+  "swagger":"2.0",
+  "info":{
+    "contact":{
+      "email":"support@saucelabs.com",
+      "name":"API Support",
+      "url":"https://saucelabs.com/support"
+    },
+    "description":"This is a REST API documentation provided by Sauce Labs",
+    "license":{
+      "name":"Apache 2.0",
+      "url":"http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "termsOfService":"https://saucelabs.com/terms-of-service",
+    "title":"Sauce Labs REST API",
+    "version":"0.0.1"
+  },
+  "host":"saucelabs.com",
   "basePath":"/rest",
+  "servers":[
+    {
+      "url":"https://api.{region}.saucelabs.{tld}",
+      "variables":{
+        "region":{
+          "default":"us-west-1",
+          "description":"region of datacenter",
+          "enum":[
+            "us-west-1",
+            "us-east-1",
+            "eu-central-1",
+            "staging"
+          ]
+        },
+        "tld":{
+          "default":"com",
+          "description":"internal or external API",
+          "enum":[
+            "net",
+            "com"
+          ]
+        }
+      }
+    }
+  ],
+  "schemes":[
+    "https"
+  ],
+  "securityDefinitions":{
+    "BasicAuth":{
+      "type":"basic"
+    },
+    "PrivApiKey":{
+      "in":"header",
+      "name":"Signature",
+      "type":"apiKey"
+    }
+  },
   "definitions":{
     "Activity":{
       "properties":{
@@ -717,35 +772,12 @@
       "type":"object"
     }
   },
-  "host":"saucelabs.com",
-  "info":{
-    "contact":{
-      "email":"support@saucelabs.com",
-      "name":"API Support",
-      "url":"https://saucelabs.com/support"
-    },
-    "description":"This is a REST API documentation provided by Sauce Labs",
-    "license":{
-      "name":"Apache 2.0",
-      "url":"http://www.apache.org/licenses/LICENSE-2.0.html"
-    },
-    "termsOfService":"https://saucelabs.com/terms-of-service",
-    "title":"Sauce Labs REST API",
-    "version":"0.0.1"
-  },
   "parameters":{
-    "assetName":{
-      "description":"filename of the asset",
+    "filename":{
+      "description":"filename",
       "in":"path",
-      "name":"assetName",
+      "name":"filename",
       "required":true,
-      "type":"string"
-    },
-    "filepath":{
-      "description":"file path to store the asset at",
-      "in":"path",
-      "name":"filepath",
-      "required":false,
       "type":"string"
     },
     "full":{
@@ -2297,10 +2329,7 @@
             "$ref":"#/parameters/id"
           },
           {
-            "$ref":"#/parameters/assetName"
-          },
-          {
-            "$ref":"#/parameters/filepath"
+            "$ref":"#/parameters/filename"
           }
         ],
         "responses":{
@@ -2329,26 +2358,5 @@
         ]
       }
     }
-  },
-  "schemes":[
-    "https"
-  ],
-  "security":[
-    {
-      "BasicAuth":[
-
-      ]
-    }
-  ],
-  "securityDefinitions":{
-    "BasicAuth":{
-      "type":"basic"
-    },
-    "PrivApiKey":{
-      "in":"header",
-      "name":"Signature",
-      "type":"apiKey"
-    }
-  },
-  "swagger":"2.0"
+  }
 }

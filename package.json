@@ -41,6 +41,7 @@
   "dependencies": {
     "bin-wrapper": "^4.1.0",
     "change-case": "^4.1.1",
+    "form-data": "^3.0.0",
     "got": "^11.1.4",
     "hash.js": "^1.1.7",
     "tunnel": "0.0.6",

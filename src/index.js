@@ -4,11 +4,12 @@ import path from 'path'
 import { spawn } from 'child_process'
 
 import got from 'got'
+import FormData from 'form-data'
 import BinWrapper from 'bin-wrapper'
 import { camelCase } from 'change-case'
 
 import {
-    createHMAC, getSauceEndpoint, toString, getParameters,
+    createHMAC, getAPIHost, getAssetHost, toString, getParameters,
     isValidType, createProxyAgent, getStrictSsl
 } from './utils'
 import {
@@ -41,6 +42,7 @@ export default class SauceLabs {
          * public fields
          */
         this.region = this._options.region
+        this.tld = this._options.tld
         this.headless = this._options.headless
 
         return new Proxy({
@@ -86,6 +88,13 @@ export default class SauceLabs {
         }
 
         /**
+         * have special implementations for certain operations
+         */
+        if (propName === 'uploadJobAssets') {
+            return ::this._uploadJobAssets
+        }
+
+        /**
          * allow to return publicly registered class properties
          */
         if (this[propName]) {
@@ -111,7 +120,7 @@ export default class SauceLabs {
         }
 
         return async (...args) => {
-            const { description, method, endpoint, host, basePath } = PROTOCOL_MAP.get(propName)
+            const { description, method, endpoint, servers, basePath } = PROTOCOL_MAP.get(propName)
             const params = getParameters(description.parameters)
             const pathParams = params.filter(p => p.in === 'path')
 
@@ -134,7 +143,7 @@ export default class SauceLabs {
              * check for body param (as last parameter as we don't expect request
              * parameters for non idempotent requests)
              */
-            let bodyOption = params.find(p => p.in === 'body')
+            let bodyOption = params.find(p => p.in === 'body') || description.requestBody
                 ? args[pathParams.length]
                 : null
 
@@ -173,7 +182,7 @@ export default class SauceLabs {
             /**
              * make request
              */
-            const uri = getSauceEndpoint(host + basePath, this._options.region, this._options.headless) + url
+            const uri = getAPIHost(servers, basePath, this._options) + url
             try {
                 const response = await this._api[method](uri, {
                     ...(
@@ -202,8 +211,8 @@ export default class SauceLabs {
         }
 
         const sauceConnectVersion = argv.scVersion || DEFAULT_SAUCE_CONNECT_VERSION
-        const { host, basePath } = PROTOCOL_MAP.get('listJobs')
-        const restUrl = getSauceEndpoint(host + basePath, this._options.region, this._options.headless) + '/v1'
+        const { servers, basePath } = PROTOCOL_MAP.get('listJobs')
+        const restUrl = getAPIHost(servers, basePath, this._options) + '/v1'
         const args = Object.entries(argv)
             /**
              * filter out yargs, yargs params and custom parameters
@@ -285,7 +294,7 @@ export default class SauceLabs {
         }
 
         const hmac = await createHMAC(this.username, this._accessKey, jobId)
-        const host = getSauceEndpoint('saucelabs.com', this._options.region, this._options.headless, 'https://assets.')
+        const host = getAssetHost(this._options)
         const responseType = assetName.endsWith('mp4') ? 'buffer' : 'text'
         const uri = `${host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`
 
@@ -317,6 +326,35 @@ export default class SauceLabs {
             return res.body
         } catch (err) {
             throw new Error(`There was an error downloading asset ${assetName}: ${err.message}`)
+        }
+    }
+
+    async _uploadJobAssets (jobId, filePaths) {
+        const { servers, basePath, method, endpoint } = PROTOCOL_MAP.get('uploadJobAssets')
+        const uri = getAPIHost(servers, basePath, this._options) + endpoint.replace('{jobId}', jobId)
+        const body = new FormData()
+
+        for (const filePath of filePaths) {
+            const readStream = fs.createReadStream(filePath.startsWith('/')
+                ? filePath
+                : path.join(process.cwd(), filePath)
+            )
+            body.append('file[]', readStream)
+        }
+
+        try {
+            const res = await this._api.get(uri, { method, body })
+
+            /**
+             * parse asset as json if proper content type is given
+             */
+            if (res.headers['content-type'] === 'application/json' && typeof res.body === 'string') {
+                res.body = JSON.parse(res.body)
+            }
+
+            return res.body
+        } catch (err) {
+            throw new Error(`There was an error uploading assets: ${err.message}`)
         }
     }
 }
