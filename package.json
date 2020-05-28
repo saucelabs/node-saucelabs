@@ -84,8 +84,8 @@
       "global": {
         "branches": 93,
         "functions": 100,
-        "lines": 97,
-        "statements": 97
+        "lines": 98,
+        "statements": 98
       }
     },
     "testEnvironment": "node"

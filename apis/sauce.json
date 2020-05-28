@@ -773,6 +773,20 @@
     }
   },
   "parameters":{
+    "assetName": {
+      "description": "filename of the asset",
+      "in": "path",
+      "name": "assetName",
+      "required": true,
+      "type": "string"
+    },
+    "filepath": {
+      "description": "file path to store the asset at",
+      "in": "path",
+      "name": "filepath",
+      "required": false,
+      "type": "string"
+    },
     "filename":{
       "description":"filename",
       "in":"path",
@@ -2330,6 +2344,9 @@
           },
           {
             "$ref":"#/parameters/filename"
+          },
+          {
+            "$ref": "#/parameters/filepath"
           }
         ],
         "responses":{

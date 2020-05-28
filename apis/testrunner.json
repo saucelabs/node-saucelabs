@@ -122,17 +122,5 @@
         }
       }
     }
-  },
-  "security":[
-    {
-      "basicAuth":[
-
-      ]
-    },
-    {
-      "bearerAuth":[
-
-      ]
-    }
-  ]
+  }
 }
