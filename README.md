@@ -95,6 +95,12 @@ or download a job asset:
 $ sl downloadJobAsset 690c5877710c422d8be4c622b40c747f video.mp4 --filepath ./video.mp4
 ```
 
+or upload a job asset:
+
+```sh
+$ sl uploadJobAssets 690c5877710c422d8be4c622b40c747f --files ./video.mp4 --files ./log.json
+```
+
 or start Sauce Connect Proxy in EU datacenter:
 
 ```sh
@@ -123,12 +129,12 @@ import SauceLabs from 'saucelabs';
     // const myAccount = new SauceLabs({ user: "YOUR-USER", key: "YOUR-ACCESS-KEY"});
 
     // get job details of last run job
-    const job = await myAccount.listJobs(
+    const jobs = await myAccount.listJobs(
         process.env.SAUCE_USERNAME,
         { limit: 1, full: true }
     );
 
-    console.log(job);
+    console.log(jobs);
     /**
      * outputs:
      * { jobs:
@@ -181,8 +187,16 @@ import SauceLabs from 'saucelabs';
     })
 
     // run a test
+    // ...
 
+    // close Sauce Connect
     await sc.close()
+
+    // upload additional log files and attach it to your Sauce job
+    await myAccount.uploadJobAssets(
+        '76e693dbe6ff4910abb0bc3d752a971e',
+        ['video.mp4', 'log.json']
+    )
 })()
 ```
 

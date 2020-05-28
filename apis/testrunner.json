@@ -1,0 +1,141 @@
+{
+  "openapi":"3.0.0",
+  "info":{
+    "description":"A service that orchestrates the Sauce cloud as well as test runner packages.",
+    "version":"0.1.7",
+    "title":"Testrunner Orchestrator",
+    "termsOfService":"https://saucelabs.com/terms-of-service",
+    "contact":{
+      "name":"Open Source Program Office at Sauce",
+      "email":"opensource@saucelabs.com",
+      "url":"https://saucelabs.com"
+    }
+  },
+  "externalDocs":{
+    "description":"Sauce Labs Wiki",
+    "url":"https://wiki.saucelabs.com"
+  },
+  "basePath": "/v1/testrunner",
+  "servers":[
+    {
+      "url":"https://api.{region}.saucelabs.{tld}",
+      "variables":{
+        "region":{
+          "default":"us-west-1",
+          "description":"region of datacenter",
+          "enum":[
+            "us-west-1",
+            "eu-central-1",
+            "staging"
+          ]
+        },
+        "tld":{
+          "default":"com",
+          "description":"internal or external API",
+          "enum":[
+            "net",
+            "com"
+          ]
+        }
+      }
+    }
+  ],
+  "tags":[
+    {
+      "name":"Log Files",
+      "description":"Log files that were captured while the test was running."
+    }
+  ],
+  "parameters": {
+    "jobId": {
+      "in":"path",
+      "name":"jobId",
+      "required":true,
+      "description":"id of the job that was run on Sauce Labs",
+      "schema":{
+        "type":"string"
+      }
+    },
+    "files": {
+      "description": "s path to upload and attach to your job",
+      "in": "path",
+      "name": "files",
+      "required": false,
+      "type": "string"
+    }
+  },
+  "components":{
+    "securitySchemes":{
+      "bearerAuth":{
+        "type":"http",
+        "scheme":"bearer",
+        "bearerFormat":"JWT"
+      },
+      "basicAuth":{
+        "type":"http",
+        "scheme":"basic"
+      }
+    }
+  },
+  "paths":{
+    "/jobs/{jobId}/assets":{
+      "put":{
+        "operationId":"uploadJobAssets",
+        "summary":"Upload job assets",
+        "externalDocs":{
+          "description":"TBD",
+          "url":"https://wiki.saucelabs.com"
+        },
+        "tags":[
+          "Job"
+        ],
+        "parameters":[
+          {
+            "$ref": "#/parameters/jobId"
+          },
+          {
+            "$ref": "#/parameters/files"
+          }
+        ],
+        "requestBody":{
+          "content":{
+            "multipart/form-data":{
+              "schema":{
+                "type":"object",
+                "properties":{
+                  "file":{
+                    "type":"array",
+                    "items":{
+                      "type":"string",
+                      "format":"binary"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses":{
+          "200":{
+            "description":"Object containing list of uploaded files.",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"array",
+                  "items":{
+                    "type":"string",
+                    "description":"uploaded file name"
+                  },
+                  "example":[
+                    "log.json",
+                    "video.mp4"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

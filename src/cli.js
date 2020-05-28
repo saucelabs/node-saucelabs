@@ -56,7 +56,12 @@ export const run = () => {
                 return process.exit(1)
             }
 
-            return api
+            /**
+             * only return for testing purposes
+             */
+            if (process.env.JEST_WORKER_ID) {
+                return api
+            }
         })
     }
 

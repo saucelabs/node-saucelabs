@@ -1,6 +1,7 @@
 import util from 'util'
 import got from 'got'
 import { spawn } from 'child_process'
+import FormData from 'form-data'
 
 import SauceLabs from '../src'
 import { instances } from 'bin-wrapper'
@@ -59,6 +60,12 @@ test('should return public properties', () => {
     expect(api._accessKey).toBe(undefined)
 })
 
+test('should return nothing if Symbol was accessed', () => {
+    const sym = Symbol('foo')
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    expect(typeof api[sym]).toBe('undefined')
+})
+
 test('should grab username and access key from env variable', () => {
     jest.resetModules()
     process.env.SAUCE_USERNAME = 'barfoo'
@@ -100,7 +107,7 @@ test('should allow to call an API method with param in url', async () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     await api.getUserConcurrency('someuser')
     expect(got.mock.calls[0][0])
-        .toBe('https://saucelabs.com/rest/v1.1/users/someuser/concurrency')
+        .toBe('https://api.us-west-1.saucelabs.com/rest/v1.1/users/someuser/concurrency')
 })
 
 test('should allow to call an API method with param as option', async () => {
@@ -112,7 +119,7 @@ test('should allow to call an API method with param as option', async () => {
 
     const uri = got.mock.calls[0][0]
     const req = got.mock.calls[0][1]
-    expect(uri).toBe('https://saucelabs.com/rest/v1.1/someuser/jobs')
+    expect(uri).toBe('https://api.us-west-1.saucelabs.com/rest/v1.1/someuser/jobs')
     expect(req.searchParams).toEqual({
         limit: 123,
         full: true
@@ -246,6 +253,58 @@ test('should put asset into file as json file', async () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     await api.downloadJobAsset('some-id', 'performance.json', { filepath: '/asset.json' })
     expect(fs.writeFileSync).toBeCalledWith('/asset.json', undefined, { encoding: 'utf8' })
+})
+
+test('should allow to upload files', async () => {
+    fs.createReadStream.mockReturnValue({
+        name: '/somefile',
+        path: 'somepath',
+    })
+
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    const body = { foo: 'bar' }
+    got.mockReturnValue(Promise.resolve({
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(body)
+    }))
+    const result = await api.uploadJobAssets('some-id', {
+        files: ['log.json', 'selenium-server.json']
+    })
+
+    const { instances } = new FormData()
+    expect(instances[0].append).toBeCalledTimes(2)
+    expect(instances[0].append).toBeCalledWith('file[]', {name: '/somefile', path: 'somepath'})
+
+    const uri = got.mock.calls[0][0]
+    expect(uri).toBe('https://api.us-west-1.saucelabs.com/v1/testrunner/jobs/some-id/assets')
+
+    expect(result).toEqual(body)
+})
+
+test('should throw if custom error if upload fails', async () => {
+    fs.createReadStream.mockReturnValue({
+        name: '/somefile',
+        path: 'somepath',
+    })
+
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    got.mockReturnValue(Promise.reject(new Error('uups')))
+    const result = await api.uploadJobAssets('some-id', {
+        files: ['log.json', '/selenium-server.json']
+    })
+        .catch((err) => err)
+
+    expect(result.message).toBe('There was an error uploading assets: uups')
+})
+
+test('should not even try to upload if no files were selected', async () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    const result = await api.uploadJobAssets('some-id')
+        .catch((err) => err)
+
+    expect(result.message).toBe('No files to upload selected')
 })
 
 describe('startSauceConnect', () => {

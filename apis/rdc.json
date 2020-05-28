@@ -5,6 +5,12 @@
     "version":"1.0.0",
     "title":"API Reference"
   },
+  "servers":[
+    {
+      "url":"https://app.testobject.com",
+      "variables":{}
+    }
+  ],
   "host":"app.testobject.com",
   "basePath":"/api/rest",
   "tags":[

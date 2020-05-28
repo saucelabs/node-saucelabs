@@ -11,6 +11,14 @@ const {
 
 function generateTypingsForApi(file) {
     const swagger = JSON.parse(fs.readFileSync(file, 'UTF-8'))
+
+    if (swagger.swagger !== '2.0') {
+        return console.log(
+            `Specification for ${file} has not the Swagger v2 format.\n` +
+            'TypeScript generation currently is only supported for Swagger v2.0.'
+        )
+    }
+
     const definitions = CodeGen.getTypescriptCode({
         className: 'SauceLabs',
         swagger,
@@ -56,12 +64,13 @@ fs.readdir(path.join(__dirname, '../apis'), (err, files) => {
     let result = `${TS_IMPORTS}\n${TS_SAUCELABS_OBJ}\n${TC_SAUCE_CONNECT_CLASS}\n${TC_SAUCE_CONNECT_OBJ}`
     const methods = [
         TC_START_SC,
-        ...files.map((api) => {
-            const typings = generateTypingsForApi('./apis/' + api)
-            result += `\n\n ${typings.defintions}`
-
-            return typings.methods
-        })
+        ...files
+            .map((api) => generateTypingsForApi('./apis/' + api))
+            .filter(Boolean)
+            .map((typings) => {
+                result += `\n\n ${typings.defintions}`
+                return typings.methods
+            })
     ].join('\n\n')
 
     result += `\n\ndeclare class SauceLabs {\n

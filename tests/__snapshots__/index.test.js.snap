@@ -9,7 +9,7 @@ Array [
       "--tunnel-identifier=my-tunnel",
       "--user=foo",
       "--api-key=bar",
-      "--rest-url=https://us-east-1.saucelabs.com/rest/v1",
+      "--rest-url=https://api.us-east-1.saucelabs.com/rest/v1",
     ],
   ],
 ]
