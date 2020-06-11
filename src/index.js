@@ -27,7 +27,7 @@ export default class SauceLabs {
         this._api = got.extend({
             username: this.username,
             password: this._accessKey,
-            rejectUnauthorized: getStrictSsl(),
+            https: { rejectUnauthorized: getStrictSsl() },
             followRedirect: true,
         })
 
