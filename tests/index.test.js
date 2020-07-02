@@ -357,6 +357,16 @@ describe('startSauceConnect', () => {
         const res = await api.startSauceConnect({ tunnelIdentifier: 'my-tunnel' }).catch((err) => err)
         expect(res).toEqual(new Error('Uuups'))
     })
+
+    it('should not overwrite rest-url if given as a parameter', async () => {
+        const api = new SauceLabs({ user: 'foo', key: 'bar'})
+        setTimeout(() => stdoutEmitter.emit('data', 'Sauce Connect is up, you may start your tests'), 50)
+        await api.startSauceConnect({
+            tunnelIdentifier: 'my-tunnel',
+            restUrl: 'https://us1.api.testobject.com/sc/rest/v1'
+        })
+        expect(spawn.mock.calls).toMatchSnapshot()
+    })
 })
 
 afterEach(() => {

@@ -1,5 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`startSauceConnect should not overwrite rest-url if given as a parameter 1`] = `
+Array [
+  Array [
+    "/foo/bar",
+    Array [
+      "--tunnel-identifier=my-tunnel",
+      "--rest-url=https://us1.api.testobject.com/sc/rest/v1",
+      "--user=foo",
+      "--api-key=bar",
+    ],
+  ],
+]
+`;
+
 exports[`startSauceConnect should start sauce connect with proper parsed args 1`] = `
 Array [
   Array [
