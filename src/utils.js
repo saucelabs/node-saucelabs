@@ -146,19 +146,23 @@ export function isValidType (option, expectedType) {
 export function createProxyAgent (proxy) {
     var proxyURL = url.parse(proxy)
     if (proxyURL.protocol === 'https:') {
-        return tunnel.httpsOverHttps({
-            proxy: {
-                host: proxyURL.hostname,
-                port: proxyURL.port
-            }
-        })
+        return {
+            https: tunnel.httpsOverHttps({
+                proxy: {
+                    host: proxyURL.hostname,
+                    port: proxyURL.port
+                }
+            })
+        }
     } else if (proxyURL.protocol === 'http:') {
-        return tunnel.httpsOverHttp({
-            proxy: {
-                host: proxyURL.hostname,
-                port: proxyURL.port
-            }
-        })
+        return {
+            https: tunnel.httpsOverHttp({
+                proxy: {
+                    host: proxyURL.hostname,
+                    port: proxyURL.port
+                }
+            })
+        }
     }
 
     throw new Error('Only http and https protocols are supported for proxying traffic.'
