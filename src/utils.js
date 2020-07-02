@@ -39,7 +39,7 @@ export function getAPIHost (servers, basePath, options) {
      * allows to set an arbitrary host (for internal use only)
      */
     const apiUrl = options.host || servers[0].url
-    let host = DEFAULT_PROTOCOL + path.join(apiUrl.replace(DEFAULT_PROTOCOL, ''), basePath)
+    let host = DEFAULT_PROTOCOL + apiUrl.replace(DEFAULT_PROTOCOL, '') + basePath
 
     /**
      * allow short region handles to stay backwards compatible
