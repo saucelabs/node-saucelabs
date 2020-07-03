@@ -223,10 +223,12 @@ export default class SauceLabs {
              */
             .filter(([k]) => !k.match(/[A-Z]/g))
             .map(([k, v]) => `--${k}=${v}`)
-
         args.push(`--user=${this.username}`)
         args.push(`--api-key=${this._accessKey}`)
-        args.push(`--rest-url=${restUrl}`)
+
+        if (!args.some(arg => arg.startsWith("--rest-url"))) {
+            args.push(`--rest-url=${restUrl}`)
+        }
 
         const bin = SAUCE_CONNECT_DISTS.reduce((bin, [downloadUrl, ...args]) => {
             bin.src(util.format(downloadUrl, sauceConnectVersion), ...args)
