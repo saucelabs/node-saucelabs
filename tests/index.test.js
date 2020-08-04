@@ -107,7 +107,7 @@ test('should allow to call an API method with param in url', async () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
     await api.getUserConcurrency('someuser')
     expect(got.mock.calls[0][0])
-        .toBe('https://api.us-west-1.saucelabs.com/rest/v1.1/users/someuser/concurrency')
+        .toBe('https://api.us-west-1.saucelabs.com/rest/v1.2/users/someuser/concurrency')
 })
 
 test('should allow to call an API method with param as option', async () => {

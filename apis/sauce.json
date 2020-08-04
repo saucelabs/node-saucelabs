@@ -226,7 +226,7 @@
       "properties":{
         "concurrency":{
           "additionalProperties":{
-            "$ref":"#/definitions/SubAccountConcurrencyValues"
+            "$ref":"#/definitions/OrgTeamConcurrencyValues"
           },
           "type":"object"
         },
@@ -260,14 +260,17 @@
     },
     "ConcurrencyValues":{
       "properties":{
-        "mac":{
+        "mac_vms":{
           "type":"integer"
         },
-        "manual":{
+        "rds":{
           "type":"integer"
         },
-        "overall":{
+        "vms":{
           "type":"integer"
+        },
+        "id":{
+          "type":"string"
         }
       },
       "type":"object"
@@ -507,12 +510,12 @@
       },
       "type":"object"
     },
-    "SubAccountConcurrencyValues":{
+    "OrgTeamConcurrencyValues":{
       "properties":{
         "current":{
           "$ref":"#/definitions/ConcurrencyValues"
         },
-        "remaining":{
+        "allowed":{
           "$ref":"#/definitions/ConcurrencyValues"
         }
       },
@@ -969,7 +972,7 @@
         ]
       }
     },
-    "/v1.1/users/{username}/concurrency":{
+    "/v1.2/users/{username}/concurrency":{
       "get":{
         "operationId":"get_user_concurrency",
         "parameters":[
