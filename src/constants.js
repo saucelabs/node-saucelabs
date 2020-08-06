@@ -1,7 +1,7 @@
 import { camelCase } from 'change-case'
 import { version } from '../package.json'
 
-export const DEFAULT_SAUCE_CONNECT_VERSION = '4.5.4'
+export const DEFAULT_SAUCE_CONNECT_VERSION = '4.6.2'
 export const SAUCE_CONNECT_BASE = 'https://saucelabs.com/downloads'
 export const SAUCE_CONNECT_DISTS = [
     [`${SAUCE_CONNECT_BASE}/sc-%s-osx.zip`, 'darwin'],
