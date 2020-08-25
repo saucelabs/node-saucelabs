@@ -237,18 +237,6 @@ Below, you can find the list of the mapped method names:
 | getSubAccountList(callback) | ? |
 | getSubAccounts(callback) | ? |
 
-## Test
+---
 
-To run the test suite, first invoke the following command within the repo, installing the development dependencies:
-
-```shell
-npm install
-```
-
-Then run the tests:
-
-```shell
-npm test
-```
-
-> This module was originally created by [Dan Jenkins](https://github.com/danjenkins) with the help of multiple contributors ([Daniel Perez Alvarez](https://github.com/unindented), [Mathieu Sabourin](https://github.com/OniOni), [Michael J Feher](https://github.com/PhearZero), and many more). We would like to thank Dan and all contributors for their support and this beautiful module.
+This module was originally created by [Dan Jenkins](https://github.com/danjenkins) with the help of multiple contributors ([Daniel Perez Alvarez](https://github.com/unindented), [Mathieu Sabourin](https://github.com/OniOni), [Michael J Feher](https://github.com/PhearZero), and many more). We would like to thank Dan and all contributors for their support and this beautiful module.
