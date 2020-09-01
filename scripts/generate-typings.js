@@ -74,7 +74,13 @@ fs.readdir(path.join(__dirname, '../apis'), (err, files) => {
     ].join('\n\n')
 
     result += `\n\ndeclare class SauceLabs {\n
-    constructor(options: SauceLabsOptions)\n\n
+    constructor(options: SauceLabsOptions)
+
+    username: string;
+    region: string;
+    tld: string;
+    headless: boolean;
+    webdriverEndpoint: string;\n\n
     ${methods}
 }
 
