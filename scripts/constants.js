@@ -28,9 +28,9 @@ export interface SauceLabsOptions {
      */
     headless?: boolean;
     /**
-     * If you want to tunnel your API request through a proxy please see the [got proxy docs](https://github.com/sindresorhus/got/blob/master/readme.md#proxies) for more information.
+     * If you want to tunnel your API request through a proxy please provide your proxy URL.
      */
-    proxy?: object;
+    proxy?: string;
 }`
 
 exports.TC_SAUCE_CONNECT_OBJ = `

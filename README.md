@@ -50,9 +50,9 @@ Default: `false`
 
 ### proxy
 
-If you want to tunnel your API request through a proxy please see the [got proxy docs](https://github.com/sindresorhus/got/blob/master/readme.md#proxies) for more information.
+If you want to tunnel your API request through a proxy please provide your proxy URL.
 
-Type: `object`<br>
+Type: `string`<br>
 Default: `null`
 
 ## Usage
