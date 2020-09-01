@@ -31,7 +31,7 @@ export default class SauceLabs {
             followRedirect: true,
         })
 
-        if (this._options.proxy !== undefined) {
+        if (typeof this._options.proxy === 'string') {
             var proxyAgent = createProxyAgent(this._options.proxy)
             this._api = got.extend({
                 agent: proxyAgent
