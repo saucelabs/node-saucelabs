@@ -4,7 +4,7 @@ const api = new SauceLabs({
     region: 'eu',
     user: 'foo',
     key: 'foobar',
-    proxy: {},
+    proxy: 'barfoo',
     headless: false
 });
 
