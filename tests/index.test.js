@@ -33,13 +33,25 @@ beforeEach(() => {
 
 test('should be inspectable', () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
-    expect(util.inspect(api)).toContain(`{
-  username: 'foo',
-  key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXbar',
-  region: 'us',
-  headless: false,
-  proxy: undefined
-}`)
+    expect(util.inspect(api)).toMatchSnapshot()
+})
+
+test('should expose a webdriverEndpoint', () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    expect(api.webdriverEndpoint)
+        .toBe('https://ondemand.us-west-1.saucelabs.com/')
+
+    const api2 = new SauceLabs({ user: 'foo', key: 'bar', region: 'eu' })
+    expect(api2.webdriverEndpoint)
+        .toBe('https://ondemand.eu-central-1.saucelabs.com/')
+
+    const api3 = new SauceLabs({ user: 'foo', key: 'bar', region: 'eu', headless: true })
+    expect(api3.webdriverEndpoint)
+        .toBe('https://ondemand.us-east-1.saucelabs.com/')
+
+    const api4 = new SauceLabs({ user: 'foo', key: 'bar', region: 'us-central-3' })
+    expect(api4.webdriverEndpoint)
+        .toBe('https://ondemand.us-central-3.saucelabs.com/')
 })
 
 test('should have to string tag', () => {

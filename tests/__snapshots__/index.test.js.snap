@@ -1,5 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`should be inspectable 1`] = `
+"{
+  username: 'foo',
+  key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXbar',
+  region: 'us',
+  headless: false,
+  proxy: undefined,
+  webdriverEndpoint: 'https://ondemand.us-west-1.saucelabs.com/'
+}"
+`;
+
 exports[`startSauceConnect should not overwrite rest-url if given as a parameter 1`] = `
 Array [
   Array [

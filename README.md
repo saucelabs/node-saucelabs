@@ -128,6 +128,9 @@ import SauceLabs from 'saucelabs';
     // using constructor options
     // const myAccount = new SauceLabs({ user: "YOUR-USER", key: "YOUR-ACCESS-KEY"});
 
+    // get full webdriver url from the client depending on region:
+    console.log(myAccount.webdriverEndpoint) // outputs "https://ondemand.us-west-1.saucelabs.com/"
+
     // get job details of last run job
     const jobs = await myAccount.listJobs(
         process.env.SAUCE_USERNAME,
@@ -201,6 +204,22 @@ import SauceLabs from 'saucelabs';
 ```
 
 > You may wonder why `listJobs` requires a `username` as first parameter since you've already defined the process.env. The reason for this is that Sauce Labs supports a concept of Team Accounts, so-called sub-accounts, grouped together. As such functions like the mentioned could list jobs not only for the requesting account, but also for the individual team account. Learn more about it [here](https://wiki.saucelabs.com/display/DOCS/Managing+Team+Members+and+Accounts)
+
+### `webdriverEndpoint` property
+
+You can use the `webdriverEndpoint` property of the client to get the full WebDriver endpoint to connect to Sauce Labs, e.g.:
+
+```js
+const myAccount = new SauceLabs({
+    user: "YOUR-USER",
+    key: "YOUR-ACCESS-KEY",
+    region: 'eu' // run in EU datacenter
+});
+
+// get full webdriver url from the client depending on `region` and `headless` option:
+console.log(myAccount.webdriverEndpoint);
+// outputs: "https://ondemand.eu-central-1.saucelabs.com/"
+```
 
 ## Breaking changes from v1 to v2
 

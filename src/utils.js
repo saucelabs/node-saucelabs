@@ -1,7 +1,6 @@
 import crypto from 'crypto'
 import tunnel from 'tunnel'
 import url from 'url'
-import path from 'path'
 
 import { ASSET_REGION_MAPPING, TO_STRING_TAG, PARAMETERS_MAP, DEFAULT_PROTOCOL } from './constants'
 
@@ -27,11 +26,24 @@ export function createHMAC (username, key, jobId) {
 }
 
 /**
+ * Translate region shorthandle option into the full region
+ * @param  {object}  options  client options
+ * @return {string}           full region
+ */
+export function getRegionSubDomain (options = {}) {
+    let region = options.region || 'us-west-1'
+
+    if (options.region === 'us') region = 'us-west-1'
+    if (options.region === 'eu') region = 'eu-central-1'
+    if (options.headless) region = 'us-east-1'
+    return region
+}
+
+/**
  * get sauce API url
- * @param  {string}  hostname  host name of the API that is being used
- * @param  {string}  region    region of the datacenter
- * @param  {boolean} headless  true if job is running on headless instance
- * @param  {string}  protocol  protcol to be used
+ * @param  {string}  servers   OpenAPI spec servers property
+ * @param  {string}  basePath  OpenAPI spec base path
+ * @param  {object}  options   client options
  * @return {string}            endpoint base url (e.g. `https://us-east1.headless.saucelabs.com`)
  */
 export function getAPIHost (servers, basePath, options) {
@@ -46,9 +58,7 @@ export function getAPIHost (servers, basePath, options) {
      * ToDo(Christian): consider to remove when making a breaking update
      */
     if (options.region) {
-        if (options.region === 'us') options.region = 'us-west-1'
-        if (options.region === 'eu') options.region = 'eu-central-1'
-        if (options.headless) options.region = 'us-east-1'
+        options.region = getRegionSubDomain(options)
     }
 
     for (const [option, value] of Object.entries(servers[0].variables)) {
