@@ -30,10 +30,19 @@ beforeEach(() => {
     spawn.mockClear()
     process.kill = jest.fn()
 })
-
 test('should be inspectable', () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
-    expect(util.inspect(api)).toMatchSnapshot()
+    /**
+     * we can't use snapshotting here as the result varies
+     * between different node versions
+     */
+    expect(util.inspect(api)).toContain(`{
+  username: 'foo',
+  key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXbar',
+  region: 'us',
+  headless: false,
+  proxy: undefined
+}`)
 })
 
 test('should expose a webdriverEndpoint', () => {
