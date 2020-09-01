@@ -10,7 +10,7 @@ import { camelCase } from 'change-case'
 
 import {
     createHMAC, getAPIHost, getAssetHost, toString, getParameters,
-    isValidType, createProxyAgent, getStrictSsl
+    isValidType, createProxyAgent, getStrictSsl, getRegionSubDomain
 } from './utils'
 import {
     PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT, SYMBOL_TOSTRING,
@@ -44,13 +44,15 @@ export default class SauceLabs {
         this.region = this._options.region
         this.tld = this._options.tld
         this.headless = this._options.headless
+        this.webdriverEndpoint = `https://ondemand.${getRegionSubDomain(options)}.saucelabs.com/`
 
         return new Proxy({
             username: this.username,
             key: `XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX${(this._accessKey || '').slice(-6)}`,
             region: this._options.region,
             headless: this._options.headless,
-            proxy: this._options.proxy
+            proxy: this._options.proxy,
+            webdriverEndpoint: this.webdriverEndpoint
         }, { get: ::this.get })
     }
 
@@ -226,7 +228,7 @@ export default class SauceLabs {
         args.push(`--user=${this.username}`)
         args.push(`--api-key=${this._accessKey}`)
 
-        if (!args.some(arg => arg.startsWith("--rest-url"))) {
+        if (!args.some(arg => arg.startsWith('--rest-url'))) {
             args.push(`--rest-url=${restUrl}`)
         }
 

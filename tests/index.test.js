@@ -30,16 +30,36 @@ beforeEach(() => {
     spawn.mockClear()
     process.kill = jest.fn()
 })
-
 test('should be inspectable', () => {
     const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    /**
+     * we can't use snapshotting here as the result varies
+     * between different node versions
+     */
     expect(util.inspect(api)).toContain(`{
   username: 'foo',
   key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXbar',
   region: 'us',
   headless: false,
-  proxy: undefined
-}`)
+  proxy: undefined`)
+})
+
+test('should expose a webdriverEndpoint', () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    expect(api.webdriverEndpoint)
+        .toBe('https://ondemand.us-west-1.saucelabs.com/')
+
+    const api2 = new SauceLabs({ user: 'foo', key: 'bar', region: 'eu' })
+    expect(api2.webdriverEndpoint)
+        .toBe('https://ondemand.eu-central-1.saucelabs.com/')
+
+    const api3 = new SauceLabs({ user: 'foo', key: 'bar', region: 'eu', headless: true })
+    expect(api3.webdriverEndpoint)
+        .toBe('https://ondemand.us-east-1.saucelabs.com/')
+
+    const api4 = new SauceLabs({ user: 'foo', key: 'bar', region: 'us-central-3' })
+    expect(api4.webdriverEndpoint)
+        .toBe('https://ondemand.us-central-3.saucelabs.com/')
 })
 
 test('should have to string tag', () => {
