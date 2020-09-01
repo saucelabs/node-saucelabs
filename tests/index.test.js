@@ -41,8 +41,7 @@ test('should be inspectable', () => {
   key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXbar',
   region: 'us',
   headless: false,
-  proxy: undefined
-}`)
+  proxy: undefined`)
 })
 
 test('should expose a webdriverEndpoint', () => {
