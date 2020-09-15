@@ -327,6 +327,16 @@ test('should not even try to upload if no files were selected', async () => {
     expect(result.message).toBe('No files to upload selected')
 })
 
+test('should contain custom headers', async () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar', headers: { 'user-agent': 'foo' } })
+    got.mockReturnValue(Promise.resolve({
+        body: JSON.stringify({ foo: 'bar' })
+    }))
+    await api.updateTest('123', '{ "passed": false }')
+    const requestOptions = got.extend.mock.calls[0][0]
+    expect(requestOptions.headers).toMatchSnapshot()
+})
+
 describe('startSauceConnect', () => {
     it('should start sauce connect with proper parsed args', async () => {
         const logs = []
@@ -386,13 +396,6 @@ describe('startSauceConnect', () => {
             restUrl: 'https://us1.api.testobject.com/sc/rest/v1'
         })
         expect(spawn.mock.calls).toMatchSnapshot()
-    })
-
-    test('should contain custom headers', () => {
-        const SauceLabsNew = require('../src').default
-        const api = new SauceLabsNew({ headers: { 'user-agent': 'foo' } })
-        expect(util.inspect(api))
-            .toContain('headers: { \'user-agent\': \'foo\' }')
     })
 })
 
