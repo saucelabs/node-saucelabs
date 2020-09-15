@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`should contain custom headers 1`] = `
+Object {
+  "user-agent": "foo",
+}
+`;
+
 exports[`startSauceConnect should not overwrite rest-url if given as a parameter 1`] = `
 Array [
   Array [

@@ -29,6 +29,7 @@ export default class SauceLabs {
             password: this._accessKey,
             https: { rejectUnauthorized: getStrictSsl() },
             followRedirect: true,
+            headers: this._options.headers
         })
 
         if (typeof this._options.proxy === 'string') {
@@ -52,7 +53,8 @@ export default class SauceLabs {
             region: this._options.region,
             headless: this._options.headless,
             proxy: this._options.proxy,
-            webdriverEndpoint: this.webdriverEndpoint
+            webdriverEndpoint: this.webdriverEndpoint,
+            headers: this._options.headers
         }, { get: ::this.get })
     }
 
