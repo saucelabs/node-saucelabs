@@ -69,7 +69,8 @@ export const DEFAULT_OPTIONS = {
     key: process.env.SAUCE_ACCESS_KEY,
     headless: false,
     region: 'us',
-    proxy: process.env.HTTPS_PROXY || process.env.HTTP_PROXY
+    proxy: process.env.HTTPS_PROXY || process.env.HTTP_PROXY,
+    headers: { 'user-agent': SAUCE_VERSION_NOTE },
 }
 
 export const ASSET_REGION_MAPPING = {
