@@ -31,6 +31,10 @@ export interface SauceLabsOptions {
      * If you want to tunnel your API request through a proxy please provide your proxy URL.
      */
     proxy?: string;
+    /**
+     * If you want to set request headers, as example {'User-Agent': 'node-saucelabs'}
+     */
+    headers?: object;
 }`
 
 exports.TC_SAUCE_CONNECT_OBJ = `

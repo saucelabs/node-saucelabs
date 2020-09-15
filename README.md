@@ -55,6 +55,13 @@ If you want to tunnel your API request through a proxy please provide your proxy
 Type: `string`<br>
 Default: `null`
 
+### headers
+
+If you want to set request headers, as example {'User-Agent': 'node-saucelabs'}
+
+Type: `object`<br>
+Default: `{'User-Agent': 'saucelabs/<VERSION> (nodejs <PLATFORM>)'}`
+
 ## Usage
 
 All accessible API commands with descriptions can be found [here](docs/interface.md).

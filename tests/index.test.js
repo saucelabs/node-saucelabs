@@ -387,6 +387,13 @@ describe('startSauceConnect', () => {
         })
         expect(spawn.mock.calls).toMatchSnapshot()
     })
+
+    test('should contain custom headers', () => {
+        const SauceLabsNew = require('../src').default
+        const api = new SauceLabsNew({ headers: { 'user-agent': 'foo' } })
+        expect(util.inspect(api))
+            .toContain('headers: { \'user-agent\': \'foo\' }')
+    })
 })
 
 afterEach(() => {

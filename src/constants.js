@@ -1,4 +1,6 @@
 import { camelCase } from 'change-case'
+import os from 'os'
+
 import { version } from '../package.json'
 
 export const DEFAULT_SAUCE_CONNECT_VERSION = '4.6.2'
@@ -70,7 +72,7 @@ export const DEFAULT_OPTIONS = {
     headless: false,
     region: 'us',
     proxy: process.env.HTTPS_PROXY || process.env.HTTP_PROXY,
-    headers: { 'user-agent': SAUCE_VERSION_NOTE },
+    headers: { 'User-Agent': `saucelabs/v${version} (nodejs ${os.platform()})` },
 }
 
 export const ASSET_REGION_MAPPING = {
