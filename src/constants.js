@@ -160,7 +160,8 @@ export const SAUCE_CONNECT_CLI_PARAMS = [{
     description: 'Use specified name server. To specify multiple servers, separate them with comma. Use IP addresses, optionally with a port number, the two separated by a colon. Example: --dns 8.8.8.8,8.8.4.4:53'
 }, {
     name: 'doctor',
-    description: 'Perform checks to detect possible misconfiguration or problems.'
+    description: 'Perform checks to detect possible misconfiguration or problems.',
+    type: 'boolean'
 }, {
     alias: 'F',
     name: 'fast-fail-regexps',
@@ -189,14 +190,17 @@ export const SAUCE_CONNECT_CLI_PARAMS = [{
     description: 'host:port for the internal web server used to expose client side metrics. (default "localhost:8888")'
 }, {
     name: 'no-autodetect',
-    description: 'Disable the autodetection of proxy settings.'
+    description: 'Disable the autodetection of proxy settings.',
+    type: 'boolean'
 }, {
     alias: 'N',
     name: 'no-proxy-caching',
-    description: 'Disable caching in Sauce Connect. All requests will be sent through the tunnel.'
+    description: 'Disable caching in Sauce Connect. All requests will be sent through the tunnel.',
+    type: 'boolean'
 }, {
     name: 'no-remove-colliding-tunnels',
-    description: 'Don\'t remove identified tunnels with the same name, or any other default tunnels if this is a default tunnel. Jobs will be distributed between these tunnels, enabling load balancing and high availability. By default, colliding tunnels will be removed when Sauce Connect is starting up.'
+    description: 'Don\'t remove identified tunnels with the same name, or any other default tunnels if this is a default tunnel. Jobs will be distributed between these tunnels, enabling load balancing and high availability. By default, colliding tunnels will be removed when Sauce Connect is starting up.',
+    type: 'boolean'
 }, {
     alias: 'B',
     name: 'no-ssl-bump-domains',
@@ -211,7 +215,8 @@ export const SAUCE_CONNECT_CLI_PARAMS = [{
 }, {
     alias: 'T',
     name: 'proxy-tunnel',
-    description: 'Use the proxy configured with -p for the tunnel connection.'
+    description: 'Use the proxy configured with -p for the tunnel connection.',
+    type: 'boolean'
 }, {
     alias: 'w',
     name: 'proxy-userpwd',
@@ -243,7 +248,8 @@ export const SAUCE_CONNECT_CLI_PARAMS = [{
 }, {
     alias: 's',
     name: 'shared-tunnel',
-    description: 'Let sub-accounts of the tunnel owner use the tunnel if requested.'
+    description: 'Let sub-accounts of the tunnel owner use the tunnel if requested.',
+    type: 'boolean'
 }, {
     name: 'tunnel-cainfo',
     description: 'CA certificate bundle to use for verifying tunnel connections. (default "/usr/local/etc/openssl/cert.pem")'
