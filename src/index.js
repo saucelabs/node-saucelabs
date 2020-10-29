@@ -16,7 +16,7 @@ import {
     PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT, SYMBOL_TOSTRING,
     SYMBOL_ITERATOR, TO_STRING_TAG, SAUCE_CONNECT_DISTS,
     SC_PARAMS_TO_STRIP, SC_READY_MESSAGE, SC_CLOSE_MESSAGE,
-    SC_CLOSE_TIMEOUT, DEFAULT_SAUCE_CONNECT_VERSION, SC_FAILURE_MESSAGE
+    SC_CLOSE_TIMEOUT, DEFAULT_SAUCE_CONNECT_VERSION, SC_FAILURE_MESSAGE, SAUCE_CONNECT_VERSIONS_ENDPOINT
 } from './constants'
 
 export default class SauceLabs {
@@ -214,7 +214,10 @@ export default class SauceLabs {
             }
         }
 
-        const sauceConnectVersion = argv.scVersion || DEFAULT_SAUCE_CONNECT_VERSION
+        let sauceConnectVersion = argv.scVersion
+        if (!sauceConnectVersion) {
+            sauceConnectVersion = await this._getLatestSauceConnectVersion()
+        }
         const { servers, basePath } = PROTOCOL_MAP.get('listJobs')
         const restUrl = getAPIHost(servers, basePath, this._options) + '/v1'
         const args = Object.entries(argv)
@@ -289,6 +292,17 @@ export default class SauceLabs {
             process.on('SIGINT', close)
             return returnObj
         })
+    }
+
+    async _getLatestSauceConnectVersion () {
+        try {
+            const {body} = await this._api.get(SAUCE_CONNECT_VERSIONS_ENDPOINT, {responseType: 'json'})
+            const responseJson = body.data
+            return responseJson['Sauce Connect']['version']
+        } catch (err) {
+            // fallback
+            return DEFAULT_SAUCE_CONNECT_VERSION
+        }
     }
 
     async _downloadJobAsset (jobId, assetName, { filepath } = {}) {
