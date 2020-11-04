@@ -219,7 +219,7 @@ export default class SauceLabs {
             sauceConnectVersion = await this._getLatestSauceConnectVersion()
         }
         const { servers, basePath } = PROTOCOL_MAP.get('listJobs')
-        const restUrl = getAPIHost(servers, basePath, this._options) + '/v1'
+        const restUrl = getAPIHost(servers, basePath, this._options).replace(/api\.(us-west-1\.)?/, '') + '/v1'
         const args = Object.entries(argv)
             /**
              * filter out yargs, yargs params and custom parameters
