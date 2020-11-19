@@ -1,0 +1,74 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "A service that orchestrates the Sauce cloud as well as test runner packages.",
+    "version": "0.1.7",
+    "title": "Testrunner Data Store Orchestrator",
+    "termsOfService": "https://saucelabs.com/terms-of-service",
+    "contact": {
+      "name": "Open Source Program Office at Sauce",
+      "email": "opensource@saucelabs.com",
+      "url": "https://saucelabs.com"
+    }
+  },
+  "externalDocs": {
+    "description": "Sauce Labs Wiki",
+    "url": "https://wiki.saucelabs.com"
+  },
+  "basePath": "/v1",
+  "servers": [
+    {
+      "url": "https://api.staging.saucelabs.net"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "paths": {
+    "/test-results/": {
+      "post": {
+        "description": "create test result via data store",
+        "operationId": "createTestResult",
+        "parameters": [
+          {
+            "name": "parameters",
+            "required": true,
+            "description": "create test result request body",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "externalDocs": {
+          "description": "TBD",
+          "url": "https://wiki.saucelabs.com"
+        },
+        "tags": [
+          "Job"
+        ],
+        "responses": {
+          "200": {
+            "description": "create test result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "json"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
