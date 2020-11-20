@@ -388,7 +388,7 @@ export default class SauceLabs {
 
     async _createTestResult(parameters) {
         const { servers, basePath, method, endpoint } = PROTOCOL_MAP.get('createTestResult')
-        const uri = servers[0].url + basePath + endpoint;
+        const uri = getAPIHost(servers, basePath, this._options) + endpoint
  
         try {
             const res = await this._api(uri, {

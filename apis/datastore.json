@@ -18,7 +18,26 @@
   "basePath": "/v1",
   "servers": [
     {
-      "url": "https://api.staging.saucelabs.net"
+      "url": "https://api.{region}.saucelabs.{tld}",
+      "variables": {
+        "region": {
+          "default": "us-west-1",
+          "description": "region of datacenter",
+          "enum": [
+            "us-west-1",
+            "eu-central-1",
+            "staging"
+          ]
+        },
+        "tld": {
+          "default": "com",
+          "description": "internal or external API",
+          "enum": [
+            "net",
+            "com"
+          ]
+        }
+      }
     }
   ],
   "components": {
