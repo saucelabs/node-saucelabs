@@ -15,7 +15,7 @@
     "description": "Sauce Labs Wiki",
     "url": "https://wiki.saucelabs.com"
   },
-  "basePath": "/v1",
+  "basePath": "/v1/test-results",
   "servers": [
     {
       "url": "https://api.{region}.saucelabs.{tld}",
@@ -54,7 +54,7 @@
     }
   },
   "paths": {
-    "/test-results/": {
+    "/": {
       "post": {
         "description": "create test result via data store",
         "operationId": "createTestResult",
