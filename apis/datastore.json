@@ -3,7 +3,7 @@
   "info": {
     "description": "A service that orchestrates the Sauce cloud as well as test runner packages.",
     "version": "0.1.7",
-    "title": "Testrunner Data Store Orchestrator",
+    "title": "Testrunner Data Store Job Orchestrator",
     "termsOfService": "https://saucelabs.com/terms-of-service",
     "contact": {
       "name": "Open Source Program Office at Sauce",
@@ -56,13 +56,13 @@
   "paths": {
     "/": {
       "post": {
-        "description": "create test result via data store",
+        "description": "create test result job via data store",
         "operationId": "createTestResult",
         "parameters": [
           {
             "name": "parameters",
             "required": true,
-            "description": "create test result request body",
+            "description": "create test result job request body",
             "schema": {
               "type": "string"
             }
@@ -77,7 +77,7 @@
         ],
         "responses": {
           "200": {
-            "description": "create test result",
+            "description": "create test result job",
             "content": {
               "application/json": {
                 "schema": {
