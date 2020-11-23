@@ -57,7 +57,7 @@
     "/": {
       "post": {
         "description": "create test result job via data store",
-        "operationId": "createTestResult",
+        "operationId": "createResultJob",
         "parameters": [
           {
             "name": "parameters",

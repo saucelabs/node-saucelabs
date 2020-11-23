@@ -98,8 +98,8 @@ export default class SauceLabs {
             return ::this._uploadJobAssets
         }
 
-        if (propName === 'createTestResult') {
-            return ::this._createTestResult
+        if (propName === 'createResultJob') {
+            return ::this._createResultJob
         }
 
         /**
@@ -386,8 +386,8 @@ export default class SauceLabs {
         }
     }
 
-    async _createTestResult(parameters) {
-        const { servers, basePath, method, endpoint } = PROTOCOL_MAP.get('createTestResult')
+    async _createResultJob(parameters) {
+        const { servers, basePath, method, endpoint } = PROTOCOL_MAP.get('createResultJob')
         const uri = getAPIHost(servers, basePath, this._options) + endpoint
  
         try {
