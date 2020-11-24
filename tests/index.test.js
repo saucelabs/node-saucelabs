@@ -341,6 +341,33 @@ test('should contain custom headers', async () => {
     expect(requestOptions.headers).toMatchSnapshot()
 })
 
+test('should create test result job', async () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar'})
+    const body = { foo: 'bar' }
+    const parameters = {"name": "string"}
+    got.mockReturnValue(Promise.resolve({
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(body)
+    }))
+    const result = await api.createResultJob(parameters)
+
+    const uri = got.mock.calls[0][0]
+    expect(uri).toBe('https://api.us-west-1.saucelabs.com/v1/test-results/')
+
+    expect(result).toEqual(JSON.stringify(body))
+})
+
+test('should throw if creating test result job failes', async () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar'})
+    got.mockReturnValue(Promise.reject(new Error('uups')))
+
+    const result = await api.createResultJob({})
+        .catch((err) => err)
+    expect(result.message).toBe('There was an error create test results: uups')
+})
+
 describe('startSauceConnect', () => {
     it('should start sauce connect with proper parsed args', async () => {
         const logs = []
