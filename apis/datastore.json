@@ -60,6 +60,7 @@
         "operationId": "createResultJob",
         "parameters": [
           {
+            "in": "body",
             "name": "parameters",
             "required": true,
             "description": "create test result job request body",

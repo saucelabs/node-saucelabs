@@ -98,10 +98,6 @@ export default class SauceLabs {
             return ::this._uploadJobAssets
         }
 
-        if (propName === 'createResultJob') {
-            return ::this._createResultJob
-        }
-
         /**
          * allow to return publicly registered class properties
          */
@@ -383,27 +379,6 @@ export default class SauceLabs {
             return res.body
         } catch (err) {
             throw new Error(`There was an error uploading assets: ${err.message}`)
-        }
-    }
-
-    async _createResultJob(parameters) {
-        const { servers, basePath, method, endpoint } = PROTOCOL_MAP.get('createResultJob')
-        const uri = getAPIHost(servers, basePath, this._options) + endpoint
- 
-        try {
-            const res = await this._api(uri, {
-                method,
-                hooks: {
-                    beforeRequest: [
-                        options => {
-                            options.body = parameters;
-                        }
-                    ]
-                }
-           })
-           return res.body;
-        } catch (err) {
-           throw new Error(`There was an error create test results: ${err.message}`)
         }
     }
 }
