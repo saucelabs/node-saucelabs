@@ -18,7 +18,8 @@ const protocols = [
     require('../apis/sauce.json'),
     require('../apis/rdc.json'),
     require('../apis/performance.json'),
-    require('../apis/testrunner.json')
+    require('../apis/testrunner.json'),
+    require('../apis/datastore.json')
 ]
 
 const protocolFlattened = new Map()
@@ -31,7 +32,6 @@ for (const { paths, parameters, basePath, servers } of protocols) {
     for (const [endpoint, methods] of Object.entries(paths)) {
         for (const [method, description] of Object.entries(methods)) {
             let commandName = camelCase(description.operationId)
-
             /**
              * mark commands as depcrecated in the command names
              */

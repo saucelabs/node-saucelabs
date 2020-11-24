@@ -1,0 +1,94 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "A service that orchestrates the Sauce cloud as well as test runner packages.",
+    "version": "0.1.7",
+    "title": "Testrunner Data Store Job Orchestrator",
+    "termsOfService": "https://saucelabs.com/terms-of-service",
+    "contact": {
+      "name": "Open Source Program Office at Sauce",
+      "email": "opensource@saucelabs.com",
+      "url": "https://saucelabs.com"
+    }
+  },
+  "externalDocs": {
+    "description": "Sauce Labs Wiki",
+    "url": "https://wiki.saucelabs.com"
+  },
+  "basePath": "/v1/test-results",
+  "servers": [
+    {
+      "url": "https://api.{region}.saucelabs.{tld}",
+      "variables": {
+        "region": {
+          "default": "us-west-1",
+          "description": "region of datacenter",
+          "enum": [
+            "us-west-1",
+            "eu-central-1",
+            "staging"
+          ]
+        },
+        "tld": {
+          "default": "com",
+          "description": "internal or external API",
+          "enum": [
+            "net",
+            "com"
+          ]
+        }
+      }
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "paths": {
+    "/": {
+      "post": {
+        "description": "create test result job via data store",
+        "operationId": "createResultJob",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "parameters",
+            "required": true,
+            "description": "create test result job request body",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "externalDocs": {
+          "description": "TBD",
+          "url": "https://wiki.saucelabs.com"
+        },
+        "tags": [
+          "Job"
+        ],
+        "responses": {
+          "200": {
+            "description": "create test result job",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "json"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
