@@ -136,6 +136,41 @@
           }
         }
       }
+    },
+    "/jobs": {
+      "post": {
+        "operationId":"createJob",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "parameters",
+            "required": true,
+            "description": "create result job request body",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "externalDocs": {
+          "description": "TBD",
+          "url": "https://wiki.saucelabs.com"
+        },
+        "tags": [
+          "Job"
+        ],
+        "responses": {
+          "200": {
+            "description": "create result job",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "json"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
