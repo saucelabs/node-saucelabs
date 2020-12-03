@@ -159,7 +159,7 @@
           "Job"
         ],
         "responses": {
-          "200": {
+          "201": {
             "description": "create result job",
             "content": {
               "application/json": {
