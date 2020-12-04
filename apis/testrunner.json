@@ -57,7 +57,7 @@
       }
     },
     "files": {
-      "description": "s path to upload and attach to your job",
+      "description": "asset to upload and attach to your job",
       "in": "path",
       "name": "files",
       "required": false,
