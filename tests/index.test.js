@@ -294,12 +294,20 @@ test('should allow to upload files', async () => {
         body: JSON.stringify(body)
     }))
     const result = await api.uploadJobAssets('some-id', {
-        files: ['log.json', 'selenium-server.json']
+        files: [
+            'log.json',
+            'selenium-server.json',
+            {
+                filename: 'foobar.json',
+                data: { foo: 'bar' }
+            }
+        ]
     })
 
     const { instances } = new FormData()
-    expect(instances[0].append).toBeCalledTimes(2)
+    expect(instances[0].append).toBeCalledTimes(3)
     expect(instances[0].append).toBeCalledWith('file[]', {name: '/somefile', path: 'somepath'})
+    expect(instances[0].append).toBeCalledWith('file[]', Buffer.from(JSON.stringify({ foo: 'bar' })), 'foobar.json')
 
     const uri = got.mock.calls[0][0]
     expect(uri).toBe('https://api.us-west-1.saucelabs.com/v1/testrunner/jobs/some-id/assets')
@@ -329,6 +337,15 @@ test('should not even try to upload if no files were selected', async () => {
         .catch((err) => err)
 
     expect(result.message).toBe('No files to upload selected')
+})
+
+test('should fail if file parameter is invalid', async () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    const result = await api.uploadJobAssets('some-id', {
+        files: [{ foo: 'bar' }]
+    }).catch((err) => err)
+
+    expect(result.message).toContain('Invalid file parameter')
 })
 
 test('should contain custom headers', async () => {

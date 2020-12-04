@@ -358,12 +358,18 @@ export default class SauceLabs {
         const uri = getAPIHost(servers, basePath, this._options) + endpoint.replace('{jobId}', jobId)
         const body = new FormData()
 
-        for (const filePath of files) {
-            const readStream = fs.createReadStream(filePath.startsWith('/')
-                ? filePath
-                : path.join(process.cwd(), filePath)
-            )
-            body.append('file[]', readStream)
+        for (const file of files) {
+            if (typeof file === 'string') {
+                const readStream = fs.createReadStream(file.startsWith('/')
+                    ? file
+                    : path.join(process.cwd(), file)
+                )
+                body.append('file[]', readStream)
+            } else if (file && typeof file.filename === 'string') {
+                body.append('file[]', Buffer.from(JSON.stringify(file.data)), file.filename)
+            } else {
+                throw new Error('Invalid file parameter! Expected either a file path or a file object containing "filename" and "data" property.')
+            }
         }
 
         try {

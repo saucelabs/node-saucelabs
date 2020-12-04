@@ -205,7 +205,17 @@ import SauceLabs from 'saucelabs';
     // upload additional log files and attach it to your Sauce job
     await myAccount.uploadJobAssets(
         '76e693dbe6ff4910abb0bc3d752a971e',
-        ['video.mp4', 'log.json']
+        [
+            // either pass in file names
+            './logs/video.mp4', './logs/log.json',
+            // or file objects
+            {
+                filename: 'myCustomLogFile.json',
+                data: {
+                    someLog: 'data'
+                }
+            }
+        ]
     )
 })()
 ```
