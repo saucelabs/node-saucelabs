@@ -102,18 +102,7 @@ git commit -s -m "adding X to change Y"
 
 ## Release Project
 
-Contributor with release rights can release the project by calling one of the following commands:
-
-```sh
-# for patch releases
-$ npm run release:patch
-# for minor releases
-$ npm run release:minor
-# for major releases
-$ npm run release:major
-```
-
-Ensure you release by following the [semantic versioning](https://semver.org/) principle.
+Contributor with push access to this repo can at any time make a release. To do so, just trigger the [GitHub Action](https://github.com/saucelabs/node-saucelabs/actions?query=workflow%3A%22Manual+NPM+Publish%22) that releases the package. Ensure you pick the correct release type by following the [semantic versioning](https://semver.org/) principle.
 
 ---
 
