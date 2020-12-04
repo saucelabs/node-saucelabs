@@ -30,7 +30,7 @@ jobs:
           path: build/
 
   release:
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Clone Repository
