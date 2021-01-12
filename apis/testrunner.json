@@ -137,7 +137,7 @@
         }
       }
     },
-    "/jobs": {
+    "/reports": {
       "post": {
         "operationId":"createJob",
         "parameters": [
