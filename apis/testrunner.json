@@ -168,6 +168,16 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "invalid parameters",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       }
