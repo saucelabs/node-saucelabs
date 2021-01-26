@@ -214,7 +214,7 @@ test('should handle error case', async () => {
         limit: 123,
         full: true
     }).catch((err) => err)
-    expect(error.message).toBe('Failed calling listJobs: Not Found')
+    expect(error.message).toContain('Failed calling listJobs: Not Found')
 })
 
 test('should be able to download assets', async () => {

@@ -198,10 +198,7 @@ export default class SauceLabs {
                 })
                 return response.body
             } catch (err) {
-                if (propName === 'createJob') {
-                    throw new Error(`Failed calling ${propName}: ${err.message}, ${err.response && err.response.body}`)
-                }
-                throw new Error(`Failed calling ${propName}: ${err.message}`)
+                throw new Error(`Failed calling ${propName}: ${err.message}, ${err.response && err.response.body}`)
             }
         }
     }
