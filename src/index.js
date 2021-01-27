@@ -196,10 +196,9 @@ export default class SauceLabs {
                     ),
                     responseType: 'json'
                 })
-
                 return response.body
             } catch (err) {
-                throw new Error(`Failed calling ${propName}: ${err.message}`)
+                throw new Error(`Failed calling ${propName}: ${err.message}, ${err.response && err.response.body}`)
             }
         }
     }

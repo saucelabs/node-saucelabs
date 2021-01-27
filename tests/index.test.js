@@ -214,7 +214,7 @@ test('should handle error case', async () => {
         limit: 123,
         full: true
     }).catch((err) => err)
-    expect(error.message).toBe('Failed calling listJobs: Not Found')
+    expect(error.message).toContain('Failed calling listJobs: Not Found')
 })
 
 test('should be able to download assets', async () => {
@@ -452,6 +452,18 @@ describe('startSauceConnect', () => {
         })
         expect(spawn.mock.calls).toMatchSnapshot()
     })
+})
+
+test('should output failure msg for createJob API', async () => {
+    const response = new Error('Response code 422 (Unprocessable Entity)')
+    response.statusCode = 422
+    response.response = {body: 'empty framework'}
+    got.post.mockReturnValue(Promise.reject(response))
+
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    const error = await api.createJob({framework: ''}).catch((err) => err)
+
+    expect(error.message).toBe('Failed calling createJob: Response code 422 (Unprocessable Entity), empty framework')
 })
 
 afterEach(() => {
