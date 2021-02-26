@@ -3,7 +3,7 @@ import os from 'os'
 
 import { version } from '../package.json'
 
-export const DEFAULT_SAUCE_CONNECT_VERSION = '4.6.2'
+export const DEFAULT_SAUCE_CONNECT_VERSION = '4.6.4'
 export const SAUCE_CONNECT_BASE = 'https://saucelabs.com/downloads'
 export const SAUCE_CONNECT_VERSIONS_ENDPOINT = 'https://saucelabs.com/versions.json'
 export const SAUCE_CONNECT_DISTS = [
