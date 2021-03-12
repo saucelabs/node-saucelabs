@@ -2,7 +2,7 @@
     <img src="./assets/trophy-bot.png" alt="Trophy bot" />
 </p>
 
-# Node Sauce Labs [![Build Status](https://travis-ci.org/saucelabs/node-saucelabs.svg?branch=master)](https://travis-ci.org/saucelabs/node-saucelabs)
+# Node Sauce Labs [![Test Changes](https://github.com/saucelabs/node-saucelabs/actions/workflows/test.yml/badge.svg)](https://github.com/saucelabs/node-saucelabs/actions/workflows/test.yml)
 
 Wrapper around all Sauce Labs REST APIs for [Node.js](http://nodejs.org/) (v8 or higher) including support for [Sauce Connect Proxy](https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy) and TypeScript definitions.
 

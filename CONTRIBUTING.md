@@ -86,7 +86,7 @@ $ npm run test
 
 ### TypeScript Type Definitions
 
-The type definitions for this package are automatically generated from the OpenAPI specs in `/apis` as `/build/index.d.ts`. We use a [node script](https://github.com/saucelabs/node-saucelabs/blob/master/scripts/generate-typings.js) to automate this when you build the project.
+The type definitions for this package are automatically generated from the OpenAPI specs in `/apis` as `/build/index.d.ts`. We use a [node script](https://github.com/saucelabs/node-saucelabs/blob/main/scripts/generate-typings.js) to automate this when you build the project.
 
 ### Commit messages
 Your commit messages ideally can answer two questions: what changed and why. The subject line should feature the “what” and the body of the commit should describe the “why”.
