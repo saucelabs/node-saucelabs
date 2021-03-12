@@ -62,10 +62,15 @@
       "name": "files",
       "required": false,
       "schema": {
-        "items":{
-          "type":"string"
+        "properties":{
+          "files":{
+            "items":{
+              "type":"string"
+            },
+            "type":"array"
+          }
         },
-        "type":"array"
+        "type":"object"
       }
     }
   },

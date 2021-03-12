@@ -6,7 +6,7 @@ const api = new SauceLabs({
     key: 'foobar',
     proxy: 'barfoo',
     headless: false
-});
+})
 
 async function foobar () {
     const job = await api.getJobV1_1('foobar')
@@ -22,7 +22,7 @@ async function foobar () {
 
     await api.downloadJobAsset( 'job_id', 'video.mp4')
     await api.downloadJobAsset( 'job_id', 'video.mp4', './video.mp4')
-    await api.uploadJobAssets('foobar', ['foo', 'bar'])
+    await api.uploadJobAssets('foobar', { files: ['/foo/bar.log'] })
 
     api.username.slice(1, 1)
     api.region.slice(1, 1)
@@ -30,3 +30,5 @@ async function foobar () {
     api.headless.valueOf()
     api.webdriverEndpoint.slice(1, 1)
 }
+
+foobar()
