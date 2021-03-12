@@ -22,6 +22,7 @@ async function foobar () {
 
     await api.downloadJobAsset( 'job_id', 'video.mp4')
     await api.downloadJobAsset( 'job_id', 'video.mp4', './video.mp4')
+    await api.uploadJobAssets('foobar', ['foo', 'bar'])
 
     api.username.slice(1, 1)
     api.region.slice(1, 1)
