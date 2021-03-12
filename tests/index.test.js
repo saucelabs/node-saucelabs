@@ -10,6 +10,9 @@ import {DEFAULT_SAUCE_CONNECT_VERSION} from '../src/constants'
 
 jest.mock('fs')
 const fs = require('fs')
+fs.promises = {
+    stat: jest.fn().mockReturnValue(Promise.resolve({ size: 123 }))
+}
 
 jest.mock('child_process', () => {
     const EventEmitter = require('events')
@@ -306,7 +309,16 @@ test('should allow to upload files', async () => {
 
     const { instances } = new FormData()
     expect(instances[0].append).toBeCalledTimes(3)
-    expect(instances[0].append).toBeCalledWith('file[]', {name: '/somefile', path: 'somepath'})
+    expect(instances[0].append).toBeCalledWith(
+        'file[]',
+        { name: '/somefile', path: 'somepath' },
+        {
+            contentType: 'text/plain',
+            filename: 'log.json',
+            filepath: expect.any(String),
+            knownLength: 123
+        }
+    )
     expect(instances[0].append).toBeCalledWith('file[]', Buffer.from(JSON.stringify({ foo: 'bar' })), 'foobar.json')
 
     const uri = got.mock.calls[0][0]

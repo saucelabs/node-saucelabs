@@ -1,5 +1,5 @@
 {
-  "openapi":"3.0.0",
+  "swagger":"2.0",
   "info":{
     "description":"A service that orchestrates the Sauce cloud as well as test runner packages.",
     "version":"0.1.7",
@@ -61,7 +61,12 @@
       "in": "path",
       "name": "files",
       "required": false,
-      "type": "string"
+      "schema": {
+        "items":{
+          "type":"string"
+        },
+        "type":"array"
+      }
     }
   },
   "components":{

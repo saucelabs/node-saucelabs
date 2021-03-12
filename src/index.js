@@ -359,11 +359,18 @@ export default class SauceLabs {
 
         for (const file of files) {
             if (typeof file === 'string') {
-                const readStream = fs.createReadStream(file.startsWith('/')
+                const filename = file.startsWith('/')
                     ? file
                     : path.join(process.cwd(), file)
-                )
-                body.append('file[]', readStream)
+                const readStream = fs.createReadStream(filename)
+                const stats = await fs.promises.stat(filename)
+
+                body.append('file[]', readStream, {
+                    filename: path.basename(file),
+                    filepath: filename,
+                    contentType: 'text/plain',
+                    knownLength: stats.size
+                })
             } else if (file && typeof file.filename === 'string') {
                 body.append('file[]', Buffer.from(JSON.stringify(file.data)), file.filename)
             } else {
