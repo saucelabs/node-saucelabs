@@ -29,7 +29,10 @@ export default class SauceLabs {
             password: this._accessKey,
             https: { rejectUnauthorized: getStrictSsl() },
             followRedirect: true,
-            headers: this._options.headers
+            headers: {
+                ...this._options.headers,
+                Authorization: `Basic ${Buffer.from(`${this.username}:${this._accessKey}`).toString('base64')}`
+            }
         })
 
         if (typeof this._options.proxy === 'string') {
