@@ -15,7 +15,7 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/v1.1/users/{username}/concurrency</code><br>
+        <b>GET</b> <code>/v1.2/users/{username}/concurrency</code><br>
         No description available.
         <h3>Example:</h3>
         <code>api.getUserConcurrency(username)</code>
@@ -44,7 +44,7 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.listBuilds(username, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>subaccounts</b>: Include subaccounts in list of jobs</li>          <li><b>limit</b>: Number of results to return</li>        </ul>      </td>
+        <ul>          <li><b>limit</b>: Number of results to return</li>          <li><b>subaccounts</b>: Include subaccounts in list of jobs</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -53,7 +53,7 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.listJobs(username, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>auto_only</b>: No description available.</li>          <li><b>to</b>: receive jobs until specific timestamp</li>          <li><b>from</b>: receive jobs beginning of a specific timestamp</li>          <li><b>owner</b>: username of owner of the jobs</li>          <li><b>owner_type</b>: owner type for jobs</li>          <li><b>name</b>: name of the job</li>          <li><b>limit</b>: Number of results to return</li>          <li><b>manual_only</b>: Only return manual jobs</li>          <li><b>full</b>: Should the return result contain everything or just the basics</li>          <li><b>subaccounts</b>: Include subaccounts in list of jobs</li>        </ul>      </td>
+        <ul>          <li><b>limit</b>: Number of results to return</li>          <li><b>subaccounts</b>: Include subaccounts in list of jobs</li>          <li><b>full</b>: Should the return result contain everything or just the basics</li>          <li><b>manual_only</b>: Only return manual jobs</li>          <li><b>auto_only</b>: No description available.</li>          <li><b>name</b>: name of the job</li>          <li><b>owner_type</b>: owner type for jobs</li>          <li><b>owner</b>: username of owner of the jobs</li>          <li><b>from</b>: receive jobs beginning of a specific timestamp</li>          <li><b>to</b>: receive jobs until specific timestamp</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -278,7 +278,7 @@ The following commands are available via package or cli tool:
         <b>GET</b> <code>/v1/jobs/{id}/{assetName}</code><br>
         No description available.
         <h3>Example:</h3>
-        <code>api.downloadJobAsset(id, assetName, { ...options })</code>
+        <code>api.downloadJobAsset(id, filename, { ...options })</code>
         <br><h4>Options</h4>
         <ul>          <li><b>filepath</b>: file path to store the asset at</li>        </ul>      </td>
     </tr>
@@ -289,7 +289,7 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.uploadApp({ ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>body</b>: No description available.</li>          <li><b>App-Active</b>: If true makes uploaded application active one</li>          <li><b>App-DisplayName</b>: Your custom display name</li>          <li><b>App-Identifier</b>: Your custom unique identifier for your app</li>          <li><b>App-Type</b>: Application type</li>        </ul>      </td>
+        <ul>          <li><b>App-Type</b>: Application type</li>          <li><b>App-Identifier</b>: Your custom unique identifier for your app</li>          <li><b>App-DisplayName</b>: Your custom display name</li>          <li><b>App-Active</b>: If true makes uploaded application active one</li>          <li><b>body</b>: No description available.</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -332,7 +332,7 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.startSuiteDeprecated(suiteId, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>body</b>: No description available.</li>          <li><b>appId</b>: The ID of the app version you wish to test</li>        </ul>      </td>
+        <ul>          <li><b>appId</b>: The ID of the app version you wish to test</li>          <li><b>body</b>: No description available.</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -401,7 +401,7 @@ If the authenticated user is the owner of the account, session reports of the en
         <h3>Example:</h3>
         <code>api.getSessionReports({ ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>limit</b>: Max number of results per page</li>          <li><b>offset</b>: Offset for pagination</li>          <li><b>lastDays</b>: Number of days to report</li>          <li><b>userId</b>: Your username.</li>        </ul>      </td>
+        <ul>          <li><b>userId</b>: Your username.</li>          <li><b>lastDays</b>: Number of days to report</li>          <li><b>offset</b>: Offset for pagination</li>          <li><b>limit</b>: Max number of results per page</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -462,7 +462,7 @@ This endpoint requires API Key authentication and will also return your private 
         <h3>Example:</h3>
         <code>api.startSuite(suiteId, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>body</b>: No description available.</li>          <li><b>appId</b>: The ID of the app version you wish to test</li>        </ul>      </td>
+        <ul>          <li><b>appId</b>: The ID of the app version you wish to test</li>          <li><b>body</b>: No description available.</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -621,7 +621,7 @@ This endpoint requires API Key authentication and will also return your private 
         <h3>Example:</h3>
         <code>api.getBaseline(job_id, metric_names, order_index, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>regime_end</b>: No description available.</li>          <li><b>regime_start</b>: No description available.</li>        </ul>      </td>
+        <ul>          <li><b>regime_start</b>: No description available.</li>          <li><b>regime_end</b>: No description available.</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -687,6 +687,119 @@ This endpoint requires API Key authentication and will also return your private 
         Provides json documentation for the performance API
         <h3>Example:</h3>
         <code>api.getApiDefinition()</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>PUT</b> <code>/jobs/{jobId}/assets</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.uploadJobAssets(jobId, { ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>files</b>: asset to upload and attach to your job</li>        </ul>      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>POST</b> <code>/reports</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.createJob(parameters)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>POST</b> <code>/</code><br>
+        create test result job via data store
+        <h3>Example:</h3>
+        <code>api.createResultJob(parameters)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/v1/getprojects</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getProjects()</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/v1/projects/{projectId}/getproject</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getProject(projectId)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/v1/projects/{projectName}/getprojectbyname</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getProjectByName(projectName)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/testSuites/{accountId}/{projectId}/getTestSuites</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getTestsuitesByProjects(projectId, accountId)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>POST</b> <code>/v1/projects/{projectId}/execute</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.executeTestsuiteTest(Body, projectId)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>POST</b> <code>/v1/testsuite/{testSuiteId}/execute</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.executeTestsuite(testSuiteId, Body)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>POST</b> <code>/v1/auth</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getAuth(Body)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/v1/jobs/{jobId}/get_status</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getExecutionStatus(jobId)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/v1/projects/{projectId}/testcases</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getTestcases(projectId)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/v1/downloadFile</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.downloadReport(fileURL)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/testScriptExecutions/{executionId}/executions</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getExecutions(executionId)</code>
       </td>
     </tr>
   </tbody></table>
