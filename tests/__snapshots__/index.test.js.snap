@@ -2,6 +2,7 @@
 
 exports[`should contain custom headers 1`] = `
 Object {
+  "Authorization": "Basic Zm9vOmJhcg==",
   "user-agent": "foo",
 }
 `;
