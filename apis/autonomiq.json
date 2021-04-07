@@ -147,17 +147,17 @@
         ],
         "parameters": [
           {
-            "name": "projectId",
-            "in": "path",
-            "type": "string",
-            "description": "Project Id",
-            "required": true
-          },
-          {
             "name": "accountId",
             "in": "path",
             "type": "string",
             "description": "Account Id",
+            "required": true
+          },
+          {
+            "name": "projectId",
+            "in": "path",
+            "type": "string",
+            "description": "Project Id",
             "required": true
           }
         ],
@@ -427,6 +427,64 @@
             "description": "",
             "schema": {
               "$ref": "#/definitions/TestsuitesToDelete"
+            }
+          }
+        ]
+      }
+    },
+    "/testCases/associate": {
+      "post": {
+        "summary": "Associates test cases with test suites.",
+        "tags": [],
+        "operationId": "associateTestcases",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/TestcaseAssociations"
+            }
+          }
+        ]
+      }
+    },
+    "/testCases/create/{accountId}/{projectId}": {
+      "post": {
+        "summary": "Associates test cases with test suites.",
+        "tags": [],
+        "operationId": "createTestcase",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "type": "string",
+            "description": "Account Id",
+            "required": true
+          },
+          {
+            "name": "projectId",
+            "in": "path",
+            "type": "string",
+            "description": "Project Id",
+            "required": true
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/NewTestcase"
             }
           }
         ]
@@ -890,6 +948,64 @@
       },
       "required": [
         "testSuiteIds"
+      ]
+    },
+    "TestcaseAssociations": {
+      "title": "TestcaseAssociations",
+      "example": {
+        "case_ids": [510, 511],
+        "suite_id": 52
+      },
+      "type": "object",
+      "properties": {
+        "case_ids": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "suite_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "case_ids",
+        "suite_id"
+      ]
+    },
+    "NewTestcase": {
+      "title": "NewTestcase",
+      "example": {
+        "case_name": "New Test Case",
+        "desc": "Some test case description",
+        "test_steps": [{
+          "columnName": "",
+          "data": "https://webdriver.io",
+          "instr": "open website",
+          "recorderData": "",
+          "stepId": "",
+          "xpath": ""
+        }]
+      },
+      "type": "object",
+      "properties": {
+        "case_name": {
+          "type": "string"
+        },
+        "desc": {
+          "type": "string"
+        },
+        "case_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Step"
+          }
+        }
+      },
+      "required": [
+        "case_name",
+        "desc",
+        "test_steps"
       ]
     },
     "GetTestsuitesByProject": {
