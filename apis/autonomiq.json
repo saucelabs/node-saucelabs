@@ -262,6 +262,42 @@
         }
       }
     },
+    "/v1/projects/{projectId}/testcases/{testcaseId}/updateLveAndRecoverSteps": {
+      "post": {
+        "summary": "It updates test steps to a test case",
+        "tags": [],
+        "operationId": "updateLveAndRecoverSteps",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "type": "string",
+            "description": "Project Id",
+            "required": true
+          },
+          {
+            "name": "testcaseId",
+            "in": "path",
+            "type": "string",
+            "description": "Testcase Id",
+            "required": true
+          },
+          {
+            "name": "steps",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UpdatedTestSteps"
+            }
+          }
+        ]
+      }
+    },
     "/v1/projects/{projectId}/execute": {
       "post": {
         "summary": "It Executes a single test script.",
@@ -436,6 +472,70 @@
         }
       }
     },
+    "/testCases/getTestCaseInfo/{testcaseId}/{stepId}": {
+      "get": {
+        "summary": "Get test steps for a specific test case",
+        "tags": [
+          "Test Suite"
+        ],
+        "operationId": "getTestSteps",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "testcaseId",
+            "in": "path",
+            "type": "string",
+            "description": "TestCase Id",
+            "required": true
+          },
+          {
+            "name": "stepId",
+            "in": "path",
+            "type": "string",
+            "description": "Step Id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "description": "it returns test steps",
+          "schema": {
+            "$ref": "#/definitions/TestSteps"
+          }
+        }
+      }
+    },
+    "/blocks/getAll/{accountId}/{blockId}": {
+      "get": {
+        "summary": "Get test steps for a specific test case block",
+        "tags": [
+          "Test Suite"
+        ],
+        "operationId": "getTestStepBlocks",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "type": "string",
+            "description": "Account Id",
+            "required": true
+          },
+          {
+            "name": "blockId",
+            "in": "path",
+            "type": "string",
+            "description": "Block Id",
+            "required": true
+          }
+        ]
+      }
+    },
     "/v1/downloadFile": {
       "get": {
         "summary": "It downloades the html report",
@@ -558,6 +658,72 @@
           "type": "boolean"
         }
       }
+    },
+    "Step": {
+      "title": "Step",
+      "example": {
+        "columnName": "",
+        "data": "https://webdriver.io",
+        "expectedResults": "",
+        "instr": "Navigate website",
+        "stepId": "",
+        "xpath": ""
+      },
+      "type": "object",
+      "properties": {
+        "columnName": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        },
+        "expectedResults": {
+          "type": "string"
+        },
+        "instr": {
+          "type": "string"
+        },
+        "stepId": {
+          "type": "string"
+        },
+        "xpath": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "instr",
+        "data"
+      ]
+    },
+    "UpdatedTestSteps": {
+      "title": "UpdatedTestSteps",
+      "example": {
+        "brokenDownSteps": [],
+        "isCreationMode": false,
+        "recoverSteps": []
+      },
+      "type": "object",
+      "properties": {
+        "brokenDownSteps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Step"
+          }
+        },
+        "isCreationMode": {
+          "type": "boolean"
+        },
+        "recoverSteps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Step"
+          }
+        }
+      },
+      "required": [
+        "brokenDownSteps",
+        "recoverSteps"
+      ]
     },
     "GetTestsuitesByProject": {
       "title": "GetTestsuitesByProject",
@@ -1314,6 +1480,32 @@
           "items": {
             "$ref": "#/definitions/TestScriptObject"
           }
+        }
+      }
+    },
+    "TestSteps": {
+      "title": "TestSteps",
+      "example": [
+        {
+          "case_id": 511,
+          "orig_steps": "[]",
+          "recover_steps": "[]",
+          "test_steps": "[]"
+        }
+      ],
+      "type": "object",
+      "properties": {
+        "case_id": {
+          "type": "integer"
+        },
+        "orig_steps": {
+          "type": "string"
+        },
+        "recover_steps": {
+          "type": "string"
+        },
+        "test_steps": {
+          "type": "integer"
         }
       }
     },

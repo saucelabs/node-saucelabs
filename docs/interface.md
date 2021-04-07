@@ -748,6 +748,14 @@ This endpoint requires API Key authentication and will also return your private 
     </tr>
     <tr>
       <td>
+        <b>POST</b> <code>/v1/projects/{projectId}/testcases/{testcaseId}/updateLveAndRecoverSteps</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.updateLveAndRecoverSteps(projectId, testcaseId, steps)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
         <b>POST</b> <code>/v1/projects/{projectId}/execute</code><br>
         No description available.
         <h3>Example:</h3>
@@ -784,6 +792,22 @@ This endpoint requires API Key authentication and will also return your private 
         No description available.
         <h3>Example:</h3>
         <code>api.getTestcases(projectId)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/testCases/getTestCaseInfo/{testcaseId}/{stepId}</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getTestSteps(testcaseId, stepId)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/blocks/getAll/{accountId}/{blockId}</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getTestStepBlocks(accountId, blockId)</code>
       </td>
     </tr>
     <tr>
