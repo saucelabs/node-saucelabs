@@ -339,6 +339,99 @@
         }
       }
     },
+    "/v1/test_suite/create": {
+      "post": {
+        "summary": "It creates a test suite.",
+        "tags": [],
+        "operationId": "createTestSuite",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/NewTestSuite"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "It Executes a single test script, though this end point accepts the array of scriptId but it will execute only the script with id at 0th index.",
+            "schema": {
+              "$ref": "#/definitions/GetTestsuitesByProject"
+            },
+            "headers": {
+            }
+          }
+        }
+      }
+    },
+    "/v1/test_suite/{testSuiteId}/update": {
+      "post": {
+        "summary": "Updates a test suite.",
+        "tags": [],
+        "operationId": "updateTestSuite",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "testSuiteId",
+            "in": "path",
+            "type": "string",
+            "description": "Testsuite Id",
+            "required": true
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/NewTestSuite"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "It Executes a single test script, though this end point accepts the array of scriptId but it will execute only the script with id at 0th index.",
+            "schema": {
+              "$ref": "#/definitions/GetTestsuitesByProject"
+            },
+            "headers": {
+            }
+          }
+        }
+      }
+    },
+    "/v1/testSuites/delete": {
+      "post": {
+        "summary": "Deletes test suite.",
+        "tags": [],
+        "operationId": "deleteTestSuites",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/TestsuitesToDelete"
+            }
+          }
+        ]
+      }
+    },
     "/v1/testsuite/{testSuiteId}/execute": {
       "post": {
         "summary": "It executes a test suite",
@@ -723,6 +816,80 @@
       "required": [
         "brokenDownSteps",
         "recoverSteps"
+      ]
+    },
+    "NewTestSuite": {
+      "title": "NewTestSuite",
+      "example": {
+        "projectId": 1074,
+        "name": "NewTestSuite",
+        "interval": 0,
+        "scheduleStartTime": "2020-08-06T05:15:38Z",
+        "schedulePlatform": "Linux",
+        "scheduleBrowser": "Chrome",
+        "recipientsEmails": [],
+        "peActions": []
+      },
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "interval": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "scheduleStartTime": {
+          "type": "string"
+        },
+        "schedulePlatform": {
+          "type": "string"
+        },
+        "scheduleBrowser": {
+          "type": "string"
+        },
+        "recipientsEmails": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "peActions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "projectId",
+        "name",
+        "interval",
+        "scheduleStartTime",
+        "schedulePlatform",
+        "scheduleBrowser"
+      ]
+    },
+    "TestsuitesToDelete": {
+      "title": "TestsuitesToDelete",
+      "example": {
+        "testSuiteIds": [1074]
+      },
+      "type": "object",
+      "properties": {
+        "testSuiteIds": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        }
+      },
+      "required": [
+        "testSuiteIds"
       ]
     },
     "GetTestsuitesByProject": {
