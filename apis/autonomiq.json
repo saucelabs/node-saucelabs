@@ -490,6 +490,42 @@
         ]
       }
     },
+    "/v1/projects/{projectId}/testcases/{testcaseId}/updateSteps": {
+      "post": {
+        "summary": "Update steps assigned to a testcase.",
+        "tags": [],
+        "operationId": "updateTestcaseSteps",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "type": "string",
+            "description": "Project Id",
+            "required": true
+          },
+          {
+            "name": "testcaseId",
+            "in": "path",
+            "type": "string",
+            "description": "Testcase Id",
+            "required": true
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UpdatedTestcase"
+            }
+          }
+        ]
+      }
+    },
     "/v1/testsuite/{testSuiteId}/execute": {
       "post": {
         "summary": "It executes a test suite",
@@ -654,6 +690,32 @@
           "description": "it returns test steps",
           "schema": {
             "$ref": "#/definitions/TestSteps"
+          }
+        }
+      }
+    },
+    "/v1/testcases/{testcaseId}/isgenerating": {
+      "get": {
+        "summary": "generating test cases",
+        "tags": [],
+        "operationId": "isGenerating",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "testcaseId",
+            "in": "path",
+            "type": "string",
+            "description": "TestCase Id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "description": "whether it is generating",
+          "schema": {
+            "type": "boolean"
           }
         }
       }
@@ -1006,6 +1068,47 @@
         "case_name",
         "desc",
         "test_steps"
+      ]
+    },
+    "UpdatedTestcase": {
+      "title": "UpdatedTestcase",
+      "example": {
+        "debugPoints": [],
+        "isCreationMode": false,
+        "sessionId": "P-uWAnuGR",
+        "testSteps": [{
+          "data": "https://webdriver.io",
+          "instr": "open website",
+          "columnName": "",
+          "xpath": "",
+          "stepId": ""
+        }]
+      },
+      "type": "object",
+      "properties": {
+        "debugPoints": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "isCreationMode": {
+          "type": "boolean"
+        },
+        "sessionId": {
+          "type": "string"
+        },
+        "testSteps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Step"
+          }
+        }
+      },
+      "required": [
+        "isCreationMode",
+        "sessionId",
+        "testSteps"
       ]
     },
     "GetTestsuitesByProject": {
