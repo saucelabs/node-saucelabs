@@ -20,7 +20,8 @@ const protocols = [
     require('../apis/performance.json'),
     require('../apis/testrunner.json'),
     require('../apis/datastore.json'),
-    require('../apis/autonomiq.json')
+    require('../apis/autonomiq.json'),
+    require('../apis/storage.json')
 ]
 
 const protocolFlattened = new Map()

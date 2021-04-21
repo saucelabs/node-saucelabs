@@ -1,0 +1,1595 @@
+{
+    "servers": [
+      {
+        "url": "https://api.{region}.saucelabs.{tld}",
+        "variables": {
+          "region": {
+            "default": "us-west-1",
+            "description": "region of datacenter",
+            "enum": [
+              "us-west-1",
+              "eu-central-1"
+            ]
+          },
+          "tld": {
+            "default": "com",
+            "description": "internal or external API",
+            "enum": [
+              "net",
+              "com"
+            ]
+          }
+        }
+      }
+    ],
+    "components": {
+      "schemas": {
+        "Access": {
+          "properties": {
+            "org_ids": {
+              "description": "list of organization ids that are allowed to access this entity",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "team_ids": {
+              "description": "list of team ids that are allowed to access this entity",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object"
+        },
+        "AndroidMetadata": {
+          "properties": {
+            "icon": {
+              "description": "base64-encoded PNG representation of the app icon",
+              "nullable": true,
+              "type": "string"
+            },
+            "identifier": {
+              "description": "unique package name",
+              "example": "com.mycompany.app",
+              "type": "string"
+            },
+            "is_test_runner": {
+              "description": "true if the current package is a test runner",
+              "nullable": true,
+              "type": "boolean"
+            },
+            "min_sdk": {
+              "description": "minimum Android SDK version number this package supports",
+              "example": 21,
+              "format": "int32",
+              "nullable": true,
+              "type": "integer"
+            },
+            "name": {
+              "description": "application name",
+              "example": "My Cool App",
+              "type": "string"
+            },
+            "target_sdk": {
+              "description": "Android SDK version number this package was built for",
+              "example": 28,
+              "format": "int32",
+              "nullable": true,
+              "type": "integer"
+            },
+            "version": {
+              "description": "value of versionName manifest value",
+              "example": "1.2.3",
+              "type": "string"
+            },
+            "version_code": {
+              "description": "value of versionCode manifest value",
+              "example": 123,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "AndroidSettings": {
+          "description": "passing null to any setting tells the backend to reset it to its default value",
+          "properties": {
+            "instrumentation": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Instrumentation"
+                }
+              ],
+              "description": "dictionary containing settings that depend on the app instrumentation state",
+              "nullable": true
+            },
+            "instrumentation_enabled": {
+              "default": true,
+              "description": "true if the app must be instrumented before running tests on it",
+              "nullable": true,
+              "type": "boolean"
+            },
+            "lang": {
+              "default": "en_GB",
+              "description": "language abbreviation to set for the app. See BCP-47 for more details",
+              "type": "string"
+            },
+            "orientation": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Orientation"
+                }
+              ],
+              "default": null,
+              "description": "orientation value to set by default for the app",
+              "nullable": true
+            },
+            "proxy": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Proxy"
+                }
+              ],
+              "description": "proxy settings",
+              "nullable": true
+            },
+            "proxy_enabled": {
+              "default": false,
+              "description": "the given host and port will be applied to proxy network requests in automated tests if set to true",
+              "nullable": true,
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "EditableFileProperties": {
+          "properties": {
+            "description": {
+              "description": "an optional custom description string of the file",
+              "maxLength": 255,
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "Error": {
+          "properties": {
+            "code": {
+              "description": "status code",
+              "format": "int32",
+              "type": "integer"
+            },
+            "detail": {
+              "description": "details string",
+              "type": "string"
+            },
+            "title": {
+              "description": "title string",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "File": {
+          "properties": {
+            "access": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Access"
+                }
+              ],
+              "description": "teams and orgs that have access to the file",
+              "nullable": true
+            },
+            "description": {
+              "description": "an optional custom description string of the file",
+              "type": "string"
+            },
+            "etag": {
+              "description": "hash sum of the uploaded binary calculated by the downstream storage",
+              "type": "string"
+            },
+            "group_id": {
+              "description": "unique identifier of the group this file belongs to",
+              "format": "int64",
+              "type": "integer"
+            },
+            "id": {
+              "description": "unique identifier of the file",
+              "type": "string"
+            },
+            "kind": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Kind"
+                }
+              ],
+              "description": "file platform name"
+            },
+            "metadata": {
+              "description": "app metadata. Could be null for non-application groups",
+              "nullable": true,
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/IOSMetadata"
+                },
+                {
+                  "$ref": "#/components/schemas/AndroidMetadata"
+                }
+              ]
+            },
+            "name": {
+              "description": "name of the file on the file system",
+              "type": "string"
+            },
+            "owner": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Owner"
+                }
+              ],
+              "description": "the info about the original file uploader"
+            },
+            "upload_timestamp": {
+              "description": "file upload timestamp in UTC seconds since Unix Epoch",
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "Group": {
+          "properties": {
+            "access": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Access"
+                }
+              ],
+              "description": "teams and orgs that have access to the current group"
+            },
+            "count": {
+              "description": "the count of files in the group",
+              "format": "int64",
+              "type": "integer"
+            },
+            "id": {
+              "description": "unique identifier of the group",
+              "format": "int64",
+              "type": "integer"
+            },
+            "name": {
+              "description": "the name of the group",
+              "type": "string"
+            },
+            "recent": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/File"
+                }
+              ],
+              "description": "The most recently uploaded file info",
+              "nullable": true
+            },
+            "settings": {
+              "description": "group settings. Could be null for non-application groups",
+              "nullable": true,
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/IOSSettings"
+                },
+                {
+                  "$ref": "#/components/schemas/AndroidSettings"
+                }
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "IOSMetadata": {
+          "properties": {
+            "icon": {
+              "description": "base64-encoded PNG representation of the app icon",
+              "nullable": true,
+              "type": "string"
+            },
+            "identifier": {
+              "description": "unique package name",
+              "example": "com.mycompany.app",
+              "type": "string"
+            },
+            "is_simulator": {
+              "description": "true if the current package was built for Simulator",
+              "type": "boolean"
+            },
+            "is_test_runner": {
+              "description": "true if the current package is a test runner",
+              "nullable": true,
+              "type": "boolean"
+            },
+            "min_os": {
+              "description": "minimum iOS version number this package supports",
+              "example": "10",
+              "nullable": true,
+              "type": "string"
+            },
+            "name": {
+              "description": "application name",
+              "example": "My Cool App",
+              "type": "string"
+            },
+            "short_version": {
+              "description": "value of CFBundleShortVersionString manifest entry",
+              "example": "1.2.3",
+              "type": "string"
+            },
+            "target_os": {
+              "description": "IOS version number this package was built for",
+              "example": "13",
+              "nullable": true,
+              "type": "string"
+            },
+            "version": {
+              "description": "value of CFBundleVersion manifest entry",
+              "example": "123",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "IOSSettings": {
+          "description": "passing null to any setting tells the backend to reset it to its default value",
+          "properties": {
+            "lang": {
+              "default": "en_GB",
+              "description": "language abbreviation to set for the app. See BCP-47 for more details",
+              "type": "string"
+            },
+            "orientation": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Orientation"
+                }
+              ],
+              "default": null,
+              "description": "orientation value to set by default for the app",
+              "nullable": true
+            },
+            "proxy": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Proxy"
+                }
+              ],
+              "description": "proxy settings",
+              "nullable": true
+            },
+            "proxy_enabled": {
+              "default": false,
+              "description": "the given host and port will be applied to proxy network requests in automated tests if set to true",
+              "nullable": true,
+              "type": "boolean"
+            },
+            "resigning": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Resigning"
+                }
+              ],
+              "description": "dictionary containing settings that depend on the app instrumentation state",
+              "nullable": true
+            },
+            "resigning_enabled": {
+              "default": true,
+              "description": "true if the app must be instrumented before running tests on it",
+              "nullable": true,
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "Instrumentation": {
+          "properties": {
+            "bypass_screenshot_restriction": {
+              "default": false,
+              "description": "whether to bypass Android restrictions while taking screenshots of views marked with FLAG_SECURE",
+              "nullable": true,
+              "type": "boolean"
+            },
+            "image_injection": {
+              "default": true,
+              "description": "whether to enable image injection",
+              "nullable": true,
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "Kind": {
+          "enum": [
+            "ios",
+            "android",
+            "other"
+          ],
+          "type": "string"
+        },
+        "Links": {
+          "properties": {
+            "next": {
+              "default": null,
+              "description": "relative link to the next page",
+              "example": "?q=2&page=3%per_page=20",
+              "nullable": true,
+              "type": "string"
+            },
+            "prev": {
+              "default": null,
+              "description": "relative link to the previous page",
+              "example": "?q=2&page=1%per_page=20",
+              "nullable": true,
+              "type": "string"
+            },
+            "self": {
+              "default": null,
+              "description": "relative link to the current page",
+              "example": "?q=2&page=2%per_page=20",
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "Orientation": {
+          "enum": [
+            "LANDSCAPE",
+            "PORTRAIT"
+          ],
+          "type": "string"
+        },
+        "Owner": {
+          "properties": {
+            "id": {
+              "description": "unique identifier of the file uploader",
+              "type": "string"
+            },
+            "org_id": {
+              "description": "unique identifier of the organization where the file uploader participates",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "Proxy": {
+          "properties": {
+            "host": {
+              "default": "",
+              "description": "valid proxy host name",
+              "type": "string"
+            },
+            "port": {
+              "default": 0,
+              "description": "valid port number in range 1..65535",
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "Resigning": {
+          "properties": {
+            "biometrics": {
+              "default": true,
+              "description": "whether to enable biometrics",
+              "nullable": true,
+              "type": "boolean"
+            },
+            "group_directory": {
+              "default": false,
+              "description": "whether to enable group directory access",
+              "nullable": true,
+              "type": "boolean"
+            },
+            "image_injection": {
+              "default": true,
+              "description": "Whether to enable image injection",
+              "nullable": true,
+              "type": "boolean"
+            },
+            "sys_alerts_delay": {
+              "default": false,
+              "description": "whether to delay system alerts",
+              "nullable": true,
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "securitySchemes": {
+        "basicAuth": {
+          "scheme": "basic",
+          "type": "http"
+        },
+        "bearerAuth": {
+          "bearerFormat": "JWT",
+          "scheme": "bearer",
+          "type": "http"
+        }
+      }
+    },
+    "info": {
+      "title": "App Storage Service API",
+      "version": "1.0.0"
+    },
+    "basePath": "",
+    "openapi": "3.0.0",
+    "paths": {
+      "/v1/storage/download/{file_id}": {
+        "get": {
+          "operationId": "downloadStorageFile",
+          "parameters": [
+            {
+              "description": "ID of file that needs to be fetched",
+              "explode": false,
+              "in": "path",
+              "name": "file_id",
+              "required": true,
+              "type": "string",
+              "schema": {
+                "type": "string"
+              },
+              "style": "simple"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/octet-stream": {
+                  "schema": {
+                    "format": "binary",
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "successful operation"
+            },
+            "304": {
+              "description": "the file has been already cached on the client side"
+            },
+            "401": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "authorization failed"
+            },
+            "404": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "the file with the given ID has not been found or is expired"
+            },
+            "412": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "the current user is not in xTM"
+            }
+          },
+          "security": [
+            {
+              "bearerAuth": []
+            },
+            {
+              "basicAuth": []
+            }
+          ],
+          "summary": "This end-point allows to download the files previously uploaded to the storage.",
+          "tags": [
+            "Download File"
+          ]
+        }
+      },
+      "/v1/storage/files": {
+        "get": {
+          "operationId": "getStorageFiles",
+          "parameters": [
+            {
+              "description": "one or more file ids to be listed",
+              "explode": true,
+              "in": "query",
+              "name": "file_id",
+              "required": false,
+              "schema": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "style": "form"
+            },
+            {
+              "description": "one or more team ids the listed file(s) should be shared with",
+              "explode": true,
+              "in": "query",
+              "name": "team_id",
+              "required": false,
+              "schema": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "style": "form"
+            },
+            {
+              "description": "one or more org ids the listed file(s) should be shared with",
+              "explode": true,
+              "in": "query",
+              "name": "org_id",
+              "required": false,
+              "schema": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "style": "form"
+            },
+            {
+              "description": "the search term. The lookup is done using version names, codes, app names, identifiers and file names",
+              "explode": true,
+              "in": "query",
+              "name": "q",
+              "required": false,
+              "schema": {
+                "type": "string"
+              },
+              "style": "form"
+            },
+            {
+              "description": "one or more platform types",
+              "explode": true,
+              "in": "query",
+              "name": "kind",
+              "required": false,
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/Kind"
+                },
+                "type": "array"
+              },
+              "style": "form"
+            },
+            {
+              "description": "the number of the current page to show",
+              "explode": true,
+              "in": "query",
+              "name": "page",
+              "required": false,
+              "schema": {
+                "default": 1,
+                "format": "int32",
+                "minimum": 1,
+                "type": "integer"
+              },
+              "style": "form"
+            },
+            {
+              "description": "the number of items per page",
+              "explode": true,
+              "in": "query",
+              "name": "per_page",
+              "required": false,
+              "schema": {
+                "default": 25,
+                "format": "int32",
+                "maximum": 100,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "style": "form"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "items": {
+                        "description": "The list of found files",
+                        "items": {
+                          "$ref": "#/components/schemas/File"
+                        },
+                        "type": "array"
+                      },
+                      "links": {
+                        "$ref": "#/components/schemas/Links",
+                        "description": "pagination links"
+                      },
+                      "page": {
+                        "description": "the number of the current page",
+                        "format": "int32",
+                        "type": "integer"
+                      },
+                      "per_page": {
+                        "description": "the maximum count of items per page",
+                        "format": "int32",
+                        "type": "integer"
+                      },
+                      "total_items": {
+                        "description": "the total count of found items",
+                        "format": "int64",
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  }
+                }
+              },
+              "description": "successful operation"
+            },
+            "401": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "authorization failed"
+            },
+            "412": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "the current user is not in xTM"
+            }
+          },
+          "security": [
+            {
+              "bearerAuth": []
+            },
+            {
+              "basicAuth": []
+            }
+          ],
+          "summary": "This end-point allows to list files previously uploaded to the storage.",
+          "tags": [
+            "List Files"
+          ]
+        }
+      },
+      "/v1/storage/files/{file_id}": {
+        "delete": {
+          "operationId": "deleteStorageFile",
+          "parameters": [
+            {
+              "description": "file id to be deleted",
+              "explode": false,
+              "in": "path",
+              "name": "file_id",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "style": "simple"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "item": {
+                        "$ref": "#/components/schemas/File",
+                        "description": "The model of the deleted file"
+                      }
+                    },
+                    "type": "object"
+                  }
+                }
+              },
+              "description": "successful operation"
+            },
+            "401": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "authorization failed"
+            },
+            "404": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "the file either does not exist or has been already deleted"
+            },
+            "412": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "the current user is not in xTM"
+            }
+          },
+          "security": [
+            {
+              "bearerAuth": []
+            },
+            {
+              "basicAuth": []
+            }
+          ],
+          "summary": "This end-point allows to delete files that are accessible for the requester.",
+          "tags": [
+            "Delete File"
+          ]
+        },
+        "put": {
+          "operationId": "editStorageFile",
+          "parameters": [
+            {
+              "description": "file id to be edited",
+              "explode": false,
+              "in": "path",
+              "name": "file_id",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "style": "simple"
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "item": {
+                      "$ref": "#/components/schemas/EditableFileProperties",
+                      "description": "the actual file properties"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "changed": {
+                        "description": "True if any of the file fields has been actually changed",
+                        "type": "boolean"
+                      },
+                      "item": {
+                        "$ref": "#/components/schemas/File",
+                        "description": "The model of the changed file"
+                      }
+                    },
+                    "type": "object"
+                  }
+                }
+              },
+              "description": "successful operation"
+            },
+            "400": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "if the provided file properties are invalid"
+            },
+            "401": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "authorization failed"
+            },
+            "404": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "the file either does not exist or has been already deleted"
+            },
+            "412": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "the current user is not in xTM"
+            }
+          },
+          "security": [
+            {
+              "bearerAuth": []
+            },
+            {
+              "basicAuth": []
+            }
+          ],
+          "summary": "This end-point allows to edit files that are accessible for the requester.",
+          "tags": [
+            "Edit File"
+          ]
+        }
+      },
+      "/v1/storage/groups": {
+        "get": {
+          "operationId": "getStorageGroups",
+          "parameters": [
+            {
+              "description": "one or more group ids to be listed",
+              "explode": true,
+              "in": "query",
+              "name": "group_id",
+              "required": false,
+              "schema": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "style": "form"
+            },
+            {
+              "description": "the search term (includes version names, codes, app names, identifiers, file and group names).",
+              "explode": true,
+              "in": "query",
+              "name": "q",
+              "required": false,
+              "schema": {
+                "type": "string"
+              },
+              "style": "form"
+            },
+            {
+              "description": "one or more application types",
+              "explode": true,
+              "in": "query",
+              "name": "kind",
+              "required": false,
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/Kind"
+                },
+                "type": "array"
+              },
+              "style": "form"
+            },
+            {
+              "description": "the number of the current page to show",
+              "explode": true,
+              "in": "query",
+              "name": "page",
+              "required": false,
+              "schema": {
+                "default": 1,
+                "format": "int32",
+                "minimum": 1,
+                "type": "integer"
+              },
+              "style": "form"
+            },
+            {
+              "description": "the number of items per page",
+              "explode": true,
+              "in": "query",
+              "name": "per_page",
+              "required": false,
+              "schema": {
+                "default": 25,
+                "format": "int32",
+                "maximum": 100,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "style": "form"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "items": {
+                        "description": "the list of found items",
+                        "items": {
+                          "$ref": "#/components/schemas/Group"
+                        },
+                        "type": "array"
+                      },
+                      "links": {
+                        "$ref": "#/components/schemas/Links"
+                      },
+                      "page": {
+                        "description": "the number of the current page",
+                        "type": "integer"
+                      },
+                      "per_page": {
+                        "description": "the maximum count of items per page",
+                        "type": "integer"
+                      },
+                      "total_items": {
+                        "description": "the total count of found items",
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  }
+                }
+              },
+              "description": "successful operation"
+            },
+            "401": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "authorization failed"
+            },
+            "412": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "the current user is not in xTM"
+            }
+          },
+          "security": [
+            {
+              "bearerAuth": []
+            },
+            {
+              "basicAuth": []
+            }
+          ],
+          "summary": "This end-point allows to list files previously uploaded to the storage.",
+          "tags": [
+            "List Groups"
+          ]
+        }
+      },
+      "/v1/storage/groups/{group_id}": {
+        "delete": {
+          "operationId": "deleteStorageGroup",
+          "parameters": [
+            {
+              "description": "group id to be deleted",
+              "explode": false,
+              "in": "path",
+              "name": "group_id",
+              "required": true,
+              "schema": {
+                "format": "int64",
+                "type": "integer"
+              },
+              "style": "simple"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "item": {
+                        "$ref": "#/components/schemas/Group",
+                        "description": "The model of the deleted group"
+                      }
+                    },
+                    "type": "object"
+                  }
+                }
+              },
+              "description": "successful operation"
+            },
+            "401": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "authorization failed"
+            },
+            "403": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "the current user has no permissions to delete the group"
+            },
+            "404": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "the group either does not exist or has been already deleted"
+            },
+            "412": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "the current user is not in xTM"
+            }
+          },
+          "security": [
+            {
+              "bearerAuth": []
+            },
+            {
+              "basicAuth": []
+            }
+          ],
+          "summary": "This end-point allows to delete groups that are accessible for the requester.",
+          "tags": [
+            "Delete Group"
+          ]
+        }
+      },
+      "/v1/storage/groups/{group_id}/settings": {
+        "get": {
+          "operationId": "getStorageGroupSettings",
+          "description": "This end-point allows to retrieve settings from an accessible and existing group",
+          "parameters": [
+            {
+              "description": "ID of group whose settings need to be fetched",
+              "explode": false,
+              "in": "path",
+              "name": "group_id",
+              "required": true,
+              "schema": {
+                "format": "int64",
+                "type": "integer"
+              },
+              "style": "simple"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "identifier": {
+                        "description": "the identifier of the app container by the group. Could be null for non-app groups",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "kind": {
+                        "$ref": "#/components/schemas/Kind",
+                        "description": "group platform name"
+                      },
+                      "settings": {
+                        "description": "The actual group settings. null is returned if the group is not an app group",
+                        "nullable": true,
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/AndroidSettings"
+                          },
+                          {
+                            "$ref": "#/components/schemas/IOSSettings"
+                          }
+                        ]
+                      }
+                    },
+                    "type": "object"
+                  }
+                }
+              },
+              "description": "successful operation"
+            },
+            "401": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "authorization failed"
+            },
+            "404": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "if the group does not exist or is not accessible"
+            }
+          },
+          "tags": [
+            "Get Group Settings"
+          ]
+        },
+        "put": {
+          "operationId": "editStorageGroupSettings",
+          "parameters": [
+            {
+              "description": "ID of group whose settings need to be fetched",
+              "explode": false,
+              "in": "path",
+              "name": "group_id",
+              "required": true,
+              "schema": {
+                "format": "int64",
+                "type": "integer"
+              },
+              "style": "simple"
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "settings": {
+                      "description": "the actual group settings",
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/AndroidSettings"
+                        },
+                        {
+                          "$ref": "#/components/schemas/IOSSettings"
+                        }
+                      ]
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "identifier": {
+                        "description": "the identifier of the app container by the group",
+                        "type": "string"
+                      },
+                      "kind": {
+                        "$ref": "#/components/schemas/Kind",
+                        "description": "group platform name"
+                      },
+                      "settings": {
+                        "description": "the actual group settings",
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/AndroidSettings"
+                          },
+                          {
+                            "$ref": "#/components/schemas/IOSSettings"
+                          }
+                        ]
+                      }
+                    },
+                    "type": "object"
+                  }
+                }
+              },
+              "description": "successful operation"
+            },
+            "400": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "if the provided group identifier is not a valid one or the provided settings object is invalid"
+            },
+            "401": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "authorization failed"
+            },
+            "403": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "if the current user does not have enough permissions to change the group"
+            },
+            "404": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "if the group does not exist or is not accessible"
+            },
+            "406": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "if the settings cannot be set for the given group type"
+            }
+          },
+          "security": [
+            {
+              "bearerAuth": []
+            },
+            {
+              "basicAuth": []
+            }
+          ],
+          "summary": "This end-point allows to set settings for an existing and accessible group",
+          "tags": [
+            "Set Group Settings"
+          ]
+        }
+      },
+      "/v1/storage/info": {
+        "get": {
+          "operationId": "getStorageInfo",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "expiration_timeout_sec": {
+                        "description": "The count of seconds until the newly added file expires after being uploaded",
+                        "format": "int64",
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  }
+                }
+              },
+              "description": "successful operation"
+            },
+            "401": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "authorization failed"
+            }
+          },
+          "security": [
+            {
+              "bearerAuth": []
+            },
+            {
+              "basicAuth": []
+            }
+          ],
+          "summary": "This end-point allows to retrieve the current service configuration.",
+          "tags": [
+            "Get Service Info"
+          ]
+        }
+      },
+      "/v1/storage/upload": {
+        "post": {
+          "operationId": "uploadApp",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "properties": {
+                    "description": {
+                      "description": "an optional custom file description string",
+                      "maxLength": 255,
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "the file name (if unset then will be retrieved from `content-disposition` header)",
+                      "maxLength": 255,
+                      "type": "string"
+                    },
+                    "payload": {
+                      "description": "the content of the file to be uploaded",
+                      "format": "binary",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "payload"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "item": {
+                        "$ref": "#/components/schemas/File"
+                      }
+                    },
+                    "type": "object"
+                  }
+                }
+              },
+              "description": "successful operation"
+            },
+            "400": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "either the incoming parameters are invalid or missing"
+            },
+            "401": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "authorization failed"
+            },
+            "403": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "the current user has no permissions to share the file with the requested org units"
+            },
+            "406": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "if the script fails to parse the metadata from the given application"
+            },
+            "412": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "the current user is not in xTM"
+            },
+            "413": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "the file size of the payload exceeds the maximum file size limit"
+            },
+            "429": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              },
+              "description": "if there are no more free upload slots"
+            }
+          },
+          "security": [
+            {
+              "bearerAuth": []
+            },
+            {
+              "basicAuth": []
+            }
+          ],
+          "summary": "This end-point allows to upload files to the storage service.",
+          "tags": [
+            "Upload File"
+          ]
+        }
+      }
+    }
+  }
