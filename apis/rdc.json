@@ -66,6 +66,7 @@
         "summary":"Upload App (APK or IPA)",
         "description":"Returns new application id after the upload.",
         "operationId":"uploadApp",
+        "deprecated": true,
         "produces":[
           "text/plain"
         ],
