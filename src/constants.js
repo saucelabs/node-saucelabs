@@ -18,7 +18,7 @@ const protocols = [
     require('../apis/sauce.json'),
     require('../apis/rdc.json'),
     require('../apis/performance.json'),
-    require('../apis/testrunner.json'),
+    require('../apis/testcomposer.json'),
     require('../apis/datastore.json'),
     require('../apis/autonomiq.json')
 ]

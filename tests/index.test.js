@@ -322,7 +322,7 @@ test('should allow to upload files', async () => {
     expect(instances[0].append).toBeCalledWith('file[]', Buffer.from(JSON.stringify({ foo: 'bar' })), 'foobar.json')
 
     const uri = got.mock.calls[0][0]
-    expect(uri).toBe('https://api.us-west-1.saucelabs.com/v1/testrunner/jobs/some-id/assets')
+    expect(uri).toBe('https://api.us-west-1.saucelabs.com/v1/testcomposer/jobs/some-id/assets')
 
     expect(result).toEqual(body)
 })

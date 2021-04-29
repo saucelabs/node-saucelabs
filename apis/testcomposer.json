@@ -1,9 +1,9 @@
 {
   "swagger":"2.0",
   "info":{
-    "description":"A service that orchestrates the Sauce cloud as well as test runner packages.",
+    "description":"A service that orchestrates the Sauce Cloud.",
     "version":"0.1.7",
-    "title":"Testrunner Orchestrator",
+    "title":"Test-Composer",
     "termsOfService":"https://saucelabs.com/terms-of-service",
     "contact":{
       "name":"Open Source Program Office at Sauce",
@@ -12,10 +12,10 @@
     }
   },
   "externalDocs":{
-    "description":"Sauce Labs Wiki",
-    "url":"https://wiki.saucelabs.com"
+    "description":"Sauce Labs Docs",
+    "url":"https://docs.saucelabs.com"
   },
-  "basePath": "/v1/testrunner",
+  "basePath": "/v1/testcomposer",
   "servers":[
     {
       "url":"https://api.{region}.saucelabs.{tld}",
