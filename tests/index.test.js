@@ -390,7 +390,7 @@ describe('startSauceConnect', () => {
             .toBe(true)
     })
 
-    it('should start sauce connect with latest version if no version is specified in the args', async () => {
+    it('should start sauce connect with v4.6.4 version if no version is specified in the args', async () => {
         const logs = []
         const api = new SauceLabs({ user: 'foo', key: 'bar', headless: true })
         got.mockReturnValue(Promise.resolve({
@@ -406,7 +406,7 @@ describe('startSauceConnect', () => {
             'proxy-tunnel': 'abc',
             logger: (log) => logs.push(log)
         })
-        expect(instances[0].dest.mock.calls[0][0].endsWith('.sc-v1.2.4'))
+        expect(instances[0].dest.mock.calls[0][0].endsWith('.sc-v4.6.4'))
             .toBe(true)
     })
 

@@ -16,7 +16,7 @@ import {
     PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT, SYMBOL_TOSTRING,
     SYMBOL_ITERATOR, TO_STRING_TAG, SAUCE_CONNECT_DISTS,
     SC_PARAMS_TO_STRIP, SC_READY_MESSAGE, SC_CLOSE_MESSAGE,
-    SC_CLOSE_TIMEOUT, DEFAULT_SAUCE_CONNECT_VERSION, SC_FAILURE_MESSAGE, SAUCE_CONNECT_VERSIONS_ENDPOINT
+    SC_CLOSE_TIMEOUT, DEFAULT_SAUCE_CONNECT_VERSION, SC_FAILURE_MESSAGE
 } from './constants'
 
 export default class SauceLabs {
@@ -297,14 +297,11 @@ export default class SauceLabs {
     }
 
     async _getLatestSauceConnectVersion () {
-        try {
-            const {body} = await this._api.get(SAUCE_CONNECT_VERSIONS_ENDPOINT, {responseType: 'json'})
-            const responseJson = body.data
-            return responseJson['Sauce Connect']['version']
-        } catch (err) {
-            // fallback
-            return DEFAULT_SAUCE_CONNECT_VERSION
-        }
+        /**
+         * for v4 of this package we enforce the default SC version 4.6.4
+         * which is the last version with Linux 32 bit support
+         */
+        return DEFAULT_SAUCE_CONNECT_VERSION
     }
 
     async _downloadJobAsset (jobId, assetName, { filepath } = {}) {
