@@ -79,9 +79,11 @@ export const DEFAULT_OPTIONS = {
 export const ASSET_REGION_MAPPING = {
     'us': '',
     'eu': 'eu-central-1.',
+    'apac': 'apac-southeast-1',
     'us-west-1': '',
     'us-east-1': 'us-east-1.',
     'eu-central-1': 'eu-central-1.',
+    'apac-southeast-1': 'apac-southeast-1',
     'staging': 'staging.'
 }
 

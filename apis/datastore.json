@@ -26,6 +26,7 @@
           "enum": [
             "us-west-1",
             "eu-central-1",
+            "apac-southeast-1",
             "staging"
           ]
         },

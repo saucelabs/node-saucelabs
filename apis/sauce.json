@@ -28,6 +28,7 @@
             "us-west-1",
             "us-east-1",
             "eu-central-1",
+            "apac-southeast-1",
             "staging"
           ]
         },
