@@ -805,6 +805,13 @@
       "required":false,
       "type":"boolean"
     },
+    "all":{
+      "description":"Should the returned result contain the same team user data",
+      "in":"query",
+      "name":"all",
+      "required":false,
+      "type":"boolean"
+    },
     "id":{
       "description":"job id",
       "in":"path",
@@ -1056,12 +1063,14 @@
         ]
       }
     },
-    "/v1.1/{username}/available_tunnels":{
+    "/v1/{username}/tunnels":{
       "get":{
         "operationId":"list_available_tunnels",
         "parameters":[
           {
-            "$ref":"#/parameters/username"
+            "$ref":"#/parameters/username",
+            "$ref":"#/parameters/full",
+            "$ref":"#/parameters/all"
           }
         ],
         "responses":{

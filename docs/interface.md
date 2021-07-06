@@ -31,10 +31,12 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/v1.1/{username}/available_tunnels</code><br>
+        <b>GET</b> <code>/v1/{username}/tunnels</code><br>
         No description available.
         <h3>Example:</h3>
-        <code>api.listAvailableTunnels(username)</code>
+        <code>api.listAvailableTunnels(username, { ...options })</code>
+        <br><h4>Options</h4>
+        <ul><li><b>full</b>: Should the result contain everything or just IDs</li><li><b>all</b>: Include all the tunnels for the users in the same team</li>        </ul>
       </td>
     </tr>
     <tr>
