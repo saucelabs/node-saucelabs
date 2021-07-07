@@ -31,16 +31,6 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/v1/{username}/tunnels</code><br>
-        No description available.
-        <h3>Example:</h3>
-        <code>api.listAvailableTunnels(username, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul><li><b>full</b>: Should the result contain everything or just IDs</li><li><b>all</b>: Include all the tunnels for the users in the same team</li>        </ul>
-      </td>
-    </tr>
-    <tr>
-      <td>
         <b>GET</b> <code>/v1.1/{username}/builds</code><br>
         No description available.
         <h3>Example:</h3>
@@ -55,7 +45,7 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.listJobs(username, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>limit</b>: Number of results to return</li>          <li><b>subaccounts</b>: Include subaccounts in list of jobs</li>          <li><b>full</b>: Should the return result contain everything or just the basics</li>          <li><b>manual_only</b>: Only return manual jobs</li>          <li><b>auto_only</b>: No description available.</li>          <li><b>name</b>: name of the job</li>          <li><b>owner_type</b>: owner type for jobs</li>          <li><b>owner</b>: username of owner of the jobs</li>          <li><b>from</b>: receive jobs beginning of a specific timestamp</li>          <li><b>to</b>: receive jobs until specific timestamp</li>        </ul>      </td>
+        <ul>          <li><b>limit</b>: Number of results to return</li>          <li><b>subaccounts</b>: Include subaccounts in list of jobs</li>          <li><b>full</b>: Should the response result contain everything or just the basics</li>          <li><b>manual_only</b>: Only return manual jobs</li>          <li><b>auto_only</b>: No description available.</li>          <li><b>name</b>: name of the job</li>          <li><b>owner_type</b>: owner type for jobs</li>          <li><b>owner</b>: username of owner of the jobs</li>          <li><b>from</b>: receive jobs beginning of a specific timestamp</li>          <li><b>to</b>: receive jobs until specific timestamp</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -224,7 +214,7 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.listBuildJobs(id, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>full</b>: Should the return result contain everything or just the basics</li>        </ul>      </td>
+        <ul>          <li><b>full</b>: Should the response result contain everything or just the basics</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -257,7 +247,7 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.listTunnels(username, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>full</b>: Should the return result contain everything or just the basics</li>        </ul>      </td>
+        <ul>          <li><b>all</b>: Should the response contain the same team user data</li>          <li><b>full</b>: Should the response result contain everything or just the basics</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -745,7 +735,7 @@ This endpoint requires API Key authentication and will also return your private 
         <b>GET</b> <code>/testSuites/{accountId}/{projectId}/getTestSuites</code><br>
         No description available.
         <h3>Example:</h3>
-        <code>api.getTestsuitesByProjects(projectId, accountId)</code>
+        <code>api.getTestsuitesByProjects(accountId, projectId)</code>
       </td>
     </tr>
     <tr>
@@ -762,6 +752,54 @@ This endpoint requires API Key authentication and will also return your private 
         No description available.
         <h3>Example:</h3>
         <code>api.executeTestsuiteTest(Body, projectId)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>POST</b> <code>/v1/test_suite/create</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.createTestSuite(Body)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>POST</b> <code>/v1/test_suite/{testSuiteId}/update</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.updateTestSuite(testSuiteId, Body)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>POST</b> <code>/v1/testSuites/delete</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.deleteTestSuites(Body)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>POST</b> <code>/testCases/associate</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.associateTestcases(Body)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>POST</b> <code>/testCases/create/{accountId}/{projectId}</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.createTestcase(accountId, projectId, Body)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>POST</b> <code>/v1/projects/{projectId}/testcases/{testcaseId}/updateSteps</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.updateTestcaseSteps(projectId, testcaseId, Body)</code>
       </td>
     </tr>
     <tr>
@@ -802,6 +840,14 @@ This endpoint requires API Key authentication and will also return your private 
         No description available.
         <h3>Example:</h3>
         <code>api.getTestSteps(testcaseId, stepId)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/v1/testcases/{testcaseId}/isgenerating</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.isGenerating(testcaseId)</code>
       </td>
     </tr>
     <tr>

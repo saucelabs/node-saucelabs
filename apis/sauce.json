@@ -799,14 +799,14 @@
       "type":"string"
     },
     "full":{
-      "description":"Should the return result contain everything or just the basics",
+      "description":"Should the response result contain everything or just the basics",
       "in":"query",
       "name":"full",
       "required":false,
       "type":"boolean"
     },
     "all":{
-      "description":"Should the returned result contain the same team user data",
+      "description":"Should the response contain the same team user data",
       "in":"query",
       "name":"all",
       "required":false,
@@ -1060,48 +1060,6 @@
         "summary":"Org information",
         "tags":[
           "User"
-        ]
-      }
-    },
-    "/v1/{username}/tunnels":{
-      "get":{
-        "operationId":"list_available_tunnels",
-        "parameters":[
-          {
-            "$ref":"#/parameters/username",
-            "$ref":"#/parameters/full",
-            "$ref":"#/parameters/all"
-          }
-        ],
-        "responses":{
-          "200":{
-            "description":"Tunnels",
-            "schema":{
-              "additionalProperties":{
-                "items":{
-                  "$ref":"#/definitions/Tunnel"
-                },
-                "type":"array"
-              },
-              "type":"object"
-            }
-          },
-          "404":{
-            "description":"User is not found",
-            "schema":{
-              "$ref":"#/definitions/Error"
-            }
-          },
-          "default":{
-            "description":"Unexpected error",
-            "schema":{
-              "$ref":"#/definitions/Error"
-            }
-          }
-        },
-        "summary":"Get Tunnels",
-        "tags":[
-          "Tunnel"
         ]
       }
     },
@@ -2010,48 +1968,6 @@
         ]
       }
     },
-    "/v1/{username}/all_tunnels":{
-      "get":{
-        "operationId":"list_all_tunnels",
-        "parameters":[
-          {
-            "$ref":"#/parameters/username"
-          }
-        ],
-        "responses":{
-          "200":{
-            "description":"Tunnels",
-            "schema":{
-              "properties":{
-                "tunnels":{
-                  "items":{
-                    "$ref":"#/definitions/Tunnel"
-                  },
-                  "type":"array"
-                }
-              },
-              "type":"object"
-            }
-          },
-          "404":{
-            "description":"User is not found",
-            "schema":{
-              "$ref":"#/definitions/Error"
-            }
-          },
-          "default":{
-            "description":"Unexpected error",
-            "schema":{
-              "$ref":"#/definitions/Error"
-            }
-          }
-        },
-        "summary":"Get all Tunnels",
-        "tags":[
-          "Tunnel"
-        ]
-      }
-    },
     "/v1/{username}/builds/{id}/failed-jobs":{
       "get":{
         "operationId":"list_build_failed_jobs",
@@ -2239,12 +2155,57 @@
         ]
       }
     },
+    "/v1/{username}/all_tunnels":{
+      "get":{
+        "operationId":"list_all_tunnels",
+        "parameters":[
+          {
+            "$ref":"#/parameters/username"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"Tunnels",
+            "schema":{
+              "properties":{
+                "tunnels":{
+                  "items":{
+                    "$ref":"#/definitions/Tunnel"
+                  },
+                  "type":"array"
+                }
+              },
+              "type":"object"
+            }
+          },
+          "404":{
+            "description":"User is not found",
+            "schema":{
+              "$ref":"#/definitions/Error"
+            }
+          },
+          "default":{
+            "description":"Unexpected error",
+            "schema":{
+              "$ref":"#/definitions/Error"
+            }
+          }
+        },
+        "summary":"Get all Tunnels",
+        "tags":[
+          "Tunnel"
+        ]
+      }
+    },
     "/v1/{username}/tunnels":{
       "get":{
         "operationId":"list_tunnels",
         "parameters":[
           {
             "$ref":"#/parameters/username"
+          },
+          {
+            "$ref":"#/parameters/all"
           },
           {
             "$ref":"#/parameters/full"
@@ -2273,7 +2234,7 @@
             }
           }
         },
-        "summary":"Get Tunnels",
+        "summary":"Get tunnels for the user or all the users in the team",
         "tags":[
           "Tunnel"
         ]
@@ -2342,7 +2303,7 @@
             }
           }
         },
-        "summary":"Get Tunnels",
+        "summary":"Get Tunnel by ID",
         "tags":[
           "Tunnel"
         ]
