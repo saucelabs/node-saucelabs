@@ -25,7 +25,7 @@ test('should be able to execute a command', async () => {
         description: 'your Sauce Labs username'
     })
 
-    const [command, description, handler, cb] = yargs.command.mock.calls[4]
+    const [command, description, handler, cb] = yargs.command.mock.calls[3]
     expect(command).toContain('listBuilds <username>')
     expect(command).toContain('[limit]')
     expect(command).toContain('[subaccounts]')
