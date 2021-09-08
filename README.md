@@ -119,7 +119,7 @@ $ sl sc --scVersion 4.5.4
 $ sl sc --help
 ```
 
-You can see all available Sauce Connect parameters on the [Sauce Labs Wiki Page](https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy+Command-Line+Quick+Reference+Guide).
+You can see all available Sauce Connect parameters on the [Sauce Labs Docs](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/).
 
 ### As NPM Package
 
@@ -189,7 +189,7 @@ import SauceLabs from 'saucelabs';
          */
         logger: (stdout) => console.log(stdout),
         /**
-         * see all available parameters here: https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy+Command-Line+Quick+Reference+Guide
+         * see all available parameters here: https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/
          * all parameters have to be applied camel cased instead of with hyphens, e.g.
          * to apply the `--tunnel-identifier` parameter, set:
          */
@@ -220,7 +220,7 @@ import SauceLabs from 'saucelabs';
 })()
 ```
 
-> You may wonder why `listJobs` requires a `username` as first parameter since you've already defined the process.env. The reason for this is that Sauce Labs supports a concept of Team Accounts, so-called sub-accounts, grouped together. As such functions like the mentioned could list jobs not only for the requesting account, but also for the individual team account. Learn more about it [here](https://wiki.saucelabs.com/display/DOCS/Managing+Team+Members+and+Accounts)
+> You may wonder why `listJobs` requires a `username` as first parameter since you've already defined the process.env. The reason for this is that Sauce Labs supports a concept of Team Accounts, so-called sub-accounts, grouped together. As such functions like the mentioned could list jobs not only for the requesting account, but also for the individual team account. Learn more about it [here](https://docs.saucelabs.com/basics/acct-team-mgmt-hub/)
 
 ### `webdriverEndpoint` property
 
