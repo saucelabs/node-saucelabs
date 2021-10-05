@@ -301,6 +301,10 @@ test('should allow to upload files', async () => {
             'log.json',
             'selenium-server.json',
             {
+                filename: 'raw-file.json',
+                data: Buffer.from('my-raw-data', 'utf8')
+            },
+            {
                 filename: 'foobar.json',
                 data: { foo: 'bar' }
             }
@@ -308,7 +312,7 @@ test('should allow to upload files', async () => {
     })
 
     const { instances } = new FormData()
-    expect(instances[0].append).toBeCalledTimes(3)
+    expect(instances[0].append).toBeCalledTimes(4)
     expect(instances[0].append).toBeCalledWith(
         'file[]',
         { name: '/somefile', path: 'somepath' },
@@ -319,6 +323,7 @@ test('should allow to upload files', async () => {
             knownLength: 123
         }
     )
+    expect(instances[0].append).toBeCalledWith('file[]', Buffer.from('my-raw-data', 'utf8'), 'raw-file.json')
     expect(instances[0].append).toBeCalledWith('file[]', Buffer.from(JSON.stringify({ foo: 'bar' })), 'foobar.json')
 
     const uri = got.mock.calls[0][0]
