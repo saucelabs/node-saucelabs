@@ -374,6 +374,8 @@ export default class SauceLabs {
                     contentType: 'text/plain',
                     knownLength: stats.size
                 })
+            } else if (file && typeof file.filename === 'string' && Buffer.isBuffer(file.data)) {
+                body.append('file[]', file.data, file.filename)
             } else if (file && typeof file.filename === 'string') {
                 body.append('file[]', Buffer.from(JSON.stringify(file.data)), file.filename)
             } else {
