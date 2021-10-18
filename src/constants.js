@@ -274,7 +274,7 @@ export const SC_CLI_PARAM_KEYS = SAUCE_CONNECT_CLI_PARAMS.map((param) => param.n
 export const SC_PARAMS_TO_STRIP = [...CLI_PARAM_KEYS, ...CLI_PARAM_ALIASES, ...SAUCE_CONNECT_CLI_PARAM_ALIASES]
 
 export const SC_READY_MESSAGE = 'Sauce Connect is up, you may start your tests'
-export const SC_FAILURE_MESSAGE = 'Sauce Connect could not establish a connection'
-export const SC_WAIT_FOR_MESSAGE = ['\u001b[K', 'Please wait for'] // "\u001b" = Escape character
+export const SC_FAILURE_MESSAGES = ['Sauce Connect could not establish a connection', 'Sauce Connect failed to start']
+export const SC_WAIT_FOR_MESSAGES = ['\u001b[K', 'Please wait for'] // "\u001b" = Escape character
 export const SC_CLOSE_MESSAGE = 'Goodbye'
 export const SC_CLOSE_TIMEOUT = 5000

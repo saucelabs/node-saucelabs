@@ -16,8 +16,8 @@ import {
     PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT, SYMBOL_TOSTRING,
     SYMBOL_ITERATOR, TO_STRING_TAG, SAUCE_CONNECT_DISTS,
     SC_PARAMS_TO_STRIP, SC_READY_MESSAGE, SC_CLOSE_MESSAGE,
-    SC_CLOSE_TIMEOUT, DEFAULT_SAUCE_CONNECT_VERSION, SC_FAILURE_MESSAGE,
-    SAUCE_CONNECT_VERSIONS_ENDPOINT, SC_WAIT_FOR_MESSAGE
+    SC_CLOSE_TIMEOUT, DEFAULT_SAUCE_CONNECT_VERSION, SC_FAILURE_MESSAGES,
+    SAUCE_CONNECT_VERSIONS_ENDPOINT, SC_WAIT_FOR_MESSAGES
 } from './constants'
 
 export default class SauceLabs {
@@ -277,7 +277,7 @@ export default class SauceLabs {
                  * check if error output is just an escape sequence or
                  * other expected data
                  */
-                if (SC_WAIT_FOR_MESSAGE.find((msg) => escape(output).includes(escape(msg)))) {
+                if (SC_WAIT_FOR_MESSAGES.find((msg) => escape(output).includes(escape(msg)))) {
                     return
                 }
 
@@ -296,7 +296,7 @@ export default class SauceLabs {
                 /**
                  * fail if SauceConnect could not establish a connection
                  */
-                if (output.includes(SC_FAILURE_MESSAGE)) {
+                if (SC_FAILURE_MESSAGES.find((msg) => escape(output).includes(escape(msg)))) {
                     return reject(new Error(output))
                 }
 

@@ -442,6 +442,18 @@ describe('startSauceConnect', () => {
         expect(err.message).toBe(errMessage)
     })
 
+    it('should properly fail if user is not authorized', async () => {
+        const errMessage = 'Sauce Connect failed to start - 401 (Unauthorized).'
+        const api = new SauceLabs({ user: 'foo', key: 'bar', headless: true })
+        setTimeout(() => stdoutEmitter.emit('data', errMessage), 50)
+        const err = await api.startSauceConnect({
+            scVersion: '1.2.3',
+            tunnelIdentifier: 'my-tunnel',
+            'proxy-tunnel': 'abc'
+        }).catch((err) => err)
+        expect(err.message).toContain(errMessage)
+    })
+
     it('should close sauce connect', async () => {
         const api = new SauceLabs({ user: 'foo', key: 'bar', headless: true })
         setTimeout(() => stdoutEmitter.emit('data', 'Sauce Connect is up, you may start your tests'), 50)
