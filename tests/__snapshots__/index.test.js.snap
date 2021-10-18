@@ -16,6 +16,7 @@ Array [
       "--rest-url=https://us1.api.testobject.com/sc/rest/v1",
       "--user=foo",
       "--api-key=bar",
+      "--region=us-west",
     ],
   ],
 ]
@@ -30,7 +31,7 @@ Array [
       "--tunnel-identifier=my-tunnel",
       "--user=foo",
       "--api-key=bar",
-      "--rest-url=https://us-east-1.saucelabs.com/rest/v1",
+      "--region=us-west",
     ],
   ],
 ]

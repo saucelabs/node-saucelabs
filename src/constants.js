@@ -228,10 +228,6 @@ export const SAUCE_CONNECT_CLI_PARAMS = [{
     name: 'readyfile',
     description: 'File that will be touched to signal when tunnel is ready.'
 }, {
-    alias: 'x',
-    name: 'rest-url',
-    description: 'Advanced feature: Connect to Sauce REST API at alternative URL. Use only if directed to do so by Sauce Labs support. (default "https://saucelabs.com/rest/v1")'
-}, {
     alias: 'X',
     name: 'scproxy-port',
     description: 'Port on which scproxy will be listening.'
@@ -276,5 +272,6 @@ export const SC_PARAMS_TO_STRIP = [...CLI_PARAM_KEYS, ...CLI_PARAM_ALIASES, ...S
 
 export const SC_READY_MESSAGE = 'Sauce Connect is up, you may start your tests'
 export const SC_FAILURE_MESSAGE = 'Sauce Connect could not establish a connection'
+export const SC_WAIT_FOR_MESSAGE = ['\u001b[K', 'Please wait for'] // "\u001b" = Escape character
 export const SC_CLOSE_MESSAGE = 'Goodbye'
 export const SC_CLOSE_TIMEOUT = 5000
