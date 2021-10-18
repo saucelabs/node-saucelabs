@@ -262,7 +262,6 @@ export const SAUCE_CONNECT_CLI_PARAMS = [{
     name: 'tunnel-domains',
     description: 'Inverse of \'--direct-domains\'. Only requests for domains in this list will be sent through the tunnel. Overrides \'--direct-domains\'.'
 }, {
-    alias: 'i',
     name: 'tunnel-identifier',
     description: '[Depcrecated] Don\'t automatically assign jobs to this tunnel. Jobs will use it only by explicitly providing the right identifier.'
 }, {
