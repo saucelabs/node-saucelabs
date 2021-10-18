@@ -3,8 +3,7 @@ module.exports = {
         '<rootDir>/tests/**/*.test.js'
     ],
     testPathIgnorePatterns: [
-        '/node_modules/',
-        '/tests/e2e'
+        '/node_modules/'
     ],
     coverageDirectory: './coverage/',
     collectCoverage: true,

@@ -1,11 +1,16 @@
 import { exportAllDeclaration } from '@babel/types'
-import SauceLabs from '../..'
+import SauceLabs from '../build'
 
 jest.setTimeout(60 * 1000) // 60s should be sufficient to boot SC
-jest.disableAutomock()
+
+/**
+ * unmock
+ */
 jest.unmock('bin-wrapper')
-jest.unmock('yargs')
+jest.unmock('form-data')
 jest.unmock('got')
+jest.unmock('yargs')
+jest.unmock('zlib')
 
 test('should not be able to run Sauce Connect due to invalid credentials', async () => {
     const api = new SauceLabs({ key: 'foobar' })
