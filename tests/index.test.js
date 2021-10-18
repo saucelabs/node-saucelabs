@@ -427,6 +427,7 @@ describe('startSauceConnect', () => {
         })
         expect(instances[0].dest.mock.calls[0][0].endsWith(`.sc-v${DEFAULT_SAUCE_CONNECT_VERSION}`))
             .toBe(true)
+        expect(spawn.mock.calls).toMatchSnapshot()
     })
 
     it('should properly fail if connection could not be established', async () => {
@@ -460,14 +461,12 @@ describe('startSauceConnect', () => {
         expect(res).toEqual(new Error('Uuups'))
     })
 
-    it('should not overwrite rest-url if given as a parameter', async () => {
-        const api = new SauceLabs({ user: 'foo', key: 'bar'})
-        setTimeout(() => stdoutEmitter.emit('data', 'Sauce Connect is up, you may start your tests'), 50)
-        await api.startSauceConnect({
-            tunnelIdentifier: 'my-tunnel',
-            restUrl: 'https://us1.api.testobject.com/sc/rest/v1'
-        })
-        expect(spawn.mock.calls).toMatchSnapshot()
+    it('should not fail if stderr is expected character', async () => {
+        const api = new SauceLabs({ user: 'foo', key: 'bar', headless: true })
+        setTimeout(() => stderrEmitter.emit('data', '\u001b[K'), 50)
+        setTimeout(() => stdoutEmitter.emit('data', 'Sauce Connect is up, you may start your tests'), 150)
+        const res = await api.startSauceConnect({ tunnelIdentifier: 'my-tunnel' }).catch((err) => err)
+        expect(res instanceof Error).toBe(false)
     })
 })
 

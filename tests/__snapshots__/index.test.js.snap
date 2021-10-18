@@ -7,13 +7,13 @@ Object {
 }
 `;
 
-exports[`startSauceConnect should not overwrite rest-url if given as a parameter 1`] = `
+exports[`startSauceConnect should start sauce connect with fallback default version in case the call to the API failed 1`] = `
 Array [
   Array [
     "/foo/bar",
     Array [
-      "--tunnel-identifier=my-tunnel",
-      "--rest-url=https://us1.api.testobject.com/sc/rest/v1",
+      "--proxy-tunnel=abc",
+      "--tunnel-name=my-tunnel",
       "--user=foo",
       "--api-key=bar",
       "--region=us-west",
@@ -28,7 +28,7 @@ Array [
     "/foo/bar",
     Array [
       "--proxy-tunnel=abc",
-      "--tunnel-identifier=my-tunnel",
+      "--tunnel-name=my-tunnel",
       "--user=foo",
       "--api-key=bar",
       "--region=us-west",

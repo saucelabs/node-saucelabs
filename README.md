@@ -112,7 +112,7 @@ or start Sauce Connect Proxy in EU datacenter:
 
 ```sh
 # start Sauce Connect tunnel for eu-central-1 region
-$ sl sc --region eu --tunnel-identifier "my-tunnel"
+$ sl sc --region eu --tunnel-name "my-tunnel"
 # run a specific Sauce Connect version
 $ sl sc --scVersion 4.5.4
 # see all available Sauce Connect parameters via:
@@ -191,9 +191,9 @@ import SauceLabs from 'saucelabs';
         /**
          * see all available parameters here: https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/
          * all parameters have to be applied camel cased instead of with hyphens, e.g.
-         * to apply the `--tunnel-identifier` parameter, set:
+         * to apply the `--tunnel-name` parameter, set:
          */
-        tunnelIdentifier: 'my-tunnel'
+        tunnelName: 'my-tunnel'
     })
 
     // run a test

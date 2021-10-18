@@ -230,6 +230,10 @@ export default class SauceLabs {
              * remove duplicate params by yargs
              */
             .filter(([k]) => !k.match(/[A-Z]/g))
+            /**
+             * replace tunnel-identifier for tunnel-name
+             */
+            .map(([k, v]) => [k === 'tunnel-identifier' ? 'tunnel-name' : k, v])
             .map(([k, v]) => `--${k}=${v}`)
         args.push(`--user=${this.username}`)
         args.push(`--api-key=${this._accessKey}`)

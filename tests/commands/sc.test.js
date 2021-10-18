@@ -17,7 +17,7 @@ jest.mock('../../src/index', () => {
 test('builder', () => {
     const yargs = { option: jest.fn() }
     builder(yargs)
-    expect(yargs.option).toBeCalledWith('tunnel-identifier', expect.any(Object))
+    expect(yargs.option).toBeCalledWith('tunnel-name', expect.any(Object))
 })
 
 test('handler', async () => {

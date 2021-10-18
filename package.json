@@ -22,7 +22,6 @@
     "build": "run-s clean compile generate:typings",
     "clean": "rm -rf ./build ./coverage",
     "compile": "babel src -d build",
-    "eslint": "eslint -c ./.eslintrc.js ./src/**/*.js ./tests/**/*.js",
     "generate:docs": "babel-node ./scripts/generate-docs",
     "generate:typings": "babel-node ./scripts/generate-typings",
     "prepublishOnly": "NODE_ENV=production run-s build generate:typings",
@@ -31,12 +30,14 @@
     "release:patch": "npm run release -- patch",
     "release:minor": "npm run release -- minor",
     "release:major": "npm run release -- major",
-    "test": "run-s build eslint test:typings test:unit",
-    "test:unit": "jest --coverage",
+    "test": "run-s build test:*",
+    "test:lint": "eslint -c ./.eslintrc.js ./src/**/*.js ./tests/**/*.js",
     "test:typings": "run-s test:typings:*",
     "test:typings:setup": "mkdir -p ./tests/typings/node_modules/saucelabs && cp ./package.json ./tests/typings/node_modules/saucelabs && cp -r ./build ./tests/typings/node_modules/saucelabs",
     "test:typings:run": "cd ./tests/typings && tsc --incremental",
     "test:typings:cleanup": "rm -r ./tests/typings/node_modules",
+    "test:unit": "jest --config ./jest.config.js",
+    "test:e2e": "jest e2e --collectCoverage=false --testPathIgnorePatterns /node_modules/ --modulePathIgnorePatterns \"<rootDir>/tests/__mock__\"",
     "watch": "npm run compile -- --watch"
   },
   "dependencies": {
@@ -73,21 +74,5 @@
     "source-map-support": "^0.5.19",
     "swagger-typescript-codegen": "^3.2.3",
     "typescript": "^4.3.4"
-  },
-  "jest": {
-    "testMatch": [
-      "<rootDir>/tests/**/*.test.js"
-    ],
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true,
-    "coverageThreshold": {
-      "global": {
-        "branches": 93,
-        "functions": 100,
-        "lines": 98,
-        "statements": 98
-      }
-    },
-    "testEnvironment": "node"
   }
 }

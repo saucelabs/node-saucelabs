@@ -264,6 +264,10 @@ export const SAUCE_CONNECT_CLI_PARAMS = [{
 }, {
     alias: 'i',
     name: 'tunnel-identifier',
+    description: '[Depcrecated] Don\'t automatically assign jobs to this tunnel. Jobs will use it only by explicitly providing the right identifier.'
+}, {
+    alias: 'i',
+    name: 'tunnel-name',
     description: 'Don\'t automatically assign jobs to this tunnel. Jobs will use it only by explicitly providing the right identifier.'
 }]
 const SAUCE_CONNECT_CLI_PARAM_ALIASES = SAUCE_CONNECT_CLI_PARAMS.map((param) => param.alias).filter(Boolean)
