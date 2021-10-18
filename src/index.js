@@ -16,7 +16,8 @@ import {
     PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT, SYMBOL_TOSTRING,
     SYMBOL_ITERATOR, TO_STRING_TAG, SAUCE_CONNECT_DISTS,
     SC_PARAMS_TO_STRIP, SC_READY_MESSAGE, SC_CLOSE_MESSAGE,
-    SC_CLOSE_TIMEOUT, DEFAULT_SAUCE_CONNECT_VERSION, SC_FAILURE_MESSAGE, SAUCE_CONNECT_VERSIONS_ENDPOINT
+    SC_CLOSE_TIMEOUT, DEFAULT_SAUCE_CONNECT_VERSION, SC_FAILURE_MESSAGES,
+    SAUCE_CONNECT_VERSIONS_ENDPOINT, SC_WAIT_FOR_MESSAGES
 } from './constants'
 
 export default class SauceLabs {
@@ -220,8 +221,6 @@ export default class SauceLabs {
         if (!sauceConnectVersion) {
             sauceConnectVersion = await this._getLatestSauceConnectVersion()
         }
-        const { servers, basePath } = PROTOCOL_MAP.get('listJobs')
-        const restUrl = getAPIHost(servers, basePath, this._options).replace(/api\.(us-west-1\.)?/, '') + '/v1'
         const args = Object.entries(argv)
             /**
              * filter out yargs, yargs params and custom parameters
@@ -231,12 +230,18 @@ export default class SauceLabs {
              * remove duplicate params by yargs
              */
             .filter(([k]) => !k.match(/[A-Z]/g))
+            /**
+             * replace tunnel-identifier for tunnel-name
+             */
+            .map(([k, v]) => [k === 'tunnel-identifier' ? 'tunnel-name' : k, v])
             .map(([k, v]) => `--${k}=${v}`)
         args.push(`--user=${this.username}`)
         args.push(`--api-key=${this._accessKey}`)
 
-        if (!args.some(arg => arg.startsWith('--rest-url'))) {
-            args.push(`--rest-url=${restUrl}`)
+        if (!args.some(arg => arg.startsWith('--region'))) {
+            const scRegion = getRegionSubDomain(this.region)
+                .split('-').slice(0, 2).join('-')
+            args.push(`--region=${scRegion}`)
         }
 
         const bin = SAUCE_CONNECT_DISTS.reduce((bin, [downloadUrl, ...args]) => {
@@ -265,7 +270,19 @@ export default class SauceLabs {
             })
             const returnObj = { cp, close }
 
-            cp.stderr.on('data', (data) => reject(new Error(data.toString())))
+            cp.stderr.on('data', (data) => {
+                const output = data.toString()
+
+                /**
+                 * check if error output is just an escape sequence or
+                 * other expected data
+                 */
+                if (SC_WAIT_FOR_MESSAGES.find((msg) => escape(output).includes(escape(msg)))) {
+                    return
+                }
+
+                return reject(new Error(output))
+            })
             cp.stdout.on('data', (data) => {
                 const logger = fromCLI ? process.stdout.write.bind(process.stdout) : argv.logger
                 const output = data.toString()
@@ -279,7 +296,7 @@ export default class SauceLabs {
                 /**
                  * fail if SauceConnect could not establish a connection
                  */
-                if (output.includes(SC_FAILURE_MESSAGE)) {
+                if (SC_FAILURE_MESSAGES.find((msg) => escape(output).includes(escape(msg)))) {
                     return reject(new Error(output))
                 }
 

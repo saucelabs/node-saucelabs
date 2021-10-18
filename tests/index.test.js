@@ -427,6 +427,7 @@ describe('startSauceConnect', () => {
         })
         expect(instances[0].dest.mock.calls[0][0].endsWith(`.sc-v${DEFAULT_SAUCE_CONNECT_VERSION}`))
             .toBe(true)
+        expect(spawn.mock.calls).toMatchSnapshot()
     })
 
     it('should properly fail if connection could not be established', async () => {
@@ -439,6 +440,18 @@ describe('startSauceConnect', () => {
             'proxy-tunnel': 'abc'
         }).catch((err) => err)
         expect(err.message).toBe(errMessage)
+    })
+
+    it('should properly fail if user is not authorized', async () => {
+        const errMessage = 'Sauce Connect failed to start - 401 (Unauthorized).'
+        const api = new SauceLabs({ user: 'foo', key: 'bar', headless: true })
+        setTimeout(() => stdoutEmitter.emit('data', errMessage), 50)
+        const err = await api.startSauceConnect({
+            scVersion: '1.2.3',
+            tunnelIdentifier: 'my-tunnel',
+            'proxy-tunnel': 'abc'
+        }).catch((err) => err)
+        expect(err.message).toContain(errMessage)
     })
 
     it('should close sauce connect', async () => {
@@ -460,14 +473,12 @@ describe('startSauceConnect', () => {
         expect(res).toEqual(new Error('Uuups'))
     })
 
-    it('should not overwrite rest-url if given as a parameter', async () => {
-        const api = new SauceLabs({ user: 'foo', key: 'bar'})
-        setTimeout(() => stdoutEmitter.emit('data', 'Sauce Connect is up, you may start your tests'), 50)
-        await api.startSauceConnect({
-            tunnelIdentifier: 'my-tunnel',
-            restUrl: 'https://us1.api.testobject.com/sc/rest/v1'
-        })
-        expect(spawn.mock.calls).toMatchSnapshot()
+    it('should not fail if stderr is expected character', async () => {
+        const api = new SauceLabs({ user: 'foo', key: 'bar', headless: true })
+        setTimeout(() => stderrEmitter.emit('data', '\u001b[K'), 50)
+        setTimeout(() => stdoutEmitter.emit('data', 'Sauce Connect is up, you may start your tests'), 150)
+        const res = await api.startSauceConnect({ tunnelIdentifier: 'my-tunnel' }).catch((err) => err)
+        expect(res instanceof Error).toBe(false)
     })
 })
 

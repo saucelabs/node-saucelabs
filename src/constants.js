@@ -228,10 +228,6 @@ export const SAUCE_CONNECT_CLI_PARAMS = [{
     name: 'readyfile',
     description: 'File that will be touched to signal when tunnel is ready.'
 }, {
-    alias: 'x',
-    name: 'rest-url',
-    description: 'Advanced feature: Connect to Sauce REST API at alternative URL. Use only if directed to do so by Sauce Labs support. (default "https://saucelabs.com/rest/v1")'
-}, {
     alias: 'X',
     name: 'scproxy-port',
     description: 'Port on which scproxy will be listening.'
@@ -266,8 +262,11 @@ export const SAUCE_CONNECT_CLI_PARAMS = [{
     name: 'tunnel-domains',
     description: 'Inverse of \'--direct-domains\'. Only requests for domains in this list will be sent through the tunnel. Overrides \'--direct-domains\'.'
 }, {
-    alias: 'i',
     name: 'tunnel-identifier',
+    description: '[Depcrecated] Don\'t automatically assign jobs to this tunnel. Jobs will use it only by explicitly providing the right identifier.'
+}, {
+    alias: 'i',
+    name: 'tunnel-name',
     description: 'Don\'t automatically assign jobs to this tunnel. Jobs will use it only by explicitly providing the right identifier.'
 }]
 const SAUCE_CONNECT_CLI_PARAM_ALIASES = SAUCE_CONNECT_CLI_PARAMS.map((param) => param.alias).filter(Boolean)
@@ -275,6 +274,7 @@ export const SC_CLI_PARAM_KEYS = SAUCE_CONNECT_CLI_PARAMS.map((param) => param.n
 export const SC_PARAMS_TO_STRIP = [...CLI_PARAM_KEYS, ...CLI_PARAM_ALIASES, ...SAUCE_CONNECT_CLI_PARAM_ALIASES]
 
 export const SC_READY_MESSAGE = 'Sauce Connect is up, you may start your tests'
-export const SC_FAILURE_MESSAGE = 'Sauce Connect could not establish a connection'
+export const SC_FAILURE_MESSAGES = ['Sauce Connect could not establish a connection', 'Sauce Connect failed to start']
+export const SC_WAIT_FOR_MESSAGES = ['\u001b[K', 'Please wait for'] // "\u001b" = Escape character
 export const SC_CLOSE_MESSAGE = 'Goodbye'
 export const SC_CLOSE_TIMEOUT = 5000
