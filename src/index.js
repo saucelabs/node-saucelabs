@@ -247,7 +247,6 @@ export default class SauceLabs {
             .map(([k, v]) => SC_BOOLEAN_CLI_PARAMS.includes(k) ? `--${k}` : `--${k}=${v}`)
         args.push(`--user=${this.username}`)
         args.push(`--api-key=${this._accessKey}`)
-        console.log(argv, args);
 
         if (!args.some(arg => arg.startsWith('--region'))) {
             const scRegion = getRegionSubDomain(this.region)

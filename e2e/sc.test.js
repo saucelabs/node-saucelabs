@@ -29,3 +29,7 @@ test('should be able to run Sauce Connect', async () => {
     console.log('Sauce Connect started successfully, shutting down...')
     await sc.close()
 })
+
+afterAll(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 5000))
+})
