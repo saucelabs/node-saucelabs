@@ -17,7 +17,8 @@ import {
     SYMBOL_ITERATOR, TO_STRING_TAG, SAUCE_CONNECT_DISTS,
     SC_PARAMS_TO_STRIP, SC_READY_MESSAGE, SC_CLOSE_MESSAGE,
     SC_CLOSE_TIMEOUT, DEFAULT_SAUCE_CONNECT_VERSION, SC_FAILURE_MESSAGES,
-    SAUCE_CONNECT_VERSIONS_ENDPOINT, SC_WAIT_FOR_MESSAGES
+    SAUCE_CONNECT_VERSIONS_ENDPOINT, SC_WAIT_FOR_MESSAGES,
+    SC_BOOLEAN_CLI_PARAMS
 } from './constants'
 
 export default class SauceLabs {
@@ -234,7 +235,16 @@ export default class SauceLabs {
              * replace tunnel-identifier for tunnel-name
              */
             .map(([k, v]) => [k === 'tunnel-identifier' ? 'tunnel-name' : k, v])
-            .map(([k, v]) => `--${k}=${v}`)
+            /**
+             * SC uses `--no-XXX` params which gets parsed out by yargs
+             * therefor we need to re-add it here
+             */
+            .map(([k, v]) => [typeof v === 'boolean' && !v ? `no-${k}` : k, v])
+            /**
+             * SC doesn't like boolean values, so we need to make sure to
+             * no pass it along when we deal with a boolean param
+             */
+            .map(([k, v]) => SC_BOOLEAN_CLI_PARAMS.includes(k) ? `--${k}` : `--${k}=${v}`)
         args.push(`--user=${this.username}`)
         args.push(`--api-key=${this._accessKey}`)
 
