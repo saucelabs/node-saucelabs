@@ -198,11 +198,13 @@ export const SAUCE_CONNECT_CLI_PARAMS = [{
     alias: 'N',
     name: 'no-proxy-caching',
     description: 'Disable caching in Sauce Connect. All requests will be sent through the tunnel.',
-    type: 'boolean'
+    type: 'boolean',
+    deprecated: true
 }, {
     name: 'no-remove-colliding-tunnels',
     description: 'Don\'t remove identified tunnels with the same name, or any other default tunnels if this is a default tunnel. Jobs will be distributed between these tunnels, enabling load balancing and high availability. By default, colliding tunnels will be removed when Sauce Connect is starting up.',
-    type: 'boolean'
+    type: 'boolean',
+    deprecated: true
 }, {
     alias: 'B',
     name: 'no-ssl-bump-domains',
@@ -268,7 +270,19 @@ export const SAUCE_CONNECT_CLI_PARAMS = [{
     alias: 'i',
     name: 'tunnel-name',
     description: 'Don\'t automatically assign jobs to this tunnel. Jobs will use it only by explicitly providing the right identifier.'
+}, {
+    name: 'tunnel-pool',
+    description: 'The tunnel is a part of a high availability tunnel pool.'
+}, {
+    alias: 'v',
+    name: 'verbose',
+    type: 'boolean',
+    description: 'Enable verbose logging. Can be used up to two times.'
 }]
+export const SC_BOOLEAN_CLI_PARAMS = SAUCE_CONNECT_CLI_PARAMS
+    .filter((p) => p.type === 'boolean')
+    .map((p) => p.name)
+
 const SAUCE_CONNECT_CLI_PARAM_ALIASES = SAUCE_CONNECT_CLI_PARAMS.map((param) => param.alias).filter(Boolean)
 export const SC_CLI_PARAM_KEYS = SAUCE_CONNECT_CLI_PARAMS.map((param) => param.name)
 export const SC_PARAMS_TO_STRIP = [...CLI_PARAM_KEYS, ...CLI_PARAM_ALIASES, ...SAUCE_CONNECT_CLI_PARAM_ALIASES]

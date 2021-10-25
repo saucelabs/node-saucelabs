@@ -384,6 +384,8 @@ describe('startSauceConnect', () => {
             scVersion: '1.2.3',
             tunnelIdentifier: 'my-tunnel',
             'proxy-tunnel': 'abc',
+            verbose: true,
+            noProxyCaching: true,
             logger: (log) => logs.push(log)
         })
         expect(spawn).toBeCalledTimes(1)
