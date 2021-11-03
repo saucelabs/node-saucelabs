@@ -248,8 +248,9 @@ export default class SauceLabs {
         args.push(`--user=${this.username}`)
         args.push(`--api-key=${this._accessKey}`)
 
-        if (!args.some(arg => arg.startsWith('--region'))) {
-            const scRegion = getRegionSubDomain(this.region)
+        const region = argv.region || this.region
+        if (region) {
+            const scRegion = getRegionSubDomain({ region })
                 .split('-').slice(0, 2).join('-')
             args.push(`--region=${scRegion}`)
         }

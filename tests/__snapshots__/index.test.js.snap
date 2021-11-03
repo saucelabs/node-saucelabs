@@ -33,7 +33,7 @@ Array [
       "--no-proxy-caching",
       "--user=foo",
       "--api-key=bar",
-      "--region=us-west",
+      "--region=eu-central",
     ],
   ],
 ]

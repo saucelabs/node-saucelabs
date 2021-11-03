@@ -385,6 +385,7 @@ describe('startSauceConnect', () => {
             tunnelIdentifier: 'my-tunnel',
             'proxy-tunnel': 'abc',
             verbose: true,
+            region: 'eu',
             noProxyCaching: true,
             logger: (log) => logs.push(log)
         })
