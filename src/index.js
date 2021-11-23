@@ -7,6 +7,8 @@ import got from 'got'
 import FormData from 'form-data'
 import BinWrapper from 'bin-wrapper'
 import { camelCase } from 'change-case'
+import { stringify } from 'query-string'
+
 
 import {
     createHMAC, getAPIHost, getAssetHost, toString, getParameters,
@@ -18,7 +20,8 @@ import {
     SC_PARAMS_TO_STRIP, SC_READY_MESSAGE, SC_CLOSE_MESSAGE,
     SC_CLOSE_TIMEOUT, DEFAULT_SAUCE_CONNECT_VERSION, SC_FAILURE_MESSAGES,
     SAUCE_CONNECT_VERSIONS_ENDPOINT, SC_WAIT_FOR_MESSAGES,
-    SC_BOOLEAN_CLI_PARAMS
+    SC_BOOLEAN_CLI_PARAMS,
+    USER_NOT_FOUND_MESSAGE
 } from './constants'
 
 export default class SauceLabs {
@@ -103,6 +106,18 @@ export default class SauceLabs {
             return ::this._uploadJobAssets
         }
 
+        if (propName === 'listBuilds') {
+            return ::this._listBuilds
+        }
+
+        if (propName === 'listBuildFailedJobs') {
+            return ::this._listBuildFailedJobs
+        }
+
+        if (propName === 'listBuildJobs') {
+            return ::this._listBuildJobs
+        }
+
         /**
          * allow to return publicly registered class properties
          */
@@ -128,83 +143,38 @@ export default class SauceLabs {
             return ::this._downloadJobAsset
         }
 
-        return async (...args) => {
-            const { description, method, endpoint, servers, basePath } = PROTOCOL_MAP.get(propName)
-            const params = getParameters(description.parameters)
-            const pathParams = params.filter(p => p.in === 'path')
+        return this._callAPI.bind(this, propName)
+    }
 
-            /**
-             * validate required url params
-             */
-            let url = endpoint
-            for (const [i, urlParam] of Object.entries(pathParams)) {
-                const param = args[i]
-                const type = urlParam.type.replace('integer', 'number')
+    async _listBuilds(username, args) {
+        const { id: userId } = await this._getUserByUsername({ username })
+        const params = { user_id: userId, ...args };
+        const { builds } = await this._callAPI('getBuildsV2', 'vdc', params)
+        return builds;
+    }
 
-                if (typeof param !== type) {
-                    throw new Error(`Expected parameter for url param '${urlParam.name}' from type '${type}', found '${typeof param}'`)
-                }
+    async _listBuildFailedJobs(username, buildId, args) {
+        const { id: userId } = await this._getUserByUsername({ username })
+        const params = { user_id: userId, faulty: true, ...args };
+        const { jobs: buildJobs } = await this._callAPI('getBuildsJobsV2', 'vdc', buildId, params)
+        const jobIds = buildJobs.map(({ id }) => id);
+        const { jobs } = await this._callAPI('getJobsV1_1', { id: jobIds, full: true })
+        return jobs;
+    }
 
-                url = url.replace(`{${urlParam.name}}`, param)
-            }
+    async _listBuildJobs(buildId, args) {
+        const { jobs: buildJobs } = await this._callAPI('getBuildsJobsV2', 'vdc', buildId, args)
+        const jobIds = buildJobs.map(({ id }) => id);
+        const { jobs } = await this._callAPI('getJobsV1_1', { ...args, id: jobIds, full: true })
+        return jobs;
+    }
 
-            /**
-             * check for body param (as last parameter as we don't expect request
-             * parameters for non idempotent requests)
-             */
-            let bodyOption = params.find(p => p.in === 'body') || description.requestBody
-                ? args[pathParams.length]
-                : null
-
-            if (bodyOption && typeof bodyOption === 'string') {
-                bodyOption = JSON.parse(bodyOption)
-            }
-
-            /**
-             * validate required options
-             */
-            const bodyMap = new Map()
-            const options = args.slice(pathParams.length)[0] || {}
-            for (const optionParam of params.filter(p => p.in === 'query')) {
-                const expectedType = optionParam.type.replace('integer', 'number')
-                const optionName = camelCase(optionParam.name)
-                const option = options[optionName]
-                const isRequired = Boolean(optionParam.required) || (typeof optionParam.required === 'undefined' && typeof optionParam.default === 'undefined')
-                if ((isRequired || option) && !isValidType(option, expectedType)) {
-                    throw new Error(`Expected parameter for option '${optionName}' from type '${expectedType}', found '${typeof option}'`)
-                }
-
-                if (typeof option !== 'undefined') {
-                    bodyMap.set(optionParam.name, option)
-                }
-            }
-
-            /**
-             * get request body by using the body parameter or convert the parameter
-             * map into json object
-             */
-            const body = bodyOption || [...bodyMap.entries()].reduce((e, [k, v]) => {
-                e[k] = v
-                return e
-            }, {})
-
-            /**
-             * make request
-             */
-            const uri = getAPIHost(servers, basePath, this._options) + url
-            try {
-                const response = await this._api[method](uri, {
-                    ...(
-                        method === 'get'
-                            ? { searchParams: body }
-                            : { json: body }
-                    ),
-                    responseType: 'json'
-                })
-                return response.body
-            } catch (err) {
-                throw new Error(`Failed calling ${propName}: ${err.message}, ${err.response && err.response.body}`)
-            }
+    async _getUserByUsername({ username }) {
+        try {
+            const { results: [user] } = await this._callAPI('getUsersV1', { username })
+            return user
+        } catch (err) {
+            throw new Error(`There was an error while fetching user information: ${err.message}`)
         }
     }
 
@@ -426,4 +396,86 @@ export default class SauceLabs {
             throw new Error(`There was an error uploading assets: ${err.message}`)
         }
     }
+
+    async _callAPI (propName, ...args) {
+        const { description, method, endpoint, servers, basePath } = PROTOCOL_MAP.get(propName)
+        const params = getParameters(description.parameters)
+        const pathParams = params.filter(p => p.in === 'path')
+
+        /**
+         * validate required url params
+         */
+        let url = endpoint
+        for (const [i, urlParam] of Object.entries(pathParams)) {
+            const param = args[i]
+            const type = urlParam.type.replace('integer', 'number')
+
+            if (typeof param !== type) {
+                throw new Error(`Expected parameter for url param '${urlParam.name}' from type '${type}', found '${typeof param}'`)
+            }
+
+            url = url.replace(`{${urlParam.name}}`, param)
+        }
+
+        /**
+         * check for body param (as last parameter as we don't expect request
+         * parameters for non idempotent requests)
+         */
+        let bodyOption = params.find(p => p.in === 'body') || description.requestBody
+            ? args[pathParams.length]
+            : null
+
+        if (bodyOption && typeof bodyOption === 'string') {
+            bodyOption = JSON.parse(bodyOption)
+        }
+
+        /**
+         * validate required options
+         */
+        const bodyMap = new Map()
+        const options = args.slice(pathParams.length)[0] || {}
+        for (const optionParam of params.filter(p => p.in === 'query')) {
+            const expectedType = optionParam.type.replace('integer', 'number')
+            const optionName = camelCase(optionParam.name)
+            const option = options[optionName]
+            const isRequired = Boolean(optionParam.required) || (typeof optionParam.required === 'undefined' && typeof optionParam.default === 'undefined')
+            if ((isRequired || option) && !isValidType(option, expectedType)) {
+                throw new Error(`Expected parameter for option '${optionName}' from type '${expectedType}', found '${typeof option}'`)
+            }
+
+            if (typeof option !== 'undefined') {
+                bodyMap.set(optionParam.name, option)
+            }
+        }
+
+        /**
+         * get request body by using the body parameter or convert the parameter
+         * map into json object
+         */
+        const body = bodyOption || [...bodyMap.entries()].reduce((e, [k, v]) => {
+            e[k] = v
+            return e
+        }, {})
+        const stringifyBody = description.stringifyOptions ?
+            stringify(body, description.stringifyOptions) :
+            body;
+            /**
+             * make request
+             */
+            const uri = getAPIHost(servers, basePath, this._options) + url
+        try {
+            const response = await this._api[method](uri, {
+                ...(
+                    method === 'get'
+                        ? { searchParams: stringifyBody }
+                        : { json: stringifyBody }
+                ),
+                responseType: 'json'
+            })
+            return response.body
+        } catch (err) {
+            throw new Error(`Failed calling ${propName}: ${err.message}, ${err.response && err.response.body}`)
+        }
+    }
+
 }

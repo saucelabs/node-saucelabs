@@ -819,6 +819,16 @@
       "required":true,
       "type":"string"
     },
+    "jobIds":{
+      "description":"list of jobIds",
+      "in":"query",
+      "name":"id",
+      "required":true,
+      "items":{
+        "type":"string"
+      },
+      "type":"array"
+    },
     "limit":{
       "default":50,
       "description":"Number of results to return",
@@ -959,6 +969,50 @@
             "description":"Job",
             "schema":{
               "$ref":"#/definitions/Job"
+            }
+          },
+          "404":{
+            "description":"User is not found",
+            "schema":{
+              "$ref":"#/definitions/Error"
+            }
+          },
+          "default":{
+            "description":"Unexpected error",
+            "schema":{
+              "$ref":"#/definitions/Error"
+            }
+          }
+        },
+        "summary":"Get Job Information",
+        "tags":[
+          "Job"
+        ]
+      }
+    },
+    "/v1.1/jobs":{
+      "get":{
+        "operationId":"get_jobs_v1.1",
+        "stringifyOptions": {},
+        "parameters":[
+          {
+            "$ref":"#/parameters/jobIds"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"List of Jobs",
+            "schema":{
+              "properties":{
+                "jobs":{
+                  "description":"list of jobs",
+                  "items":{
+                    "$ref":"#/definitions/Job"
+                  },
+                  "type":"array"
+                }
+              },
+              "type":"object"
             }
           },
           "404":{
@@ -2031,7 +2085,7 @@
             }
           },
           "404":{
-            "description":"User is not found",
+            "description":"Jobs not found",
             "schema":{
               "$ref":"#/definitions/Error"
             }
