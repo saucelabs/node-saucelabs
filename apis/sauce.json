@@ -819,16 +819,6 @@
       "required":true,
       "type":"string"
     },
-    "jobIds":{
-      "description":"list of jobIds",
-      "in":"query",
-      "name":"id",
-      "required":true,
-      "items":{
-        "type":"string"
-      },
-      "type":"array"
-    },
     "limit":{
       "default":50,
       "description":"Number of results to return",
@@ -953,6 +943,16 @@
       "name":"username",
       "required":true,
       "type":"string"
+    },
+    "jobIds":{
+      "description":"list of jobIds",
+      "in":"query",
+      "name":"id",
+      "required":true,
+      "items":{
+        "type":"string"
+      },
+      "type":"array"
     }
   },
   "paths":{
@@ -969,50 +969,6 @@
             "description":"Job",
             "schema":{
               "$ref":"#/definitions/Job"
-            }
-          },
-          "404":{
-            "description":"User is not found",
-            "schema":{
-              "$ref":"#/definitions/Error"
-            }
-          },
-          "default":{
-            "description":"Unexpected error",
-            "schema":{
-              "$ref":"#/definitions/Error"
-            }
-          }
-        },
-        "summary":"Get Job Information",
-        "tags":[
-          "Job"
-        ]
-      }
-    },
-    "/v1.1/jobs":{
-      "get":{
-        "operationId":"get_jobs_v1.1",
-        "stringifyOptions": {},
-        "parameters":[
-          {
-            "$ref":"#/parameters/jobIds"
-          }
-        ],
-        "responses":{
-          "200":{
-            "description":"List of Jobs",
-            "schema":{
-              "properties":{
-                "jobs":{
-                  "description":"list of jobs",
-                  "items":{
-                    "$ref":"#/definitions/Job"
-                  },
-                  "type":"array"
-                }
-              },
-              "type":"object"
             }
           },
           "404":{
@@ -1114,49 +1070,6 @@
         "summary":"Org information",
         "tags":[
           "User"
-        ]
-      }
-    },
-    "/v1.1/{username}/builds":{
-      "get":{
-        "operationId":"list_builds",
-        "parameters":[
-          {
-            "$ref":"#/parameters/username"
-          },
-          {
-            "$ref":"#/parameters/limit"
-          },
-          {
-            "$ref":"#/parameters/subaccounts"
-          }
-        ],
-        "responses":{
-          "200":{
-            "description":"List of builds",
-            "schema":{
-              "items":{
-                "$ref":"#/definitions/Build"
-              },
-              "type":"array"
-            }
-          },
-          "404":{
-            "description":"User is not found",
-            "schema":{
-              "$ref":"#/definitions/Error"
-            }
-          },
-          "default":{
-            "description":"Unexpected error",
-            "schema":{
-              "$ref":"#/definitions/Error"
-            }
-          }
-        },
-        "summary":"Get all of a users builds",
-        "tags":[
-          "Build"
         ]
       }
     },
@@ -2022,88 +1935,6 @@
         ]
       }
     },
-    "/v1/{username}/builds/{id}/failed-jobs":{
-      "get":{
-        "operationId":"list_build_failed_jobs",
-        "parameters":[
-          {
-            "$ref":"#/parameters/username"
-          },
-          {
-            "$ref":"#/parameters/id"
-          }
-        ],
-        "responses":{
-          "200":{
-            "description":"List of jobs",
-            "schema":{
-              "items":{
-                "$ref":"#/definitions/Job"
-              },
-              "type":"array"
-            }
-          },
-          "404":{
-            "description":"User is not found",
-            "schema":{
-              "$ref":"#/definitions/Error"
-            }
-          },
-          "default":{
-            "description":"Unexpected error",
-            "schema":{
-              "$ref":"#/definitions/Error"
-            }
-          }
-        },
-        "summary":"Get all of the jobs associated with a build that have failed",
-        "tags":[
-          "Build",
-          "Job"
-        ]
-      }
-    },
-    "/v1/builds/{id}/jobs":{
-      "get":{
-        "operationId":"list_build_jobs",
-        "parameters":[
-          {
-            "$ref":"#/parameters/id"
-          },
-          {
-            "$ref":"#/parameters/full"
-          }
-        ],
-        "responses":{
-          "200":{
-            "description":"List of jobs",
-            "schema":{
-              "items":{
-                "$ref":"#/definitions/Job"
-              },
-              "type":"array"
-            }
-          },
-          "404":{
-            "description":"Jobs not found",
-            "schema":{
-              "$ref":"#/definitions/Error"
-            }
-          },
-          "default":{
-            "description":"Unexpected error",
-            "schema":{
-              "$ref":"#/definitions/Error"
-            }
-          }
-        },
-        "summary":"Get all of the jobs associated with a build",
-        "tags":[
-          "Build",
-          "Job"
-        ]
-      }
-    },
     "/v1/{username}/jobs/{id}":{
       "get":{
         "operationId":"get_job",
@@ -2400,6 +2231,50 @@
         "summary":"Get job asset",
         "tags":[
           "Asset"
+        ]
+      }
+    },
+    "/v1.1/jobs":{
+      "get":{
+        "operationId":"get_jobs_v1.1",
+        "stringifyOptions": {},
+        "parameters":[
+          {
+            "$ref":"#/parameters/jobIds"
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"List of Jobs",
+            "schema":{
+              "properties":{
+                "jobs":{
+                  "description":"list of jobs",
+                  "items":{
+                    "$ref":"#/definitions/Job"
+                  },
+                  "type":"array"
+                }
+              },
+              "type":"object"
+            }
+          },
+          "404":{
+            "description":"User is not found",
+            "schema":{
+              "$ref":"#/definitions/Error"
+            }
+          },
+          "default":{
+            "description":"Unexpected error",
+            "schema":{
+              "$ref":"#/definitions/Error"
+            }
+          }
+        },
+        "summary":"Get Job Information",
+        "tags":[
+          "Job"
         ]
       }
     }

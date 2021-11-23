@@ -429,6 +429,18 @@
           },
           {
             "$ref":"#/parameters/buildId"
+          },
+          {
+            "$ref":"#/parameters/buildUserId"
+          },
+          {
+            "$ref":"#/parameters/buildOrgId"
+          },
+          {
+            "$ref":"#/parameters/buildGroupId"
+          },
+          {
+            "$ref":"#/parameters/buildTeamId"
           }
         ],
         "responses":{
@@ -466,6 +478,18 @@
           },
           {
             "$ref":"#/parameters/buildJobId"
+          },
+          {
+            "$ref":"#/parameters/buildUserId"
+          },
+          {
+            "$ref":"#/parameters/buildOrgId"
+          },
+          {
+            "$ref":"#/parameters/buildGroupId"
+          },
+          {
+            "$ref":"#/parameters/buildTeamId"
           }
         ],
         "responses":{
@@ -505,6 +529,18 @@
             "$ref":"#/parameters/buildId"
           },
           {
+            "$ref":"#/parameters/buildUserId"
+          },
+          {
+            "$ref":"#/parameters/buildOrgId"
+          },
+          {
+            "$ref":"#/parameters/buildGroupId"
+          },
+          {
+            "$ref":"#/parameters/buildTeamId"
+          },
+          {
             "$ref":"#/parameters/buildModifiedSince"
           },
           {
@@ -536,6 +572,12 @@
           },
           {
             "$ref":"#/parameters/buildFaulty"
+          },
+          {
+            "$ref":"#/parameters/buildLimit"
+          },
+          {
+            "$ref":"#/parameters/buildOffset"
           }
         ],
         "responses":{

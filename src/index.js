@@ -118,6 +118,10 @@ export default class SauceLabs {
             return ::this._listBuildJobs
         }
 
+        if (propName === 'getUserByUsername') {
+            return ::this._getUserByUsername
+        }
+
         /**
          * allow to return publicly registered class properties
          */
@@ -148,14 +152,14 @@ export default class SauceLabs {
 
     async _listBuilds(username, args) {
         const { id: userId } = await this._getUserByUsername({ username })
-        const params = { user_id: userId, ...args };
+        const params = { userId, ...args }
         const { builds } = await this._callAPI('getBuildsV2', 'vdc', params)
         return builds;
     }
 
     async _listBuildFailedJobs(username, buildId, args) {
         const { id: userId } = await this._getUserByUsername({ username })
-        const params = { user_id: userId, faulty: true, ...args };
+        const params = { userId, faulty: true, ...args };
         const { jobs: buildJobs } = await this._callAPI('getBuildsJobsV2', 'vdc', buildId, params)
         const jobIds = buildJobs.map(({ id }) => id);
         const { jobs } = await this._callAPI('getJobsV1_1', { id: jobIds, full: true })
@@ -456,7 +460,10 @@ export default class SauceLabs {
             e[k] = v
             return e
         }, {})
-        const stringifyBody = description.stringifyOptions ?
+        /**
+         * stringify queryParams if stringifyOptions exists within description
+         */
+        const modifiedParams = description.stringifyOptions ?
             stringify(body, description.stringifyOptions) :
             body;
             /**
@@ -467,8 +474,8 @@ export default class SauceLabs {
             const response = await this._api[method](uri, {
                 ...(
                     method === 'get'
-                        ? { searchParams: stringifyBody }
-                        : { json: stringifyBody }
+                        ? { searchParams: modifiedParams }
+                        : { json: modifiedParams }
                 ),
                 responseType: 'json'
             })

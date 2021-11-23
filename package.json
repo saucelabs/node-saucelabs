@@ -37,7 +37,7 @@
     "test:typings:run": "cd ./tests/typings && tsc --incremental",
     "test:typings:cleanup": "rm -r ./tests/typings/node_modules",
     "test:unit": "jest --config ./jest.config.js",
-    "test1:e2e": "jest e2e --collectCoverage=false --testMatch \"<rootDir>/e2e/**/*.test.js\" --testPathIgnorePatterns \"<rootDir>/tests\"",
+    "test:e2e": "jest e2e --collectCoverage=false --testMatch \"<rootDir>/e2e/**/*.test.js\" --testPathIgnorePatterns \"<rootDir>/tests\"",
     "watch": "npm run compile -- --watch"
   },
   "dependencies": {

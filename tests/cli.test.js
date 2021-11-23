@@ -6,7 +6,7 @@ jest.mock('../src/index.js', () => {
     class SauceLabsMock {
         constructor (options) {
             this.options = options
-            this.listBuilds = jest.fn().mockReturnValue(Promise.resolve(options.returnValue))
+            this.listJobs = jest.fn().mockReturnValue(Promise.resolve(options.returnValue))
         }
     }
 
@@ -26,10 +26,8 @@ test('should be able to execute a command', async () => {
     })
 
     const [command, description, handler, cb] = yargs.command.mock.calls[3]
-    expect(command).toContain('listBuilds <username>')
-    expect(command).toContain('[limit]')
-    expect(command).toContain('[subaccounts]')
-    expect(description).toBe('Get all of a users builds')
+    expect(command).toContain('listJobs <username> [limit] [subaccounts]')
+    expect(description).toBe('Get all of a users jobs')
 
     handler(yargs)
     expect(yargs.positional)
@@ -63,5 +61,5 @@ test('should be able to execute a command', async () => {
         headless: true,
         region: 'anywhere',
     })
-    expect(api.listBuilds).toBeCalledWith('username-param', params)
+    expect(api.listJobs).toBeCalledWith('username-param', params)
 })
