@@ -25,7 +25,7 @@ for (const [commandName, options] of PROTOCOL_MAP) {
     docs += '    <tr>\n'
     docs += '      <td>\n'
     docs += `        <b>${options.method.toUpperCase()}</b> <code>${options.endpoint}</code><br>\n`
-    docs += `        ${options.description.description || 'No description available.'}\n`
+    docs += `        ${options.description.description || options.description.summary || 'No description available.'}\n`
     docs += '        <h3>Example:</h3>\n'
     docs += `        <code>${example}</code>\n`
 
