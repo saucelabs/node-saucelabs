@@ -257,16 +257,14 @@
       "in":"path",
       "name":"build_id",
       "required":true,
-      "type":"string",
-      "required": false
+      "type":"string"
     },
     "buildJobId":{
       "description":"job_id",
       "in":"path",
       "name":"job_id",
       "required":true,
-      "type":"string",
-      "required": false
+      "type":"string"
     },
     "buildModifiedSince":{
       "description":"modified_since",

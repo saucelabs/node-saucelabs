@@ -889,26 +889,26 @@ This endpoint requires API Key authentication and will also return your private 
         <b>GET</b> <code>/{build_source}/{build_id}/</code><br>
         Get Build detail (build_source can be vdc or rdc)
         <h3>Example:</h3>
-        <code>api.getBuildV2(build_source, { ...options })</code>
+        <code>api.getBuildV2(build_source, build_id, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>build_id</b>: build_id</li>          <li><b>user_id</b>: user_id</li>          <li><b>org_id</b>: org_id</li>          <li><b>group_id</b>: group_id</li>          <li><b>team_id</b>: team_id</li>        </ul>      </td>
+        <ul>          <li><b>user_id</b>: user_id</li>          <li><b>org_id</b>: org_id</li>          <li><b>group_id</b>: group_id</li>          <li><b>team_id</b>: team_id</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
         <b>GET</b> <code>/{build_source}/jobs/{job_id}/build/</code><br>
         Get Build Jobs (build_source can be vdc or rdc)
         <h3>Example:</h3>
-        <code>api.getBuildByJobIdV2(build_source, { ...options })</code>
+        <code>api.getBuildByJobIdV2(build_source, job_id, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>job_id</b>: job_id</li>          <li><b>user_id</b>: user_id</li>          <li><b>org_id</b>: org_id</li>          <li><b>group_id</b>: group_id</li>          <li><b>team_id</b>: team_id</li>        </ul>      </td>
+        <ul>          <li><b>user_id</b>: user_id</li>          <li><b>org_id</b>: org_id</li>          <li><b>group_id</b>: group_id</li>          <li><b>team_id</b>: team_id</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
         <b>GET</b> <code>/{build_source}/{build_id}/jobs/</code><br>
         Get Build detail (build_source can be vdc or rdc)
         <h3>Example:</h3>
-        <code>api.getBuildsJobsV2(build_source, { ...options })</code>
+        <code>api.getBuildsJobsV2(build_source, build_id, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>build_id</b>: build_id</li>          <li><b>user_id</b>: user_id</li>          <li><b>org_id</b>: org_id</li>          <li><b>group_id</b>: group_id</li>          <li><b>team_id</b>: team_id</li>          <li><b>modified_since</b>: modified_since</li>          <li><b>completed</b>: completed</li>          <li><b>errored</b>: errored</li>          <li><b>failed</b>: failed</li>          <li><b>finished</b>: finished</li>          <li><b>new</b>: new</li>          <li><b>passed</b>: passed</li>          <li><b>public</b>: public</li>          <li><b>queued</b>: queued</li>          <li><b>running</b>: running</li>          <li><b>faulty</b>: faulty</li>          <li><b>limit</b>: Number of results to return</li>          <li><b>offset</b>: Starting number</li>        </ul>      </td>
+        <ul>          <li><b>user_id</b>: user_id</li>          <li><b>org_id</b>: org_id</li>          <li><b>group_id</b>: group_id</li>          <li><b>team_id</b>: team_id</li>          <li><b>modified_since</b>: modified_since</li>          <li><b>completed</b>: completed</li>          <li><b>errored</b>: errored</li>          <li><b>failed</b>: failed</li>          <li><b>finished</b>: finished</li>          <li><b>new</b>: new</li>          <li><b>passed</b>: passed</li>          <li><b>public</b>: public</li>          <li><b>queued</b>: queued</li>          <li><b>running</b>: running</li>          <li><b>faulty</b>: faulty</li>          <li><b>limit</b>: Number of results to return</li>          <li><b>offset</b>: Starting number</li>        </ul>      </td>
     </tr>
   </tbody></table>
