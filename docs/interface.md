@@ -31,15 +31,6 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/v1.1/{username}/builds</code><br>
-        No description available.
-        <h3>Example:</h3>
-        <code>api.listBuilds(username, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>limit</b>: Number of results to return</li>          <li><b>subaccounts</b>: Include subaccounts in list of jobs</li>        </ul>      </td>
-    </tr>
-    <tr>
-      <td>
         <b>GET</b> <code>/v1.1/{username}/jobs</code><br>
         No description available.
         <h3>Example:</h3>
@@ -193,31 +184,6 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/v1/{username}/all_tunnels</code><br>
-        No description available.
-        <h3>Example:</h3>
-        <code>api.listAllTunnels(username)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>GET</b> <code>/v1/{username}/builds/{id}/failed-jobs</code><br>
-        No description available.
-        <h3>Example:</h3>
-        <code>api.listBuildFailedJobs(username, id)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>GET</b> <code>/v1/builds/{id}/jobs</code><br>
-        No description available.
-        <h3>Example:</h3>
-        <code>api.listBuildJobs(id, { ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>full</b>: Should the response result contain everything or just the basics</li>        </ul>      </td>
-    </tr>
-    <tr>
-      <td>
         <b>GET</b> <code>/v1/{username}/jobs/{id}</code><br>
         No description available.
         <h3>Example:</h3>
@@ -238,6 +204,14 @@ The following commands are available via package or cli tool:
         No description available.
         <h3>Example:</h3>
         <code>api.stopJob(username, id)</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/v1/{username}/all_tunnels</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.listAllTunnels(username)</code>
       </td>
     </tr>
     <tr>
@@ -273,6 +247,15 @@ The following commands are available via package or cli tool:
         <code>api.downloadJobAsset(id, filename, { ...options })</code>
         <br><h4>Options</h4>
         <ul>          <li><b>filepath</b>: file path to store the asset at</li>        </ul>      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/v1.1/jobs</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getJobsV1_1(id, { ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>full</b>: Should the response result contain everything or just the basics</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -873,5 +856,59 @@ This endpoint requires API Key authentication and will also return your private 
         <h3>Example:</h3>
         <code>api.getExecutions(executionId)</code>
       </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/teams</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getTeamsV1({ ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>name</b>: name</li>        </ul>      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/users</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getUsersV1({ ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>username</b>: username</li>          <li><b>teams</b>: List of team_ids</li>          <li><b>team-name</b>: team-name</li>          <li><b>roles</b>: roles</li>          <li><b>phrase</b>: phrase</li>          <li><b>status</b>: status</li>          <li><b>limit</b>: Number of results to return</li>          <li><b>offset</b>: Starting number</li>        </ul>      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/{build_source}/</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getBuildsV2(build_source, { ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>user_id</b>: user_id</li>          <li><b>org_id</b>: org_id</li>          <li><b>group_id</b>: group_id</li>          <li><b>team_id</b>: team_id</li>          <li><b>status</b>: status</li>          <li><b>name</b>: start</li>          <li><b>end</b>: end</li>          <li><b>limit</b>: Number of results to return</li>          <li><b>offset</b>: Starting number</li>          <li><b>sort</b>: sort</li>        </ul>      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/{build_source}/{build_id}/</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getBuildV2(build_source, { ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>build_id</b>: build_id</li>          <li><b>user_id</b>: user_id</li>          <li><b>org_id</b>: org_id</li>          <li><b>group_id</b>: group_id</li>          <li><b>team_id</b>: team_id</li>        </ul>      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/{build_source}/jobs/{job_id}/build/</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getBuildByJobIdV2(build_source, { ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>job_id</b>: job_id</li>          <li><b>user_id</b>: user_id</li>          <li><b>org_id</b>: org_id</li>          <li><b>group_id</b>: group_id</li>          <li><b>team_id</b>: team_id</li>        </ul>      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/{build_source}/{build_id}/jobs/</code><br>
+        No description available.
+        <h3>Example:</h3>
+        <code>api.getBuildsJobsV2(build_source, { ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>build_id</b>: build_id</li>          <li><b>user_id</b>: user_id</li>          <li><b>org_id</b>: org_id</li>          <li><b>group_id</b>: group_id</li>          <li><b>team_id</b>: team_id</li>          <li><b>modified_since</b>: modified_since</li>          <li><b>completed</b>: completed</li>          <li><b>errored</b>: errored</li>          <li><b>failed</b>: failed</li>          <li><b>finished</b>: finished</li>          <li><b>new</b>: new</li>          <li><b>passed</b>: passed</li>          <li><b>public</b>: public</li>          <li><b>queued</b>: queued</li>          <li><b>running</b>: running</li>          <li><b>faulty</b>: faulty</li>          <li><b>limit</b>: Number of results to return</li>          <li><b>offset</b>: Starting number</li>        </ul>      </td>
     </tr>
   </tbody></table>
