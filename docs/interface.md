@@ -8,7 +8,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1.1/jobs/{id}</code><br>
-        No description available.
+        Get Job Information
         <h3>Example:</h3>
         <code>api.getJobV1_1(id)</code>
       </td>
@@ -16,7 +16,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1.2/users/{username}/concurrency</code><br>
-        No description available.
+        User concurrency
         <h3>Example:</h3>
         <code>api.getUserConcurrency(username)</code>
       </td>
@@ -24,7 +24,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1.1/users/{username}/organization</code><br>
-        No description available.
+        Org information
         <h3>Example:</h3>
         <code>api.listUserOrganization(username)</code>
       </td>
@@ -32,7 +32,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1.1/{username}/jobs</code><br>
-        No description available.
+        Get all of a users jobs
         <h3>Example:</h3>
         <code>api.listJobs(username, { ...options })</code>
         <br><h4>Options</h4>
@@ -41,7 +41,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1/dashboard_messages/{username}</code><br>
-        No description available.
+        Dashboard messages from Django
         <h3>Example:</h3>
         <code>api.getDashboardMessageForUser(username)</code>
       </td>
@@ -57,7 +57,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1/info/status</code><br>
-        No description available.
+        Sauce Labs Status
         <h3>Example:</h3>
         <code>api.getStatus()</code>
       </td>
@@ -105,7 +105,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1/me</code><br>
-        No description available.
+        Authenticated user cookie information
         <h3>Example:</h3>
         <code>api.getCurrentUser()</code>
       </td>
@@ -129,7 +129,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1/users/{username}</code><br>
-        No description available.
+        User information
         <h3>Example:</h3>
         <code>api.getUser(username)</code>
       </td>
@@ -137,7 +137,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1/users/{username}/subaccounts</code><br>
-        No description available.
+        User information
         <h3>Example:</h3>
         <code>api.getSubaccounts(username)</code>
       </td>
@@ -145,7 +145,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1/users/{username}/activity</code><br>
-        No description available.
+        Get currently running job counts broken down by account and job status
         <h3>Example:</h3>
         <code>api.getUserActivity(username)</code>
       </td>
@@ -153,7 +153,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1/users/{username}/monthly-minutes</code><br>
-        No description available.
+        User's monthly-minutes
         <h3>Example:</h3>
         <code>api.getUserMinutes(username)</code>
       </td>
@@ -161,7 +161,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1/users_activity</code><br>
-        No description available.
+        Get job statistics for usernames
         <h3>Example:</h3>
         <code>api.getUsersActivity()</code>
       </td>
@@ -169,7 +169,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1/users_last_job</code><br>
-        No description available.
+        The result returns dict of usersnames and time when they started last job.
         <h3>Example:</h3>
         <code>api.usersLastJob()</code>
       </td>
@@ -177,7 +177,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1/whoami</code><br>
-        No description available.
+        Authenticated user information
         <h3>Example:</h3>
         <code>api.getCurrentUserFull()</code>
       </td>
@@ -185,7 +185,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1/{username}/jobs/{id}</code><br>
-        No description available.
+        Get Job Information
         <h3>Example:</h3>
         <code>api.getJob(username, id)</code>
       </td>
@@ -193,7 +193,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>PUT</b> <code>/v1/{username}/jobs/{id}</code><br>
-        No description available.
+        Update Job Information
         <h3>Example:</h3>
         <code>api.updateJob(username, id, body)</code>
       </td>
@@ -201,7 +201,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>PUT</b> <code>/v1/{username}/jobs/{id}/stop</code><br>
-        No description available.
+        Stop Job Information
         <h3>Example:</h3>
         <code>api.stopJob(username, id)</code>
       </td>
@@ -209,7 +209,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1/{username}/all_tunnels</code><br>
-        No description available.
+        Get all Tunnels
         <h3>Example:</h3>
         <code>api.listAllTunnels(username)</code>
       </td>
@@ -217,7 +217,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1/{username}/tunnels</code><br>
-        No description available.
+        Get tunnels for the user or all the users in the team
         <h3>Example:</h3>
         <code>api.listTunnels(username, { ...options })</code>
         <br><h4>Options</h4>
@@ -226,7 +226,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>DELETE</b> <code>/v1/{username}/tunnels/{id}</code><br>
-        No description available.
+        Delete a Tunnel
         <h3>Example:</h3>
         <code>api.deleteTunnel(username, id)</code>
       </td>
@@ -234,7 +234,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1/{username}/tunnels/{id}</code><br>
-        No description available.
+        Get Tunnel by ID
         <h3>Example:</h3>
         <code>api.getTunnel(username, id)</code>
       </td>
@@ -242,7 +242,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1/jobs/{id}/{assetName}</code><br>
-        No description available.
+        Get job asset
         <h3>Example:</h3>
         <code>api.downloadJobAsset(id, filename, { ...options })</code>
         <br><h4>Options</h4>
@@ -251,7 +251,7 @@ The following commands are available via package or cli tool:
     <tr>
       <td>
         <b>GET</b> <code>/v1.1/jobs</code><br>
-        No description available.
+        Get Job Information
         <h3>Example:</h3>
         <code>api.getJobsV1_1(id, { ...options })</code>
         <br><h4>Options</h4>
@@ -667,7 +667,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>PUT</b> <code>/jobs/{jobId}/assets</code><br>
-        No description available.
+        Upload job assets
         <h3>Example:</h3>
         <code>api.uploadJobAssets(jobId, { ...options })</code>
         <br><h4>Options</h4>
@@ -692,7 +692,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/v1/getprojects</code><br>
-        No description available.
+        Get all enabled projects for the user account
         <h3>Example:</h3>
         <code>api.getProjects()</code>
       </td>
@@ -700,7 +700,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/v1/projects/{projectId}/getproject</code><br>
-        No description available.
+        Get project information by projectId
         <h3>Example:</h3>
         <code>api.getProject(projectId)</code>
       </td>
@@ -708,7 +708,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/v1/projects/{projectName}/getprojectbyname</code><br>
-        No description available.
+        Get project information by project name.
         <h3>Example:</h3>
         <code>api.getProjectByName(projectName)</code>
       </td>
@@ -716,7 +716,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/testSuites/{accountId}/{projectId}/getTestSuites</code><br>
-        No description available.
+        Get test suites and associated test case  info for the testsuite for the requested project.
         <h3>Example:</h3>
         <code>api.getTestsuitesByProjects(accountId, projectId)</code>
       </td>
@@ -724,7 +724,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>POST</b> <code>/v1/projects/{projectId}/testcases/{testcaseId}/updateLveAndRecoverSteps</code><br>
-        No description available.
+        It updates test steps to a test case
         <h3>Example:</h3>
         <code>api.updateLveAndRecoverSteps(projectId, testcaseId, steps)</code>
       </td>
@@ -732,7 +732,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>POST</b> <code>/v1/projects/{projectId}/execute</code><br>
-        No description available.
+        It Executes a single test script.
         <h3>Example:</h3>
         <code>api.executeTestsuiteTest(Body, projectId)</code>
       </td>
@@ -740,7 +740,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>POST</b> <code>/v1/test_suite/create</code><br>
-        No description available.
+        It creates a test suite.
         <h3>Example:</h3>
         <code>api.createTestSuite(Body)</code>
       </td>
@@ -748,7 +748,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>POST</b> <code>/v1/test_suite/{testSuiteId}/update</code><br>
-        No description available.
+        Updates a test suite.
         <h3>Example:</h3>
         <code>api.updateTestSuite(testSuiteId, Body)</code>
       </td>
@@ -756,7 +756,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>POST</b> <code>/v1/testSuites/delete</code><br>
-        No description available.
+        Deletes test suite.
         <h3>Example:</h3>
         <code>api.deleteTestSuites(Body)</code>
       </td>
@@ -764,7 +764,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>POST</b> <code>/testCases/associate</code><br>
-        No description available.
+        Associates test cases with test suites.
         <h3>Example:</h3>
         <code>api.associateTestcases(Body)</code>
       </td>
@@ -772,7 +772,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>POST</b> <code>/testCases/create/{accountId}/{projectId}</code><br>
-        No description available.
+        Associates test cases with test suites.
         <h3>Example:</h3>
         <code>api.createTestcase(accountId, projectId, Body)</code>
       </td>
@@ -780,7 +780,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>POST</b> <code>/v1/projects/{projectId}/testcases/{testcaseId}/updateSteps</code><br>
-        No description available.
+        Update steps assigned to a testcase.
         <h3>Example:</h3>
         <code>api.updateTestcaseSteps(projectId, testcaseId, Body)</code>
       </td>
@@ -788,7 +788,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>POST</b> <code>/v1/testsuite/{testSuiteId}/execute</code><br>
-        No description available.
+        It executes a test suite
         <h3>Example:</h3>
         <code>api.executeTestsuite(testSuiteId, Body)</code>
       </td>
@@ -804,7 +804,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/v1/jobs/{jobId}/get_status</code><br>
-        No description available.
+        It returns status of execution of test suite
         <h3>Example:</h3>
         <code>api.getExecutionStatus(jobId)</code>
       </td>
@@ -812,7 +812,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/v1/projects/{projectId}/testcases</code><br>
-        No description available.
+        Get Test Cases For ProjectId
         <h3>Example:</h3>
         <code>api.getTestcases(projectId)</code>
       </td>
@@ -820,7 +820,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/testCases/getTestCaseInfo/{testcaseId}/{stepId}</code><br>
-        No description available.
+        Get test steps for a specific test case
         <h3>Example:</h3>
         <code>api.getTestSteps(testcaseId, stepId)</code>
       </td>
@@ -828,7 +828,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/v1/testcases/{testcaseId}/isgenerating</code><br>
-        No description available.
+        generating test cases
         <h3>Example:</h3>
         <code>api.isGenerating(testcaseId)</code>
       </td>
@@ -836,7 +836,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/blocks/getAll/{accountId}/{blockId}</code><br>
-        No description available.
+        Get test steps for a specific test case block
         <h3>Example:</h3>
         <code>api.getTestStepBlocks(accountId, blockId)</code>
       </td>
@@ -844,7 +844,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/v1/downloadFile</code><br>
-        No description available.
+        It downloades the html report
         <h3>Example:</h3>
         <code>api.downloadReport(fileURL)</code>
       </td>
@@ -852,7 +852,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/testScriptExecutions/{executionId}/executions</code><br>
-        No description available.
+        It returns execution details for the executing script.
         <h3>Example:</h3>
         <code>api.getExecutions(executionId)</code>
       </td>
@@ -860,7 +860,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/teams</code><br>
-        No description available.
+        Get List of Teams
         <h3>Example:</h3>
         <code>api.getTeamsV1({ ...options })</code>
         <br><h4>Options</h4>
@@ -869,7 +869,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/users</code><br>
-        No description available.
+        Get List of Teams
         <h3>Example:</h3>
         <code>api.getUsersV1({ ...options })</code>
         <br><h4>Options</h4>
@@ -878,7 +878,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/{build_source}/</code><br>
-        No description available.
+        Get List of Builds (build_source can be vdc or rdc)
         <h3>Example:</h3>
         <code>api.getBuildsV2(build_source, { ...options })</code>
         <br><h4>Options</h4>
@@ -887,7 +887,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/{build_source}/{build_id}/</code><br>
-        No description available.
+        Get Build detail (build_source can be vdc or rdc)
         <h3>Example:</h3>
         <code>api.getBuildV2(build_source, { ...options })</code>
         <br><h4>Options</h4>
@@ -896,7 +896,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/{build_source}/jobs/{job_id}/build/</code><br>
-        No description available.
+        Get Build Jobs (build_source can be vdc or rdc)
         <h3>Example:</h3>
         <code>api.getBuildByJobIdV2(build_source, { ...options })</code>
         <br><h4>Options</h4>
@@ -905,7 +905,7 @@ This endpoint requires API Key authentication and will also return your private 
     <tr>
       <td>
         <b>GET</b> <code>/{build_source}/{build_id}/jobs/</code><br>
-        No description available.
+        Get Build detail (build_source can be vdc or rdc)
         <h3>Example:</h3>
         <code>api.getBuildsJobsV2(build_source, { ...options })</code>
         <br><h4>Options</h4>

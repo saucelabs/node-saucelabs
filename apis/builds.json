@@ -414,7 +414,7 @@
             }
           }
         },
-        "summary":"Get List of Builds",
+        "summary":"Get List of Builds (build_source can be vdc or rdc)",
         "tags":[
           "Build"
         ]
@@ -463,7 +463,7 @@
             }
           }
         },
-        "summary":"Get Build detail",
+        "summary":"Get Build detail (build_source can be vdc or rdc)",
         "tags":[
           "Build"
         ]
@@ -512,7 +512,7 @@
             }
           }
         },
-        "summary":"Get Build Jobs",
+        "summary":"Get Build Jobs (build_source can be vdc or rdc)",
         "tags":[
           "Build"
         ]
@@ -600,7 +600,7 @@
             }
           }
         },
-        "summary":"Get Build detail",
+        "summary":"Get Build detail (build_source can be vdc or rdc)",
         "tags":[
           "Build"
         ]
