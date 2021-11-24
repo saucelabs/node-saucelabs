@@ -2241,6 +2241,9 @@
         "parameters":[
           {
             "$ref":"#/parameters/jobIds"
+          },
+          {
+            "$ref":"#/parameters/full"
           }
         ],
         "responses":{

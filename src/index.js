@@ -460,16 +460,18 @@ export default class SauceLabs {
             e[k] = v
             return e
         }, {})
+
         /**
          * stringify queryParams if stringifyOptions exists within description
          */
         const modifiedParams = description.stringifyOptions ?
             stringify(body, description.stringifyOptions) :
             body;
-            /**
-             * make request
-             */
-            const uri = getAPIHost(servers, basePath, this._options) + url
+
+        /**
+         * make request
+         */
+        const uri = getAPIHost(servers, basePath, this._options) + url
         try {
             const response = await this._api[method](uri, {
                 ...(
