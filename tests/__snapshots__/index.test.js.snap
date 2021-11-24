@@ -34,7 +34,7 @@ Array [
     "https://api.us-west-1.saucelabs.com/rest/v1.1/jobs",
     Object {
       "responseType": "json",
-      "searchParams": "id=job-1&id=job-2",
+      "searchParams": "full=true&id=job-1&id=job-2",
     },
   ],
 ]
@@ -71,7 +71,7 @@ Array [
     "https://api.us-west-1.saucelabs.com/rest/v1.1/jobs",
     Object {
       "responseType": "json",
-      "searchParams": "id=job-1&id=job-2",
+      "searchParams": "full=true&id=job-1&id=job-2",
     },
   ],
 ]
