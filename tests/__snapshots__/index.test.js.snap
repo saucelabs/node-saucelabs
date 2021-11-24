@@ -7,6 +7,128 @@ Object {
 }
 `;
 
+exports[`should get builds failed jobs 1`] = `
+Array [
+  Array [
+    "https://api.us-west-1.saucelabs.com/team-management/v1/users",
+    Object {
+      "responseType": "json",
+      "searchParams": Object {
+        "username": "fooUser",
+      },
+    },
+  ],
+  Array [
+    "https://api.us-west-1.saucelabs.com/v2/builds/vdc/build-1/jobs/",
+    Object {
+      "responseType": "json",
+      "searchParams": Object {
+        "faulty": true,
+        "limit": 10,
+        "offset": 5,
+        "user_id": "foo-id",
+      },
+    },
+  ],
+  Array [
+    "https://api.us-west-1.saucelabs.com/rest/v1.1/jobs",
+    Object {
+      "responseType": "json",
+      "searchParams": "id=job-1&id=job-2",
+    },
+  ],
+]
+`;
+
+exports[`should get builds failed jobs 2`] = `
+Array [
+  Object {
+    "id": "job-1",
+    "name": "foo-job",
+    "status": "failed",
+  },
+  Object {
+    "id": "job-2",
+    "name": "bar-job",
+    "status": "errored",
+  },
+]
+`;
+
+exports[`should get builds jobs 1`] = `
+Array [
+  Array [
+    "https://api.us-west-1.saucelabs.com/v2/builds/vdc/build-1/jobs/",
+    Object {
+      "responseType": "json",
+      "searchParams": Object {
+        "limit": 10,
+        "offset": 5,
+      },
+    },
+  ],
+  Array [
+    "https://api.us-west-1.saucelabs.com/rest/v1.1/jobs",
+    Object {
+      "responseType": "json",
+      "searchParams": "id=job-1&id=job-2",
+    },
+  ],
+]
+`;
+
+exports[`should get builds jobs 2`] = `
+Array [
+  Object {
+    "id": "job-1",
+    "name": "foo-job",
+    "status": "failed",
+  },
+  Object {
+    "id": "job-2",
+    "name": "bar-job",
+    "status": "errored",
+  },
+]
+`;
+
+exports[`should get list of builds 1`] = `
+Array [
+  Array [
+    "https://api.us-west-1.saucelabs.com/team-management/v1/users",
+    Object {
+      "responseType": "json",
+      "searchParams": Object {
+        "username": "fooUser",
+      },
+    },
+  ],
+  Array [
+    "https://api.us-west-1.saucelabs.com/v2/builds/vdc/",
+    Object {
+      "responseType": "json",
+      "searchParams": Object {
+        "limit": 10,
+        "offset": 5,
+        "user_id": "foo-id",
+      },
+    },
+  ],
+]
+`;
+
+exports[`should get user by username 1`] = `
+Array [
+  "https://api.us-west-1.saucelabs.com/team-management/v1/users",
+  Object {
+    "responseType": "json",
+    "searchParams": Object {
+      "username": "fooUser",
+    },
+  },
+]
+`;
+
 exports[`startSauceConnect should start sauce connect with fallback default version in case the call to the API failed 1`] = `
 Array [
   Array [

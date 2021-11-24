@@ -497,6 +497,72 @@ test('should output failure msg for createJob API', async () => {
     expect(error.message).toBe('Failed calling createJob: Response code 422 (Unprocessable Entity), empty framework')
 })
 
+test('should get user by username', async () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    got.mockReturnValue(Promise.resolve({
+        body: { results: [{ id: 'foo-id' }]}
+    }))
+    const result = await api.getUserByUsername({ username: 'fooUser' })
+    expect(result).toEqual({ id: 'foo-id' })
+    expect(got.mock.calls[0]).toMatchSnapshot()
+})
+
+test('should get list of builds', async () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    got.mockReturnValueOnce(Promise.resolve({
+        body: { results: [{ id: 'foo-id' }]}
+    })).mockReturnValue(Promise.resolve({
+        body: { builds: [{ id: 'build-id' }]}
+    }))
+    const builds = await api.listBuilds('fooUser', { offset: 5, limit: 10 })
+    expect(got.mock.calls).toMatchSnapshot()
+    expect(builds).toEqual([{ id: 'build-id' }])
+})
+
+test('should get builds failed jobs', async () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    got.mockReturnValueOnce(Promise.resolve({
+        body: { results: [{ id: 'foo-id' }]}
+    })).mockReturnValueOnce(Promise.resolve({
+        body: { jobs: [{ id: 'job-1' }, { id: 'job-2' }]}
+    })).mockReturnValue(Promise.resolve({
+        body: { jobs: [
+            { id: 'job-1', name: 'foo-job', status: 'failed' },
+            { id: 'job-2', name: 'bar-job', status: 'errored' }
+        ]}
+    }))
+    const failedJobs = await api.listBuildFailedJobs('fooUser', 'build-1', { offset: 5, limit: 10 })
+    expect(got.mock.calls).toMatchSnapshot()
+    expect(failedJobs).toMatchSnapshot()
+})
+
+test('should get builds jobs', async () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    got.mockReturnValueOnce(Promise.resolve({
+        body: { jobs: [{ id: 'job-1' }, { id: 'job-2' }]}
+    })).mockReturnValue(Promise.resolve({
+        body: { jobs: [
+            { id: 'job-1', name: 'foo-job', status: 'failed' },
+            { id: 'job-2', name: 'bar-job', status: 'errored' }
+        ]}
+    }))
+    const failedJobs = await api.listBuildJobs('build-1', { offset: 5, limit: 10 })
+    expect(got.mock.calls).toMatchSnapshot()
+    expect(failedJobs).toMatchSnapshot()
+})
+
+test('should stringify searchParams', () => {
+    const api = new SauceLabs({ user: 'foo', key: 'bar' })
+    got.mockReturnValue(Promise.resolve({
+        body: { jobs: [
+            { id: 'job-1', name: 'foo-job', status: 'failed' },
+            { id: 'job-2', name: 'bar-job', status: 'errored' }
+        ]}
+    }))
+    api.getJobsV1_1({ id: ['job-1', 'job-2'] })
+    expect(got.mock.calls[0][1].searchParams).toEqual("id=job-1&id=job-2")
+})
+
 afterEach(() => {
     fs.writeFileSync.mockClear()
     got.mockClear()
