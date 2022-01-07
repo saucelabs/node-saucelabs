@@ -4,11 +4,13 @@
  * The module had a CVE-2021-3795 vulnerability and decided to fork
  * and "simplify" the implementation
  */
-import {stat, chmod} from 'fs/promises'
+import {promises} from 'fs'
 import {join, parse} from 'path'
 import url from 'url'
 import download from 'download'
 import osFilterObj  from 'os-filter-obj'
+
+const {chmod, stat} = promises
 
 export default class BinWrapper {
     constructor(options = {}) {
