@@ -5,7 +5,6 @@ import { spawn } from 'child_process'
 
 import got from 'got'
 import FormData from 'form-data'
-import BinWrapper from 'bin-wrapper'
 import { camelCase } from 'change-case'
 import { stringify } from 'query-string'
 
@@ -23,6 +22,7 @@ import {
     SC_BOOLEAN_CLI_PARAMS,
     USER_NOT_FOUND_MESSAGE
 } from './constants'
+import BinWrapper from './binWrapper'
 
 export default class SauceLabs {
     constructor (options) {
@@ -237,9 +237,8 @@ export default class SauceLabs {
         bin
             .dest(path.join(__dirname, `.sc-v${sauceConnectVersion}`))
             .use('/bin/' + (process.platform.startsWith('win') ? 'sc.exe' : 'sc'))
-            .version(`v${sauceConnectVersion}`)
 
-        await bin.run(['--version'])
+        await bin.verifyAlreadyDownloaded()
         const cp = spawn(bin.path(), args)
         return new Promise((resolve, reject) => {
             const close = () => new Promise((resolveClose) => {

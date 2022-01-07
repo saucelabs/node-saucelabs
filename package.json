@@ -41,11 +41,12 @@
     "watch": "npm run compile -- --watch"
   },
   "dependencies": {
-    "bin-wrapper": "^4.1.0",
     "change-case": "^4.1.2",
+    "download": "^8.0.0",
     "form-data": "^4.0.0",
     "got": "^11.8.2",
     "hash.js": "^1.1.7",
+    "os-filter-obj": "^2.0.0",
     "tunnel": "^0.0.6",
     "yargs": "^17.2.1"
   },
