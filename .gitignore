@@ -67,3 +67,4 @@ build
 !babel.config.js
 .idea/
 .DS_Store
+.vscode
