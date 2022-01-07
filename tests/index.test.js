@@ -4,9 +4,11 @@ import { spawn } from 'child_process'
 import FormData from 'form-data'
 
 import SauceLabs from '../src'
-import { instances } from 'bin-wrapper'
+
 import versions from './__responses__/versions.json'
 import {DEFAULT_SAUCE_CONNECT_VERSION} from '../src/constants'
+
+const instances = []
 
 jest.mock('fs')
 const fs = require('fs')
@@ -560,7 +562,7 @@ test('should stringify searchParams', () => {
         ]}
     }))
     api.getJobsV1_1({ id: ['job-1', 'job-2'] })
-    expect(got.mock.calls[0][1].searchParams).toEqual("id=job-1&id=job-2")
+    expect(got.mock.calls[0][1].searchParams).toEqual('id=job-1&id=job-2')
 })
 
 afterEach(() => {
