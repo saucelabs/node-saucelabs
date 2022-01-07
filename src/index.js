@@ -20,7 +20,6 @@ import {
     SC_CLOSE_TIMEOUT, DEFAULT_SAUCE_CONNECT_VERSION, SC_FAILURE_MESSAGES,
     SAUCE_CONNECT_VERSIONS_ENDPOINT, SC_WAIT_FOR_MESSAGES,
     SC_BOOLEAN_CLI_PARAMS,
-    USER_NOT_FOUND_MESSAGE
 } from './constants'
 import BinWrapper from './binWrapper'
 
@@ -154,23 +153,23 @@ export default class SauceLabs {
         const { id: userId } = await this._getUserByUsername({ username })
         const params = { userId, ...args }
         const { builds } = await this._callAPI('getBuildsV2', 'vdc', params)
-        return builds;
+        return builds
     }
 
     async _listBuildFailedJobs(username, buildId, args) {
         const { id: userId } = await this._getUserByUsername({ username })
-        const params = { userId, faulty: true, ...args };
+        const params = { userId, faulty: true, ...args }
         const { jobs: buildJobs } = await this._callAPI('getBuildsJobsV2', 'vdc', buildId, params)
-        const jobIds = buildJobs.map(({ id }) => id);
+        const jobIds = buildJobs.map(({ id }) => id)
         const { jobs } = await this._callAPI('getJobsV1_1', { id: jobIds, full: true })
-        return jobs;
+        return jobs
     }
 
     async _listBuildJobs(buildId, args) {
         const { jobs: buildJobs } = await this._callAPI('getBuildsJobsV2', 'vdc', buildId, args)
-        const jobIds = buildJobs.map(({ id }) => id);
+        const jobIds = buildJobs.map(({ id }) => id)
         const { jobs } = await this._callAPI('getJobsV1_1', { ...args, id: jobIds, full: true })
-        return jobs;
+        return jobs
     }
 
     async _getUserByUsername({ username }) {
@@ -465,7 +464,7 @@ export default class SauceLabs {
          */
         const modifiedParams = description.stringifyOptions ?
             stringify(body, description.stringifyOptions) :
-            body;
+            body
 
         /**
          * make request
