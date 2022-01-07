@@ -30,6 +30,22 @@ jest.mock('child_process', () => {
     return { spawn }
 })
 
+jest.mock('../src/binWrapper.js', () => {
+    class BinWrapperMock {
+        constructor () {
+            this.verifyAlreadyDownloaded = jest.fn().mockReturnValue(Promise.resolve()),
+            this.path = jest.fn().mockReturnValue('/foo/bar'),
+            this.src = jest.fn()
+            this.dest = jest.fn().mockReturnValue(this)
+            this.use = jest.fn().mockReturnValue(this)
+            this.version = jest.fn().mockReturnValue(this)
+            instances.push(this)
+        }
+    }
+
+    return BinWrapperMock
+})
+
 const stdoutEmitter = spawn().stdout
 const stderrEmitter = spawn().stderr
 const origKill = ::process.kill

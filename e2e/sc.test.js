@@ -5,7 +5,6 @@ jest.setTimeout(60 * 1000) // 60s should be sufficient to boot SC
 /**
  * unmock
  */
-jest.unmock('bin-wrapper')
 jest.unmock('form-data')
 jest.unmock('got')
 jest.unmock('yargs')
