@@ -235,7 +235,7 @@ export default class SauceLabs {
 
         bin
             .dest(path.join(__dirname, `.sc-v${sauceConnectVersion}`))
-            .use('/bin/' + (process.platform.startsWith('win') ? 'sc.exe' : 'sc'))
+            .use('/bin/' + (process.platform === 'win32' ? 'sc.exe' : 'sc'))
 
         await bin.verifyAlreadyDownloaded()
         const cp = spawn(bin.path(), args)
