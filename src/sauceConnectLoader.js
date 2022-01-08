@@ -48,7 +48,6 @@ export default class SauceConnectLoader {
 	 * @api public
 	 */
     path() {
-        console.log('this.scData = ', this.scData)
         return this.scData.path
     }
 
@@ -80,7 +79,6 @@ export default class SauceConnectLoader {
             strip: 1,
         })
         .then((result) => {
-            console.log('result = ', result)
             const resultingFiles = flatten(result.map((item, index) => {
                 if (Array.isArray(item)) {
                     return item.map(file => file.path)
@@ -96,7 +94,6 @@ export default class SauceConnectLoader {
                 return chmod(join(this.dest(), fileName), 0o755)
             }))
         })
-        .catch(e=> console.log('er = ', e))
     }
 }
 
