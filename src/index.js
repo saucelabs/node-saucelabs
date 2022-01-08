@@ -15,13 +15,13 @@ import {
 } from './utils'
 import {
     PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT, SYMBOL_TOSTRING,
-    SYMBOL_ITERATOR, TO_STRING_TAG, SAUCE_CONNECT_DISTS,
+    SYMBOL_ITERATOR, TO_STRING_TAG,
     SC_PARAMS_TO_STRIP, SC_READY_MESSAGE, SC_CLOSE_MESSAGE,
     SC_CLOSE_TIMEOUT, DEFAULT_SAUCE_CONNECT_VERSION, SC_FAILURE_MESSAGES,
     SAUCE_CONNECT_VERSIONS_ENDPOINT, SC_WAIT_FOR_MESSAGES,
     SC_BOOLEAN_CLI_PARAMS,
 } from './constants'
-import BinWrapper from './binWrapper'
+import SauceConnectLoader from './sauceConnectLoader'
 
 export default class SauceLabs {
     constructor (options) {
@@ -227,18 +227,9 @@ export default class SauceLabs {
                 .split('-').slice(0, 2).join('-')
             args.push(`--region=${scRegion}`)
         }
-
-        const bin = SAUCE_CONNECT_DISTS.reduce((bin, [downloadUrl, ...args]) => {
-            bin.src(util.format(downloadUrl, sauceConnectVersion), ...args)
-            return bin
-        }, new BinWrapper())
-
-        bin
-            .dest(path.join(__dirname, `.sc-v${sauceConnectVersion}`))
-            .use('/bin/' + (process.platform === 'win32' ? 'sc.exe' : 'sc'))
-
-        await bin.verifyAlreadyDownloaded()
-        const cp = spawn(bin.path(), args)
+        const scLoader = new SauceConnectLoader({sauceConnectVersion})
+        await scLoader.verifyAlreadyDownloaded()
+        const cp = spawn(scLoader.path(), args)
         return new Promise((resolve, reject) => {
             const close = () => new Promise((resolveClose) => {
                 process.kill(cp.pid, 'SIGINT')

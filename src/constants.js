@@ -6,10 +6,22 @@ import { version } from '../package.json'
 export const DEFAULT_SAUCE_CONNECT_VERSION = '4.7.1'
 export const SAUCE_CONNECT_BASE = 'https://saucelabs.com/downloads'
 export const SAUCE_CONNECT_VERSIONS_ENDPOINT = 'https://saucelabs.com/versions.json'
-export const SAUCE_CONNECT_DISTS = [
-    [`${SAUCE_CONNECT_BASE}/sc-%s-osx.zip`, 'darwin'],
-    [`${SAUCE_CONNECT_BASE}/sc-%s-win32.zip`, 'win32'],
-    [`${SAUCE_CONNECT_BASE}/sc-%s-linux.tar.gz`, 'linux']
+export const SAUCE_CONNECT_PLATFORM_DATA = [
+    {
+        url: `${SAUCE_CONNECT_BASE}/sc-%s-osx.zip`,
+        os: 'darwin',
+        use: '/bin/sc'
+    },
+    {
+        url: `${SAUCE_CONNECT_BASE}/sc-%s-win32.zip`,
+        os: 'win32',
+        use: '/bin/sc.exe'
+    },
+    {
+        url: `${SAUCE_CONNECT_BASE}/sc-%s-linux.tar.gz`,
+        os: 'linux',
+        use: '/bin/sc'
+    },
 ]
 export const SAUCE_VERSION_NOTE = `node-saucelabs v${version}\nSauce Connect v${DEFAULT_SAUCE_CONNECT_VERSION}`
 

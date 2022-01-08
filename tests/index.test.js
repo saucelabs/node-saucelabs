@@ -6,7 +6,6 @@ import FormData from 'form-data'
 import SauceLabs from '../src'
 
 import versions from './__responses__/versions.json'
-import {DEFAULT_SAUCE_CONNECT_VERSION} from '../src/constants'
 
 const instances = []
 
@@ -30,20 +29,16 @@ jest.mock('child_process', () => {
     return { spawn }
 })
 
-jest.mock('../src/binWrapper.js', () => {
-    class BinWrapperMock {
+jest.mock('../src/sauceConnectLoader.js', () => {
+    class SauceConnectLoaderMock {
         constructor () {
             this.verifyAlreadyDownloaded = jest.fn().mockReturnValue(Promise.resolve()),
             this.path = jest.fn().mockReturnValue('/foo/bar'),
-            this.src = jest.fn()
-            this.dest = jest.fn().mockReturnValue(this)
-            this.use = jest.fn().mockReturnValue(this)
-            this.version = jest.fn().mockReturnValue(this)
             instances.push(this)
         }
     }
 
-    return BinWrapperMock
+    return SauceConnectLoaderMock
 })
 
 const stdoutEmitter = spawn().stdout
@@ -412,8 +407,6 @@ describe('startSauceConnect', () => {
 
         expect(logs).toHaveLength(1)
         expect(instances).toHaveLength(1)
-        expect(instances[0].dest.mock.calls[0][0].endsWith('.sc-v1.2.3'))
-            .toBe(true)
     })
 
     it('should start sauce connect with latest version if no version is specified in the args', async () => {
@@ -432,8 +425,6 @@ describe('startSauceConnect', () => {
             'proxy-tunnel': 'abc',
             logger: (log) => logs.push(log)
         })
-        expect(instances[0].dest.mock.calls[0][0].endsWith('.sc-v1.2.4'))
-            .toBe(true)
     })
 
     it('should start sauce connect with fallback default version in case the call to the API failed', async () => {
@@ -446,8 +437,6 @@ describe('startSauceConnect', () => {
             'proxy-tunnel': 'abc',
             logger: (log) => logs.push(log)
         })
-        expect(instances[0].dest.mock.calls[0][0].endsWith(`.sc-v${DEFAULT_SAUCE_CONNECT_VERSION}`))
-            .toBe(true)
         expect(spawn.mock.calls).toMatchSnapshot()
     })
 
