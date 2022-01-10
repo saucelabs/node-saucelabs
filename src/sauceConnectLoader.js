@@ -32,14 +32,13 @@ const {chmod, stat} = promises
 export default class SauceConnectLoader {
     constructor(options = {}) {
         this.options = options
-        this.scData = SAUCE_CONNECT_PLATFORM_DATA
-            .filter(({os})=> os === process.platform)
-            .map((platformData)=>({
-                ...platformData,
-                url: format(platformData.url, this.options.sauceConnectVersion),
-                dest: join(__dirname, 'sc-loader', `.sc-v${this.options.sauceConnectVersion}`),
-                path: join(__dirname, 'sc-loader', `.sc-v${this.options.sauceConnectVersion}`, platformData.use),
-            }))[0]
+        const basedir = join(__dirname, 'sc-loader', `.sc-v${options.sauceConnectVersion}`)
+        this.scData = SAUCE_CONNECT_PLATFORM_DATA.reduce((acc, {os, url, use}) => {
+            if (os === process.platform) {
+                acc = {...acc, url: format(url, options.sauceConnectVersion), dest: basedir, path: join(basedir, use)}
+            }
+            return acc
+        }, {})
     }
 
     /**
@@ -78,22 +77,22 @@ export default class SauceConnectLoader {
             extract: true,
             strip: 1,
         })
-        .then((result) => {
-            const resultingFiles = flatten(result.map((item, index) => {
-                if (Array.isArray(item)) {
-                    return item.map(file => file.path)
-                }
+            .then((result) => {
+                const resultingFiles = flatten(result.map((item) => {
+                    if (Array.isArray(item)) {
+                        return item.map(file => file.path)
+                    }
 
-                const parsedUrl = new url.URL(files[index].url)
-                const parsedPath = parse(parsedUrl.pathname)
+                    const parsedUrl = new url.URL(item.url)
+                    const parsedPath = parse(parsedUrl.pathname)
 
-                return parsedPath.base
-            }))
+                    return parsedPath.base
+                }))
 
-            return Promise.all(resultingFiles.map(fileName => {
-                return chmod(join(this.dest(), fileName), 0o755)
-            }))
-        })
+                return Promise.all(resultingFiles.map(fileName => {
+                    return chmod(join(this.dest(), fileName), 0o755)
+                }))
+            })
     }
 }
 
