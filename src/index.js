@@ -1,5 +1,4 @@
 import fs from 'fs'
-import util from 'util'
 import path from 'path'
 import { spawn } from 'child_process'
 
@@ -229,7 +228,7 @@ export default class SauceLabs {
         }
         const scLoader = new SauceConnectLoader({sauceConnectVersion})
         await scLoader.verifyAlreadyDownloaded()
-        const cp = spawn(scLoader.path(), args)
+        const cp = spawn(scLoader.path, args)
         return new Promise((resolve, reject) => {
             const close = () => new Promise((resolveClose) => {
                 process.kill(cp.pid, 'SIGINT')

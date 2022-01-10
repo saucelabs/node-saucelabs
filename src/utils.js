@@ -186,3 +186,10 @@ export function createProxyAgent (proxy) {
 export function getStrictSsl() {
     return !(process.env.STRICT_SSL === 'false' || process.env.strict_ssl === 'false')
 }
+
+/**
+ * Mainly just here for testing
+ */
+export function getPlatform() {
+    return process.platform
+}

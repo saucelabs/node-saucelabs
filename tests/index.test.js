@@ -33,7 +33,7 @@ jest.mock('../src/sauceConnectLoader.js', () => {
     class SauceConnectLoaderMock {
         constructor () {
             this.verifyAlreadyDownloaded = jest.fn().mockReturnValue(Promise.resolve()),
-            this.path = jest.fn().mockReturnValue('/foo/bar'),
+            this.path = '/foo/bar'
             instances.push(this)
         }
     }

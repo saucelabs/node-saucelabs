@@ -22,32 +22,24 @@
  */
 import {promises} from 'fs'
 import {format} from 'util'
-import {join, parse} from 'path'
-import url from 'url'
+import {join} from 'path'
 import download from 'download'
 import {SAUCE_CONNECT_PLATFORM_DATA} from './constants'
+import {getPlatform} from './utils'
 
 const {chmod, stat} = promises
 
 export default class SauceConnectLoader {
     constructor(options = {}) {
-        this.options = options
-        const basedir = join(__dirname, 'sc-loader', `.sc-v${options.sauceConnectVersion}`)
-        this.scData = SAUCE_CONNECT_PLATFORM_DATA.reduce((acc, {os, url, use}) => {
-            if (os === process.platform) {
-                acc = {...acc, url: format(url, options.sauceConnectVersion), dest: basedir, path: join(basedir, use)}
-            }
-            return acc
-        }, {})
-    }
-
-    /**
-	 * Get path to the binary
-	 *
-	 * @api public
-	 */
-    path() {
-        return this.scData.path
+        const platform = getPlatform()
+        const platformData = SAUCE_CONNECT_PLATFORM_DATA[platform]
+        if (!platformData) {
+            throw new ReferenceError(`Unsupported platform ${platform}`)
+        }
+        const {url, use} = platformData
+        this.url = format(url, options.sauceConnectVersion)
+        this.dest = join(__dirname, 'sc-loader', `.sc-v${options.sauceConnectVersion}`)
+        this.path = join(this.dest, use)
     }
 
     /**
@@ -57,10 +49,10 @@ export default class SauceConnectLoader {
 	 * @api public
 	 */
     verifyAlreadyDownloaded() {
-        return stat(this.path())
+        return stat(this.path)
             .catch(error => {
-                if (error && error.code === 'ENOENT') {
-                    return this.download()
+                if (error?.code === 'ENOENT') {
+                    return this._download()
                 }
 
                 return Promise.reject(error)
@@ -72,38 +64,16 @@ export default class SauceConnectLoader {
 	 *
 	 * @api private
 	 */
-    download() {
-        return download(this.scData.url, this.scData.dest,{
+    _download() {
+        return download(this.url, this.dest,{
             extract: true,
             strip: 1,
         })
-            .then((result) => {
-                const resultingFiles = flatten(result.map((item) => {
-                    if (Array.isArray(item)) {
-                        return item.map(file => file.path)
-                    }
-
-                    const parsedUrl = new url.URL(item.url)
-                    const parsedPath = parse(parsedUrl.pathname)
-
-                    return parsedPath.base
-                }))
-
-                return Promise.all(resultingFiles.map(fileName => {
-                    return chmod(join(this.dest(), fileName), 0o755)
-                }))
+            .then(() => {
+                if (process.platform !== 'win32') {
+                    // ensure the sc executable is actually executable
+                    return chmod(this.path, 0o755)
+                }
             })
     }
-}
-
-function flatten(arr) {
-    return arr.reduce((acc, elem) => {
-        if (Array.isArray(elem)) {
-            acc.push(...elem)
-        } else {
-            acc.push(elem)
-        }
-
-        return acc
-    }, [])
 }
