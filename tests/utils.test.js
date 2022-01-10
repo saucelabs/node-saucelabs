@@ -3,12 +3,16 @@ import https from 'https'
 import sauceAPI from '../apis/sauce.json'
 import rdcAPI from '../apis/rdc.json'
 import {
-    createHMAC, getAPIHost, toString, isValidType, getStrictSsl, getAssetHost, createProxyAgent
+    createHMAC, getAPIHost, toString, isValidType, getStrictSsl, getAssetHost, createProxyAgent, getPlatform
 } from '../src/utils'
 
 test('createHMAC', async () => {
     expect(await createHMAC('foo', 'bar', 'loo123'))
         .toBe('b975a69fa344ed43e1035b0698788705')
+})
+
+test('getPlatform', () => {
+    expect(getPlatform()).toBe(process.platform)
 })
 
 test('getAPIHost', () => {

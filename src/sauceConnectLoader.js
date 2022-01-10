@@ -20,14 +20,12 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
  * DEALINGS IN THE SOFTWARE.
  */
-import {promises} from 'fs'
+import {promises as fs} from 'fs'
 import {format} from 'util'
 import {join} from 'path'
 import download from 'download'
 import {SAUCE_CONNECT_PLATFORM_DATA} from './constants'
 import {getPlatform} from './utils'
-
-const {chmod, stat} = promises
 
 export default class SauceConnectLoader {
     constructor(options = {}) {
@@ -49,13 +47,13 @@ export default class SauceConnectLoader {
 	 * @api public
 	 */
     verifyAlreadyDownloaded() {
-        return stat(this.path)
-            .catch(error => {
-                if (error?.code === 'ENOENT') {
+        return fs.stat(this.path)
+            .catch(err => {
+                if (err?.code === 'ENOENT') {
                     return this._download()
                 }
 
-                return Promise.reject(error)
+                throw err
             })
     }
 
@@ -72,7 +70,7 @@ export default class SauceConnectLoader {
             .then(() => {
                 if (process.platform !== 'win32') {
                     // ensure the sc executable is actually executable
-                    return chmod(this.path, 0o755)
+                    return fs.chmod(this.path, 0o755)
                 }
             })
     }
