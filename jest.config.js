@@ -15,5 +15,6 @@ module.exports = {
             statements: 98
         }
     },
-    testEnvironment: 'node'
+    testEnvironment: 'node',
+    restoreMocks: true
 }

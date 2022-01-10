@@ -1,11 +1,9 @@
 import fs from 'fs'
-import util from 'util'
 import path from 'path'
 import { spawn } from 'child_process'
 
 import got from 'got'
 import FormData from 'form-data'
-import BinWrapper from 'bin-wrapper'
 import { camelCase } from 'change-case'
 import { stringify } from 'query-string'
 
@@ -16,13 +14,13 @@ import {
 } from './utils'
 import {
     PROTOCOL_MAP, DEFAULT_OPTIONS, SYMBOL_INSPECT, SYMBOL_TOSTRING,
-    SYMBOL_ITERATOR, TO_STRING_TAG, SAUCE_CONNECT_DISTS,
+    SYMBOL_ITERATOR, TO_STRING_TAG,
     SC_PARAMS_TO_STRIP, SC_READY_MESSAGE, SC_CLOSE_MESSAGE,
     SC_CLOSE_TIMEOUT, DEFAULT_SAUCE_CONNECT_VERSION, SC_FAILURE_MESSAGES,
     SAUCE_CONNECT_VERSIONS_ENDPOINT, SC_WAIT_FOR_MESSAGES,
     SC_BOOLEAN_CLI_PARAMS,
-    USER_NOT_FOUND_MESSAGE
 } from './constants'
+import SauceConnectLoader from './sauceConnectLoader'
 
 export default class SauceLabs {
     constructor (options) {
@@ -154,23 +152,23 @@ export default class SauceLabs {
         const { id: userId } = await this._getUserByUsername({ username })
         const params = { userId, ...args }
         const { builds } = await this._callAPI('getBuildsV2', 'vdc', params)
-        return builds;
+        return builds
     }
 
     async _listBuildFailedJobs(username, buildId, args) {
         const { id: userId } = await this._getUserByUsername({ username })
-        const params = { userId, faulty: true, ...args };
+        const params = { userId, faulty: true, ...args }
         const { jobs: buildJobs } = await this._callAPI('getBuildsJobsV2', 'vdc', buildId, params)
-        const jobIds = buildJobs.map(({ id }) => id);
+        const jobIds = buildJobs.map(({ id }) => id)
         const { jobs } = await this._callAPI('getJobsV1_1', { id: jobIds, full: true })
-        return jobs;
+        return jobs
     }
 
     async _listBuildJobs(buildId, args) {
         const { jobs: buildJobs } = await this._callAPI('getBuildsJobsV2', 'vdc', buildId, args)
-        const jobIds = buildJobs.map(({ id }) => id);
+        const jobIds = buildJobs.map(({ id }) => id)
         const { jobs } = await this._callAPI('getJobsV1_1', { ...args, id: jobIds, full: true })
-        return jobs;
+        return jobs
     }
 
     async _getUserByUsername({ username }) {
@@ -228,19 +226,9 @@ export default class SauceLabs {
                 .split('-').slice(0, 2).join('-')
             args.push(`--region=${scRegion}`)
         }
-
-        const bin = SAUCE_CONNECT_DISTS.reduce((bin, [downloadUrl, ...args]) => {
-            bin.src(util.format(downloadUrl, sauceConnectVersion), ...args)
-            return bin
-        }, new BinWrapper())
-
-        bin
-            .dest(path.join(__dirname, `.sc-v${sauceConnectVersion}`))
-            .use('/bin/' + (process.platform.startsWith('win') ? 'sc.exe' : 'sc'))
-            .version(`v${sauceConnectVersion}`)
-
-        await bin.run(['--version'])
-        const cp = spawn(bin.path(), args)
+        const scLoader = new SauceConnectLoader({sauceConnectVersion})
+        await scLoader.verifyAlreadyDownloaded()
+        const cp = spawn(scLoader.path, args)
         return new Promise((resolve, reject) => {
             const close = () => new Promise((resolveClose) => {
                 process.kill(cp.pid, 'SIGINT')
@@ -466,7 +454,7 @@ export default class SauceLabs {
          */
         const modifiedParams = description.stringifyOptions ?
             stringify(body, description.stringifyOptions) :
-            body;
+            body
 
         /**
          * make request

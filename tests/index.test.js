@@ -4,9 +4,10 @@ import { spawn } from 'child_process'
 import FormData from 'form-data'
 
 import SauceLabs from '../src'
-import { instances } from 'bin-wrapper'
+
 import versions from './__responses__/versions.json'
-import {DEFAULT_SAUCE_CONNECT_VERSION} from '../src/constants'
+
+const instances = []
 
 jest.mock('fs')
 const fs = require('fs')
@@ -26,6 +27,18 @@ jest.mock('child_process', () => {
     }
     const spawn = jest.fn().mockReturnValue(spawnMock)
     return { spawn }
+})
+
+jest.mock('../src/sauceConnectLoader.js', () => {
+    class SauceConnectLoaderMock {
+        constructor () {
+            this.verifyAlreadyDownloaded = jest.fn().mockReturnValue(Promise.resolve()),
+            this.path = '/foo/bar'
+            instances.push(this)
+        }
+    }
+
+    return SauceConnectLoaderMock
 })
 
 const stdoutEmitter = spawn().stdout
@@ -394,8 +407,6 @@ describe('startSauceConnect', () => {
 
         expect(logs).toHaveLength(1)
         expect(instances).toHaveLength(1)
-        expect(instances[0].dest.mock.calls[0][0].endsWith('.sc-v1.2.3'))
-            .toBe(true)
     })
 
     it('should start sauce connect with latest version if no version is specified in the args', async () => {
@@ -414,8 +425,6 @@ describe('startSauceConnect', () => {
             'proxy-tunnel': 'abc',
             logger: (log) => logs.push(log)
         })
-        expect(instances[0].dest.mock.calls[0][0].endsWith('.sc-v1.2.4'))
-            .toBe(true)
     })
 
     it('should start sauce connect with fallback default version in case the call to the API failed', async () => {
@@ -428,8 +437,6 @@ describe('startSauceConnect', () => {
             'proxy-tunnel': 'abc',
             logger: (log) => logs.push(log)
         })
-        expect(instances[0].dest.mock.calls[0][0].endsWith(`.sc-v${DEFAULT_SAUCE_CONNECT_VERSION}`))
-            .toBe(true)
         expect(spawn.mock.calls).toMatchSnapshot()
     })
 
@@ -560,7 +567,7 @@ test('should stringify searchParams', () => {
         ]}
     }))
     api.getJobsV1_1({ id: ['job-1', 'job-2'] })
-    expect(got.mock.calls[0][1].searchParams).toEqual("id=job-1&id=job-2")
+    expect(got.mock.calls[0][1].searchParams).toEqual('id=job-1&id=job-2')
 })
 
 afterEach(() => {
