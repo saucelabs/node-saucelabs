@@ -4,7 +4,7 @@
 
 # Node Sauce Labs [![Test Changes](https://github.com/saucelabs/node-saucelabs/actions/workflows/test.yml/badge.svg)](https://github.com/saucelabs/node-saucelabs/actions/workflows/test.yml)
 
-Wrapper around all Sauce Labs REST APIs for [Node.js](http://nodejs.org/) (v8 or higher) including support for [Sauce Connect Proxy](https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy) and TypeScript definitions.
+Wrapper around all Sauce Labs REST APIs for [Node.js](http://nodejs.org/) (v12 or higher) including support for [Sauce Connect Proxy](https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy) and TypeScript definitions.
 
 ## Install
 
@@ -20,14 +20,14 @@ npm install saucelabs
 
 Your Sauce Labs username.
 
-Type: `string`<br>
+Type: `string`  
 Default: `process.env.SAUCE_USERNAME`
 
 ### key
 
 Your Sauce Labs access key.
 
-Type: `string`<br>
+Type: `string`  
 Default: `process.env.SAUCE_ACCESS_KEY`
 
 ### region
@@ -38,21 +38,21 @@ Your Sauce Labs datacenter region. The following regions are available:
 - `eu-central-1` (short `eu`)
 - `us-east-1` (headless)
 
-Type: `string`<br>
+Type: `string`  
 Default: `us`
 
 ### headless
 
 If set to true you are accessing the headless Sauce instances (this discards the `region` option).
 
-Type: `boolean`<br>
+Type: `boolean`  
 Default: `false`
 
 ### proxy
 
 If you want to tunnel your API request through a proxy please provide your proxy URL.
 
-Type: `string`<br>
+Type: `string`  
 Default: `null`
 
 ### headers
@@ -238,6 +238,10 @@ console.log(myAccount.webdriverEndpoint);
 // outputs: "https://ondemand.eu-central-1.saucelabs.com/"
 ```
 
----
+## Contributors
 
 This module was originally created by [Dan Jenkins](https://github.com/danjenkins) with the help of multiple contributors ([Daniel Perez Alvarez](https://github.com/unindented), [Mathieu Sabourin](https://github.com/OniOni), [Michael J Feher](https://github.com/PhearZero), and many more). We would like to thank Dan and all contributors for their support and this beautiful module.
+
+## License
+
+Copyright 2012 Sauce Labs, Inc.  Licensed Apache-2.0
