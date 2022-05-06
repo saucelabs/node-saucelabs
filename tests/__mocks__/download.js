@@ -1,1 +1,1 @@
-export default jest.fn().mockImplementation(() => Promise.resolve([]))
+export default jest.fn().mockImplementation(() => Promise.resolve([]));
