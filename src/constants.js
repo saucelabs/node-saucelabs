@@ -184,12 +184,12 @@ export const SAUCE_CONNECT_CLI_PARAMS = [
     name: 'capath',
     description:
       'Directory of CA certs to use for verifying REST connections. (default "/etc/ssl/certs")',
+    deprecated: true,
   },
   {
     alias: 'c',
     name: 'config-file',
-    description:
-      'Path to YAML config file. Please refer to https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Command+Line+Reference for a sample configuration file.',
+    description: 'Path to YAML config file.',
   },
   {
     alias: 'D',
@@ -199,14 +199,14 @@ export const SAUCE_CONNECT_CLI_PARAMS = [
   },
   {
     name: 'dns',
-    description:
-      'Use specified name server. To specify multiple servers, separate them with comma. Use IP addresses, optionally with a port number, the two separated by a colon. Example: --dns 8.8.8.8,8.8.4.4:53',
+    description: 'Use specified name server(s). Example: --dns 8.8.8.8,8.8.4.4:53',
   },
   {
     name: 'doctor',
     description:
       'Perform checks to detect possible misconfiguration or problems.',
     type: 'boolean',
+    deprecated: true,
   },
   {
     alias: 'F',
@@ -219,6 +219,7 @@ export const SAUCE_CONNECT_CLI_PARAMS = [
     name: 'log-stats',
     description: 'Log statistics about HTTP traffic every <seconds>.',
     type: 'number',
+    deprecated: true,
   },
   {
     alias: 'l',
@@ -234,17 +235,20 @@ export const SAUCE_CONNECT_CLI_PARAMS = [
   {
     alias: 'M',
     name: 'max-missed-acks',
-    description:
-      'The maximum amount of keepalive acks that can be missed before the client will trigger a reconnect. (default 30)',
+    description: 'The max number of keepalive acks that can be missed before triggering reconnect.',
     type: 'number',
-    default: 30,
+    deprecated: true,
   },
   {
     name: 'metrics-address',
-    description:
-      'host:port for the internal web server used to expose client side metrics. (default "localhost:8888")',
-    deprecated: true
-}, {
+    description: 'host:port server used to expose client-side metrics.',
+    deprecated: true,
+  },
+  {
+    name: 'status-address',
+    description: 'host:port server used to expose client status.',
+  },
+  {
     name: 'no-autodetect',
     description: 'Disable the autodetection of proxy settings.',
     type: 'boolean',
@@ -295,8 +299,9 @@ export const SAUCE_CONNECT_CLI_PARAMS = [
   {
     alias: 'f',
     name: 'readyfile',
-    description: 'File that will be touched to signal when tunnel is ready.'
-}, {
+    description: 'File that will be touched to signal when tunnel is ready.',
+  },
+  {
     alias: 'X',
     name: 'scproxy-port',
     description: 'Port on which scproxy will be listening.',
@@ -305,11 +310,13 @@ export const SAUCE_CONNECT_CLI_PARAMS = [
     name: 'scproxy-read-limit',
     description:
       'Rate limit reads in scproxy to X bytes per second. This option can be used to adjust local network transfer rate in order not to overload the tunnel connection.',
+    deprecated: true,
   },
   {
     name: 'scproxy-write-limit',
     description:
       'Rate limit writes in scproxy to X bytes per second. This option can be used to adjust local network transfer rate in order not to overload the tunnel connection.',
+    deprecated: true,
   },
   {
     alias: 'P',
@@ -335,6 +342,7 @@ export const SAUCE_CONNECT_CLI_PARAMS = [
     name: 'tunnel-capath',
     description:
       'Directory of CA certs to use for verifying tunnel connections. (default "/etc/ssl/certs")',
+    deprecated: true,
   },
   {
     name: 'tunnel-cert',
@@ -349,14 +357,13 @@ export const SAUCE_CONNECT_CLI_PARAMS = [
   },
   {
     name: 'tunnel-identifier',
-    description:
-      "[Depcrecated] Don't automatically assign jobs to this tunnel. Jobs will use it only by explicitly providing the right identifier.",
+    description: 'Tunnel name used for this tunnel or the tunnels in the same HA pool.',
+    deprecated: true,
   },
   {
     alias: 'i',
     name: 'tunnel-name',
-    description:
-      "Don't automatically assign jobs to this tunnel. Jobs will use it only by explicitly providing the right identifier.",
+    description: 'Tunnel name used for this tunnel or the tunnels in the same HA pool.',
   },
   {
     name: 'tunnel-pool',

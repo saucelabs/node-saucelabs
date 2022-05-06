@@ -138,7 +138,7 @@ Array [
       "--tunnel-name=my-tunnel",
       "--user=foo",
       "--api-key=bar",
-      "--region=us-west",
+      "--region=us-west-1",
     ],
   ],
 ]
@@ -154,7 +154,7 @@ Array [
       "--tunnel-name=my-tunnel",
       "--user=foo",
       "--api-key=bar",
-      "--region=eu-central",
+      "--region=eu-central-1",
     ],
   ],
 ]
