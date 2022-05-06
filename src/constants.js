@@ -243,8 +243,8 @@ export const SAUCE_CONNECT_CLI_PARAMS = [
     name: 'metrics-address',
     description:
       'host:port for the internal web server used to expose client side metrics. (default "localhost:8888")',
-  },
-  {
+    deprecated: true
+}, {
     name: 'no-autodetect',
     description: 'Disable the autodetection of proxy settings.',
     type: 'boolean',
