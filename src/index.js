@@ -279,10 +279,7 @@ export default class SauceLabs {
 
     const region = argv.region || this.region;
     if (region) {
-      const scRegion = getRegionSubDomain({region})
-        .split('-')
-        .slice(0, 2)
-        .join('-');
+      const scRegion = getRegionSubDomain({region});
       args.push(`--region=${scRegion}`);
     }
     const scLoader = new SauceConnectLoader({sauceConnectVersion});
