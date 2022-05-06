@@ -29,6 +29,7 @@ test('should be able to run Sauce Connect', async () => {
   const api = new SauceLabs();
   const sc = await api.startSauceConnect({
     logger: console.log.bind(console),
+    // tunnelPool is set here in order for the concurrent tests to not shut down "colliding" tunnels.
     tunnelPool: true,
     tunnelName: `node-saucelabs E2E test - ${ID}`,
   });
