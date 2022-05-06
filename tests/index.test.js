@@ -476,7 +476,6 @@ describe('startSauceConnect', () => {
       'proxy-tunnel': 'abc',
       verbose: true,
       region: 'eu',
-      noProxyCaching: true,
       logger: (log) => logs.push(log),
     });
     expect(spawn).toBeCalledTimes(1);
