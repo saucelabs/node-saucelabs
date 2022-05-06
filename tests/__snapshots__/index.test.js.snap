@@ -152,7 +152,6 @@ Array [
       "--proxy-tunnel",
       "--verbose",
       "--tunnel-name=my-tunnel",
-      "--no-proxy-caching",
       "--user=foo",
       "--api-key=bar",
       "--region=eu-central",
