@@ -23,20 +23,12 @@
         "region": {
           "default": "us-west-1",
           "description": "region of datacenter",
-          "enum": [
-            "us-west-1",
-            "eu-central-1",
-            "apac-southeast-1",
-            "staging"
-          ]
+          "enum": ["us-west-1", "eu-central-1", "apac-southeast-1", "staging"]
         },
         "tld": {
           "default": "com",
           "description": "internal or external API",
-          "enum": [
-            "net",
-            "com"
-          ]
+          "enum": ["net", "com"]
         }
       }
     }
@@ -74,9 +66,7 @@
           "description": "TBD",
           "url": "https://wiki.saucelabs.com"
         },
-        "tags": [
-          "Job"
-        ],
+        "tags": ["Job"],
         "responses": {
           "200": {
             "description": "create test result job",

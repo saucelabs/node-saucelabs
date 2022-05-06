@@ -1,9 +1,14 @@
-const { SAUCE_CONNECT_CLI_PARAMS, ASSET_REGION_MAPPING } = require('../src/constants')
-const regions = Object.keys(ASSET_REGION_MAPPING).map(key => `"${key}"`).join(' | ')
+const {
+  SAUCE_CONNECT_CLI_PARAMS,
+  ASSET_REGION_MAPPING,
+} = require('../src/constants');
+const regions = Object.keys(ASSET_REGION_MAPPING)
+  .map((key) => `"${key}"`)
+  .join(' | ');
 
 exports.TS_IMPORTS = `
 import { ChildProcess } from 'child_process';
-`
+`;
 
 exports.TS_SAUCELABS_OBJ = `
 export interface SauceLabsOptions {
@@ -35,7 +40,7 @@ export interface SauceLabsOptions {
      * If you want to set request headers, as example {'User-Agent': 'node-saucelabs'}
      */
     headers?: object;
-}`
+}`;
 
 exports.TC_SAUCE_CONNECT_OBJ = `
 export interface SauceConnectOptions {
@@ -43,14 +48,20 @@ export interface SauceConnectOptions {
      * A function to optionally write sauce-connect-launcher log messages, e.g. console.log
      */
     logger?: (output: string) => void;
-${SAUCE_CONNECT_CLI_PARAMS.map((option) => `
+${SAUCE_CONNECT_CLI_PARAMS.map(
+  (option) => `
     /**
-     * ${option.description} ${option.default ? `(default: ${option.default})` : ''}
+     * ${option.description} ${
+    option.default ? `(default: ${option.default})` : ''
+  }
      */
-    ${option.name.replace(/-[a-z]/g, (r) => r.slice(1).toUpperCase())}?: ${option.type || 'string'};
-`).join('\n')}
-}
+    ${option.name.replace(/-[a-z]/g, (r) => r.slice(1).toUpperCase())}?: ${
+    option.type || 'string'
+  };
 `
+).join('\n')}
+}
+`;
 
 exports.TC_SAUCE_CONNECT_CLASS = `
 export interface SauceConnectInstance {
@@ -63,7 +74,7 @@ export interface SauceConnectInstance {
      */
     close: () => Promise<undefined>;
 }
-`
+`;
 
 exports.TC_START_SC = `
     /**
@@ -73,4 +84,4 @@ exports.TC_START_SC = `
      * @param {string} id - job id
      */
     startSauceConnect(params: SauceConnectOptions): Promise<SauceConnectInstance>;
-`
+`;

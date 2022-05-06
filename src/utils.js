@@ -1,8 +1,8 @@
-import crypto from 'crypto'
-import tunnel from 'tunnel'
-import url from 'url'
+import crypto from 'crypto';
+import tunnel from 'tunnel';
+import url from 'url';
 
-import { ASSET_REGION_MAPPING, TO_STRING_TAG, PARAMETERS_MAP } from './constants'
+import {ASSET_REGION_MAPPING, TO_STRING_TAG, PARAMETERS_MAP} from './constants';
 
 /**
  * Create HMAC token to receive job assets
@@ -12,17 +12,19 @@ import { ASSET_REGION_MAPPING, TO_STRING_TAG, PARAMETERS_MAP } from './constants
  * @param  {string} jobId     job id of job you want to get access to
  * @return {string}           hmac token
  */
-export function createHMAC (username, key, jobId) {
-    const hmac = crypto.createHmac('md5', `${username}:${key}`)
-    hmac.write(jobId)
-    hmac.end()
-    return new Promise((resolve, reject) => hmac.on('readable', () => {
-        const data = hmac.read()
-        if (!data) {
-            return reject(new Error('Could not create HMAC token'))
-        }
-        return resolve(data.toString('hex'))
-    }))
+export function createHMAC(username, key, jobId) {
+  const hmac = crypto.createHmac('md5', `${username}:${key}`);
+  hmac.write(jobId);
+  hmac.end();
+  return new Promise((resolve, reject) =>
+    hmac.on('readable', () => {
+      const data = hmac.read();
+      if (!data) {
+        return reject(new Error('Could not create HMAC token'));
+      }
+      return resolve(data.toString('hex'));
+    })
+  );
 }
 
 /**
@@ -30,14 +32,14 @@ export function createHMAC (username, key, jobId) {
  * @param  {object}  options  client options
  * @return {string}           full region
  */
-export function getRegionSubDomain (options = {}) {
-    let region = options.region || 'us-west-1'
+export function getRegionSubDomain(options = {}) {
+  let region = options.region || 'us-west-1';
 
-    if (options.region === 'us') region = 'us-west-1'
-    if (options.region === 'eu') region = 'eu-central-1'
-    if (options.region === 'apac') region = 'apac-southeast-1'
-    if (options.headless) region = 'us-east-1'
-    return region
+  if (options.region === 'us') region = 'us-west-1';
+  if (options.region === 'eu') region = 'eu-central-1';
+  if (options.region === 'apac') region = 'apac-southeast-1';
+  if (options.headless) region = 'us-east-1';
+  return region;
 }
 
 /**
@@ -47,34 +49,38 @@ export function getRegionSubDomain (options = {}) {
  * @param  {object}  options   client options
  * @return {string}            endpoint base url (e.g. `https://us-east1.headless.saucelabs.com`)
  */
-export function getAPIHost (servers, basePath, options) {
-    /**
-     * allows to set an arbitrary host (for internal use only)
-     */
-    let host = (options.host || servers[0].url) + basePath
+export function getAPIHost(servers, basePath, options) {
+  /**
+   * allows to set an arbitrary host (for internal use only)
+   */
+  let host = (options.host || servers[0].url) + basePath;
+
+  /**
+   * allow short region handles to stay backwards compatible
+   * ToDo(Christian): consider to remove when making a breaking update
+   */
+  if (options.region) {
+    options.region = getRegionSubDomain(options);
+  }
+
+  for (const [option, value] of Object.entries(servers[0].variables)) {
+    const hostOption = options[option] || value.default;
 
     /**
-     * allow short region handles to stay backwards compatible
-     * ToDo(Christian): consider to remove when making a breaking update
+     * check if option is valid
      */
-    if (options.region) {
-        options.region = getRegionSubDomain(options)
+    if (!value.enum.includes(hostOption)) {
+      throw new Error(
+        `Option "${option}" contains invalid value ("${hostOption}"), allowed are: ${value.enum.join(
+          ', '
+        )}`
+      );
     }
 
-    for (const [option, value] of Object.entries(servers[0].variables)) {
-        const hostOption = options[option] || value.default
+    host = host.replace(`{${option}}`, hostOption);
+  }
 
-        /**
-         * check if option is valid
-         */
-        if (!value.enum.includes(hostOption)) {
-            throw new Error(`Option "${option}" contains invalid value ("${hostOption}"), allowed are: ${value.enum.join(', ')}`)
-        }
-
-        host = host.replace(`{${option}}`, hostOption)
-    }
-
-    return host
+  return host;
 }
 
 /**
@@ -84,18 +90,18 @@ export function getAPIHost (servers, basePath, options) {
  * https://assets.us-east-1.saucelabs.com/jobs/<jobId>/log.json
  * https://assets.staging.saucelabs.net/jobs/<jobId>/log.json
  */
-export function getAssetHost (options) {
-    if (options.headless) {
-        options.region = 'us-east-1'
-    }
+export function getAssetHost(options) {
+  if (options.headless) {
+    options.region = 'us-east-1';
+  }
 
-    if (options.region === 'staging') {
-        options.tld = options.tld || 'net'
-    }
+  if (options.region === 'staging') {
+    options.tld = options.tld || 'net';
+  }
 
-    const tld = options.tld || 'com'
-    const region = ASSET_REGION_MAPPING[options.region] || ''
-    return `https://assets.${region}saucelabs.${tld}`
+  const tld = options.tld || 'com';
+  const region = ASSET_REGION_MAPPING[options.region] || '';
+  return `https://assets.${region}saucelabs.${tld}`;
 }
 
 /**
@@ -103,14 +109,14 @@ export function getAssetHost (options) {
  * @param  {object} scope  actual API instance
  * @return {string}        to string output
  */
-export function toString (scope) {
-    return `${TO_STRING_TAG} {
+export function toString(scope) {
+  return `${TO_STRING_TAG} {
   username: '${scope.username}',
   key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX${scope._accessKey.slice(-6)}',
   region: '${scope._options.region}',
   headless: ${scope._options.headless},
   proxy: ${scope._options.proxy}
-}`
+}`;
 }
 
 /**
@@ -118,21 +124,22 @@ export function toString (scope) {
  * @param  {Array}    [parameters=[]]  parameter defined in endpoint
  * @return {[Object]}                  full description of parameters
  */
-export function getParameters (parameters = []) {
-    const params = parameters.map(
-        (urlParameter) => urlParameter.$ref
-            ? PARAMETERS_MAP.get(urlParameter.$ref.split('/').slice(-1)[0])
-            : urlParameter)
+export function getParameters(parameters = []) {
+  const params = parameters.map((urlParameter) =>
+    urlParameter.$ref
+      ? PARAMETERS_MAP.get(urlParameter.$ref.split('/').slice(-1)[0])
+      : urlParameter
+  );
 
-    return params.sort((a, b) => {
-        if (a.required && b.required) {
-            return 0
-        }
-        if (a.required && !b.required) {
-            return -1
-        }
-        return 1
-    })
+  return params.sort((a, b) => {
+    if (a.required && b.required) {
+      return 0;
+    }
+    if (a.required && !b.required) {
+      return -1;
+    }
+    return 1;
+  });
 }
 
 /**
@@ -141,11 +148,11 @@ export function getParameters (parameters = []) {
  * @param  {String} expectedType  expected parameter type
  * @return {Boolean}              true if typecheck was ok
  */
-export function isValidType (option, expectedType) {
-    if (expectedType === 'array') {
-        return Array.isArray(option)
-    }
-    return typeof option === expectedType
+export function isValidType(option, expectedType) {
+  if (expectedType === 'array') {
+    return Array.isArray(option);
+  }
+  return typeof option === expectedType;
 }
 
 /**
@@ -153,30 +160,32 @@ export function isValidType (option, expectedType) {
  * @param  {string}  proxy  proxy URL that traffic will be tunneled with
  * @return {Agent} proxy Agent object
  */
-export function createProxyAgent (proxy) {
-    var proxyURL = url.parse(proxy)
-    if (proxyURL.protocol === 'https:') {
-        return {
-            https: tunnel.httpsOverHttps({
-                proxy: {
-                    host: proxyURL.hostname,
-                    port: proxyURL.port
-                }
-            })
-        }
-    } else if (proxyURL.protocol === 'http:') {
-        return {
-            https: tunnel.httpsOverHttp({
-                proxy: {
-                    host: proxyURL.hostname,
-                    port: proxyURL.port
-                }
-            })
-        }
-    }
+export function createProxyAgent(proxy) {
+  var proxyURL = url.parse(proxy);
+  if (proxyURL.protocol === 'https:') {
+    return {
+      https: tunnel.httpsOverHttps({
+        proxy: {
+          host: proxyURL.hostname,
+          port: proxyURL.port,
+        },
+      }),
+    };
+  } else if (proxyURL.protocol === 'http:') {
+    return {
+      https: tunnel.httpsOverHttp({
+        proxy: {
+          host: proxyURL.hostname,
+          port: proxyURL.port,
+        },
+      }),
+    };
+  }
 
-    throw new Error('Only http and https protocols are supported for proxying traffic.'
-                        + `\nWe got ${proxyURL.protocol}`)
+  throw new Error(
+    'Only http and https protocols are supported for proxying traffic.' +
+      `\nWe got ${proxyURL.protocol}`
+  );
 }
 
 /**
@@ -184,12 +193,14 @@ export function createProxyAgent (proxy) {
  * This is used in requests to define the value of the "strictSSL" option.
  */
 export function getStrictSsl() {
-    return !(process.env.STRICT_SSL === 'false' || process.env.strict_ssl === 'false')
+  return !(
+    process.env.STRICT_SSL === 'false' || process.env.strict_ssl === 'false'
+  );
 }
 
 /**
  * Mainly just here for testing
  */
 export function getPlatform() {
-    return process.platform
+  return process.platform;
 }

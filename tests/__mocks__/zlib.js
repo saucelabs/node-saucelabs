@@ -1,3 +1,3 @@
 export default {
-    createGunzip: jest.fn().mockReturnValue('gunzip')
-}
+  createGunzip: jest.fn().mockReturnValue('gunzip'),
+};

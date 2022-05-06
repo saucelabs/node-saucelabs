@@ -1,19 +1,19 @@
 {
-  "swagger":"2.0",
-  "info":{
-    "title":"Builds API",
-    "version":"2.0.0",
-    "description":"Builds API"
+  "swagger": "2.0",
+  "info": {
+    "title": "Builds API",
+    "version": "2.0.0",
+    "description": "Builds API"
   },
-  "host":"saucelabs.com",
-  "servers":[
+  "host": "saucelabs.com",
+  "servers": [
     {
-      "url":"https://api.{region}.saucelabs.{tld}",
-      "variables":{
-        "region":{
-          "default":"us-west-1",
-          "description":"region of datacenter",
-          "enum":[
+      "url": "https://api.{region}.saucelabs.{tld}",
+      "variables": {
+        "region": {
+          "default": "us-west-1",
+          "description": "region of datacenter",
+          "enum": [
             "us-west-1",
             "us-east-1",
             "eu-central-1",
@@ -21,587 +21,560 @@
             "staging"
           ]
         },
-        "tld":{
-          "default":"com",
-          "description":"internal or external API",
-          "enum":[
-            "net",
-            "com"
-          ]
+        "tld": {
+          "default": "com",
+          "description": "internal or external API",
+          "enum": ["net", "com"]
         }
       }
     }
   ],
-  "basePath":"/v2/builds",
-  "schemes":[
-    "https"
-  ],
-  "produces":[
-    "application/json"
-  ],
-  "securityDefinitions":{
-    "BasicAuth":{
-      "type":"basic"
+  "basePath": "/v2/builds",
+  "schemes": ["https"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "BasicAuth": {
+      "type": "basic"
     },
-    "PrivApiKey":{
-      "in":"header",
-      "name":"Signature",
-      "type":"apiKey"
+    "PrivApiKey": {
+      "in": "header",
+      "name": "Signature",
+      "type": "apiKey"
     }
   },
-  "definitions":{
-    "JobsState":{
-      "properties":{
-        "completed":{
-          "type":"integer"
+  "definitions": {
+    "JobsState": {
+      "properties": {
+        "completed": {
+          "type": "integer"
         },
-        "errored":{
-          "type":"integer"
+        "errored": {
+          "type": "integer"
         },
-        "failed":{
-          "type":"integer"
+        "failed": {
+          "type": "integer"
         },
-        "finished":{
-          "type":"integer"
+        "finished": {
+          "type": "integer"
         },
-        "passed":{
-          "type":"integer"
+        "passed": {
+          "type": "integer"
         },
-        "public":{
-          "type":"integer"
+        "public": {
+          "type": "integer"
         },
-        "queued":{
-          "type":"integer"
+        "queued": {
+          "type": "integer"
         },
-        "running":{
-          "type":"integer"
+        "running": {
+          "type": "integer"
         }
       },
-      "type":"object"
+      "type": "object"
     },
-    "BuildV2":{
-      "description":"Build",
-      "properties":{
-        "creation_time":{
-          "type":"string"
+    "BuildV2": {
+      "description": "Build",
+      "properties": {
+        "creation_time": {
+          "type": "string"
         },
-        "deletion_time":{
-          "type":"string"
+        "deletion_time": {
+          "type": "string"
         },
-        "end_time":{
-          "type":"string"
+        "end_time": {
+          "type": "string"
         },
-        "group_id":{
-          "type":"string"
+        "group_id": {
+          "type": "string"
         },
-        "id":{
-          "type":"string"
+        "id": {
+          "type": "string"
         },
         "jobs": {
-          "$ref":"#/definitions/JobsState"
+          "$ref": "#/definitions/JobsState"
         },
-        "modification_time":{
-          "type":"string"
+        "modification_time": {
+          "type": "string"
         },
-        "name":{
-          "type":"string"
+        "name": {
+          "type": "string"
         },
-        "org_id":{
-          "type":"string"
+        "org_id": {
+          "type": "string"
         },
-        "owner_id":{
-          "type":"string"
+        "owner_id": {
+          "type": "string"
         },
-        "passed":{
-          "type":"boolean"
+        "passed": {
+          "type": "boolean"
         },
-        "public":{
-          "type":"boolean"
+        "public": {
+          "type": "boolean"
         },
-        "run":{
-          "type":"integer"
+        "run": {
+          "type": "integer"
         },
-        "start_time":{
-          "type":"integer"
+        "start_time": {
+          "type": "integer"
         },
-        "status":{
-          "type":"string"
+        "status": {
+          "type": "string"
         },
-        "team_id":{
-          "type":"string"
+        "team_id": {
+          "type": "string"
         }
       },
-      "type":"object"
+      "type": "object"
     },
-    "BuildV2Job":{
-      "description":"Job",
-      "properties":{
-        "creation_time":{
-          "type":"string"
+    "BuildV2Job": {
+      "description": "Job",
+      "properties": {
+        "creation_time": {
+          "type": "string"
         },
-        "deletion_time":{
-          "type":"string"
+        "deletion_time": {
+          "type": "string"
         },
-        "id":{
-          "type":"string"
+        "id": {
+          "type": "string"
         },
-        "modification_time":{
-          "type":"string"
+        "modification_time": {
+          "type": "string"
         },
         "state": {
-          "$ref":"#/definitions/JobsState"
+          "$ref": "#/definitions/JobsState"
         }
       },
-      "type":"object"
+      "type": "object"
     }
   },
-  "parameters":{
-    "buildOffset":{
-      "default":0,
-      "description":"Starting number",
-      "in":"query",
-      "name":"offset",
-      "type":"number",
+  "parameters": {
+    "buildOffset": {
+      "default": 0,
+      "description": "Starting number",
+      "in": "query",
+      "name": "offset",
+      "type": "number",
       "required": false
     },
-    "buildLimit":{
-      "default":20,
-      "description":"Number of results to return",
-      "in":"query",
-      "name":"limit",
-      "type":"number",
+    "buildLimit": {
+      "default": 20,
+      "description": "Number of results to return",
+      "in": "query",
+      "name": "limit",
+      "type": "number",
       "required": false
     },
-    "buildUserId":{
-      "description":"user_id",
-      "in":"query",
-      "name":"user_id",
-      "type":"string",
+    "buildUserId": {
+      "description": "user_id",
+      "in": "query",
+      "name": "user_id",
+      "type": "string",
       "required": false
     },
-    "buildOrgId":{
-      "description":"org_id",
-      "in":"query",
-      "name":"org_id",
-      "type":"string",
+    "buildOrgId": {
+      "description": "org_id",
+      "in": "query",
+      "name": "org_id",
+      "type": "string",
       "required": false
     },
-    "buildGroupId":{
-      "description":"group_id",
-      "in":"query",
-      "name":"group_id",
-      "type":"string",
+    "buildGroupId": {
+      "description": "group_id",
+      "in": "query",
+      "name": "group_id",
+      "type": "string",
       "required": false
     },
-    "buildTeamId":{
-      "description":"team_id",
-      "in":"query",
-      "name":"team_id",
-      "type":"string",
+    "buildTeamId": {
+      "description": "team_id",
+      "in": "query",
+      "name": "team_id",
+      "type": "string",
       "required": false
     },
-    "buildStatus":{
-      "enum":[
-        "running",
-        "error",
-        "failed",
-        "complete",
-        "success"
-      ],
-      "description":"status",
-      "in":"query",
-      "name":"status",
-      "type":"string",
+    "buildStatus": {
+      "enum": ["running", "error", "failed", "complete", "success"],
+      "description": "status",
+      "in": "query",
+      "name": "status",
+      "type": "string",
       "required": false
     },
-    "buildStart":{
-      "description":"start",
-      "in":"query",
-      "name":"name",
-      "format":"date",
-      "type":"string",
+    "buildStart": {
+      "description": "start",
+      "in": "query",
+      "name": "name",
+      "format": "date",
+      "type": "string",
       "required": false
     },
-    "buildEnd":{
-      "description":"end",
-      "in":"query",
-      "name":"end",
-      "format":"date",
-      "type":"string",
+    "buildEnd": {
+      "description": "end",
+      "in": "query",
+      "name": "end",
+      "format": "date",
+      "type": "string",
       "required": false
     },
-    "buildSort":{
-      "enum":[
-        "asc",
-        "desc"
-      ],
-      "description":"sort",
-      "in":"query",
-      "name":"sort",
-      "type":"string",
+    "buildSort": {
+      "enum": ["asc", "desc"],
+      "description": "sort",
+      "in": "query",
+      "name": "sort",
+      "type": "string",
       "required": false
     },
-    "buildSource":{
-      "enum":[
-        "vdc",
-        "rdc"
-      ],
-      "description":"build_source",
-      "in":"path",
-      "name":"build_source",
-      "type":"string",
-      "required":true
+    "buildSource": {
+      "enum": ["vdc", "rdc"],
+      "description": "build_source",
+      "in": "path",
+      "name": "build_source",
+      "type": "string",
+      "required": true
     },
-    "buildId":{
-      "description":"build_id",
-      "in":"path",
-      "name":"build_id",
-      "required":true,
-      "type":"string"
+    "buildId": {
+      "description": "build_id",
+      "in": "path",
+      "name": "build_id",
+      "required": true,
+      "type": "string"
     },
-    "buildJobId":{
-      "description":"job_id",
-      "in":"path",
-      "name":"job_id",
-      "required":true,
-      "type":"string"
+    "buildJobId": {
+      "description": "job_id",
+      "in": "path",
+      "name": "job_id",
+      "required": true,
+      "type": "string"
     },
-    "buildModifiedSince":{
-      "description":"modified_since",
-      "in":"query",
-      "name":"modified_since",
-      "type":"string",
+    "buildModifiedSince": {
+      "description": "modified_since",
+      "in": "query",
+      "name": "modified_since",
+      "type": "string",
       "required": false
     },
-    "buildCompleted":{
-      "description":"completed",
-      "in":"query",
-      "name":"completed",
-      "type":"boolean",
+    "buildCompleted": {
+      "description": "completed",
+      "in": "query",
+      "name": "completed",
+      "type": "boolean",
       "required": false
     },
-    "buildErrored":{
-      "description":"errored",
-      "in":"query",
-      "name":"errored",
-      "type":"string",
+    "buildErrored": {
+      "description": "errored",
+      "in": "query",
+      "name": "errored",
+      "type": "string",
       "required": false
     },
-    "buildFailed":{
-      "description":"failed",
-      "in":"query",
-      "name":"failed",
-      "type":"string",
+    "buildFailed": {
+      "description": "failed",
+      "in": "query",
+      "name": "failed",
+      "type": "string",
       "required": false
     },
-    "buildFinished":{
-      "description":"finished",
-      "in":"query",
-      "name":"finished",
-      "type":"string",
+    "buildFinished": {
+      "description": "finished",
+      "in": "query",
+      "name": "finished",
+      "type": "string",
       "required": false
     },
-    "buildNew":{
-      "description":"new",
-      "in":"query",
-      "name":"new",
-      "type":"string",
+    "buildNew": {
+      "description": "new",
+      "in": "query",
+      "name": "new",
+      "type": "string",
       "required": false
     },
-    "buildPassed":{
-      "description":"passed",
-      "in":"query",
-      "name":"passed",
-      "type":"string",
+    "buildPassed": {
+      "description": "passed",
+      "in": "query",
+      "name": "passed",
+      "type": "string",
       "required": false
     },
-    "buildPublic":{
-      "description":"public",
-      "in":"query",
-      "name":"public",
-      "type":"boolean",
+    "buildPublic": {
+      "description": "public",
+      "in": "query",
+      "name": "public",
+      "type": "boolean",
       "required": false
     },
-    "buildQueued":{
-      "description":"queued",
-      "in":"query",
-      "name":"queued",
-      "type":"boolean",
+    "buildQueued": {
+      "description": "queued",
+      "in": "query",
+      "name": "queued",
+      "type": "boolean",
       "required": false
     },
-    "buildRunning":{
-      "description":"running",
-      "in":"query",
-      "name":"running",
-      "type":"boolean",
+    "buildRunning": {
+      "description": "running",
+      "in": "query",
+      "name": "running",
+      "type": "boolean",
       "required": false
     },
-    "buildFaulty":{
-      "description":"faulty",
-      "in":"query",
-      "name":"faulty",
-      "type":"boolean",
+    "buildFaulty": {
+      "description": "faulty",
+      "in": "query",
+      "name": "faulty",
+      "type": "boolean",
       "required": false
     }
   },
   "paths": {
-    "/{build_source}/":{
-      "get":{
-        "operationId":"get_builds_v2",
-        "parameters":[
+    "/{build_source}/": {
+      "get": {
+        "operationId": "get_builds_v2",
+        "parameters": [
           {
-            "$ref":"#/parameters/buildSource"
+            "$ref": "#/parameters/buildSource"
           },
           {
-            "$ref":"#/parameters/buildUserId"
+            "$ref": "#/parameters/buildUserId"
           },
           {
-            "$ref":"#/parameters/buildOrgId"
+            "$ref": "#/parameters/buildOrgId"
           },
           {
-            "$ref":"#/parameters/buildGroupId"
+            "$ref": "#/parameters/buildGroupId"
           },
           {
-            "$ref":"#/parameters/buildTeamId"
+            "$ref": "#/parameters/buildTeamId"
           },
           {
-            "$ref":"#/parameters/buildStatus"
+            "$ref": "#/parameters/buildStatus"
           },
           {
-            "$ref":"#/parameters/buildStart"
+            "$ref": "#/parameters/buildStart"
           },
           {
-            "$ref":"#/parameters/buildEnd"
+            "$ref": "#/parameters/buildEnd"
           },
           {
-            "$ref":"#/parameters/buildLimit"
+            "$ref": "#/parameters/buildLimit"
           },
           {
-            "$ref":"#/parameters/buildOffset"
+            "$ref": "#/parameters/buildOffset"
           },
           {
-            "$ref":"#/parameters/buildSort"
+            "$ref": "#/parameters/buildSort"
           }
         ],
-        "responses":{
-          "200":{
-            "description":"List of Builds",
-            "schema":{
-              "properties":{
-                "builds":{
-                  "description":"list of builds",
-                  "items":{
-                    "$ref":"#/definitions/BuildV2"
+        "responses": {
+          "200": {
+            "description": "List of Builds",
+            "schema": {
+              "properties": {
+                "builds": {
+                  "description": "list of builds",
+                  "items": {
+                    "$ref": "#/definitions/BuildV2"
                   },
-                  "type":"array"
+                  "type": "array"
                 }
               },
-              "type":"object"
+              "type": "object"
             }
           },
-          "404":{
-            "description":"Not found",
-            "schema":{
-              "$ref":"#/definitions/Error"
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           },
-          "default":{
-            "description":"Unexpected error",
-            "schema":{
-              "$ref":"#/definitions/Error"
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
-        "summary":"Get List of Builds (build_source can be vdc or rdc)",
-        "tags":[
-          "Build"
-        ]
+        "summary": "Get List of Builds (build_source can be vdc or rdc)",
+        "tags": ["Build"]
       }
     },
-    "/{build_source}/{build_id}/":{
-      "get":{
-        "operationId":"get_build_v2",
-        "parameters":[
+    "/{build_source}/{build_id}/": {
+      "get": {
+        "operationId": "get_build_v2",
+        "parameters": [
           {
-            "$ref":"#/parameters/buildSource"
+            "$ref": "#/parameters/buildSource"
           },
           {
-            "$ref":"#/parameters/buildId"
+            "$ref": "#/parameters/buildId"
           },
           {
-            "$ref":"#/parameters/buildUserId"
+            "$ref": "#/parameters/buildUserId"
           },
           {
-            "$ref":"#/parameters/buildOrgId"
+            "$ref": "#/parameters/buildOrgId"
           },
           {
-            "$ref":"#/parameters/buildGroupId"
+            "$ref": "#/parameters/buildGroupId"
           },
           {
-            "$ref":"#/parameters/buildTeamId"
+            "$ref": "#/parameters/buildTeamId"
           }
         ],
-        "responses":{
-          "200":{
-            "description":"Build",
-            "schema":{
-              "$ref":"#/definitions/BuildV2"
+        "responses": {
+          "200": {
+            "description": "Build",
+            "schema": {
+              "$ref": "#/definitions/BuildV2"
             }
           },
-          "404":{
-            "description":"Not found",
-            "schema":{
-              "$ref":"#/definitions/Error"
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           },
-          "default":{
-            "description":"Unexpected error",
-            "schema":{
-              "$ref":"#/definitions/Error"
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
-        "summary":"Get Build detail (build_source can be vdc or rdc)",
-        "tags":[
-          "Build"
-        ]
+        "summary": "Get Build detail (build_source can be vdc or rdc)",
+        "tags": ["Build"]
       }
     },
-    "/{build_source}/jobs/{job_id}/build/":{
-      "get":{
-        "operationId":"get_build_by_jobId_v2",
-        "parameters":[
+    "/{build_source}/jobs/{job_id}/build/": {
+      "get": {
+        "operationId": "get_build_by_jobId_v2",
+        "parameters": [
           {
-            "$ref":"#/parameters/buildSource"
+            "$ref": "#/parameters/buildSource"
           },
           {
-            "$ref":"#/parameters/buildJobId"
+            "$ref": "#/parameters/buildJobId"
           },
           {
-            "$ref":"#/parameters/buildUserId"
+            "$ref": "#/parameters/buildUserId"
           },
           {
-            "$ref":"#/parameters/buildOrgId"
+            "$ref": "#/parameters/buildOrgId"
           },
           {
-            "$ref":"#/parameters/buildGroupId"
+            "$ref": "#/parameters/buildGroupId"
           },
           {
-            "$ref":"#/parameters/buildTeamId"
+            "$ref": "#/parameters/buildTeamId"
           }
         ],
-        "responses":{
-          "200":{
-            "description":"Build",
-            "schema":{
-              "$ref":"#/definitions/BuildV2"
+        "responses": {
+          "200": {
+            "description": "Build",
+            "schema": {
+              "$ref": "#/definitions/BuildV2"
             }
           },
-          "404":{
-            "description":"Not found",
-            "schema":{
-              "$ref":"#/definitions/Error"
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           },
-          "default":{
-            "description":"Unexpected error",
-            "schema":{
-              "$ref":"#/definitions/Error"
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
-        "summary":"Get Build Jobs (build_source can be vdc or rdc)",
-        "tags":[
-          "Build"
-        ]
+        "summary": "Get Build Jobs (build_source can be vdc or rdc)",
+        "tags": ["Build"]
       }
     },
-    "/{build_source}/{build_id}/jobs/":{
-      "get":{
-        "operationId":"get_builds_jobs_v2",
-        "parameters":[
+    "/{build_source}/{build_id}/jobs/": {
+      "get": {
+        "operationId": "get_builds_jobs_v2",
+        "parameters": [
           {
-            "$ref":"#/parameters/buildSource"
+            "$ref": "#/parameters/buildSource"
           },
           {
-            "$ref":"#/parameters/buildId"
+            "$ref": "#/parameters/buildId"
           },
           {
-            "$ref":"#/parameters/buildUserId"
+            "$ref": "#/parameters/buildUserId"
           },
           {
-            "$ref":"#/parameters/buildOrgId"
+            "$ref": "#/parameters/buildOrgId"
           },
           {
-            "$ref":"#/parameters/buildGroupId"
+            "$ref": "#/parameters/buildGroupId"
           },
           {
-            "$ref":"#/parameters/buildTeamId"
+            "$ref": "#/parameters/buildTeamId"
           },
           {
-            "$ref":"#/parameters/buildModifiedSince"
+            "$ref": "#/parameters/buildModifiedSince"
           },
           {
-            "$ref":"#/parameters/buildCompleted"
+            "$ref": "#/parameters/buildCompleted"
           },
           {
-            "$ref":"#/parameters/buildErrored"
+            "$ref": "#/parameters/buildErrored"
           },
           {
-            "$ref":"#/parameters/buildFailed"
+            "$ref": "#/parameters/buildFailed"
           },
           {
-            "$ref":"#/parameters/buildFinished"
+            "$ref": "#/parameters/buildFinished"
           },
           {
-            "$ref":"#/parameters/buildNew"
+            "$ref": "#/parameters/buildNew"
           },
           {
-            "$ref":"#/parameters/buildPassed"
+            "$ref": "#/parameters/buildPassed"
           },
           {
-            "$ref":"#/parameters/buildPublic"
+            "$ref": "#/parameters/buildPublic"
           },
           {
-            "$ref":"#/parameters/buildQueued"
+            "$ref": "#/parameters/buildQueued"
           },
           {
-            "$ref":"#/parameters/buildRunning"
+            "$ref": "#/parameters/buildRunning"
           },
           {
-            "$ref":"#/parameters/buildFaulty"
+            "$ref": "#/parameters/buildFaulty"
           },
           {
-            "$ref":"#/parameters/buildLimit"
+            "$ref": "#/parameters/buildLimit"
           },
           {
-            "$ref":"#/parameters/buildOffset"
+            "$ref": "#/parameters/buildOffset"
           }
         ],
-        "responses":{
-          "200":{
-            "description":"Build Jobs",
-            "schema":{
-              "$ref":"#/definitions/BuildV2Job"
+        "responses": {
+          "200": {
+            "description": "Build Jobs",
+            "schema": {
+              "$ref": "#/definitions/BuildV2Job"
             }
           },
-          "404":{
-            "description":"Not found",
-            "schema":{
-              "$ref":"#/definitions/Error"
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           },
-          "default":{
-            "description":"Unexpected error",
-            "schema":{
-              "$ref":"#/definitions/Error"
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         },
-        "summary":"Get Build detail (build_source can be vdc or rdc)",
-        "tags":[
-          "Build"
-        ]
+        "summary": "Get Build detail (build_source can be vdc or rdc)",
+        "tags": ["Build"]
       }
     }
   }

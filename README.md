@@ -10,7 +10,7 @@ Wrapper around all Sauce Labs REST APIs for [Node.js](http://nodejs.org/) (v12 o
 
 To install the package run:
 
-```shell
+```sh
 npm install saucelabs
 ```
 
@@ -131,21 +131,21 @@ import SauceLabs from 'saucelabs';
 // const SauceLabs = require('saucelabs').default;
 
 (async () => {
-    const myAccount = new SauceLabs();
-    // using constructor options
-    // const myAccount = new SauceLabs({ user: "YOUR-USER", key: "YOUR-ACCESS-KEY"});
+  const myAccount = new SauceLabs();
+  // using constructor options
+  // const myAccount = new SauceLabs({ user: "YOUR-USER", key: "YOUR-ACCESS-KEY"});
 
-    // get full webdriver url from the client depending on region:
-    console.log(myAccount.webdriverEndpoint) // outputs "https://ondemand.us-west-1.saucelabs.com/"
+  // get full webdriver url from the client depending on region:
+  console.log(myAccount.webdriverEndpoint); // outputs "https://ondemand.us-west-1.saucelabs.com/"
 
-    // get job details of last run job
-    const jobs = await myAccount.listJobs(
-        process.env.SAUCE_USERNAME,
-        { limit: 1, full: true }
-    );
+  // get job details of last run job
+  const jobs = await myAccount.listJobs(process.env.SAUCE_USERNAME, {
+    limit: 1,
+    full: true,
+  });
 
-    console.log(jobs);
-    /**
+  console.log(jobs);
+  /**
      * outputs:
      * { jobs:
         [ { browser_short_version: '72',
@@ -180,44 +180,42 @@ import SauceLabs from 'saucelabs';
             browser: 'googlechrome' } ] }
      */
 
+  /**
+   * start Sauce Connect Proxy
+   */
+  const sc = await myAccount.startSauceConnect({
     /**
-     * start Sauce Connect Proxy
+     * you can pass in a `logger` method to print Sauce Connect log messages
      */
-    const sc = await myAccount.startSauceConnect({
-        /**
-         * you can pass in a `logger` method to print Sauce Connect log messages
-         */
-        logger: (stdout) => console.log(stdout),
-        /**
-         * see all available parameters here: https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/
-         * all parameters have to be applied camel cased instead of with hyphens, e.g.
-         * to apply the `--tunnel-name` parameter, set:
-         */
-        tunnelName: 'my-tunnel'
-    })
+    logger: (stdout) => console.log(stdout),
+    /**
+     * see all available parameters here: https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/
+     * all parameters have to be applied camel cased instead of with hyphens, e.g.
+     * to apply the `--tunnel-name` parameter, set:
+     */
+    tunnelName: 'my-tunnel',
+  });
 
-    // run a test
-    // ...
+  // run a test
+  // ...
 
-    // close Sauce Connect
-    await sc.close()
+  // close Sauce Connect
+  await sc.close();
 
-    // upload additional log files and attach it to your Sauce job
-    await myAccount.uploadJobAssets(
-        '76e693dbe6ff4910abb0bc3d752a971e',
-        [
-            // either pass in file names
-            './logs/video.mp4', './logs/log.json',
-            // or file objects
-            {
-                filename: 'myCustomLogFile.json',
-                data: {
-                    someLog: 'data'
-                }
-            }
-        ]
-    )
-})()
+  // upload additional log files and attach it to your Sauce job
+  await myAccount.uploadJobAssets('76e693dbe6ff4910abb0bc3d752a971e', [
+    // either pass in file names
+    './logs/video.mp4',
+    './logs/log.json',
+    // or file objects
+    {
+      filename: 'myCustomLogFile.json',
+      data: {
+        someLog: 'data',
+      },
+    },
+  ]);
+})();
 ```
 
 > You may wonder why `listJobs` requires a `username` as first parameter since you've already defined the process.env. The reason for this is that Sauce Labs supports a concept of Team Accounts, so-called sub-accounts, grouped together. As such functions like the mentioned could list jobs not only for the requesting account, but also for the individual team account. Learn more about it [here](https://docs.saucelabs.com/basics/acct-team-mgmt-hub/)
@@ -228,9 +226,9 @@ You can use the `webdriverEndpoint` property of the client to get the full WebDr
 
 ```js
 const myAccount = new SauceLabs({
-    user: "YOUR-USER",
-    key: "YOUR-ACCESS-KEY",
-    region: 'eu' // run in EU datacenter
+  user: 'YOUR-USER',
+  key: 'YOUR-ACCESS-KEY',
+  region: 'eu', // run in EU datacenter
 });
 
 // get full webdriver url from the client depending on `region` and `headless` option:
@@ -244,4 +242,4 @@ This module was originally created by [Dan Jenkins](https://github.com/danjenkin
 
 ## License
 
-Copyright 2012 Sauce Labs, Inc.  Licensed Apache-2.0
+Copyright 2012 Sauce Labs, Inc. Licensed Apache-2.0

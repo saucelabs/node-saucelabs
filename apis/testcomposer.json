@@ -1,60 +1,52 @@
 {
-  "swagger":"2.0",
-  "info":{
-    "description":"A service that orchestrates the Sauce Cloud.",
-    "version":"0.1.7",
-    "title":"Test-Composer",
-    "termsOfService":"https://saucelabs.com/terms-of-service",
-    "contact":{
-      "name":"Open Source Program Office at Sauce",
-      "email":"opensource@saucelabs.com",
-      "url":"https://saucelabs.com"
+  "swagger": "2.0",
+  "info": {
+    "description": "A service that orchestrates the Sauce Cloud.",
+    "version": "0.1.7",
+    "title": "Test-Composer",
+    "termsOfService": "https://saucelabs.com/terms-of-service",
+    "contact": {
+      "name": "Open Source Program Office at Sauce",
+      "email": "opensource@saucelabs.com",
+      "url": "https://saucelabs.com"
     }
   },
-  "externalDocs":{
-    "description":"Sauce Labs Docs",
-    "url":"https://docs.saucelabs.com"
+  "externalDocs": {
+    "description": "Sauce Labs Docs",
+    "url": "https://docs.saucelabs.com"
   },
   "basePath": "/v1/testcomposer",
-  "servers":[
+  "servers": [
     {
-      "url":"https://api.{region}.saucelabs.{tld}",
-      "variables":{
-        "region":{
-          "default":"us-west-1",
-          "description":"region of datacenter",
-          "enum":[
-            "us-west-1",
-            "eu-central-1",
-            "apac-southeast-1",
-            "staging"
-          ]
+      "url": "https://api.{region}.saucelabs.{tld}",
+      "variables": {
+        "region": {
+          "default": "us-west-1",
+          "description": "region of datacenter",
+          "enum": ["us-west-1", "eu-central-1", "apac-southeast-1", "staging"]
         },
-        "tld":{
-          "default":"com",
-          "description":"internal or external API",
-          "enum":[
-            "net",
-            "com"
-          ]
+        "tld": {
+          "default": "com",
+          "description": "internal or external API",
+          "enum": ["net", "com"]
         }
       }
     }
   ],
-  "tags":[
+  "tags": [
     {
-      "name":"Log Files",
-      "description":"Log files that were captured while the test was running."
+      "name": "Log Files",
+      "description": "Log files that were captured while the test was running."
     }
   ],
   "parameters": {
     "jobId": {
-      "in":"path",
-      "name":"jobId",
-      "required":true,
-      "description":"id of the job that was run on Sauce Labs",
-      "schema":{
-        "type":"string"
+      "in": "path",
+      "name": "jobId",
+      "required": true,
+      "description": "id of the job that was run on Sauce Labs",
+      "schema": {
+        "type": "string"
       }
     },
     "files": {
@@ -63,44 +55,42 @@
       "name": "files",
       "required": false,
       "schema": {
-        "properties":{
-          "files":{
-            "items":{
-              "type":"string"
+        "properties": {
+          "files": {
+            "items": {
+              "type": "string"
             },
-            "type":"array"
+            "type": "array"
           }
         },
-        "type":"object"
+        "type": "object"
       }
     }
   },
-  "components":{
-    "securitySchemes":{
-      "bearerAuth":{
-        "type":"http",
-        "scheme":"bearer",
-        "bearerFormat":"JWT"
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       },
-      "basicAuth":{
-        "type":"http",
-        "scheme":"basic"
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
       }
     }
   },
-  "paths":{
-    "/jobs/{jobId}/assets":{
-      "put":{
-        "operationId":"uploadJobAssets",
-        "summary":"Upload job assets",
-        "externalDocs":{
-          "description":"TBD",
-          "url":"https://wiki.saucelabs.com"
+  "paths": {
+    "/jobs/{jobId}/assets": {
+      "put": {
+        "operationId": "uploadJobAssets",
+        "summary": "Upload job assets",
+        "externalDocs": {
+          "description": "TBD",
+          "url": "https://wiki.saucelabs.com"
         },
-        "tags":[
-          "Job"
-        ],
-        "parameters":[
+        "tags": ["Job"],
+        "parameters": [
           {
             "$ref": "#/parameters/jobId"
           },
@@ -108,17 +98,17 @@
             "$ref": "#/parameters/files"
           }
         ],
-        "requestBody":{
-          "content":{
-            "multipart/form-data":{
-              "schema":{
-                "type":"object",
-                "properties":{
-                  "file":{
-                    "type":"array",
-                    "items":{
-                      "type":"string",
-                      "format":"binary"
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
                     }
                   }
                 }
@@ -126,21 +116,18 @@
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":"Object containing list of uploaded files.",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "type":"array",
-                  "items":{
-                    "type":"string",
-                    "description":"uploaded file name"
+        "responses": {
+          "200": {
+            "description": "Object containing list of uploaded files.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "uploaded file name"
                   },
-                  "example":[
-                    "log.json",
-                    "video.mp4"
-                  ]
+                  "example": ["log.json", "video.mp4"]
                 }
               }
             }
@@ -150,7 +137,7 @@
     },
     "/reports": {
       "post": {
-        "operationId":"createJob",
+        "operationId": "createJob",
         "parameters": [
           {
             "in": "body",
@@ -166,9 +153,7 @@
           "description": "TBD",
           "url": "https://wiki.saucelabs.com"
         },
-        "tags": [
-          "Job"
-        ],
+        "tags": ["Job"],
         "responses": {
           "201": {
             "description": "create result job",

@@ -2,9 +2,6 @@
   "compilerOptions": {
     "outDir": "dist",
     "noImplicitAny": true,
-    "types": [
-      "saucelabs",
-      "node"
-    ]
+    "types": ["saucelabs", "node"]
   }
 }

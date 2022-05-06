@@ -26,41 +26,26 @@
       "type": "basic"
     }
   },
-  "schemes": [
-    "https"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
+  "schemes": ["https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
   "paths": {
     "/v1/getprojects": {
       "get": {
         "summary": "Get all enabled projects for the user account",
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "operationId": "getProjects",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-
-        ],
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "It returns list of projects for the user account.",
             "schema": {
               "$ref": "#/definitions/GetProjects"
             },
-            "headers": {
-            }
+            "headers": {}
           }
         }
       }
@@ -69,15 +54,9 @@
       "get": {
         "summary": "Get project information by projectId",
         "operationId": "getProject",
-        "tags": [
-          "Projects"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "multipart/form-data"
-        ],
+        "tags": ["Projects"],
+        "produces": ["application/json"],
+        "consumes": ["multipart/form-data"],
         "parameters": [
           {
             "name": "projectId",
@@ -93,8 +72,7 @@
             "schema": {
               "$ref": "#/definitions/ProjectObject"
             },
-            "headers": {
-            }
+            "headers": {}
           }
         }
       }
@@ -102,17 +80,11 @@
     "/v1/projects/{projectName}/getprojectbyname": {
       "get": {
         "summary": "Get project information by project name.",
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "operationId": "getProjectByName",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "multipart/form-data"
-        ],
+        "produces": ["application/json"],
+        "consumes": ["multipart/form-data"],
         "parameters": [
           {
             "name": "projectName",
@@ -128,8 +100,7 @@
             "schema": {
               "$ref": "#/definitions/GetProjectByName"
             },
-            "headers": {
-            }
+            "headers": {}
           }
         }
       }
@@ -137,14 +108,10 @@
     "/testSuites/{accountId}/{projectId}/getTestSuites": {
       "get": {
         "summary": "Get test suites and associated test case  info for the testsuite for the requested project.",
-        "tags": [
-          "Test Suite"
-        ],
+        "tags": ["Test Suite"],
         "operationId": "getTestsuitesByProjects",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "accountId",
@@ -201,12 +168,8 @@
                   "isAiqExecution": false,
                   "schedulePlatform": "Linux",
                   "scheduleBrowser": "Chrome",
-                  "recipientsEmails": [
-
-                  ],
-                  "peTriggers": [
-
-                  ]
+                  "recipientsEmails": [],
+                  "peTriggers": []
                 },
                 {
                   "projectId": 1074,
@@ -249,12 +212,8 @@
                   "isAiqExecution": false,
                   "schedulePlatform": "Linux",
                   "scheduleBrowser": "Chrome",
-                  "recipientsEmails": [
-
-                  ],
-                  "peTriggers": [
-
-                  ]
+                  "recipientsEmails": [],
+                  "peTriggers": []
                 }
               ]
             }
@@ -268,9 +227,7 @@
         "tags": [],
         "operationId": "updateLveAndRecoverSteps",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "projectId",
@@ -301,14 +258,10 @@
     "/v1/projects/{projectId}/execute": {
       "post": {
         "summary": "It Executes a single test script.",
-        "tags": [
-          "Execution And Report"
-        ],
+        "tags": ["Execution And Report"],
         "operationId": "executeTestsuiteTest",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "Body",
@@ -333,8 +286,7 @@
             "schema": {
               "$ref": "#/definitions/ExecuteTestSuiteTestResponse"
             },
-            "headers": {
-            }
+            "headers": {}
           }
         }
       }
@@ -345,9 +297,7 @@
         "tags": [],
         "operationId": "createTestSuite",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "Body",
@@ -365,8 +315,7 @@
             "schema": {
               "$ref": "#/definitions/GetTestsuitesByProject"
             },
-            "headers": {
-            }
+            "headers": {}
           }
         }
       }
@@ -377,9 +326,7 @@
         "tags": [],
         "operationId": "updateTestSuite",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "testSuiteId",
@@ -404,8 +351,7 @@
             "schema": {
               "$ref": "#/definitions/GetTestsuitesByProject"
             },
-            "headers": {
-            }
+            "headers": {}
           }
         }
       }
@@ -416,9 +362,7 @@
         "tags": [],
         "operationId": "deleteTestSuites",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "Body",
@@ -438,9 +382,7 @@
         "tags": [],
         "operationId": "associateTestcases",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "Body",
@@ -460,9 +402,7 @@
         "tags": [],
         "operationId": "createTestcase",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "accountId",
@@ -496,9 +436,7 @@
         "tags": [],
         "operationId": "updateTestcaseSteps",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "projectId",
@@ -529,14 +467,10 @@
     "/v1/testsuite/{testSuiteId}/execute": {
       "post": {
         "summary": "It executes a test suite",
-        "tags": [
-          "Test Suite"
-        ],
+        "tags": ["Test Suite"],
         "operationId": "executeTestsuite",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "testSuiteId",
@@ -566,14 +500,10 @@
     },
     "/v1/auth": {
       "post": {
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "operationId": "getAuth",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "Body",
@@ -598,14 +528,10 @@
     "/v1/jobs/{jobId}/get_status": {
       "get": {
         "summary": "It returns status of execution of test suite",
-        "tags": [
-          "Test Suite"
-        ],
+        "tags": ["Test Suite"],
         "operationId": "getExecutionStatus",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "jobId",
@@ -621,8 +547,7 @@
             "schema": {
               "$ref": "#/definitions/GetStatus"
             },
-            "headers": {
-            }
+            "headers": {}
           }
         }
       }
@@ -630,14 +555,10 @@
     "/v1/projects/{projectId}/testcases": {
       "get": {
         "summary": "Get Test Cases For ProjectId",
-        "tags": [
-          "Test Cases"
-        ],
+        "tags": ["Test Cases"],
         "operationId": "getTestcases",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "projectId",
@@ -653,8 +574,7 @@
             "schema": {
               "$ref": "#/definitions/GetTestCaseByProjectId"
             },
-            "headers": {
-            }
+            "headers": {}
           }
         }
       }
@@ -662,14 +582,10 @@
     "/testCases/getTestCaseInfo/{testcaseId}/{stepId}": {
       "get": {
         "summary": "Get test steps for a specific test case",
-        "tags": [
-          "Test Suite"
-        ],
+        "tags": ["Test Suite"],
         "operationId": "getTestSteps",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "testcaseId",
@@ -700,9 +616,7 @@
         "tags": [],
         "operationId": "isGenerating",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "testcaseId",
@@ -723,14 +637,10 @@
     "/blocks/getAll/{accountId}/{blockId}": {
       "get": {
         "summary": "Get test steps for a specific test case block",
-        "tags": [
-          "Test Suite"
-        ],
+        "tags": ["Test Suite"],
         "operationId": "getTestStepBlocks",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "accountId",
@@ -752,14 +662,10 @@
     "/v1/downloadFile": {
       "get": {
         "summary": "It downloades the html report",
-        "tags": [
-          "Execution And Report"
-        ],
+        "tags": ["Execution And Report"],
         "operationId": "downloadReport",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "fileURL",
@@ -772,8 +678,7 @@
         "responses": {
           "200": {
             "description": "",
-            "headers": {
-            }
+            "headers": {}
           }
         }
       }
@@ -781,14 +686,10 @@
     "/testScriptExecutions/{executionId}/executions": {
       "get": {
         "summary": "It returns execution details for the executing script.",
-        "tags": [
-          "Execution And Report"
-        ],
+        "tags": ["Execution And Report"],
         "operationId": "getExecutions",
         "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "executionId",
@@ -804,8 +705,7 @@
             "schema": {
               "$ref": "#/definitions/GetExecutions"
             },
-            "headers": {
-            }
+            "headers": {}
           }
         }
       }
@@ -827,10 +727,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "username",
-        "password"
-      ]
+      "required": ["username", "password"]
     },
     "AuthResponse": {
       "title": "AuthResponse",
@@ -903,10 +800,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "instr",
-        "data"
-      ]
+      "required": ["instr", "data"]
     },
     "UpdatedTestSteps": {
       "title": "UpdatedTestSteps",
@@ -933,10 +827,7 @@
           }
         }
       },
-      "required": [
-        "brokenDownSteps",
-        "recoverSteps"
-      ]
+      "required": ["brokenDownSteps", "recoverSteps"]
     },
     "NewTestSuite": {
       "title": "NewTestSuite",
@@ -1008,9 +899,7 @@
           }
         }
       },
-      "required": [
-        "testSuiteIds"
-      ]
+      "required": ["testSuiteIds"]
     },
     "TestcaseAssociations": {
       "title": "TestcaseAssociations",
@@ -1030,24 +919,23 @@
           "type": "string"
         }
       },
-      "required": [
-        "case_ids",
-        "suite_id"
-      ]
+      "required": ["case_ids", "suite_id"]
     },
     "NewTestcase": {
       "title": "NewTestcase",
       "example": {
         "case_name": "New Test Case",
         "desc": "Some test case description",
-        "test_steps": [{
-          "columnName": "",
-          "data": "https://webdriver.io",
-          "instr": "open website",
-          "recorderData": "",
-          "stepId": "",
-          "xpath": ""
-        }]
+        "test_steps": [
+          {
+            "columnName": "",
+            "data": "https://webdriver.io",
+            "instr": "open website",
+            "recorderData": "",
+            "stepId": "",
+            "xpath": ""
+          }
+        ]
       },
       "type": "object",
       "properties": {
@@ -1064,11 +952,7 @@
           }
         }
       },
-      "required": [
-        "case_name",
-        "desc",
-        "test_steps"
-      ]
+      "required": ["case_name", "desc", "test_steps"]
     },
     "UpdatedTestcase": {
       "title": "UpdatedTestcase",
@@ -1076,13 +960,15 @@
         "debugPoints": [],
         "isCreationMode": false,
         "sessionId": "P-uWAnuGR",
-        "testSteps": [{
-          "data": "https://webdriver.io",
-          "instr": "open website",
-          "columnName": "",
-          "xpath": "",
-          "stepId": ""
-        }]
+        "testSteps": [
+          {
+            "data": "https://webdriver.io",
+            "instr": "open website",
+            "columnName": "",
+            "xpath": "",
+            "stepId": ""
+          }
+        ]
       },
       "type": "object",
       "properties": {
@@ -1105,11 +991,7 @@
           }
         }
       },
-      "required": [
-        "isCreationMode",
-        "sessionId",
-        "testSteps"
-      ]
+      "required": ["isCreationMode", "sessionId", "testSteps"]
     },
     "GetTestsuitesByProject": {
       "title": "GetTestsuitesByProject",
@@ -1142,12 +1024,8 @@
         "isAiqExecution": false,
         "schedulePlatform": "Linux",
         "scheduleBrowser": "Chrome",
-        "recipientsEmails": [
-
-        ],
-        "peTriggers": [
-
-        ]
+        "recipientsEmails": [],
+        "peTriggers": []
       },
       "type": "object",
       "properties": {
@@ -1701,14 +1579,11 @@
         "isRemoteDriver": false,
         "platform": "Linux",
         "remoteDriverUrl": "",
-        "scripts": [
-          3110
-        ],
+        "scripts": [3110],
         "testExecutionName": "suitedemo",
         "sessionId": "",
         "testCaseId": 3331,
-        "extraData": {
-        },
+        "extraData": {},
         "appiumVersion": "",
         "deviceName": "",
         "deviceOrientation": "",
@@ -1818,17 +1693,13 @@
               "executionId": 37911
             }
           ],
-          "tags": [
-
-          ],
+          "tags": [],
           "lastRun": "2019-08-09T05:08:25Z",
           "totalTime": 4,
           "isGenerating": false,
           "desc": "",
           "reportUrl": "",
-          "testDatas": [
-
-          ],
+          "testDatas": [],
           "ordinal": 0
         }
       ],
@@ -2056,9 +1927,7 @@
             "aiq_execution": false,
             "aiq_report_data": "",
             "browser": "chrome",
-            "tags": [
-
-            ]
+            "tags": []
           }
         ]
       },
@@ -2095,8 +1964,7 @@
             "browserVersion": "0.0"
           }
         ],
-        "map": {
-        }
+        "map": {}
       },
       "type": "object",
       "properties": {
@@ -2210,10 +2078,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "browser",
-        "browserVersion"
-      ]
+      "required": ["browser", "browserVersion"]
     }
   },
   "tags": [
