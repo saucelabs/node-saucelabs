@@ -29,6 +29,7 @@ test('should be able to run Sauce Connect', async () => {
   const api = new SauceLabs();
   const sc = await api.startSauceConnect({
     logger: console.log.bind(console),
+    tunnelPool: true,
     tunnelName: `node-saucelabs E2E test - ${ID}`,
   });
   console.log('Sauce Connect started successfully, shutting down...');
