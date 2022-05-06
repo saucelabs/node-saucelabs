@@ -295,9 +295,12 @@ export const SAUCE_CONNECT_CLI_PARAMS = [
   {
     alias: 'f',
     name: 'readyfile',
-    description: 'File that will be touched to signal when tunnel is ready.',
-  },
-  {
+    description: 'File that will be touched to signal when tunnel is ready.'
+}, {
+    alias: 'x',
+    name: 'rest-url',
+    description: 'Advanced feature: Connect to Sauce REST API at alternative URL. Use only if directed to do so by Sauce Labs support. (default "https://saucelabs.com/rest/v1")'
+}, {
     alias: 'X',
     name: 'scproxy-port',
     description: 'Port on which scproxy will be listening.',
