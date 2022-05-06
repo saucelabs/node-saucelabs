@@ -7,3 +7,4 @@ build/**
 coverage/**
 .vscode/**
 **/dist/**
+package-lock.json
