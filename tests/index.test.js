@@ -45,7 +45,7 @@ jest.mock('../src/sauceConnectLoader.js', () => {
 
 const stdoutEmitter = spawn().stdout;
 const stderrEmitter = spawn().stderr;
-const origKill = ::process.kill;
+const origKill = process.kill;
 beforeEach(() => {
   spawn.mockClear();
   process.kill = jest.fn();

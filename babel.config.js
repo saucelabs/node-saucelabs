@@ -4,16 +4,11 @@ module.exports = {
       '@babel/preset-env',
       {
         targets: {
-          node: 10,
+          node: 12,
         },
+        shippedProposals: true,
       },
     ],
-  ],
-  plugins: [
-    '@babel/plugin-proposal-function-bind',
-    '@babel/plugin-proposal-export-default-from',
-    '@babel/plugin-proposal-class-properties',
-    '@babel/plugin-proposal-optional-catch-binding',
   ],
   env: {
     development: {
