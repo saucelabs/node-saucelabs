@@ -87,7 +87,7 @@ export default class SauceLabs {
         webdriverEndpoint: this.webdriverEndpoint,
         headers: this._options.headers,
       },
-      {get: ::this.get}
+      {get: this.get.bind(this)}
     );
   }
 
@@ -121,30 +121,30 @@ export default class SauceLabs {
      * provide access to Sauce Connect interface
      */
     if (propName === 'startSauceConnect') {
-      return ::this._startSauceConnect;
+      return this._startSauceConnect.bind(this);
     }
 
     /**
      * have special implementations for certain operations
      */
     if (propName === 'uploadJobAssets') {
-      return ::this._uploadJobAssets;
+      return this._uploadJobAssets.bind(this);
     }
 
     if (propName === 'listBuilds') {
-      return ::this._listBuilds;
+      return this._listBuilds.bind(this);
     }
 
     if (propName === 'listBuildFailedJobs') {
-      return ::this._listBuildFailedJobs;
+      return this._listBuildFailedJobs.bind(this);
     }
 
     if (propName === 'listBuildJobs') {
-      return ::this._listBuildJobs;
+      return this._listBuildJobs.bind(this);
     }
 
     if (propName === 'getUserByUsername') {
-      return ::this._getUserByUsername;
+      return this._getUserByUsername.bind(this);
     }
 
     /**
@@ -169,7 +169,7 @@ export default class SauceLabs {
      * handle special commands not defined in the protocol
      */
     if (propName === 'downloadJobAsset') {
-      return ::this._downloadJobAsset;
+      return this._downloadJobAsset.bind(this);
     }
 
     return this._callAPI.bind(this, propName);
