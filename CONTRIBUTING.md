@@ -80,6 +80,14 @@ $ npm run watch
 
 ### Test Project
 
+To run e2e tests, run:
+
+```sh
+$ export SAUCE_API_KEY=<YOUR KEY>
+$ export SAUCE_USERNAME=<YOUR USER>
+$ npm run test:e2e
+```
+
 To test the project, run:
 
 ```sh
