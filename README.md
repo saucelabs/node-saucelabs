@@ -1,6 +1,4 @@
-<p align="center">
-    <img src="./assets/trophy-bot.png" alt="Trophy bot" />
-</p>
+
 
 # Node Sauce Labs [![Test Changes](https://github.com/saucelabs/node-saucelabs/actions/workflows/test.yml/badge.svg)](https://github.com/saucelabs/node-saucelabs/actions/workflows/test.yml)
 
