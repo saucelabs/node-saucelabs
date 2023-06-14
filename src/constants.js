@@ -3,7 +3,7 @@ import os from 'os';
 
 import {version} from '../package.json';
 
-export const DEFAULT_SAUCE_CONNECT_VERSION = '4.8.2';
+export const DEFAULT_SAUCE_CONNECT_VERSION = '4.9.0';
 export const SAUCE_CONNECT_BASE = 'https://saucelabs.com/downloads';
 export const SAUCE_CONNECT_VERSIONS_ENDPOINT =
   'https://saucelabs.com/versions.json';
@@ -199,7 +199,8 @@ export const SAUCE_CONNECT_CLI_PARAMS = [
   },
   {
     name: 'dns',
-    description: 'Use specified name server(s). Example: --dns 8.8.8.8,8.8.4.4:53',
+    description:
+      'Use specified name server(s). Example: --dns 8.8.8.8,8.8.4.4:53',
   },
   {
     name: 'doctor',
@@ -235,7 +236,8 @@ export const SAUCE_CONNECT_CLI_PARAMS = [
   {
     alias: 'M',
     name: 'max-missed-acks',
-    description: 'The max number of keepalive acks that can be missed before triggering reconnect.',
+    description:
+      'The max number of keepalive acks that can be missed before triggering reconnect.',
     type: 'number',
     deprecated: true,
   },
@@ -357,13 +359,15 @@ export const SAUCE_CONNECT_CLI_PARAMS = [
   },
   {
     name: 'tunnel-identifier',
-    description: 'Tunnel name used for this tunnel or the tunnels in the same HA pool.',
+    description:
+      'Tunnel name used for this tunnel or the tunnels in the same HA pool.',
     deprecated: true,
   },
   {
     alias: 'i',
     name: 'tunnel-name',
-    description: 'Tunnel name used for this tunnel or the tunnels in the same HA pool.',
+    description:
+      'Tunnel name used for this tunnel or the tunnels in the same HA pool.',
   },
   {
     name: 'tunnel-pool',
