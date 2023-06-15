@@ -26,6 +26,11 @@ test('should not be able to run Sauce Connect due to invalid credentials', async
 });
 
 test('should be able to run Sauce Connect', async () => {
+  // Only run the test when the env var is present
+  // in GitHub Actions, otherwise it fails for untrusted PRs/
+  if (process.env.GITHUB_RUN_ID && !process.env.SAUCE_USERNAME) {
+    return;
+  }
   const api = new SauceLabs();
   const sc = await api.startSauceConnect({
     logger: console.log.bind(console),
