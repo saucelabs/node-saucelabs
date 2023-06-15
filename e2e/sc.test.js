@@ -1,6 +1,10 @@
 import SauceLabs from '../build';
 
 const ID = process.env.GITHUB_RUN_ID ?? '(local)';
+// Only run the test when the env var is present
+// in GitHub Actions, otherwise it fails for untrusted PRs/
+const SKIP_TEST = process.env.GITHUB_RUN_ID && !process.env.SAUCE_USERNAME;
+
 
 jest.setTimeout(60 * 1000); // 60s should be sufficient to boot SC
 
@@ -15,6 +19,9 @@ jest
   .unmock('zlib');
 
 test('should not be able to run Sauce Connect due to invalid credentials', async () => {
+  if (SKIP_TEST) {
+    return;
+  }
   const api = new SauceLabs({key: 'foobar'});
   const err = await api
     .startSauceConnect({
@@ -26,9 +33,7 @@ test('should not be able to run Sauce Connect due to invalid credentials', async
 });
 
 test('should be able to run Sauce Connect', async () => {
-  // Only run the test when the env var is present
-  // in GitHub Actions, otherwise it fails for untrusted PRs/
-  if (process.env.GITHUB_RUN_ID && !process.env.SAUCE_USERNAME) {
+  if (SKIP_TEST) {
     return;
   }
   const api = new SauceLabs();
