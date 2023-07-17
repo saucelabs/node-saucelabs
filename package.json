@@ -44,7 +44,7 @@
     "form-data": "^4.0.0",
     "got": "^11.8.2",
     "hash.js": "^1.1.7",
-    "query-string": "^7.0.1",
+    "query-string": "^8.1.0",
     "tunnel": "^0.0.6",
     "yargs": "^17.2.1"
   },
