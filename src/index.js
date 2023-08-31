@@ -5,7 +5,7 @@ import {spawn} from 'child_process';
 import got from 'got';
 import FormData from 'form-data';
 import {camelCase} from 'change-case';
-import {stringify} from 'query-string';
+import queryString from 'query-string';
 
 import {
   createHMAC,
@@ -561,7 +561,7 @@ export default class SauceLabs {
      * stringify queryParams if stringifyOptions exists within description
      */
     const modifiedParams = description.stringifyOptions
-      ? stringify(body, description.stringifyOptions)
+      ? queryString.stringify(body, description.stringifyOptions)
       : body;
 
     /**
