@@ -4,6 +4,19 @@ const esModules = [
   'decode-uri-component',
   'split-on-first',
   'filter-obj',
+  // got and dependencies
+  'got',
+  'p-cancelable',
+  '@szmarczak/http-timer',
+  'lowercase-keys',
+  '@sindresorhus/is',
+  'cacheable-request',
+  'normalize-url',
+  'responselike',
+  'cacheable-request',
+  'mimic-response',
+  'form-data-encoder',
+  'cacheable-lookup',
 ];
 
 module.exports = {
