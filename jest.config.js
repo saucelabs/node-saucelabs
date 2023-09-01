@@ -17,6 +17,23 @@ const esModules = [
   'mimic-response',
   'form-data-encoder',
   'cacheable-lookup',
+  // @xhmikosr/downloader and dependencies
+  '@xhmikosr/downloader',
+  '@xhmikosr/archive-type',
+  'file-type',
+  'strtok3',
+  'peek-readable',
+  'token-types',
+  '@xhmikosr/decompress',
+  '@xhmikosr/decompress-tar',
+  'is-stream',
+  'filenamify',
+  'trim-repeated',
+  'escape-string-regexp',
+  'filename-reserved-regex',
+  'strip-outer',
+  'p-event',
+  'p-timeout',
 ];
 
 module.exports = {
