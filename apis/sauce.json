@@ -24,13 +24,7 @@
         "region": {
           "default": "us-west-1",
           "description": "region of datacenter",
-          "enum": [
-            "us-west-1",
-            "us-east-1",
-            "eu-central-1",
-            "apac-southeast-1",
-            "staging"
-          ]
+          "enum": ["us-west-1", "us-east-1", "eu-central-1", "staging"]
         },
         "tld": {
           "default": "com",

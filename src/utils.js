@@ -37,7 +37,6 @@ export function getRegionSubDomain(options = {}) {
 
   if (options.region === 'us') region = 'us-west-1';
   if (options.region === 'eu') region = 'eu-central-1';
-  if (options.region === 'apac') region = 'apac-southeast-1';
   if (options.headless) region = 'us-east-1';
   return region;
 }
