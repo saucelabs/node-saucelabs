@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import {spawn} from 'child_process';
 
+// https://github.com/import-js/eslint-plugin-import/issues/2352
+// eslint-disable-next-line import/no-unresolved
 import got from 'got';
 import FormData from 'form-data';
 import {camelCase} from 'change-case';

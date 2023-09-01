@@ -1,7 +1,7 @@
 import * as utils from '../src/utils';
 import SauceConnectLoader from '../src/sauceConnectLoader';
 import {promises} from 'fs';
-import download from 'download';
+import download from '@xhmikosr/downloader';
 
 describe('SauceConnectLoader', () => {
   describe('constructor', () => {
@@ -85,7 +85,9 @@ describe('SauceConnectLoader', () => {
         await scl._download();
         expect(download).toHaveBeenCalledWith(scl.url, scl.dest, {
           extract: true,
-          strip: 1,
+          decompress: {
+            strip: 1,
+          },
         });
       });
     });

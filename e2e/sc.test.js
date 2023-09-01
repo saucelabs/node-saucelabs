@@ -5,14 +5,13 @@ const ID = process.env.GITHUB_RUN_ID ?? '(local)';
 // in GitHub Actions, otherwise it fails for untrusted PRs/
 const SKIP_TEST = process.env.GITHUB_RUN_ID && !process.env.SAUCE_USERNAME;
 
-
 jest.setTimeout(60 * 1000); // 60s should be sufficient to boot SC
 
 /**
  * unmock
  */
 jest
-  .unmock('download')
+  .unmock('@xhmikosr/downloader')
   .unmock('form-data')
   .unmock('got')
   .unmock('yargs')

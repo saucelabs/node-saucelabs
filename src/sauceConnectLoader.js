@@ -23,7 +23,7 @@
 import {promises as fs} from 'fs';
 import {format} from 'util';
 import {join} from 'path';
-import download from 'download';
+import download from '@xhmikosr/downloader';
 import {SAUCE_CONNECT_PLATFORM_DATA} from './constants';
 import {getPlatform} from './utils';
 
@@ -68,7 +68,9 @@ export default class SauceConnectLoader {
   _download() {
     return download(this.url, this.dest, {
       extract: true,
-      strip: 1,
+      decompress: {
+        strip: 1,
+      },
     }).then(() => {
       if (process.platform !== 'win32') {
         // ensure the sc executable is actually executable
