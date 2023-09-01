@@ -3,7 +3,7 @@ import os from 'os';
 
 import {version} from '../package.json';
 
-export const DEFAULT_SAUCE_CONNECT_VERSION = '4.9.0';
+export const DEFAULT_SAUCE_CONNECT_VERSION = '4.9.1';
 export const SAUCE_CONNECT_BASE = 'https://saucelabs.com/downloads';
 export const SAUCE_CONNECT_VERSIONS_ENDPOINT =
   'https://saucelabs.com/versions.json';
@@ -46,7 +46,7 @@ for (const {paths, parameters, basePath, servers} of protocols) {
     for (const [method, description] of Object.entries(methods)) {
       let commandName = camelCase(description.operationId);
       /**
-       * mark commands as depcrecated in the command names
+       * mark commands as deprecated in the command names
        */
       if (description.deprecated) {
         commandName += 'Deprecated';
