@@ -46,7 +46,7 @@ for (const {paths, parameters, basePath, servers} of protocols) {
     for (const [method, description] of Object.entries(methods)) {
       let commandName = camelCase(description.operationId);
       /**
-       * mark commands as depcrecated in the command names
+       * mark commands as deprecated in the command names
        */
       if (description.deprecated) {
         commandName += 'Deprecated';
