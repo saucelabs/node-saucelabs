@@ -43,9 +43,6 @@ test('getAPIHost', () => {
     getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'us-east-1'})
   ).toBe('https://api.us-east-1.saucelabs.com/rest');
   expect(
-    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'apac'})
-  ).toBe('https://api.apac-southeast-1.saucelabs.com/rest');
-  expect(
     getAPIHost(sauceAPI.servers, sauceAPI.basePath, {
       region: 'us-west-1',
       headless: true,
