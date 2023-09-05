@@ -1,6 +1,6 @@
 {
   "name": "saucelabs",
-  "version": "7.3.0",
+  "version": "7.3.1",
   "author": "Sauce Labs, Inc.",
   "description": "A wrapper around Sauce Labs REST API",
   "homepage": "https://github.com/saucelabs/node-saucelabs",
