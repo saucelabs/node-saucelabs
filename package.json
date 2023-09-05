@@ -42,7 +42,7 @@
     "@xhmikosr/downloader": "^13.0.1",
     "change-case": "^4.1.2",
     "form-data": "^4.0.0",
-    "got": "^12.6.1",
+    "got": "^11.8.6",
     "hash.js": "^1.1.7",
     "query-string": "^8.1.0",
     "tunnel": "^0.0.6",
