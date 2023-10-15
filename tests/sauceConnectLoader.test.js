@@ -1,7 +1,8 @@
 import * as utils from '../src/utils';
 import SauceConnectLoader from '../src/sauceConnectLoader';
-import {promises} from 'fs';
-import download from '@xhmikosr/downloader';
+import fs from 'fs';
+import https from 'https';
+import compressing from 'compressing';
 
 describe('SauceConnectLoader', () => {
   describe('constructor', () => {
@@ -26,7 +27,7 @@ describe('SauceConnectLoader', () => {
       describe('when executable exists', () => {
         beforeEach(() => {
           jest
-            .spyOn(promises, 'stat')
+            .spyOn(fs.promises, 'stat')
             .mockImplementation(() => Promise.resolve());
           scl = new SauceConnectLoader({
             sauceConnectVersion: '1.2.3',
@@ -42,7 +43,7 @@ describe('SauceConnectLoader', () => {
       describe('when executable does not exist', () => {
         beforeEach(() => {
           jest
-            .spyOn(promises, 'stat')
+            .spyOn(fs.promises, 'stat')
             .mockImplementation(() => Promise.reject({code: 'ENOENT'}));
           scl = new SauceConnectLoader({
             sauceConnectVersion: '1.2.3',
@@ -58,7 +59,7 @@ describe('SauceConnectLoader', () => {
       describe('when something else is wrong', () => {
         beforeEach(() => {
           jest
-            .spyOn(promises, 'stat')
+            .spyOn(fs.promises, 'stat')
             .mockImplementation(() => Promise.reject(new Error()));
           scl = new SauceConnectLoader({
             sauceConnectVersion: '1.2.3',
@@ -71,24 +72,59 @@ describe('SauceConnectLoader', () => {
       });
     });
 
+    // test the _download method with mock https.get and mock compressing
     describe('_download()', () => {
       let scl;
+      let mockHttpsGet;
+      let mockCompressingLinux;
+      let mockCompressingWinMac;
 
       beforeEach(() => {
         jest
-          .spyOn(promises, 'chmod')
+          .spyOn(fs.promises, 'chmod')
+          .mockImplementation(() => Promise.resolve());
+        jest
+          .spyOn(fs.promises, 'rename')
           .mockImplementation(() => Promise.resolve());
         scl = new SauceConnectLoader({sauceConnectVersion: '1.2.3'});
+        mockHttpsGet = jest.spyOn(https, 'get');
+
+        mockCompressingLinux = jest
+          .spyOn(compressing.tgz, 'uncompress')
+          .mockImplementation(() => Promise.resolve());
+        mockCompressingWinMac = jest
+          .spyOn(compressing.zip, 'uncompress')
+          .mockImplementation(() => Promise.resolve());
       });
 
-      test('should delegate to `download` pkg', async () => {
+      test('should download and uncompress - linux', async () => {
+        jest.spyOn(utils, 'getPlatform').mockImplementation(() => 'linux');
         await scl._download();
-        expect(download).toHaveBeenCalledWith(scl.url, scl.dest, {
-          extract: true,
-          decompress: {
-            strip: 1,
-          },
-        });
+        expect(mockHttpsGet).toHaveBeenCalledWith(
+          scl.url,
+          expect.any(Function)
+        );
+        expect(mockCompressingLinux).toHaveBeenCalled();
+      });
+
+      test('should download and uncompress - mac', async () => {
+        jest.spyOn(utils, 'getPlatform').mockImplementation(() => 'darwin');
+        await scl._download();
+        expect(mockHttpsGet).toHaveBeenCalledWith(
+          scl.url,
+          expect.any(Function)
+        );
+        expect(mockCompressingWinMac).toHaveBeenCalled();
+      });
+
+      test('should download and uncompress - win', async () => {
+        jest.spyOn(utils, 'getPlatform').mockImplementation(() => 'win32');
+        await scl._download();
+        expect(mockHttpsGet).toHaveBeenCalledWith(
+          scl.url,
+          expect.any(Function)
+        );
+        expect(mockCompressingWinMac).toHaveBeenCalled();
       });
     });
   });
