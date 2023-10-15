@@ -20,12 +20,14 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-import {promises as fs} from 'fs';
 import {format} from 'util';
-import {join} from 'path';
-import download from '@xhmikosr/downloader';
 import {SAUCE_CONNECT_PLATFORM_DATA} from './constants';
 import {getPlatform} from './utils';
+import {mkdirSync, unlinkSync, createWriteStream} from 'fs';
+import {basename, join} from 'path';
+import https from 'https';
+import fs from 'fs/promises';
+import compressing from 'compressing';
 
 export default class SauceConnectLoader {
   constructor(options = {}) {
@@ -36,12 +38,13 @@ export default class SauceConnectLoader {
     }
     const {url, use} = platformData;
     this.url = format(url, options.sauceConnectVersion);
-    this.dest = join(
+    this.destDir = join(__dirname, 'sc-loader');
+    this.destSC = join(
       __dirname,
       'sc-loader',
       `.sc-v${options.sauceConnectVersion}`
     );
-    this.path = join(this.dest, use);
+    this.path = join(this.destSC, use);
   }
 
   /**
@@ -55,26 +58,55 @@ export default class SauceConnectLoader {
       if (err?.code === 'ENOENT') {
         return this._download();
       }
-
       throw err;
     });
   }
 
   /**
-   * Download SC
-   *
-   * @api private
+   * Download Sauce Connect
    */
   _download() {
-    return download(this.url, this.dest, {
-      extract: true,
-      decompress: {
-        strip: 1,
-      },
+    mkdirSync(this.destDir, {recursive: true});
+    const compressedFilePath = join(this.destDir, basename(this.url));
+    return new Promise((resolve, reject) => {
+      const file = createWriteStream(compressedFilePath);
+      https
+        .get(this.url, (response) => {
+          response.pipe(file);
+          file.on('finish', () => {
+            file.close();
+            resolve();
+          });
+        })
+        .on('error', (err) => {
+          unlinkSync(compressedFilePath);
+          reject(err);
+        });
     }).then(() => {
-      if (process.platform !== 'win32') {
-        // ensure the sc executable is actually executable
-        return fs.chmod(this.path, 0o755);
+      if (getPlatform() === 'linux') {
+        return compressing.tgz
+          .uncompress(compressedFilePath, this.destDir, {
+            strip: 1,
+          })
+          .then(() => {
+            const extractedDir = compressedFilePath.replace('.tar.gz', '');
+            fs.rename(extractedDir, this.destSC).then(() => {
+              // ensure the sc executable is actually executable
+              return fs.chmod(this.path, 0o755);
+            });
+            // renameSync(extractedDir, this.destSC);
+          });
+      } else {
+        return compressing.zip
+          .uncompress(compressedFilePath, this.destSC, {
+            strip: 1,
+          })
+          .then(() => {
+            if (getPlatform() !== 'win32') {
+              // ensure the sc executable is actually executable
+              return fs.chmod(this.path, 0o755);
+            }
+          });
       }
     });
   }
