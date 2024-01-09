@@ -34,7 +34,7 @@
             "required": true,
             "description": "create test runs request body",
             "schema": {
-              "$ref": "#/definitions/TestRun"
+              "$ref": "#/definitions/TestRuns"
             }
           }
         ],
@@ -302,6 +302,18 @@
           "type": "array",
           "items": {
             "type": "string"
+          }
+        }
+      }
+    },
+    "TestRuns": {
+      "type": "object",
+      "properties": {
+        "test_runs": {
+          "title": "TestRuns",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TestRun"
           }
         }
       }
