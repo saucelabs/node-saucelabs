@@ -910,4 +910,12 @@ This endpoint requires API Key authentication and will also return your private 
         <br><h4>Options</h4>
         <ul>          <li><b>user_id</b>: user_id</li>          <li><b>org_id</b>: org_id</li>          <li><b>group_id</b>: group_id</li>          <li><b>team_id</b>: team_id</li>          <li><b>modified_since</b>: modified_since</li>          <li><b>completed</b>: completed</li>          <li><b>errored</b>: errored</li>          <li><b>failed</b>: failed</li>          <li><b>finished</b>: finished</li>          <li><b>new</b>: new</li>          <li><b>passed</b>: passed</li>          <li><b>public</b>: public</li>          <li><b>queued</b>: queued</li>          <li><b>running</b>: running</li>          <li><b>faulty</b>: faulty</li>          <li><b>limit</b>: Number of results to return</li>          <li><b>offset</b>: Starting number</li>        </ul>      </td>
     </tr>
+    <tr>
+      <td>
+        <b>POST</b> <code>/v1/</code><br>
+        Post Test Runs
+        <h3>Example:</h3>
+        <code>api.createTestRunsV1(parameters)</code>
+      </td>
+    </tr>
   </tbody></table>

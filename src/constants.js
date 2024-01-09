@@ -33,6 +33,7 @@ const protocols = [
   require('../apis/autonomiq.json'),
   require('../apis/teamManagement.json'),
   require('../apis/builds.json'),
+  require('../apis/testruns.json'),
 ];
 
 const protocolFlattened = new Map();
