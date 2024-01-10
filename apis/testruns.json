@@ -1,0 +1,357 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "test-runs-api",
+    "version": "1.0.1"
+  },
+  "basePath": "/test-runs",
+  "servers": [
+    {
+      "url": "https://api.{region}.saucelabs.{tld}",
+      "variables": {
+        "region": {
+          "default": "us-west-1",
+          "description": "region of datacenter",
+          "enum": ["us-west-1", "eu-central-1", "us-east-4", "staging"]
+        },
+        "tld": {
+          "default": "com",
+          "description": "internal or external API",
+          "enum": ["net", "com"]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/v1/": {
+      "post": {
+        "summary": "Post Test Runs",
+        "operationId": "createTestRunsV1",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "parameters",
+            "required": true,
+            "description": "create test runs request body",
+            "schema": {
+              "$ref": "#/definitions/TestRuns"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Test runs successfully created with no content returned"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ApiTesting": {
+      "title": "ApiTesting",
+      "type": "object",
+      "properties": {
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "run_name": {
+          "title": "Run Name",
+          "type": "string"
+        },
+        "run_mode": {
+          "title": "Run Mode",
+          "type": "string"
+        },
+        "project_id": {
+          "title": "Project Id",
+          "type": "string"
+        },
+        "project_name": {
+          "title": "Project Name",
+          "type": "string"
+        },
+        "failures_count": {
+          "title": "Failures Count",
+          "type": "integer"
+        },
+        "warning_count": {
+          "title": "Warning Count",
+          "type": "integer"
+        }
+      }
+    },
+    "Ci": {
+      "title": "Ci",
+      "type": "object",
+      "properties": {
+        "ref_name": {
+          "title": "Ref Name",
+          "type": "string"
+        },
+        "commit_sha": {
+          "title": "Commit Sha",
+          "type": "string"
+        },
+        "repository": {
+          "title": "Repository",
+          "type": "string"
+        },
+        "branch": {
+          "title": "Branch",
+          "type": "string"
+        }
+      }
+    },
+    "HTTPValidationError": {
+      "title": "HTTPValidationError",
+      "type": "object",
+      "properties": {
+        "detail": {
+          "title": "Detail",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ValidationError"
+          }
+        }
+      }
+    },
+    "TestRunPlatform": {
+      "title": "TestRunPlatform",
+      "enum": ["vdc", "rdc", "api", "other"],
+      "type": "string",
+      "description": "An enumeration."
+    },
+    "SauceJob": {
+      "title": "SauceJob",
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        }
+      }
+    },
+    "Status": {
+      "title": "Status",
+      "enum": ["passed", "failed", "skipped"],
+      "type": "string",
+      "description": "An enumeration."
+    },
+    "TestRunTestError": {
+      "title": "TestRunTestError",
+      "type": "object",
+      "properties": {
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "line": {
+          "title": "Line",
+          "type": "integer"
+        }
+      }
+    },
+    "TestRun": {
+      "title": "TestRun",
+      "required": ["name", "start_time", "end_time", "duration"],
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "user_id": {
+          "title": "User Id",
+          "type": "string"
+        },
+        "org_id": {
+          "title": "Org Id",
+          "type": "string"
+        },
+        "team_id": {
+          "title": "Team Id",
+          "type": "string"
+        },
+        "group_id": {
+          "title": "Group Id",
+          "type": "string"
+        },
+        "author_id": {
+          "title": "Author Id",
+          "type": "string"
+        },
+        "path_name": {
+          "title": "Path Name",
+          "type": "string"
+        },
+        "build_id": {
+          "title": "Build Id",
+          "type": "string"
+        },
+        "build_name": {
+          "title": "Build Name",
+          "type": "string"
+        },
+        "creation_time": {
+          "title": "Creation Time",
+          "type": "string",
+          "format": "date-time"
+        },
+        "start_time": {
+          "title": "Start Time",
+          "type": "string",
+          "format": "date-time"
+        },
+        "end_time": {
+          "title": "End Time",
+          "type": "string",
+          "format": "date-time"
+        },
+        "duration": {
+          "title": "Duration",
+          "type": "integer"
+        },
+        "browser": {
+          "title": "Browser",
+          "type": "string"
+        },
+        "device": {
+          "title": "Device",
+          "type": "string"
+        },
+        "os": {
+          "title": "Os",
+          "type": "string"
+        },
+        "app_name": {
+          "title": "App Name",
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "allOf": [
+            {
+              "$ref": "#/definitions/Status"
+            }
+          ],
+          "default": "skipped"
+        },
+        "platform": {
+          "type": "string",
+          "allOf": [
+            {
+              "$ref": "#/definitions/TestRunPlatform"
+            }
+          ],
+          "default": "other"
+        },
+        "type": {
+          "type": "string",
+          "allOf": [
+            {
+              "$ref": "#/definitions/TestType"
+            }
+          ],
+          "default": "other"
+        },
+        "framework": {
+          "title": "Framework",
+          "type": "string"
+        },
+        "ci": {
+          "$ref": "#/definitions/Ci"
+        },
+        "api_testing": {
+          "$ref": "#/definitions/ApiTesting"
+        },
+        "sauce_job": {
+          "$ref": "#/definitions/SauceJob"
+        },
+        "errors": {
+          "title": "Errors",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TestRunTestError"
+          }
+        },
+        "tags": {
+          "title": "Tags",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "TestRuns": {
+      "type": "object",
+      "properties": {
+        "test_runs": {
+          "title": "TestRuns",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TestRun"
+          }
+        }
+      }
+    },
+    "TestType": {
+      "title": "TestType",
+      "enum": ["web", "mobile", "api", "other"],
+      "type": "string",
+      "description": "An enumeration."
+    },
+    "ValidationError": {
+      "title": "ValidationError",
+      "required": ["loc", "msg", "type"],
+      "type": "object",
+      "properties": {
+        "loc": {
+          "title": "Location",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          }
+        },
+        "msg": {
+          "title": "Message",
+          "type": "string"
+        },
+        "type": {
+          "title": "Error Type",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

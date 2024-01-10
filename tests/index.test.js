@@ -727,6 +727,37 @@ test('should stringify searchParams', () => {
   expect(got.mock.calls[0][1].searchParams).toEqual('id=job-1&id=job-2');
 });
 
+test('should get HTTPValidationError when posting test-runs failed', async () => {
+  const api = new SauceLabs({user: 'foo', key: 'bar'});
+  got.mockReturnValue(
+    Promise.resolve({
+      body: {
+        detail: [
+          {
+            loc: ['body', 14],
+            msg: 'Expecting property name enclosed in double quotes: line 1 column 15 (char 14)',
+            type: 'value_error.jsondecode',
+            ctx: {
+              msg: 'Expecting property name enclosed in double quotes',
+              doc: '...',
+              pos: 14,
+              lineno: 1,
+              colno: 15,
+            },
+          },
+        ],
+      },
+    })
+  );
+  const failedResp = await api.createTestRunsV1({testRuns: []});
+  expect(failedResp.detail.length).toEqual(1);
+  const detail = failedResp.detail[0];
+  expect(detail.type).toEqual('value_error.jsondecode');
+  expect(detail.msg).toEqual(
+    'Expecting property name enclosed in double quotes: line 1 column 15 (char 14)'
+  );
+});
+
 afterEach(() => {
   fs.writeFileSync.mockClear();
   got.mockClear();
