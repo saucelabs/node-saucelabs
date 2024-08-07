@@ -50,8 +50,7 @@ test('should be able to execute a command', async () => {
   const params = {
     user: 'foobaruser',
     key: 'barfookey',
-    headless: true,
-    region: 'anywhere',
+    region: 'eu',
     username: 'username-param',
     limit: 42,
     subaccounts: true,
@@ -62,8 +61,7 @@ test('should be able to execute a command', async () => {
   expect(api.options).toEqual({
     user: 'foobaruser',
     key: 'barfookey',
-    headless: true,
-    region: 'anywhere',
+    region: 'eu',
   });
   expect(api.listJobs).toBeCalledWith('username-param', params);
 });

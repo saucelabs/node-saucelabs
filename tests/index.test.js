@@ -64,7 +64,6 @@ test('should be inspectable', () => {
   username: 'foo',
   key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXbar',
   region: 'us',
-  headless: false,
   proxy: undefined`);
 });
 
@@ -82,8 +81,7 @@ test('should expose a webdriverEndpoint', () => {
   const api3 = new SauceLabs({
     user: 'foo',
     key: 'bar',
-    region: 'eu',
-    headless: true,
+    region: 'us-east-1',
   });
   expect(api3.webdriverEndpoint).toBe(
     'https://ondemand.us-east-1.saucelabs.com/'
@@ -463,7 +461,7 @@ test('should contain custom headers', async () => {
 describe('startSauceConnect', () => {
   it('should start sauce connect with proper parsed args', async () => {
     const logs = [];
-    const api = new SauceLabs({user: 'foo', key: 'bar', headless: true});
+    const api = new SauceLabs({user: 'foo', key: 'bar'});
     setTimeout(
       () =>
         stdoutEmitter.emit(
@@ -489,7 +487,7 @@ describe('startSauceConnect', () => {
 
   it('should start sauce connect with latest version if no version is specified in the args', async () => {
     const logs = [];
-    const api = new SauceLabs({user: 'foo', key: 'bar', headless: true});
+    const api = new SauceLabs({user: 'foo', key: 'bar'});
     got.mockReturnValue(
       Promise.resolve({
         body: {
@@ -516,7 +514,7 @@ describe('startSauceConnect', () => {
 
   it('should start sauce connect with fallback default version in case the call to the API failed', async () => {
     const logs = [];
-    const api = new SauceLabs({user: 'foo', key: 'bar', headless: true});
+    const api = new SauceLabs({user: 'foo', key: 'bar'});
     got.mockImplementation(() => {
       throw new Error('Endpoint not available!');
     });
@@ -538,7 +536,7 @@ describe('startSauceConnect', () => {
 
   it('should properly fail if connection could not be established', async () => {
     const errMessage = 'Sauce Connect could not establish a connection';
-    const api = new SauceLabs({user: 'foo', key: 'bar', headless: true});
+    const api = new SauceLabs({user: 'foo', key: 'bar'});
     setTimeout(() => stdoutEmitter.emit('data', errMessage), 50);
     const err = await api
       .startSauceConnect({
@@ -552,7 +550,7 @@ describe('startSauceConnect', () => {
 
   it('should properly fail if user is not authorized', async () => {
     const errMessage = 'Sauce Connect failed to start - 401 (Unauthorized).';
-    const api = new SauceLabs({user: 'foo', key: 'bar', headless: true});
+    const api = new SauceLabs({user: 'foo', key: 'bar'});
     setTimeout(() => stdoutEmitter.emit('data', errMessage), 50);
     const err = await api
       .startSauceConnect({
@@ -565,7 +563,7 @@ describe('startSauceConnect', () => {
   });
 
   it('should close sauce connect', async () => {
-    const api = new SauceLabs({user: 'foo', key: 'bar', headless: true});
+    const api = new SauceLabs({user: 'foo', key: 'bar'});
     setTimeout(
       () =>
         stdoutEmitter.emit(
@@ -587,7 +585,7 @@ describe('startSauceConnect', () => {
   });
 
   it('should fail if stderr is emitted', async () => {
-    const api = new SauceLabs({user: 'foo', key: 'bar', headless: true});
+    const api = new SauceLabs({user: 'foo', key: 'bar'});
     setTimeout(() => stderrEmitter.emit('data', 'Uuups'), 50);
     const res = await api
       .startSauceConnect({tunnelIdentifier: 'my-tunnel'})
@@ -596,7 +594,7 @@ describe('startSauceConnect', () => {
   });
 
   it('should not fail if stderr is expected character', async () => {
-    const api = new SauceLabs({user: 'foo', key: 'bar', headless: true});
+    const api = new SauceLabs({user: 'foo', key: 'bar'});
     setTimeout(() => stderrEmitter.emit('data', '\u001b[K'), 50);
     setTimeout(
       () =>

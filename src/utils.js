@@ -37,7 +37,6 @@ export function getRegionSubDomain(options = {}) {
 
   if (options.region === 'us') region = 'us-west-1';
   if (options.region === 'eu') region = 'eu-central-1';
-  if (options.headless) region = 'us-east-1';
   return region;
 }
 
@@ -46,7 +45,7 @@ export function getRegionSubDomain(options = {}) {
  * @param  {string}  servers   OpenAPI spec servers property
  * @param  {string}  basePath  OpenAPI spec base path
  * @param  {object}  options   client options
- * @return {string}            endpoint base url (e.g. `https://us-east1.headless.saucelabs.com`)
+ * @return {string}            endpoint base url (e.g. `https://api.us-west-1.saucelabs.com`)
  */
 export function getAPIHost(servers, basePath, options) {
   /**
@@ -90,10 +89,6 @@ export function getAPIHost(servers, basePath, options) {
  * https://assets.staging.saucelabs.net/jobs/<jobId>/log.json
  */
 export function getAssetHost(options) {
-  if (options.headless) {
-    options.region = 'us-east-1';
-  }
-
   if (options.region === 'staging') {
     options.tld = options.tld || 'net';
   }
@@ -113,7 +108,6 @@ export function toString(scope) {
   username: '${scope.username}',
   key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX${scope._accessKey.slice(-6)}',
   region: '${scope._options.region}',
-  headless: ${scope._options.headless},
   proxy: ${scope._options.proxy}
 }`;
 }

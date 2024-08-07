@@ -9,11 +9,7 @@ export const builder = (yargs) => {
   }
 };
 export const handler = async (argv) => {
-  const {user, key, headless, region, proxy} = Object.assign(
-    {},
-    DEFAULT_OPTIONS,
-    argv
-  );
-  const api = new SauceLabs({user, key, headless, region, proxy});
+  const {user, key, region, proxy} = Object.assign({}, DEFAULT_OPTIONS, argv);
+  const api = new SauceLabs({user, key, region, proxy});
   return api.startSauceConnect(argv, true);
 };
