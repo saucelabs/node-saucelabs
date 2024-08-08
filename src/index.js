@@ -72,7 +72,6 @@ export default class SauceLabs {
      */
     this.region = this._options.region;
     this.tld = this._options.tld;
-    this.headless = this._options.headless;
     this.webdriverEndpoint = `https://ondemand.${getRegionSubDomain(
       options
     )}.saucelabs.com/`;
@@ -84,7 +83,6 @@ export default class SauceLabs {
           -6
         )}`,
         region: this._options.region,
-        headless: this._options.headless,
         proxy: this._options.proxy,
         webdriverEndpoint: this.webdriverEndpoint,
         headers: this._options.headers,

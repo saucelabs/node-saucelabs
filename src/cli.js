@@ -47,12 +47,12 @@ export const run = () => {
         }
       },
       async (argv) => {
-        const {user, key, headless, region, proxy, tld} = Object.assign(
+        const {user, key, region, proxy, tld} = Object.assign(
           {},
           DEFAULT_OPTIONS,
           argv
         );
-        const api = new SauceLabs({user, key, headless, region, proxy, tld});
+        const api = new SauceLabs({user, key, region, proxy, tld});
         const requiredParams = params
           .filter((p) => p.required)
           .map((p) => argv[p.name]);

@@ -87,7 +87,6 @@ export const JOB_ASSET_NAMES = [
 export const DEFAULT_OPTIONS = {
   user: process.env.SAUCE_USERNAME,
   key: process.env.SAUCE_ACCESS_KEY,
-  headless: false,
   region: 'us',
   proxy: process.env.HTTPS_PROXY || process.env.HTTP_PROXY,
   headers: {'User-Agent': `saucelabs/v${version} (nodejs ${os.platform()})`},
@@ -135,13 +134,6 @@ export const CLI_PARAMS = [
     default: DEFAULT_OPTIONS.region,
     description:
       'your Sauce Labs datacenter region, the following regions are available: `us-west-1` (short `us`), `eu-central-1` (short `eu`)',
-  },
-  {
-    name: 'headless',
-    default: DEFAULT_OPTIONS.headless,
-    description:
-      'if set to true you are accessing the headless Sauce instances (this discards the `region` option)',
-    boolean: true,
   },
   {
     alias: 'p',

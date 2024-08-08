@@ -21,7 +21,7 @@ test('builder', () => {
 });
 
 test('handler', async () => {
-  const api = await handler({headless: true});
+  const api = await handler({region: 'eu'});
   expect(api.scStarted).toBe(true);
-  expect(api.startSauceConnect).toBeCalledWith({headless: true}, true);
+  expect(api.startSauceConnect).toBeCalledWith({region: 'eu'}, true);
 });

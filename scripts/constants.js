@@ -25,13 +25,9 @@ export interface SauceLabsOptions {
      *
      * - us-west-1 (short 'us')
      * - eu-central-1 (short 'eu')
-     * - us-east-1 (headless)
+     * - us-east-1
      */
     region?: ${regions};
-    /**
-     * If set to true you are accessing the headless Sauce instances (this discards the region option).
-     */
-    headless?: boolean;
     /**
      * If you want to tunnel your API request through a proxy please provide your proxy URL.
      */

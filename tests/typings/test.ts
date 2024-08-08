@@ -5,7 +5,6 @@ const api = new SauceLabs({
   user: 'foo',
   key: 'foobar',
   proxy: 'barfoo',
-  headless: false,
 });
 
 async function foobar() {
@@ -27,7 +26,6 @@ async function foobar() {
   api.username.slice(1, 1);
   api.region.slice(1, 1);
   api.tld.slice(1, 1);
-  api.headless.valueOf();
   api.webdriverEndpoint.slice(1, 1);
 }
 
