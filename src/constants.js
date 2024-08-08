@@ -96,7 +96,7 @@ export const ASSET_REGION_MAPPING = {
   us: '',
   eu: 'eu-central-1.',
   'us-west-1': '',
-  'us-east-1': 'us-east-1.',
+  'us-east-4': 'us-east-4.',
   'eu-central-1': 'eu-central-1.',
   staging: 'staging.',
 };
