@@ -81,10 +81,10 @@ test('should expose a webdriverEndpoint', () => {
   const api3 = new SauceLabs({
     user: 'foo',
     key: 'bar',
-    region: 'us-east-1',
+    region: 'us-east-4',
   });
   expect(api3.webdriverEndpoint).toBe(
-    'https://ondemand.us-east-1.saucelabs.com/'
+    'https://ondemand.us-east-4.saucelabs.com/'
   );
 
   const api4 = new SauceLabs({user: 'foo', key: 'bar', region: 'us-central-3'});

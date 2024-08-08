@@ -85,7 +85,7 @@ export function getAPIHost(servers, basePath, options) {
  * helper to generate host for assets, like:
  * https://assets.saucelabs.com/jobs/<jobId>/selenium-server.log
  * https://assets.eu-central-1.saucelabs.com/jobs/<jobId>/log.json
- * https://assets.us-east-1.saucelabs.com/jobs/<jobId>/log.json
+ * https://assets.us-east-4.saucelabs.com/jobs/<jobId>/log.json
  * https://assets.staging.saucelabs.net/jobs/<jobId>/log.json
  */
 export function getAssetHost(options) {
