@@ -40,14 +40,8 @@ test('getAPIHost', () => {
     getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'us-west-1'})
   ).toBe('https://api.us-west-1.saucelabs.com/rest');
   expect(
-    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'us-east-1'})
-  ).toBe('https://api.us-east-1.saucelabs.com/rest');
-  expect(
-    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {
-      region: 'us-west-1',
-      headless: true,
-    })
-  ).toBe('https://api.us-east-1.saucelabs.com/rest');
+    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'us-east-4'})
+  ).toBe('https://api.us-east-4.saucelabs.com/rest');
   expect(
     getAPIHost(sauceAPI.servers, sauceAPI.basePath, {host: 'http://foobar.com'})
   ).toBe('http://foobar.com/rest');
@@ -91,11 +85,8 @@ test('getAssetHost', () => {
   expect(getAssetHost({region: 'eu-central-1'})).toBe(
     'https://assets.eu-central-1.saucelabs.com'
   );
-  expect(getAssetHost({headless: true})).toBe(
-    'https://assets.us-east-1.saucelabs.com'
-  );
-  expect(getAssetHost({headless: true, region: 'eu'})).toBe(
-    'https://assets.us-east-1.saucelabs.com'
+  expect(getAssetHost({region: 'us-east-4'})).toBe(
+    'https://assets.us-east-4.saucelabs.com'
   );
   expect(getAssetHost({region: 'staging'})).toBe(
     'https://assets.staging.saucelabs.net'
