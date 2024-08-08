@@ -89,7 +89,6 @@ fs.readdir(path.join(__dirname, '../apis'), (err, files) => {
     username: string;
     region: string;
     tld: string;
-    headless: boolean;
     webdriverEndpoint: string;\n\n
     ${methods}
 }
