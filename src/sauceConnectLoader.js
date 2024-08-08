@@ -90,11 +90,10 @@ export default class SauceConnectLoader {
           })
           .then(() => {
             const extractedDir = compressedFilePath.replace('.tar.gz', '');
-            fs.rename(extractedDir, this.destSC).then(() => {
+            return fs.rename(extractedDir, this.destSC).then(() => {
               // ensure the sc executable is actually executable
               return fs.chmod(this.path, 0o755);
             });
-            // renameSync(extractedDir, this.destSC);
           });
       } else {
         return compressing.zip
