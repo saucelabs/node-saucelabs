@@ -25,7 +25,7 @@ export interface SauceLabsOptions {
      *
      * - us-west-1 (short 'us')
      * - eu-central-1 (short 'eu')
-     * - us-east-4
+     * - us-east-1 (headless)
      */
     region?: ${regions};
     /**
