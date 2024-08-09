@@ -196,17 +196,17 @@
       "required": false
     },
     "buildStart": {
-      "description": "start",
+      "description": "start_time",
       "in": "query",
-      "name": "name",
+      "name": "start_time",
       "format": "date",
       "type": "string",
       "required": false
     },
     "buildEnd": {
-      "description": "end",
+      "description": "end_time",
       "in": "query",
-      "name": "end",
+      "name": "end_time",
       "format": "date",
       "type": "string",
       "required": false
