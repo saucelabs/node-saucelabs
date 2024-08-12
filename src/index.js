@@ -529,20 +529,24 @@ export default class SauceLabs {
     const options = args.slice(pathParams.length)[0] || {};
     for (const optionParam of params.filter((p) => p.in === 'query')) {
       const expectedType = optionParam.type.replace('integer', 'number');
+      // I'm not sure why query param name is camel-cased here, underscore params do exist in Sauce Labs.
       const optionName = camelCase(optionParam.name);
-      const option = options[optionName];
+      const optionValue = options[optionName] || options[optionParam.name];
       const isRequired =
         Boolean(optionParam.required) ||
         (typeof optionParam.required === 'undefined' &&
           typeof optionParam.default === 'undefined');
-      if ((isRequired || option) && !isValidType(option, expectedType)) {
+      if (
+        (isRequired || optionValue) &&
+        !isValidType(optionValue, expectedType)
+      ) {
         throw new Error(
-          `Expected parameter for option '${optionName}' from type '${expectedType}', found '${typeof option}'`
+          `Expected parameter for option '${optionName}' from type '${expectedType}', found '${typeof optionValue}'`
         );
       }
 
-      if (typeof option !== 'undefined') {
-        bodyMap.set(optionParam.name, option);
+      if (typeof optionValue !== 'undefined') {
+        bodyMap.set(optionParam.name, optionValue);
       }
     }
 

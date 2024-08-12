@@ -8,6 +8,8 @@ import FormData from 'form-data';
 import SauceLabs from '../src';
 
 import versions from './__responses__/versions.json';
+import allVersions from './__responses__/all_versions.json';
+import latestVersions from './__responses__/latest_versions.json';
 
 const instances = [];
 
@@ -419,6 +421,45 @@ test('should fail if file parameter is invalid', async () => {
     .catch((err) => err);
 
   expect(result.message).toContain('Invalid file parameter');
+});
+
+test('should contain all download links', async () => {
+  const api = new SauceLabs({user: 'foo', key: 'bar'});
+  got.mockReturnValue(
+    Promise.resolve({
+      body: {
+        ...allVersions,
+      },
+    })
+  );
+  const scVersions = await api.scVersions({
+    clientVersion: '5.1.1',
+    clientHost: 'darwin-arm64',
+    all: true,
+  });
+  expect(got.mock.calls).toMatchSnapshot();
+  expect(scVersions.all_downloads['5.1.1'].linux).toMatchObject({
+    download_url:
+      'https://saucelabs.com/downloads/sauce-connect/5.1.1/sauce-connect-5.1.1_linux.x86_64.tar.gz',
+    sha256: '6247e61e39ff054cf524341a681f4045c557be79bcf63c8c501e634ef2d54a41',
+  });
+});
+
+test('should have status latest', async () => {
+  const api = new SauceLabs({user: 'foo', key: 'bar'});
+  got.mockReturnValue(
+    Promise.resolve({
+      body: {
+        ...latestVersions,
+      },
+    })
+  );
+  const scVersions = await api.scVersions({
+    clientVersion: '5.1.1',
+    clientHost: 'darwin-arm64',
+  });
+  expect(got.mock.calls).toMatchSnapshot();
+  expect(scVersions.status).toEqual('LATEST');
 });
 
 describe('startSauceConnect', () => {

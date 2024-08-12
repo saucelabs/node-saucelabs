@@ -458,6 +458,84 @@
       },
       "type": "object"
     },
+    "SauceConnectDownloadInfo": {
+      "type": "object",
+      "properties": {
+        "download_url": {
+          "type": "string"
+        },
+        "sha1": {
+          "type": "string",
+          "nullable": true
+        },
+        "sha256": {
+          "type": "string",
+          "nullable": true
+        },
+        "version": {
+          "type": "string",
+          "nullable": true
+        }
+      }
+    },
+    "SauceConnectByPlatform": {
+      "type": "object",
+      "properties": {
+        "linux": {
+          "$ref": "#/definitions/SauceConnectDownloadInfo",
+          "nullable": true
+        },
+        "linux-arm64": {
+          "$ref": "#/definitions/SauceConnectDownloadInfo",
+          "nullable": true
+        },
+        "win32": {
+          "$ref": "#/definitions/SauceConnectDownloadInfo",
+          "nullable": true
+        },
+        "osx": {
+          "$ref": "#/definitions/SauceConnectDownloadInfo"
+        }
+      }
+    },
+    "SauceConnectVersions": {
+      "type": "object",
+      "properties": {
+        "latest_version": {
+          "type": "string"
+        },
+        "client_version": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["LATEST", "UPGRADE", "PRERELEASE", "UNKNOWN", "EOL"]
+        },
+        "info_url": {
+          "type": "string"
+        },
+        "download_url": {
+          "type": "string"
+        },
+        "sha1": {
+          "type": "string",
+          "nullable": true
+        },
+        "sha256": {
+          "type": "string",
+          "nullable": true
+        }
+      },
+      "downloads": {
+        "$ref": "#/definitions/SauceConnectByPlatform"
+      },
+      "all_downloads": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/SauceConnectByPlatform"
+        }
+      }
+    },
     "SauceStatus": {
       "properties": {
         "service_operational": {
@@ -742,6 +820,20 @@
       "required": true,
       "type": "string"
     },
+    "clientHost": {
+      "description": "SC client host OS and CPU arch",
+      "in": "query",
+      "name": "client_host",
+      "required": false,
+      "type": "string"
+    },
+    "clientVersion": {
+      "description": "SC client version",
+      "in": "query",
+      "name": "client_version",
+      "required": false,
+      "type": "string"
+    },
     "filepath": {
       "description": "file path to store the asset at",
       "in": "path",
@@ -754,6 +846,14 @@
       "in": "path",
       "name": "filename",
       "required": true,
+      "type": "string"
+    },
+    "filter": {
+      "description": "Filter expression to apply before returning query results",
+      "in": "query",
+      "name": "filter",
+      "enum": ["v2alpha", "one_per_pool"],
+      "required": false,
       "type": "string"
     },
     "full": {
@@ -811,6 +911,21 @@
         "type": "object"
       }
     },
+    "protocol": {
+      "description": "Sauce Connect Protocol",
+      "in": "query",
+      "name": "protocol",
+      "required": false,
+      "enum": ["kgp", "h2c"],
+      "type": "string"
+    },
+    "reason": {
+      "description": "Reason for stopping a tunnel",
+      "in": "query",
+      "name": "reason",
+      "required": true,
+      "type": "string"
+    },
     "subaccounts": {
       "default": false,
       "description": "Include subaccounts in list of jobs",
@@ -824,6 +939,13 @@
       "name": "username",
       "required": true,
       "type": "string"
+    },
+    "wait_for_jobs": {
+      "default": true,
+      "description": "Wait for jobs to finish",
+      "in": "query",
+      "name": "wait_for_jobs",
+      "type": "boolean"
     },
     "jobIds": {
       "description": "list of jobIds",
@@ -1539,6 +1661,12 @@
           },
           {
             "$ref": "#/parameters/full"
+          },
+          {
+            "$ref": "#/parameters/filter"
+          },
+          {
+            "$ref": "#/parameters/protocol"
           }
         ],
         "responses": {
@@ -1577,6 +1705,12 @@
           },
           {
             "$ref": "#/parameters/id"
+          },
+          {
+            "$ref": "#/parameters/reason"
+          },
+          {
+            "$ref": "#/parameters/wait_for_jobs"
           }
         ],
         "responses": {
@@ -1630,6 +1764,38 @@
           }
         },
         "summary": "Get Tunnel by ID",
+        "tags": ["Tunnel"]
+      }
+    },
+    "/v1/public/tunnels/info/versions": {
+      "get": {
+        "operationId": "sc_versions",
+        "parameters": [
+          {
+            "$ref": "#/parameters/clientVersion"
+          },
+          {
+            "$ref": "#/parameters/clientHost"
+          },
+          {
+            "$ref": "#/parameters/all"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tunnels",
+            "schema": {
+              "$ref": "#/definitions/SauceConnectVersions"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "summary": "Get tunnels for the user or all the users in the team",
         "tags": ["Tunnel"]
       }
     },
