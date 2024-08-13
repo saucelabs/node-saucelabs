@@ -1,7 +1,6 @@
 import http from 'http';
 import https from 'https';
 import sauceAPI from '../apis/sauce.json';
-import rdcAPI from '../apis/rdc.json';
 import {
   createHMAC,
   getAPIHost,
@@ -61,10 +60,6 @@ test('getAPIHost', () => {
   expect(() =>
     getAPIHost(sauceAPI.servers, sauceAPI.basePath, {tld: 'info'})
   ).toThrow();
-
-  expect(getAPIHost(rdcAPI.servers, rdcAPI.basePath, {})).toBe(
-    'https://app.testobject.com/api/rest'
-  );
 });
 
 test('getAssetHost', () => {
