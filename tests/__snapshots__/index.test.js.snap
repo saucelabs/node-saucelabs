@@ -1,12 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should contain custom headers 1`] = `
-{
-  "Authorization": "Basic Zm9vOmJhcg==",
-  "user-agent": "foo",
-}
-`;
-
 exports[`should get builds failed jobs 1`] = `
 [
   [
