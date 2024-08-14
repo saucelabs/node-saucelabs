@@ -26,7 +26,6 @@ export const SAUCE_VERSION_NOTE = `node-saucelabs v${version}\nSauce Connect v${
 
 const protocols = [
   require('../apis/sauce.json'),
-  require('../apis/rdc.json'),
   require('../apis/performance.json'),
   require('../apis/testcomposer.json'),
   require('../apis/datastore.json'),

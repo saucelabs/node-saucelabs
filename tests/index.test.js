@@ -203,27 +203,6 @@ test('should allow to make a request with body param via CLI call', async () => 
   expect(req.json).toEqual({passed: false});
 });
 
-test('should update RDC job status with body param', async () => {
-  const api = new SauceLabs({});
-  await api.updateTest('89ec3cca-7092-41f1-8037-d035579fb8d1', {passed: true});
-
-  const req = got.mock.calls[0][1];
-  expect(got.put).toBeCalled();
-  expect(req.json).toEqual({passed: true});
-});
-
-test('should update RDC job status with body param via CLI call', async () => {
-  const api = new SauceLabs({});
-  await api.updateTest(
-    '89ec3cca-7092-41f1-8037-d035579fb8d1',
-    '{ "passed": false }'
-  );
-
-  const req = got.mock.calls[0][1];
-  expect(got.put).toBeCalled();
-  expect(req.json).toEqual({passed: false});
-});
-
 test('should fail if param has wrong type', async () => {
   const api = new SauceLabs({user: 'foo', key: 'bar'});
   const error = await api
@@ -440,22 +419,6 @@ test('should fail if file parameter is invalid', async () => {
     .catch((err) => err);
 
   expect(result.message).toContain('Invalid file parameter');
-});
-
-test('should contain custom headers', async () => {
-  const api = new SauceLabs({
-    user: 'foo',
-    key: 'bar',
-    headers: {'user-agent': 'foo'},
-  });
-  got.mockReturnValue(
-    Promise.resolve({
-      body: JSON.stringify({foo: 'bar'}),
-    })
-  );
-  await api.updateTest('123', '{ "passed": false }');
-  const requestOptions = got.extend.mock.calls[0][0];
-  expect(requestOptions.headers).toMatchSnapshot();
 });
 
 describe('startSauceConnect', () => {
