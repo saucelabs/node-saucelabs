@@ -63,66 +63,10 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>DELETE</b> <code>/v1/manual</code><br>
-        complete manual task
-        <h3>Example:</h3>
-        <code>api.deleteManualJob(ids)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>POST</b> <code>/v1/manual</code><br>
-        Creates a manual job
-        <h3>Example:</h3>
-        <code>api.createManualJob(capabilities)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>GET</b> <code>/v1/manual/options/</code><br>
-        returns a list of supported platforms in the Sauce cloud
-        <h3>Example:</h3>
-        <code>api.listManualPlatforms()</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>GET</b> <code>/v1/manual/{taskId}</code><br>
-        get manual task
-        <h3>Example:</h3>
-        <code>api.getManualJob(taskId)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>POST</b> <code>/v1/manual/{taskId}/screenshot</code><br>
-        Take screenshot in manual session
-        <h3>Example:</h3>
-        <code>api.createManualJobScreenshot(taskId)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
         <b>GET</b> <code>/v1/me</code><br>
         Authenticated user cookie information
         <h3>Example:</h3>
         <code>api.getCurrentUser()</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>DELETE</b> <code>/v1/tasks</code><br>
-        complete manual task
-        <h3>Example:</h3>
-        <code>api.deleteManualJobLegacy(ids)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>POST</b> <code>/v1/tasks</code><br>
-        Creates a manual job
-        <h3>Example:</h3>
-        <code>api.createManualJobLegacy(capabilities)</code>
       </td>
     </tr>
     <tr>
@@ -220,15 +164,16 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.listTunnels(username, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>all</b>: Should the response contain the same team user data</li>          <li><b>full</b>: Should the response result contain everything or just the basics</li>        </ul>      </td>
+        <ul>          <li><b>all</b>: Should the response contain the same team user data</li>          <li><b>full</b>: Should the response result contain everything or just the basics</li>          <li><b>filter</b>: Filter expression to apply before returning query results</li>          <li><b>protocol</b>: Sauce Connect Protocol</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
         <b>DELETE</b> <code>/v1/{username}/tunnels/{id}</code><br>
         Delete a Tunnel
         <h3>Example:</h3>
-        <code>api.deleteTunnel(username, id)</code>
-      </td>
+        <code>api.deleteTunnel(username, id, reason, { ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>wait_for_jobs</b>: Wait for jobs to finish</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -237,6 +182,15 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.getTunnel(username, id)</code>
       </td>
+    </tr>
+    <tr>
+      <td>
+        <b>GET</b> <code>/v1/public/tunnels/info/versions</code><br>
+        Get tunnels for the user or all the users in the team
+        <h3>Example:</h3>
+        <code>api.scVersions({ ...options })</code>
+        <br><h4>Options</h4>
+        <ul>          <li><b>client_version</b>: SC client version</li>          <li><b>client_host</b>: SC client host OS and CPU arch</li>          <li><b>all</b>: Should the response contain the same team user data</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -255,15 +209,6 @@ The following commands are available via package or cli tool:
         <code>api.getJobsV1_1(id, { ...options })</code>
         <br><h4>Options</h4>
         <ul>          <li><b>full</b>: Should the response result contain everything or just the basics</li>        </ul>      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>POST</b> <code>/storage/upload</code><br>
-        Returns new application id after the upload.
-        <h3>Example:</h3>
-        <code>api.uploadApp({ ...options })</code>
-        <br><h4>Options</h4>
-        <ul>          <li><b>App-Type</b>: Application type</li>          <li><b>App-Identifier</b>: Your custom unique identifier for your app</li>          <li><b>App-DisplayName</b>: Your custom display name</li>          <li><b>App-Active</b>: If true makes uploaded application active one</li>          <li><b>body</b>: No description available.</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -584,7 +529,7 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.getBuildsV2(build_source, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>user_id</b>: user_id</li>          <li><b>org_id</b>: org_id</li>          <li><b>group_id</b>: group_id</li>          <li><b>team_id</b>: team_id</li>          <li><b>status</b>: status</li>          <li><b>name</b>: start</li>          <li><b>end</b>: end</li>          <li><b>limit</b>: Number of results to return</li>          <li><b>offset</b>: Starting number</li>          <li><b>sort</b>: sort</li>        </ul>      </td>
+        <ul>          <li><b>user_id</b>: user_id</li>          <li><b>org_id</b>: org_id</li>          <li><b>group_id</b>: group_id</li>          <li><b>team_id</b>: team_id</li>          <li><b>status</b>: status</li>          <li><b>start_time</b>: start_time</li>          <li><b>end_time</b>: end_time</li>          <li><b>limit</b>: Number of results to return</li>          <li><b>offset</b>: Starting number</li>          <li><b>sort</b>: sort</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
