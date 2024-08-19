@@ -1,0 +1,270 @@
+{
+  "downloads": {
+    "linux": {
+      "download_url": "https://saucelabs.com/downloads/sauce-connect/5.1.1/sauce-connect-5.1.1_linux.x86_64.tar.gz",
+      "sha256": "6247e61e39ff054cf524341a681f4045c557be79bcf63c8c501e634ef2d54a41"
+    },
+    "linux-arm64": {
+      "download_url": "https://saucelabs.com/downloads/sauce-connect/5.1.1/sauce-connect-5.1.1_linux.aarch64.tar.gz",
+      "sha256": "b4951cf64a724ceb03cf0ae676a35a0ca721210c0e42426384dcec23159f1fe5"
+    },
+    "osx": {
+      "download_url": "https://saucelabs.com/downloads/sauce-connect/5.1.1/sauce-connect-5.1.1_darwin.all.zip",
+      "sha256": "d0a29f2df3277e8468c55810ef99685bed632ec6d2eed9fdbd941f2f8faf2354"
+    },
+    "win32": {
+      "download_url": "https://saucelabs.com/downloads/sauce-connect/5.1.1/sauce-connect-5.1.1_windows.x86_64.zip",
+      "sha256": "d3e692cca8b9311a4822e8a6f8715e787319e70dc5551cbb212f5be68d36f7bb"
+    },
+    "windows-arm64": {
+      "download_url": "https://saucelabs.com/downloads/sauce-connect/5.1.1/sauce-connect-5.1.1_windows.aarch64.zip",
+      "sha256": "fbb1b15c9a5ae6435cba0dc43f195df32764e5c7b1fcc6a2e625df58ea05642d"
+    }
+  },
+  "info_url": "https://docs.saucelabs.com/secure-connections/sauce-connect-5/installation/",
+  "latest_version": "5.1.1",
+  "download_url": "https://saucelabs.com/downloads/sauce-connect/5.1.1/sauce-connect-5.1.1_darwin.all.zip",
+  "sha256": "d0a29f2df3277e8468c55810ef99685bed632ec6d2eed9fdbd941f2f8faf2354",
+  "status": "LATEST",
+  "client_version": "5.1.1",
+  "all_downloads": {
+    "4.7.0": {
+      "linux": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.7.0-linux.tar.gz",
+        "sha1": "f0bf8e35894e9b35bf9fae8f4f34e83845b4bb6b"
+      },
+      "osx": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.7.0-osx.zip",
+        "sha1": "8e41a471bdf4cfeed7cd06d6af9dd081b9aa028d"
+      }
+    },
+    "4.7.1": {
+      "linux": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.7.1-linux.tar.gz",
+        "sha1": "e5d7f82ad98251a653d1b0537f1103e49eda5e11"
+      },
+      "linux-arm64": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.7.1-linux-arm64.tar.gz",
+        "sha1": "d07c8f62ec64168f9cc80d73a59976764f2c62b4"
+      },
+      "osx": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.7.1-osx.zip",
+        "sha1": "1f18defa14a5cc4b663bf07213411f6bdd535b6d"
+      },
+      "win32": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.7.1-win32.zip",
+        "sha1": "9c91e5adbd023973efe0eb14d2d427d2c0ef3c25"
+      }
+    },
+    "4.8.0": {
+      "linux": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.8.0-linux.tar.gz",
+        "sha1": "a6bcfeab41b245e503c1f2aad382bfa8956893a1"
+      },
+      "linux-arm64": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.8.0-linux-arm64.tar.gz",
+        "sha1": "8ce9b5a740710e6eef1be70b1b1d347df938d46a"
+      },
+      "osx": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.8.0-osx.zip",
+        "sha1": "8c4c7de20c68b704cffddcaddea44a6773b05746"
+      },
+      "win32": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.8.0-win32.zip",
+        "sha1": "48382adec66130d96148ccaff46894088366ed90"
+      }
+    },
+    "4.8.1": {
+      "linux": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.8.1-linux.tar.gz",
+        "sha1": "9c16682e4c9716734432789884f868212f95f563"
+      },
+      "linux-arm64": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.8.1-linux-arm64.tar.gz",
+        "sha1": "2a6a5fd0ad90c1d776048e4f9fd60a1a8a26c3a2"
+      },
+      "osx": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.8.1-osx.zip",
+        "sha1": "4c5b8b570994a76396c75858455032bfdbb83589"
+      },
+      "win32": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.8.1-win32.zip",
+        "sha1": "f3df33f01bf8d9585cfcda084b54300089266159"
+      }
+    },
+    "4.8.2": {
+      "linux": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.8.2-linux.tar.gz",
+        "sha1": "e65e77e849a80d1eb1de03ba56abf5a4d51cf1c5"
+      },
+      "linux-arm64": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.8.2-linux-arm64.tar.gz",
+        "sha1": "fd782a658f4d28b9792edaf9df730a87ae797cba"
+      },
+      "osx": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.8.2-osx.zip",
+        "sha1": "5c2f81f6b0f246a641384d33df5c091ca0174730"
+      },
+      "win32": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.8.2-win32.zip",
+        "sha1": "1c81cbe9d1b25b8f8483cc1163d54d94191f7665"
+      }
+    },
+    "4.8.3": {
+      "linux": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.8.3-linux.tar.gz",
+        "sha1": "1af0d45ce48e3f0707164dbf0577adad2e6b7853"
+      },
+      "linux-arm64": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.8.3-linux-arm64.tar.gz",
+        "sha1": "de6c894d018a1dd1f38c3c90bd4b8084c2e9fd4d"
+      },
+      "osx": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.8.3-osx.zip",
+        "sha1": "c6edb040d3c7398c0f2be41957846b85a8d1e6e6"
+      },
+      "win32": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.8.3-win32.zip",
+        "sha1": "6df7d8114954b09d61e54ac8c642137fa98d342f"
+      }
+    },
+    "4.9.0": {
+      "linux": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.9.0-linux.tar.gz",
+        "sha1": "f263177c700ebc29a0c5772a04e9b04bc1487c91"
+      },
+      "linux-arm64": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.9.0-linux-arm64.tar.gz",
+        "sha1": "04f697d585bdc7d95d7663dea52f5b895628b0ba"
+      },
+      "osx": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.9.0-osx.zip",
+        "sha1": "f3080fbd76a3847c9c19dae6131f93a1c3abb008"
+      },
+      "win32": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.9.0-win32.zip",
+        "sha1": "fe35f66126ddd6e8d043790906206c2999d69f1a"
+      }
+    },
+    "4.9.1": {
+      "linux": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.9.1-linux.tar.gz",
+        "sha1": "9310bc860f7870a1f872b11c4dc6073a1ad34e5e"
+      },
+      "linux-arm64": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.9.1-linux-arm64.tar.gz",
+        "sha1": "535e6c9edcc0ca94cac7c9f800f910dcea808cbf"
+      },
+      "osx": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.9.1-osx.zip",
+        "sha1": "64f9c1bac5d4f5b9acb6fbb629b6df0f5671b4c8"
+      },
+      "win32": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.9.1-win32.zip",
+        "sha1": "63858695eb6840306921607a97af0083c0697bf3"
+      }
+    },
+    "4.9.2": {
+      "linux": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.9.2-linux.tar.gz",
+        "sha1": "5589571bdc186f3f1b05fe6ce68529501a42fb43"
+      },
+      "linux-arm64": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.9.2-linux-arm64.tar.gz",
+        "sha1": "8b02c4343b74c36c575817ea4a6eae5fb5718f6c"
+      },
+      "win32": {
+        "download_url": "https://saucelabs.com/downloads/sc-4.9.2-win32.zip",
+        "sha1": "47c19feda3fb684f88acd816e9c8f2e3d4a1e3c0"
+      }
+    },
+    "5.0.0": {
+      "linux": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.0.0/sauce-connect-5.0.0_linux.x86_64.tar.gz",
+        "sha1": "1dfcae164bf28dc5071d496777f23187285f7578"
+      },
+      "linux-arm64": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.0.0/sauce-connect-5.0.0_linux.aarch64.tar.gz",
+        "sha1": "9861f28c8703a8d4a0f7824684e467974e202350"
+      },
+      "osx": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.0.0/sauce-connect-5.0.0_darwin.all.zip",
+        "sha1": "19d56467d90a98cafd85ed1f2b7647c95d8fe27b"
+      },
+      "win32": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.0.0/sauce-connect-5.0.0_windows.x86_64.zip",
+        "sha1": "40f1375d0d28e8c704f8b829fb842bedd11ea6c9"
+      },
+      "windows-arm64": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.0.0/sauce-connect-5.0.0_windows.aarch64.zip",
+        "sha1": "a7be976a39a72e0c1c931f7b981649a93c0a4b36"
+      }
+    },
+    "5.0.1": {
+      "linux": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.0.1/sauce-connect-5.0.1_linux.x86_64.tar.gz",
+        "sha1": "23fe2956742c1244757e249e5e05a59e96039482"
+      },
+      "linux-arm64": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.0.1/sauce-connect-5.0.1_linux.aarch64.tar.gz",
+        "sha1": "962c1cd7884ad703e213d86ba9df8d7b5d58dbe7"
+      },
+      "osx": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.0.1/sauce-connect-5.0.1_darwin.all.zip",
+        "sha1": "5eaa165b5eae2c57c8fc07f7272404c09a56cb89"
+      },
+      "win32": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.0.1/sauce-connect-5.0.1_windows.x86_64.zip",
+        "sha1": "f6afc12802581922fdff2ee7472f1b3a1d259ec9"
+      },
+      "windows-arm64": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.0.1/sauce-connect-5.0.1_windows.aarch64.zip",
+        "sha1": "c92ae859e212fc83221b92486886e741bb6f336c"
+      }
+    },
+    "5.1.0": {
+      "linux": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.1.0/sauce-connect-5.1.0_linux.x86_64.tar.gz",
+        "sha256": "69ef7830b8ea3fc2bd9129cbf3f5ff04a22c6a7cd8a3c9e1e1ff0ee411b0ca20"
+      },
+      "linux-arm64": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.1.0/sauce-connect-5.1.0_linux.aarch64.tar.gz",
+        "sha256": "679b940e6e7e99ded716fd22e0a4229be012c85aaad9d0ca9242e2bbcf8f50ed"
+      },
+      "osx": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.1.0/sauce-connect-5.1.0_darwin.all.zip",
+        "sha256": "e587d5a9b5e5c928600d9e5e35d74ae9926218c7e13ab1da90f26da411d360cd"
+      },
+      "win32": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.1.0/sauce-connect-5.1.0_windows.x86_64.zip",
+        "sha256": "291f149685fa20015f78423a5650438978aa38ba3c72671fe834d80c706e32c4"
+      },
+      "windows-arm64": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.1.0/sauce-connect-5.1.0_windows.aarch64.zip",
+        "sha256": "a6b1e61f93eb8afb4bf461d7df43724ae1cafdb9553ca7f7cc59905ed431d7f7"
+      }
+    },
+    "5.1.1": {
+      "linux": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.1.1/sauce-connect-5.1.1_linux.x86_64.tar.gz",
+        "sha256": "6247e61e39ff054cf524341a681f4045c557be79bcf63c8c501e634ef2d54a41"
+      },
+      "linux-arm64": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.1.1/sauce-connect-5.1.1_linux.aarch64.tar.gz",
+        "sha256": "b4951cf64a724ceb03cf0ae676a35a0ca721210c0e42426384dcec23159f1fe5"
+      },
+      "osx": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.1.1/sauce-connect-5.1.1_darwin.all.zip",
+        "sha256": "d0a29f2df3277e8468c55810ef99685bed632ec6d2eed9fdbd941f2f8faf2354"
+      },
+      "win32": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.1.1/sauce-connect-5.1.1_windows.x86_64.zip",
+        "sha256": "d3e692cca8b9311a4822e8a6f8715e787319e70dc5551cbb212f5be68d36f7bb"
+      },
+      "windows-arm64": {
+        "download_url": "https://saucelabs.com/downloads/sauce-connect/5.1.1/sauce-connect-5.1.1_windows.aarch64.zip",
+        "sha256": "fbb1b15c9a5ae6435cba0dc43f195df32764e5c7b1fcc6a2e625df58ea05642d"
+      }
+    }
+  }
+}

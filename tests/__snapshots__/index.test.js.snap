@@ -1,5 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`should contain all download links 1`] = `
+[
+  [
+    "https://api.us-west-1.saucelabs.com/rest/v1/public/tunnels/info/versions",
+    {
+      "responseType": "json",
+      "searchParams": {
+        "all": true,
+        "client_host": "darwin-arm64",
+        "client_version": "5.1.1",
+      },
+    },
+  ],
+]
+`;
+
 exports[`should get builds failed jobs 1`] = `
 [
   [
@@ -119,6 +135,21 @@ exports[`should get user by username 1`] = `
       "username": "fooUser",
     },
   },
+]
+`;
+
+exports[`should have status latest 1`] = `
+[
+  [
+    "https://api.us-west-1.saucelabs.com/rest/v1/public/tunnels/info/versions",
+    {
+      "responseType": "json",
+      "searchParams": {
+        "client_host": "darwin-arm64",
+        "client_version": "5.1.1",
+      },
+    },
+  ],
 ]
 `;
 
