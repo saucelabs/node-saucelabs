@@ -35,7 +35,7 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.listJobs(username, { ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>limit</b>: Number of results to return</li>          <li><b>subaccounts</b>: Include subaccounts in list of jobs</li>          <li><b>full</b>: Should the response result contain everything or just the basics</li>          <li><b>manual_only</b>: Only return manual jobs</li>          <li><b>auto_only</b>: No description available.</li>          <li><b>name</b>: name of the job</li>          <li><b>owner_type</b>: owner type for jobs</li>          <li><b>owner</b>: username of owner of the jobs</li>          <li><b>from</b>: receive jobs beginning of a specific timestamp</li>          <li><b>to</b>: receive jobs until specific timestamp</li>        </ul>      </td>
+        <ul>          <li><b>limit</b>: Number of results to return</li>          <li><b>subaccounts</b>: Include subaccounts in list of jobs</li>          <li><b>full</b>: Should the response result contain everything or just the basics</li>          <li><b>manual_only</b>: Only return manual jobs</li>          <li><b>auto_only</b>: Only return automated jobs</li>          <li><b>name</b>: name of the job</li>          <li><b>owner_type</b>: owner type for jobs</li>          <li><b>owner</b>: username of owner of the jobs</li>          <li><b>from</b>: receive jobs beginning of a specific timestamp</li>          <li><b>to</b>: receive jobs until specific timestamp</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
