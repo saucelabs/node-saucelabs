@@ -529,9 +529,16 @@ export default class SauceLabs {
     const options = args.slice(pathParams.length)[0] || {};
     for (const optionParam of params.filter((p) => p.in === 'query')) {
       const expectedType = optionParam.type.replace('integer', 'number');
-      // I'm not sure why query param name is camel-cased here, underscore params do exist in Sauce Labs.
+      // support query options passed in camelCased form.
       const optionName = camelCase(optionParam.name);
-      const optionValue = options[optionName] || options[optionParam.name];
+      let optionValueFromParams = options[optionName];
+      if (
+        optionParam.name !== optionName &&
+        typeof optionValueFromParams === 'undefined'
+      ) {
+        optionValueFromParams = options[optionParam.name];
+      }
+      const optionValue = optionValueFromParams;
       const isRequired =
         Boolean(optionParam.required) ||
         (typeof optionParam.required === 'undefined' &&
@@ -583,7 +590,7 @@ export default class SauceLabs {
     } catch (err) {
       throw new Error(
         `Failed calling ${propName}: ${err.message}, ${
-          err.response && err.response.body
+          err.response && JSON.stringify(err.response.body)
         }`
       );
     }
