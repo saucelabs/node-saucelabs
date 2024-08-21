@@ -18,6 +18,20 @@ jest
   .unmock('compressing')
   .unmock('zlib');
 
+test('should be able to get Sauce Connect versions', async () => {
+  if (SKIP_TEST) {
+    return;
+  }
+  const api = new SauceLabs();
+  const scVersion = await api.scVersions({
+    clientVersion: '5.1.0',
+    clientHost: 'darwin-arm64',
+  });
+  expect(scVersion.status).toEqual('UPGRADE');
+  expect(scVersion.latest_version).toMatch(/5\./);
+  console.log(scVersion.download_url);
+});
+
 test('should not be able to run Sauce Connect due to invalid credentials', async () => {
   if (SKIP_TEST) {
     return;

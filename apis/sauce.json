@@ -1087,15 +1087,16 @@
             "$ref": "#/parameters/full"
           },
           {
-            "default": false,
+            "required": false,
             "description": "Only return manual jobs",
             "in": "query",
             "name": "manual_only",
             "type": "boolean"
           },
           {
-            "default": false,
+            "required": false,
             "in": "query",
+            "description": "Only return automated jobs",
             "name": "auto_only",
             "type": "boolean"
           },

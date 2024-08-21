@@ -625,7 +625,7 @@ test('should output failure msg for createJob API', async () => {
   const error = await api.createJob({framework: ''}).catch((err) => err);
 
   expect(error.message).toBe(
-    'Failed calling createJob: Response code 422 (Unprocessable Entity), empty framework'
+    'Failed calling createJob: Response code 422 (Unprocessable Entity), "empty framework"'
   );
 });
 

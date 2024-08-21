@@ -63,7 +63,7 @@ This package if installed globally can be used as CLI tool to access the API fro
 ```sh
 $ npm install -g saucelabs
 ...
-$ sl listJobs $SAUCE_USERNAME --limit 5 --region eu
+$ sl listJobs $SAUCE_USERNAME 5 --region eu
 { jobs:
    [ { id: '19dab74f8fd848518f8d2c2cee3a6fbd' },
      { id: 'dc08ca0c7fa14eee909a093d11567328' },
@@ -104,7 +104,7 @@ or start Sauce Connect Proxy in EU datacenter:
 # start Sauce Connect tunnel for eu-central-1 region
 $ sl sc --region eu --tunnel-name "my-tunnel"
 # run a specific Sauce Connect version
-$ sl sc --scVersion 4.5.4
+$ sl sc --scVersion 4.9.1
 # see all available Sauce Connect parameters via:
 $ sl sc --help
 ```
