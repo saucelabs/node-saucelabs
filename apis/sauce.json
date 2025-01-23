@@ -458,81 +458,33 @@
       },
       "type": "object"
     },
-    "SauceConnectDownloadInfo": {
+    "SauceConnectDownload": {
       "type": "object",
       "properties": {
-        "download_url": {
-          "type": "string"
-        },
-        "sha1": {
-          "type": "string",
-          "nullable": true
-        },
-        "sha256": {
-          "type": "string",
-          "nullable": true
-        },
-        "version": {
-          "type": "string",
-          "nullable": true
-        }
-      }
-    },
-    "SauceConnectByPlatform": {
-      "type": "object",
-      "properties": {
-        "linux": {
-          "$ref": "#/definitions/SauceConnectDownloadInfo",
-          "nullable": true
-        },
-        "linux-arm64": {
-          "$ref": "#/definitions/SauceConnectDownloadInfo",
-          "nullable": true
-        },
-        "win32": {
-          "$ref": "#/definitions/SauceConnectDownloadInfo",
-          "nullable": true
-        },
-        "osx": {
-          "$ref": "#/definitions/SauceConnectDownloadInfo"
-        }
-      }
-    },
-    "SauceConnectVersions": {
-      "type": "object",
-      "properties": {
-        "latest_version": {
-          "type": "string"
-        },
-        "client_version": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string",
-          "enum": ["LATEST", "UPGRADE", "PRERELEASE", "UNKNOWN", "EOL"]
-        },
-        "info_url": {
-          "type": "string"
-        },
-        "download_url": {
-          "type": "string"
-        },
-        "sha1": {
-          "type": "string",
-          "nullable": true
-        },
-        "sha256": {
-          "type": "string",
-          "nullable": true
-        }
-      },
-      "downloads": {
-        "$ref": "#/definitions/SauceConnectByPlatform"
-      },
-      "all_downloads": {
-        "type": "array",
-        "items": {
-          "$ref": "#/definitions/SauceConnectByPlatform"
+        "download": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "checksums": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  },
+                  "algorithm": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -820,10 +772,17 @@
       "required": true,
       "type": "string"
     },
-    "clientHost": {
-      "description": "SC client host OS and CPU arch",
+    "clientArch": {
+      "description": "SC client host CPU arch",
       "in": "query",
-      "name": "client_host",
+      "name": "arch",
+      "required": false,
+      "type": "string"
+    },
+    "clientOS": {
+      "description": "SC client host OS",
+      "in": "query",
+      "name": "os",
       "required": false,
       "type": "string"
     },
@@ -1768,25 +1727,26 @@
         "tags": ["Tunnel"]
       }
     },
-    "/v1/public/tunnels/info/versions": {
+    "/v1/public/tunnels/sauce-connect/download": {
       "get": {
-        "operationId": "sc_versions",
+        "description": "Get Sauce Connect download information for the latest version",
+        "operationId": "sc_download",
         "parameters": [
           {
+            "$ref": "#/parameters/clientArch"
+          },
+          {
+            "$ref": "#/parameters/clientOS"
+          },
+          {
             "$ref": "#/parameters/clientVersion"
-          },
-          {
-            "$ref": "#/parameters/clientHost"
-          },
-          {
-            "$ref": "#/parameters/all"
           }
         ],
         "responses": {
           "200": {
-            "description": "Tunnels",
+            "description": "download",
             "schema": {
-              "$ref": "#/definitions/SauceConnectVersions"
+              "$ref": "#/definitions/SauceConnectDownload"
             }
           },
           "default": {
@@ -1796,7 +1756,6 @@
             }
           }
         },
-        "summary": "Get tunnels for the user or all the users in the team",
         "tags": ["Tunnel"]
       }
     },

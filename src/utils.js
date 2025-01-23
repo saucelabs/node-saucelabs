@@ -192,24 +192,35 @@ export function getStrictSsl() {
 }
 
 /**
- * Returns an OS platform
- * - darwin
+ * Returns whether this platform is running a Windows OS
+ */
+export function isWindows() {
+  return process.platform.startsWith('win');
+}
+
+/**
+ * Returns an OS platform compatible with scDownload endpoint
+ * - macos
  * - linux
- * - win32
- * etc
+ * - windows
  */
 export function getPlatform() {
+  if (isWindows()) {
+    return 'windows';
+  } else if (process.platform == 'darwin') {
+    return 'macos';
+  }
   return process.platform;
 }
 
 /**
- * Returns CPU architecture
- * - 'x32'
- * - 'x64'
- * - 'arm'
+ * Returns CPU architecture compatible with scDownload endpoint
+ * - 'x86_64'
  * - 'arm64'
- *   etc
  */
 export function getCPUArch() {
+  if (process.arch == 'x64') {
+    return 'x86_64';
+  }
   return process.arch;
 }

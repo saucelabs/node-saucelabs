@@ -20,11 +20,46 @@ test('createHMAC', async () => {
 });
 
 test('getPlatform', () => {
-  expect(getPlatform()).toBe(process.platform);
+  // Enable monkey patching process.platform.
+  const originalPlatform = process.platform;
+  let platform = null;
+  Object.defineProperty(process, 'platform', {get: () => platform});
+
+  platform = 'win32';
+  expect(getPlatform()).toBe('windows');
+
+  platform = 'darwin';
+  expect(getPlatform()).toBe('macos');
+
+  platform = 'linux';
+  expect(getPlatform()).toBe('linux');
+
+  // Restore the original value of process.platform.
+  platform = originalPlatform;
 });
 
 test('getCPUArch', () => {
-  expect(getCPUArch()).toBe(process.arch);
+  let result = process.arch;
+  if (result == 'x64') {
+    result = 'x86_64';
+  }
+  expect(getCPUArch()).toBe(result);
+});
+
+test('getCPUArch', () => {
+  // Enable monkey patching process.arch.
+  const originalArch = process.arch;
+  let arch = null;
+  Object.defineProperty(process, 'arch', {get: () => arch});
+
+  arch = 'x64';
+  expect(getCPUArch()).toBe('x86_64');
+
+  arch = 'arm64';
+  expect(getCPUArch()).toBe('arm64');
+
+  // Restore the original value of process.platform.
+  arch = originalArch;
 });
 
 test('getAPIHost', () => {

@@ -16,7 +16,6 @@ export const run = () => {
     .epilog(EPILOG)
     .demandCommand()
     .commandDir('commands')
-    .wrap(yargs.terminalWidth())
     .help()
     .version(SAUCE_VERSION_NOTE);
 

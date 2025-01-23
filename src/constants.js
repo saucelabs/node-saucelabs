@@ -3,7 +3,7 @@ import os from 'os';
 
 import {version} from '../package.json';
 
-export const DEFAULT_SAUCE_CONNECT_VERSION = '5.2.0';
+export const DEFAULT_SAUCE_CONNECT_VERSION = '5.2.2';
 export const SAUCE_VERSION_NOTE = `node-saucelabs v${version}\nSauce Connect v${DEFAULT_SAUCE_CONNECT_VERSION}`;
 
 const protocols = [
@@ -199,9 +199,25 @@ export const SAUCE_CONNECT_CLI_PARAMS = [
       "Forward matching requests over the Sauce Connect Proxy connection. Requests not matching \"tunnel domains\" will be forwarded to their origin server over the public internet. You can specify --tunnel-domains or --direct-domains, but not both. Prefix domains with '-' to exclude requests from being forwarded over the SC Proxy connection. Special keyword 'all' matches all domains.",
   },
   {
+    name: 'tunnel-connections',
+    description:
+      'Number of connections to the Sauce Connect server. By default it is set to the number of CPUs on the machine. Total number of concurrent requests that can be handled is limited by the number of connections multiplied by the number of streams, see --tunnel-max-concurrent-streams flag. For example with 4 connections and 256 streams, the total number of concurrent requests is 1024.',
+  },
+  {
+    name: 'tunnel-max-concurrent-streams',
+    description:
+      'Maximal number of concurrent HTTP/2 streams per TCP connection.',
+  },
+  {
     alias: 'a',
     name: 'auth',
     description: 'Site or upstream proxy basic authentication credentials.',
+  },
+  {
+    alias: 'H',
+    name: 'header',
+    description:
+      'The header name will be normalized to canonical form. The header value should not contain any newlines or carriage returns. The flag can be specified multiple times. The following example removes the User-Agent header and all headers starting with X-.',
   },
   {
     name: 'pac',
@@ -313,10 +329,6 @@ export const SC_PARAMS_TO_STRIP = [
 ];
 
 export const SC_READY_MESSAGE = 'Sauce Connect is up, you may start your tests';
-export const SC_FAILURE_MESSAGES = [
-  'Sauce Connect could not establish a connection',
-  'Sauce Connect failed to start',
-];
-export const SC_WAIT_FOR_MESSAGES = ['\u001b[K', 'Please wait for']; // "\u001b" = Escape character
-export const SC_CLOSE_MESSAGE = 'Goodbye';
+export const SC_FAILURE_MESSAGES = ['fatal error exiting'];
+export const SC_CLOSE_MESSAGE = 'tunnel was shutdown';
 export const SC_CLOSE_TIMEOUT = 5000;

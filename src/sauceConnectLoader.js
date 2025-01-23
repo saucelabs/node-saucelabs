@@ -21,7 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 // import SauceLabs from './';
-import {getPlatform} from './utils';
+import {getCPUArch, getPlatform, isWindows} from './utils';
 import {mkdirSync, unlinkSync, createWriteStream} from 'fs';
 import {basename, join} from 'path';
 import https from 'https';
@@ -29,15 +29,15 @@ import fs from 'fs/promises';
 import compressing from 'compressing';
 
 export default class SauceConnectLoader {
-  constructor(options = {}) {
+  constructor(version) {
     this.destDir = join(__dirname, 'sc-loader');
     this.destSC = join(
       __dirname,
       'sc-loader',
-      `.sc-v${options.sauceConnectVersion}`
+      `.sc-v${version}-${getPlatform()}-${getCPUArch()}`
     );
     let scBinary = 'sc';
-    if (getPlatform().startsWith('win')) {
+    if (isWindows()) {
       scBinary += '.exe';
     }
     this.path = join(this.destSC, scBinary);
@@ -82,25 +82,18 @@ export default class SauceConnectLoader {
           reject(err);
         });
     }).then(() => {
-      if (getPlatform() === 'linux') {
+      if (compressedFilePath.endsWith('.tar.gz')) {
         return compressing.tgz
-          .uncompress(compressedFilePath, this.destDir, {
-            strip: 1,
-          })
+          .uncompress(compressedFilePath, this.destSC)
           .then(() => {
-            const extractedDir = compressedFilePath.replace('.tar.gz', '');
-            return fs.rename(extractedDir, this.destSC).then(() => {
-              // ensure the sc executable is actually executable
-              return fs.chmod(this.path, 0o755);
-            });
+            // ensure the sc executable is actually executable
+            return fs.chmod(this.path, 0o755);
           });
       } else {
         return compressing.zip
-          .uncompress(compressedFilePath, this.destSC, {
-            strip: 1,
-          })
+          .uncompress(compressedFilePath, this.destSC)
           .then(() => {
-            if (getPlatform() !== 'win32') {
+            if (!isWindows()) {
               // ensure the sc executable is actually executable
               return fs.chmod(this.path, 0o755);
             }

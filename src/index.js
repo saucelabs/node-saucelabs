@@ -35,7 +35,6 @@ import {
   SC_CLOSE_TIMEOUT,
   DEFAULT_SAUCE_CONNECT_VERSION,
   SC_FAILURE_MESSAGES,
-  SC_WAIT_FOR_MESSAGES,
   SC_BOOLEAN_CLI_PARAMS,
 } from './constants';
 import SauceConnectLoader from './sauceConnectLoader';
@@ -243,6 +242,12 @@ export default class SauceLabs {
     }
 
     const sauceConnectVersion = argv.scVersion || DEFAULT_SAUCE_CONNECT_VERSION;
+    if (sauceConnectVersion.startsWith('4')) {
+      throw new Error(
+        `This Sauce Connect version (${sauceConnectVersion}) is no longer supported. Please use Sauce Connect 5.`
+      );
+    }
+
     const scUpstreamProxy = argv.scUpstreamProxy;
     const args = Object.entries(argv)
       /**
@@ -255,6 +260,7 @@ export default class SauceLabs {
             '$0',
             'sc-version',
             'sc-upstream-proxy',
+            'tunnel-name',
             'logger',
             ...SC_PARAMS_TO_STRIP,
           ].includes(k)
@@ -292,17 +298,34 @@ export default class SauceLabs {
       // --region is required for Sauce Connect 5.
       throw new Error('Missing region');
     }
-    const scLoader = new SauceConnectLoader({sauceConnectVersion});
-    const isDownloaded = await scLoader.verifyAlreadyDownloaded();
-    if (!isDownloaded) {
-      let sauceConnectURL = await this._getSauceConnectDownloadURL(
-        sauceConnectVersion
-      );
-      await scLoader.verifyAlreadyDownloaded({url: sauceConnectURL});
+
+    const tunnelName = argv.tunnelName;
+    if (tunnelName) {
+      args.push(`--tunnel-name=${tunnelName}`);
+    } else {
+      // --tunnel-name is required for Sauce Connect 5.
+      throw new Error('Missing tunnel-name');
     }
+
+    // download and verify the Sauce Connect client
+    let scLoader = new SauceConnectLoader(sauceConnectVersion);
+    const isDownloaded = await scLoader.verifyAlreadyDownloaded();
+
+    if (!isDownloaded) {
+      let download = await this._getSauceConnectDownload(sauceConnectVersion);
+
+      // downloaded version may differ from the input version, eg. if a partial version is given as input
+      // update scLoader if necessary
+      if (download.version != sauceConnectVersion) {
+        scLoader = new SauceConnectLoader(download.version);
+      }
+      await scLoader.verifyAlreadyDownloaded({url: download.url});
+    }
+
     if (args.length == 0 || args[0] != 'run') {
       args.unshift('run');
     }
+
     const cp = spawn(scLoader.path, args);
     return new Promise((resolve, reject) => {
       const close = () =>
@@ -321,19 +344,6 @@ export default class SauceLabs {
 
       cp.stderr.on('data', (data) => {
         const output = data.toString();
-
-        /**
-         * check if error output is just an escape sequence or
-         * other expected data
-         */
-        if (
-          SC_WAIT_FOR_MESSAGES.find((msg) =>
-            escape(output).includes(escape(msg))
-          )
-        ) {
-          return;
-        }
-
         return reject(new Error(output));
       });
       cp.stdout.on('data', (data) => {
@@ -372,17 +382,43 @@ export default class SauceLabs {
     });
   }
 
-  async _getSauceConnectDownloadURL(sauceConnectVersion) {
+  /**
+   * Retrieve the download URL for the Sauce Connect client specific to this device's OS and architecture.
+   * Throws an exception on any error response
+   * @param {string} version Full or partial version for the download to match
+   * @returns {Object} download
+   * @returns {string} download.url
+   * @returns {string} download.version
+   * @returns {Object[]} download.checksums
+   * @returns {string} download.checksums[].value
+   * @returns {string} download.checksums[].algorithm
+   */
+  async _getSauceConnectDownload(version) {
     const platform = getPlatform();
-    const cpuARCH = getCPUArch();
-    const scVersionInfo = await this._callAPI('scVersions', {
-      client_host: `${platform}-${cpuARCH}`,
-      client_version: sauceConnectVersion,
-    });
-    if (!scVersionInfo.download_url) {
-      throw new Error('Failed to retrieve Sauce Connect download URL');
+    const cpuArch = getCPUArch();
+    var response = {};
+    try {
+      response = await this._callAPI('scDownload', {
+        os: platform,
+        arch: cpuArch,
+        version: version,
+      });
+    } catch (err) {
+      // if this endpoint is down, the start tunnels endpoint is likely down as well.
+      throw new Error(`Failed to retrieve Sauce Connect download. ${err}`);
     }
-    return scVersionInfo.download_url;
+
+    if (response.error) {
+      // likely an input value error. some platform/arch combinations may not be supported.
+      throw new Error(
+        `Failed to retrieve Sauce Connect download. code: ${response.error.code} message: ${response.error.message}`
+      );
+    }
+    if (!response.download) {
+      // unexpected, inconsistent with API definition
+      throw new Error(`Failed to retrieve Sauce Connect download.`);
+    }
+    return response.download;
   }
 
   async _downloadJobAsset(jobId, assetName, {filepath} = {}) {
@@ -572,7 +608,11 @@ export default class SauceLabs {
       }
 
       if (typeof optionValue !== 'undefined') {
-        bodyMap.set(optionParam.name, optionValue);
+        // version is a reserved keyword, so convert to the parameter name here
+        const optionName =
+          optionParam.name == 'client_version' ? 'version' : optionParam.name;
+
+        bodyMap.set(optionName, optionValue);
       }
     }
 

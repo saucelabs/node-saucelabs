@@ -23,27 +23,42 @@ test('should be able to get Sauce Connect versions', async () => {
     return;
   }
   const api = new SauceLabs();
-  const scVersion = await api.scVersions({
-    clientVersion: '5.1.0',
-    clientHost: 'darwin-arm64',
+  const response = await api.scDownload({
+    version: '5.2.2',
+    arch: 'arm64',
+    os: 'macos',
   });
-  expect(scVersion.status).toEqual('UPGRADE');
-  expect(scVersion.latest_version).toMatch(/5\./);
-  console.log(scVersion.download_url);
+
+  expect(response.download.version).toEqual('5.2.2');
+  expect(response.download.url).toMatch(/5\.2\.2/);
+  console.log(response.download.url);
 });
 
 test('should not be able to run Sauce Connect due to invalid credentials', async () => {
   if (SKIP_TEST) {
     return;
   }
-  const api = new SauceLabs({key: 'foobar'});
+  const api = new SauceLabs({key: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'});
   const err = await api
     .startSauceConnect({
       logger: console.log.bind(console),
       tunnelName: `node-saucelabs E2E test - ${ID}`,
     })
     .catch((err) => err);
-  expect(err.message).toContain('Unauthorized');
+  expect(err.message).toContain('Not authorized');
+});
+
+test('should not be able to run Sauce Connect due to missing tunnel-name', async () => {
+  if (SKIP_TEST) {
+    return;
+  }
+  const api = new SauceLabs();
+  const err = await api
+    .startSauceConnect({
+      logger: console.log.bind(console),
+    })
+    .catch((err) => err);
+  expect(err.message).toContain('Missing tunnel-name');
 });
 
 test('should be able to run Sauce Connect', async () => {
