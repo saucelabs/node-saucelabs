@@ -789,7 +789,7 @@
     "clientVersion": {
       "description": "SC client version",
       "in": "query",
-      "name": "client_version",
+      "name": "version",
       "required": false,
       "type": "string"
     },

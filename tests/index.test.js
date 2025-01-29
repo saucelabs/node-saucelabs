@@ -433,7 +433,7 @@ test('should contain expected macos download link', async () => {
     })
   );
   const scDownload = await api.scDownload({
-    client_version: '5.2.2',
+    version: '5.2.2',
     os: 'macos',
     arch: 'x86_64',
   });
@@ -461,7 +461,7 @@ test('should contain expected windows download link', async () => {
     })
   );
   const scDownload = await api.scDownload({
-    client_version: '5.2.2',
+    version: '5.2.2',
     os: 'windows',
     arch: 'x86_64',
   });

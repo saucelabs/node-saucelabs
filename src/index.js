@@ -323,8 +323,8 @@ export default class SauceLabs {
     const isDownloaded = await scLoader.verifyAlreadyDownloaded();
 
     if (!isDownloaded) {
+      console.info(`Downloading Sauce Connect v${sauceConnectVersion}...`);
       let download = await this._getSauceConnectDownload(sauceConnectVersion);
-
       // downloaded version may differ from the input version, eg. if a partial version is given as input
       // update scLoader if necessary
       if (download.version != sauceConnectVersion) {
@@ -619,11 +619,7 @@ export default class SauceLabs {
       }
 
       if (typeof optionValue !== 'undefined') {
-        // version is a reserved keyword, so convert to the parameter name here
-        const optionName =
-          optionParam.name == 'client_version' ? 'version' : optionParam.name;
-
-        bodyMap.set(optionName, optionValue);
+        bodyMap.set(optionParam.name, optionValue);
       }
     }
 
