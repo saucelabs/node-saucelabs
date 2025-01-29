@@ -161,9 +161,11 @@ exports[`startSauceConnect should start sauce connect with proper parsed args 1`
     [
       "run",
       "--proxy-tunnel=abc",
+      "--metadata=runner=example",
       "--verbose=true",
       "--username=foo",
       "--access-key=bar",
+      "--proxy=http://example.com:8080",
       "--region=eu-central-1",
       "--tunnel-name=my-tunnel",
     ],

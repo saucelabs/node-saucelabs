@@ -36,6 +36,7 @@ import {
   DEFAULT_SAUCE_CONNECT_VERSION,
   SC_FAILURE_MESSAGES,
   SC_BOOLEAN_CLI_PARAMS,
+  DEFAULT_RUNNER_NAME,
 } from './constants';
 import SauceConnectLoader from './sauceConnectLoader';
 
@@ -246,6 +247,16 @@ export default class SauceLabs {
       throw new Error(
         `This Sauce Connect version (${sauceConnectVersion}) is no longer supported. Please use Sauce Connect 5.`
       );
+    }
+
+    // Provide a default runner name. It's used for identifying the tunnel's initiation method.
+    if (!argv['metadata']) {
+      argv = {...argv, metadata: `runner=${DEFAULT_RUNNER_NAME}`};
+    } else if (!argv['metadata'].includes('runner=')) {
+      argv = {
+        ...argv,
+        metadata: `runner=${DEFAULT_RUNNER_NAME},${argv['metadata']}`,
+      };
     }
 
     const scUpstreamProxy = argv.scUpstreamProxy;

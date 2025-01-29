@@ -495,8 +495,10 @@ describe('startSauceConnect', () => {
       scVersion: '1.2.3',
       tunnelName: 'my-tunnel',
       'proxy-tunnel': 'abc',
+      metadata: 'runner=example',
       verbose: true,
       region: 'eu',
+      scUpstreamProxy: 'http://example.com:8080',
       logger: (log) => logs.push(log),
     });
     expect(spawn).toBeCalledTimes(1);
