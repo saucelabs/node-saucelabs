@@ -688,6 +688,19 @@ test('should get user by username', async () => {
   expect(got.mock.calls[0]).toMatchSnapshot();
 });
 
+test('should get user by username fail when api fails', async () => {
+  const api = new SauceLabs({user: 'foo', key: 'bar'});
+  got.mockReturnValue(Promise.reject(new Error('example')));
+  const error = await api
+    .getUserByUsername({username: 'fooUser'})
+    .catch((err) => err);
+  expect(error).toEqual(
+    new Error(
+      'There was an error while fetching user information: Failed calling getUsersV1: example, undefined'
+    )
+  );
+});
+
 test('should get list of builds', async () => {
   const api = new SauceLabs({user: 'foo', key: 'bar'});
   got
