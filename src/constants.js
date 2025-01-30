@@ -3,9 +3,9 @@ import os from 'os';
 
 import {version} from '../package.json';
 
-export const DEFAULT_SAUCE_CONNECT_VERSION = '5.2.2';
+export const DEFAULT_SAUCE_CONNECT_VERSION = '5';
 export const DEFAULT_RUNNER_NAME = 'node-saucelabs';
-export const SAUCE_VERSION_NOTE = `node-saucelabs v${version}\nSauce Connect v${DEFAULT_SAUCE_CONNECT_VERSION}`;
+export const SAUCE_VERSION_NOTE = `node-saucelabs v${version}\nSauce Connect v5 (latest)`;
 
 const protocols = [
   require('../apis/sauce.json'),
