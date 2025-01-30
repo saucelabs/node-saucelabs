@@ -1,0 +1,12 @@
+{
+  "download": {
+    "checksums": [
+      {
+        "value": "fb932db5af5c4ed3dbdae9c939ae77da5d9440a3b0de60701643518af7b53ff1",
+        "algorithm": "sha256"
+      }
+    ],
+    "url": "https://saucelabs.com/downloads/sauce-connect/5.2.2/sauce-connect-5.2.2_windows.x86_64.zip",
+    "version": "5.2.2"
+  }
+}

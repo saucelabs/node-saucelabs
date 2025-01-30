@@ -7,9 +7,9 @@ import FormData from 'form-data';
 
 import SauceLabs from '../src';
 
-import versions from './__responses__/versions.json';
-import allVersions from './__responses__/all_versions.json';
-import latestVersions from './__responses__/latest_versions.json';
+import downloadMacos from './__responses__/download_macos.json';
+import downloadWindows from './__responses__/download_windows_x86_64.json';
+import downloadError from './__responses__/download_error.json';
 
 const instances = [];
 
@@ -423,43 +423,60 @@ test('should fail if file parameter is invalid', async () => {
   expect(result.message).toContain('Invalid file parameter');
 });
 
-test('should contain all download links', async () => {
+test('should contain expected macos download link', async () => {
   const api = new SauceLabs({user: 'foo', key: 'bar'});
   got.mockReturnValue(
     Promise.resolve({
       body: {
-        ...allVersions,
+        ...downloadMacos,
       },
     })
   );
-  const scVersions = await api.scVersions({
-    clientVersion: '5.1.1',
-    clientHost: 'darwin-arm64',
-    all: true,
+  const scDownload = await api.scDownload({
+    version: '5.2.2',
+    os: 'macos',
+    arch: 'x86_64',
   });
   expect(got.mock.calls).toMatchSnapshot();
-  expect(scVersions.all_downloads['5.1.1'].linux).toMatchObject({
-    download_url:
-      'https://saucelabs.com/downloads/sauce-connect/5.1.1/sauce-connect-5.1.1_linux.x86_64.tar.gz',
-    sha256: '6247e61e39ff054cf524341a681f4045c557be79bcf63c8c501e634ef2d54a41',
+  expect(scDownload.download).toMatchObject({
+    checksums: [
+      {
+        value:
+          '1384bb85b2d29d177933fc8e894c8f6ac60d83b666435d12e9fca7f50b350459',
+        algorithm: 'sha256',
+      },
+    ],
+    url: 'https://saucelabs.com/downloads/sauce-connect/5.2.2/sauce-connect-5.2.2_darwin.all.zip',
+    version: '5.2.2',
   });
 });
 
-test('should have status latest', async () => {
+test('should contain expected windows download link', async () => {
   const api = new SauceLabs({user: 'foo', key: 'bar'});
   got.mockReturnValue(
     Promise.resolve({
       body: {
-        ...latestVersions,
+        ...downloadWindows,
       },
     })
   );
-  const scVersions = await api.scVersions({
-    clientVersion: '5.1.1',
-    clientHost: 'darwin-arm64',
+  const scDownload = await api.scDownload({
+    version: '5.2.2',
+    os: 'windows',
+    arch: 'x86_64',
   });
   expect(got.mock.calls).toMatchSnapshot();
-  expect(scVersions.status).toEqual('LATEST');
+  expect(scDownload.download).toMatchObject({
+    checksums: [
+      {
+        value:
+          'fb932db5af5c4ed3dbdae9c939ae77da5d9440a3b0de60701643518af7b53ff1',
+        algorithm: 'sha256',
+      },
+    ],
+    url: 'https://saucelabs.com/downloads/sauce-connect/5.2.2/sauce-connect-5.2.2_windows.x86_64.zip',
+    version: '5.2.2',
+  });
 });
 
 describe('startSauceConnect', () => {
@@ -476,28 +493,82 @@ describe('startSauceConnect', () => {
     );
     await api.startSauceConnect({
       scVersion: '1.2.3',
-      tunnelIdentifier: 'my-tunnel',
+      tunnelName: 'my-tunnel',
       'proxy-tunnel': 'abc',
+      metadata: 'runner=example',
       verbose: true,
       region: 'eu',
+      scUpstreamProxy: 'http://example.com:8080',
       logger: (log) => logs.push(log),
     });
     expect(spawn).toBeCalledTimes(1);
     expect(spawn.mock.calls).toMatchSnapshot();
 
     expect(logs).toHaveLength(1);
-    expect(instances).toHaveLength(1);
+    expect(instances).toHaveLength(2);
   });
 
-  it('should start sauce connect with latest version if no version is specified in the args', async () => {
+  it('should throw an error if there is an error response from the download API', async () => {
     const logs = [];
     const api = new SauceLabs({user: 'foo', key: 'bar'});
     got.mockReturnValue(
       Promise.resolve({
         body: {
-          data: {
-            ...versions,
-          },
+          ...downloadError,
+        },
+      })
+    );
+    const err = await api
+      .startSauceConnect({
+        tunnelName: 'my-tunnel',
+        'proxy-tunnel': 'abc',
+        logger: (log) => logs.push(log),
+      })
+      .catch((err) => err);
+    expect(err.message).toContain('code: 404 message: Invalid input');
+  });
+
+  it('should throw an error if there is an invalid response from the download API', async () => {
+    const logs = [];
+    const api = new SauceLabs({user: 'foo', key: 'bar'});
+    got.mockReturnValue(
+      Promise.resolve({
+        body: {}, // empty response
+      })
+    );
+    const err = await api
+      .startSauceConnect({
+        tunnelName: 'my-tunnel',
+        'proxy-tunnel': 'abc',
+        logger: (log) => logs.push(log),
+      })
+      .catch((err) => err);
+    expect(err.message).toBe('Failed to retrieve Sauce Connect download.');
+  });
+
+  it('should throw an error if the call to the download API failed', async () => {
+    const logs = [];
+    const api = new SauceLabs({user: 'foo', key: 'bar'});
+    got.mockImplementation(() => {
+      throw new Error('Endpoint not available!');
+    });
+    const err = await api
+      .startSauceConnect({
+        tunnelName: 'my-tunnel',
+        'proxy-tunnel': 'abc',
+        logger: (log) => logs.push(log),
+      })
+      .catch((err) => err);
+    expect(err.message).toContain('Endpoint not available!');
+  });
+
+  it('should start sauce connect with the default version if no version is specified in the args', async () => {
+    const logs = [];
+    const api = new SauceLabs({user: 'foo', key: 'bar'});
+    got.mockReturnValue(
+      Promise.resolve({
+        body: {
+          ...downloadMacos,
         },
       })
     );
@@ -510,60 +581,24 @@ describe('startSauceConnect', () => {
       50
     );
     await api.startSauceConnect({
-      tunnelIdentifier: 'my-tunnel',
+      tunnelName: 'my-tunnel',
       'proxy-tunnel': 'abc',
       logger: (log) => logs.push(log),
     });
   });
 
-  it('should start sauce connect with fallback default version in case the call to the API failed', async () => {
-    const logs = [];
-    const api = new SauceLabs({user: 'foo', key: 'bar'});
-    got.mockImplementation(() => {
-      throw new Error('Endpoint not available!');
-    });
-    setTimeout(
-      () =>
-        stdoutEmitter.emit(
-          'data',
-          'Sauce Connect is up, you may start your tests'
-        ),
-      50
-    );
-    await api.startSauceConnect({
-      tunnelIdentifier: 'my-tunnel',
-      'proxy-tunnel': 'abc',
-      logger: (log) => logs.push(log),
-    });
-    expect(spawn.mock.calls).toMatchSnapshot();
-  });
-
-  it('should properly fail if connection could not be established', async () => {
-    const errMessage = 'Sauce Connect could not establish a connection';
+  it('should properly fail on fatal error', async () => {
+    const errMessage = 'fatal error exiting: any error message';
     const api = new SauceLabs({user: 'foo', key: 'bar'});
     setTimeout(() => stdoutEmitter.emit('data', errMessage), 50);
     const err = await api
       .startSauceConnect({
         scVersion: '1.2.3',
-        tunnelIdentifier: 'my-tunnel',
+        tunnelName: 'my-tunnel',
         'proxy-tunnel': 'abc',
       })
       .catch((err) => err);
     expect(err.message).toBe(errMessage);
-  });
-
-  it('should properly fail if user is not authorized', async () => {
-    const errMessage = 'Sauce Connect failed to start - 401 (Unauthorized).';
-    const api = new SauceLabs({user: 'foo', key: 'bar'});
-    setTimeout(() => stdoutEmitter.emit('data', errMessage), 50);
-    const err = await api
-      .startSauceConnect({
-        scVersion: '1.2.3',
-        tunnelIdentifier: 'my-tunnel',
-        'proxy-tunnel': 'abc',
-      })
-      .catch((err) => err);
-    expect(err.message).toContain(errMessage);
   });
 
   it('should close sauce connect', async () => {
@@ -576,13 +611,10 @@ describe('startSauceConnect', () => {
         ),
       50
     );
-    const sc = await api.startSauceConnect(
-      {tunnelIdentifier: 'my-tunnel'},
-      true
-    );
+    const sc = await api.startSauceConnect({tunnelName: 'my-tunnel'}, true);
     setTimeout(() => {
       sc.cp.stdout.emit('data', 'Some other message');
-      sc.cp.stdout.emit('data', 'Goodbye');
+      sc.cp.stdout.emit('data', 'tunnel was shutdown');
     }, 100);
     await sc.close();
     expect(process.kill).toBeCalledWith(123, 'SIGINT');
@@ -592,27 +624,42 @@ describe('startSauceConnect', () => {
     const api = new SauceLabs({user: 'foo', key: 'bar'});
     setTimeout(() => stderrEmitter.emit('data', 'Uuups'), 50);
     const res = await api
-      .startSauceConnect({tunnelIdentifier: 'my-tunnel'})
+      .startSauceConnect({tunnelName: 'my-tunnel'})
       .catch((err) => err);
     expect(res).toEqual(new Error('Uuups'));
   });
 
-  it('should not fail if stderr is expected character', async () => {
+  it('should fail on Sauce Connect v4', async () => {
     const api = new SauceLabs({user: 'foo', key: 'bar'});
-    setTimeout(() => stderrEmitter.emit('data', '\u001b[K'), 50);
-    setTimeout(
-      () =>
-        stdoutEmitter.emit(
-          'data',
-          'Sauce Connect is up, you may start your tests'
-        ),
-      150
-    );
+    const scVersion = '4.9.2';
     const res = await api
-      .startSauceConnect({tunnelIdentifier: 'my-tunnel'})
+      .startSauceConnect({
+        tunnelName: 'my-tunnel',
+        scVersion: scVersion,
+      })
       .catch((err) => err);
-    expect(res instanceof Error).toBe(false);
+    expect(res).toEqual(
+      new Error(
+        `This Sauce Connect version (${scVersion}) is no longer supported. Please use Sauce Connect 5.`
+      )
+    );
   });
+});
+
+it('should fail with an invalid region', async () => {
+  const api = new SauceLabs({user: 'foo', key: 'bar', region: ''});
+  const res = await api
+    .startSauceConnect({
+      tunnelName: 'my-tunnel',
+    })
+    .catch((err) => err);
+  expect(res).toEqual(new Error(`Missing region`));
+});
+
+it('should fail when tunnelName is not given', async () => {
+  const api = new SauceLabs({user: 'foo', key: 'bar'});
+  const res = await api.startSauceConnect({}).catch((err) => err);
+  expect(res).toEqual(new Error(`Missing tunnel-name`));
 });
 
 test('should output failure msg for createJob API', async () => {
