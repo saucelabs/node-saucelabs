@@ -1,7 +1,7 @@
 # Node Sauce Labs [![Test Changes](https://github.com/saucelabs/node-saucelabs/actions/workflows/test.yml/badge.svg)](https://github.com/saucelabs/node-saucelabs/actions/workflows/test.yml)
 
 Wrapper around all Sauce Labs REST APIs for [Node.js](http://nodejs.org/) (v18 or higher) including support for
-[Sauce Connect Proxy](https://docs.saucelabs.com/secure-connections/sauce-connect/) and TypeScript definitions.
+[Sauce Connect Proxy](https://docs.saucelabs.com/secure-connections/sauce-connect-5/) and TypeScript definitions.
 
 ## Install
 
