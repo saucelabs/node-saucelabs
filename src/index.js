@@ -249,16 +249,6 @@ export default class SauceLabs {
       );
     }
 
-    // Provide a default runner name. It's used for identifying the tunnel's initiation method.
-    if (!argv['metadata']) {
-      argv = {...argv, metadata: `runner=${DEFAULT_RUNNER_NAME}`};
-    } else if (!argv['metadata'].includes('runner=')) {
-      argv = {
-        ...argv,
-        metadata: `runner=${DEFAULT_RUNNER_NAME},${argv['metadata']}`,
-      };
-    }
-
     const scUpstreamProxy = argv.scUpstreamProxy;
     const args = Object.entries(argv)
       /**
@@ -269,6 +259,7 @@ export default class SauceLabs {
           ![
             '_',
             '$0',
+            'metadata',
             'sc-version',
             'sc-upstream-proxy',
             'tunnel-name',
@@ -289,6 +280,7 @@ export default class SauceLabs {
       );
     args.push(`--username=${this.username}`);
     args.push(`--access-key=${this._accessKey}`);
+
     if (scUpstreamProxy) {
       // map `--sc-upstream-proxy` to sc's `--proxy`. It's done because the app CLI
       // conflicts with sc's CLI, `--proxy` here is equivalent to `--proxy-sauce` in sc.
@@ -300,6 +292,15 @@ export default class SauceLabs {
     if (this.proxy) {
       args.push(`--proxy-sauce=${this.proxy}`);
     }
+
+    // Provide a default runner name. It's used for identifying the tunnel's initiation method.
+    let metadata = argv.metadata || "";
+    if (!metadata.includes("runner=")) {
+      metadata = [metadata, `runner=${DEFAULT_RUNNER_NAME}`]
+        .filter(Boolean)
+        .join(',')
+    }
+    args.push(`--metadata=${metadata}`);
 
     const region = argv.region || this.region;
     if (region) {
