@@ -329,7 +329,6 @@ export const SC_PARAMS_TO_STRIP = [
   ...SAUCE_CONNECT_CLI_PARAM_ALIASES,
 ];
 
-export const SC_READY_MESSAGE = 'Sauce Connect is up, you may start your tests';
-export const SC_FAILURE_MESSAGES = ['fatal error exiting'];
-export const SC_CLOSE_MESSAGE = 'tunnel was shutdown';
 export const SC_CLOSE_TIMEOUT = 5000;
+export const SC_READY_TIMEOUT = 30000;
+export const SC_HEALTHCHECK_TIMEOUT = 1000;
