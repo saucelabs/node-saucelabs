@@ -47,6 +47,21 @@ jest.mock('../src/sauceConnectLoader.js', () => {
   return SauceConnectLoaderMock;
 });
 
+jest.mock('../src/sauceConnectHealthcheck.js', () => {
+  class SauceConnectHealthcheckMock {
+    constructor() {
+      this.perform = jest.fn().mockResolvedValue(undefined);
+    }
+  }
+
+  return SauceConnectHealthcheckMock;
+});
+
+jest.mock('../src/constants.js', () => ({
+  ...jest.requireActual('../src/constants.js'),
+  SC_CLOSE_TIMEOUT: 10,
+}));
+
 const stdoutEmitter = spawn().stdout;
 const stderrEmitter = spawn().stderr;
 const origKill = process.kill;
@@ -55,6 +70,7 @@ beforeEach(() => {
   process.kill = jest.fn();
   // clean instances array
   instances.splice(0, instances.length);
+  // scHealthcheckPerformMock.mockRejectedValue(new Error("failure"))
 });
 test('should be inspectable', () => {
   const api = new SauceLabs({user: 'foo', key: 'bar'});
@@ -482,7 +498,11 @@ test('should contain expected windows download link', async () => {
 describe('startSauceConnect', () => {
   it('should start sauce connect with proper parsed args', async () => {
     const logs = [];
-    const api = new SauceLabs({user: 'foo', key: 'bar'});
+    const api = new SauceLabs({
+      user: 'foo',
+      key: 'bar',
+      proxy: 'http://example.com',
+    });
     setTimeout(
       () =>
         stdoutEmitter.emit(
@@ -572,14 +592,6 @@ describe('startSauceConnect', () => {
         },
       })
     );
-    setTimeout(
-      () =>
-        stdoutEmitter.emit(
-          'data',
-          'Sauce Connect is up, you may start your tests'
-        ),
-      50
-    );
     await api.startSauceConnect({
       tunnelName: 'my-tunnel',
       'proxy-tunnel': 'abc',
@@ -587,35 +599,9 @@ describe('startSauceConnect', () => {
     });
   });
 
-  it('should properly fail on fatal error', async () => {
-    const errMessage = 'fatal error exiting: any error message';
-    const api = new SauceLabs({user: 'foo', key: 'bar'});
-    setTimeout(() => stdoutEmitter.emit('data', errMessage), 50);
-    const err = await api
-      .startSauceConnect({
-        scVersion: '1.2.3',
-        tunnelName: 'my-tunnel',
-        'proxy-tunnel': 'abc',
-      })
-      .catch((err) => err);
-    expect(err.message).toBe(errMessage);
-  });
-
   it('should close sauce connect', async () => {
     const api = new SauceLabs({user: 'foo', key: 'bar'});
-    setTimeout(
-      () =>
-        stdoutEmitter.emit(
-          'data',
-          'Sauce Connect is up, you may start your tests'
-        ),
-      50
-    );
     const sc = await api.startSauceConnect({tunnelName: 'my-tunnel'}, true);
-    setTimeout(() => {
-      sc.cp.stdout.emit('data', 'Some other message');
-      sc.cp.stdout.emit('data', 'tunnel was shutdown');
-    }, 100);
     await sc.close();
     expect(process.kill).toBeCalledWith(123, 'SIGINT');
   });
