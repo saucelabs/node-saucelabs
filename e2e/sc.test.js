@@ -45,7 +45,9 @@ test('should not be able to run Sauce Connect due to invalid credentials', async
       tunnelName: `node-saucelabs E2E test - ${ID}`,
     })
     .catch((err) => err);
-  expect(err.message).toContain('Not authorized');
+  expect(err.message).toContain(
+    'Sauce Connect exited before reaching a ready state'
+  );
 });
 
 test('should not be able to run Sauce Connect due to missing tunnel-name', async () => {
