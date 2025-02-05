@@ -329,6 +329,6 @@ export const SC_PARAMS_TO_STRIP = [
   ...SAUCE_CONNECT_CLI_PARAM_ALIASES,
 ];
 
-export const SC_CLOSE_TIMEOUT = 10000;
+export const SC_CLOSE_TIMEOUT = 5000;
 export const SC_READY_TIMEOUT = 60000;
 export const SC_HEALTHCHECK_TIMEOUT = 1000;
