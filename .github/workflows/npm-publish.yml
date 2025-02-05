@@ -29,7 +29,7 @@ jobs:
       - name: Run tests
         run: npm test
       - name: Upload built package
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: compiled-package
           path: build/
