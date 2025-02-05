@@ -330,5 +330,5 @@ export const SC_PARAMS_TO_STRIP = [
 ];
 
 export const SC_CLOSE_TIMEOUT = 5000;
-export const SC_READY_TIMEOUT = 30000;
+export const SC_READY_TIMEOUT = 60000;
 export const SC_HEALTHCHECK_TIMEOUT = 1000;
