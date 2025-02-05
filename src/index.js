@@ -7,9 +7,9 @@ import {spawn} from 'child_process';
 import got from 'got';
 import FormData from 'form-data';
 import {camelCase} from 'change-case';
-import queryString from 'query-string';
-
 import {
+  getCPUArch,
+  getPlatform,
   createHMAC,
   getAPIHost,
   getAssetHost,
@@ -20,6 +20,8 @@ import {
   getStrictSsl,
   getRegionSubDomain,
 } from './utils';
+import queryString from 'query-string';
+
 import {
   PROTOCOL_MAP,
   DEFAULT_OPTIONS,
@@ -28,16 +30,12 @@ import {
   SYMBOL_ITERATOR,
   TO_STRING_TAG,
   SC_PARAMS_TO_STRIP,
-  SC_READY_MESSAGE,
-  SC_CLOSE_MESSAGE,
-  SC_CLOSE_TIMEOUT,
   DEFAULT_SAUCE_CONNECT_VERSION,
-  SC_FAILURE_MESSAGES,
-  SAUCE_CONNECT_VERSIONS_ENDPOINT,
-  SC_WAIT_FOR_MESSAGES,
   SC_BOOLEAN_CLI_PARAMS,
+  DEFAULT_RUNNER_NAME,
 } from './constants';
 import SauceConnectLoader from './sauceConnectLoader';
+import {SauceConnectManager} from './sauceConnectManager';
 
 export default class SauceLabs {
   constructor(options) {
@@ -58,7 +56,8 @@ export default class SauceLabs {
     });
 
     if (typeof this._options.proxy === 'string') {
-      var proxyAgent = createProxyAgent(this._options.proxy);
+      this.proxy = this._options.proxy;
+      const proxyAgent = createProxyAgent(this.proxy);
       this._api = got.extend(
         {
           agent: proxyAgent,
@@ -240,33 +239,36 @@ export default class SauceLabs {
       }
     }
 
-    let sauceConnectVersion = argv.scVersion;
-    if (!sauceConnectVersion) {
-      sauceConnectVersion = await this._getLatestSauceConnectVersion();
+    const sauceConnectVersion = argv.scVersion || DEFAULT_SAUCE_CONNECT_VERSION;
+    if (sauceConnectVersion.startsWith('4')) {
+      throw new Error(
+        `This Sauce Connect version (${sauceConnectVersion}) is no longer supported. Please use Sauce Connect 5.`
+      );
     }
+
+    const scUpstreamProxy = argv.scUpstreamProxy;
     const args = Object.entries(argv)
       /**
        * filter out yargs, yargs params and custom parameters
        */
       .filter(
         ([k]) =>
-          !['_', '$0', 'sc-version', 'logger', ...SC_PARAMS_TO_STRIP].includes(
-            k
-          )
+          ![
+            '_',
+            '$0',
+            'api-address',
+            'metadata',
+            'sc-version',
+            'sc-upstream-proxy',
+            'tunnel-name',
+            'logger',
+            ...SC_PARAMS_TO_STRIP,
+          ].includes(k)
       )
       /**
        * remove duplicate params by yargs
        */
       .filter(([k]) => !k.match(/[A-Z]/g))
-      /**
-       * replace tunnel-identifier for tunnel-name
-       */
-      .map(([k, v]) => [k === 'tunnel-identifier' ? 'tunnel-name' : k, v])
-      /**
-       * SC uses `--no-XXX` params which gets parsed out by yargs
-       * therefor we need to re-add it here
-       */
-      .map(([k, v]) => [typeof v === 'boolean' && !v ? `no-${k}` : k, v])
       /**
        * SC doesn't like boolean values, so we need to make sure to
        * no pass it along when we deal with a boolean param
@@ -274,96 +276,122 @@ export default class SauceLabs {
       .map(([k, v]) =>
         SC_BOOLEAN_CLI_PARAMS.includes(k) ? `--${k}` : `--${k}=${v}`
       );
-    args.push(`--user=${this.username}`);
-    args.push(`--api-key=${this._accessKey}`);
+    args.push(`--username=${this.username}`);
+    args.push(`--access-key=${this._accessKey}`);
+
+    if (scUpstreamProxy) {
+      // map `--sc-upstream-proxy` to sc's `--proxy`. It's done because the app CLI
+      // conflicts with sc's CLI, `--proxy` here is equivalent to `--proxy-sauce` in sc.
+      // See: https://docs.saucelabs.com/dev/cli/sauce-connect-5/run/#proxy
+      // See: https://docs.saucelabs.com/dev/cli/sauce-connect-5/run/#proxy and
+      // https://docs.saucelabs.com/dev/cli/sauce-connect-5/run/#proxy-sauce
+      args.push(`--proxy=${scUpstreamProxy}`);
+    }
+    if (this.proxy) {
+      args.push(`--proxy-sauce=${this.proxy}`);
+    }
+
+    // Provide a default runner name. It's used for identifying the tunnel's initiation method.
+    let metadata = argv.metadata || '';
+    if (!metadata.includes('runner=')) {
+      metadata = [metadata, `runner=${DEFAULT_RUNNER_NAME}`]
+        .filter(Boolean)
+        .join(',');
+    }
+    args.push(`--metadata=${metadata}`);
+
+    const apiAddress = argv.apiAddress || ':8032';
+    args.push(`--api-address=${apiAddress}`);
 
     const region = argv.region || this.region;
     if (region) {
       const scRegion = getRegionSubDomain({region});
       args.push(`--region=${scRegion}`);
+    } else {
+      // --region is required for Sauce Connect 5.
+      throw new Error('Missing region');
     }
-    const scLoader = new SauceConnectLoader({sauceConnectVersion});
-    await scLoader.verifyAlreadyDownloaded();
+
+    const tunnelName = argv.tunnelName;
+    if (tunnelName) {
+      args.push(`--tunnel-name=${tunnelName}`);
+    } else {
+      // --tunnel-name is required for Sauce Connect 5.
+      throw new Error('Missing tunnel-name');
+    }
+
+    // download and verify the Sauce Connect client
+    let scLoader = new SauceConnectLoader(sauceConnectVersion);
+    const isDownloaded = await scLoader.verifyAlreadyDownloaded();
+
+    if (!isDownloaded) {
+      console.info(`Downloading Sauce Connect v${sauceConnectVersion}...`);
+      let download = await this._getSauceConnectDownload(sauceConnectVersion);
+      // downloaded version may differ from the input version, eg. if a partial version is given as input
+      // update scLoader if necessary
+      if (download.version != sauceConnectVersion) {
+        scLoader = new SauceConnectLoader(download.version);
+      }
+      await scLoader.verifyAlreadyDownloaded({url: download.url});
+    }
+
+    if (args.length == 0 || args[0] != 'run') {
+      args.unshift('run');
+    }
+
+    const logger = fromCLI
+      ? process.stdout.write.bind(process.stdout)
+      : argv.logger;
     const cp = spawn(scLoader.path, args);
-    return new Promise((resolve, reject) => {
-      const close = () =>
-        new Promise((resolveClose) => {
-          process.kill(cp.pid, 'SIGINT');
-          const timeout = setTimeout(resolveClose, SC_CLOSE_TIMEOUT);
-          cp.stdout.on('data', (data) => {
-            const output = data.toString();
-            if (output.includes(SC_CLOSE_MESSAGE)) {
-              clearTimeout(timeout);
-              return resolveClose(returnObj);
-            }
-          });
-        });
-      const returnObj = {cp, close};
+    const manager = new SauceConnectManager(cp, logger);
+    process.on('SIGINT', () => manager.close());
 
-      cp.stderr.on('data', (data) => {
-        const output = data.toString();
-
-        /**
-         * check if error output is just an escape sequence or
-         * other expected data
-         */
-        if (
-          SC_WAIT_FOR_MESSAGES.find((msg) =>
-            escape(output).includes(escape(msg))
-          )
-        ) {
-          return;
-        }
-
-        return reject(new Error(output));
-      });
-      cp.stdout.on('data', (data) => {
-        const logger = fromCLI
-          ? process.stdout.write.bind(process.stdout)
-          : argv.logger;
-        const output = data.toString();
-        /**
-         * print to stdout if called via CLI
-         */
-        if (typeof logger === 'function') {
-          logger(output);
-        }
-
-        /**
-         * fail if SauceConnect could not establish a connection
-         */
-        if (
-          SC_FAILURE_MESSAGES.find((msg) =>
-            escape(output).includes(escape(msg))
-          )
-        ) {
-          return reject(new Error(output));
-        }
-
-        /**
-         * continue if connection was established
-         */
-        if (output.includes(SC_READY_MESSAGE)) {
-          return resolve(returnObj);
-        }
-      });
-
-      process.on('SIGINT', close);
-      return returnObj;
-    });
+    try {
+      await manager.waitForReady(apiAddress);
+      return {cp, close: () => manager.close()};
+    } catch (err) {
+      await manager.close();
+      throw err;
+    }
   }
 
-  async _getLatestSauceConnectVersion() {
+  /**
+   * Retrieve the download URL for the Sauce Connect client specific to this device's OS and architecture.
+   * Throws an exception on any error response
+   * @param {string} version Full or partial version for the download to match
+   * @returns {Object} download
+   * @returns {string} download.url
+   * @returns {string} download.version
+   * @returns {Object[]} download.checksums
+   * @returns {string} download.checksums[].value
+   * @returns {string} download.checksums[].algorithm
+   */
+  async _getSauceConnectDownload(version) {
+    const platform = getPlatform();
+    const cpuArch = getCPUArch();
+    var response = {};
     try {
-      const {body} = await this._api.get(SAUCE_CONNECT_VERSIONS_ENDPOINT, {
-        responseType: 'json',
+      response = await this._callAPI('scDownload', {
+        os: platform,
+        arch: cpuArch,
+        version: version,
       });
-      const responseJson = body.data;
-      return responseJson['Sauce Connect']['version'];
     } catch (err) {
-      // fallback
-      return DEFAULT_SAUCE_CONNECT_VERSION;
+      // if this endpoint is down, the start tunnels endpoint is likely down as well.
+      throw new Error(`Failed to retrieve Sauce Connect download. ${err}`);
     }
+
+    if (response.error) {
+      // likely an input value error. some platform/arch combinations may not be supported.
+      throw new Error(
+        `Failed to retrieve Sauce Connect download. code: ${response.error.code} message: ${response.error.message}`
+      );
+    }
+    if (!response.download) {
+      // unexpected, inconsistent with API definition
+      throw new Error(`Failed to retrieve Sauce Connect download.`);
+    }
+    return response.download;
   }
 
   async _downloadJobAsset(jobId, assetName, {filepath} = {}) {

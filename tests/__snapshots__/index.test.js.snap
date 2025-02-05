@@ -1,15 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should contain all download links 1`] = `
+exports[`should contain expected macos download link 1`] = `
 [
   [
-    "https://api.us-west-1.saucelabs.com/rest/v1/public/tunnels/info/versions",
+    "https://api.us-west-1.saucelabs.com/rest/v1/public/tunnels/sauce-connect/download",
     {
       "responseType": "json",
       "searchParams": {
-        "all": true,
-        "client_host": "darwin-arm64",
-        "client_version": "5.1.1",
+        "arch": "x86_64",
+        "os": "macos",
+        "version": "5.2.2",
+      },
+    },
+  ],
+]
+`;
+
+exports[`should contain expected windows download link 1`] = `
+[
+  [
+    "https://api.us-west-1.saucelabs.com/rest/v1/public/tunnels/sauce-connect/download",
+    {
+      "responseType": "json",
+      "searchParams": {
+        "arch": "x86_64",
+        "os": "windows",
+        "version": "5.2.2",
       },
     },
   ],
@@ -138,47 +154,22 @@ exports[`should get user by username 1`] = `
 ]
 `;
 
-exports[`should have status latest 1`] = `
-[
-  [
-    "https://api.us-west-1.saucelabs.com/rest/v1/public/tunnels/info/versions",
-    {
-      "responseType": "json",
-      "searchParams": {
-        "client_host": "darwin-arm64",
-        "client_version": "5.1.1",
-      },
-    },
-  ],
-]
-`;
-
-exports[`startSauceConnect should start sauce connect with fallback default version in case the call to the API failed 1`] = `
-[
-  [
-    "/foo/bar",
-    [
-      "--proxy-tunnel",
-      "--tunnel-name=my-tunnel",
-      "--user=foo",
-      "--api-key=bar",
-      "--region=us-west-1",
-    ],
-  ],
-]
-`;
-
 exports[`startSauceConnect should start sauce connect with proper parsed args 1`] = `
 [
   [
     "/foo/bar",
     [
-      "--proxy-tunnel",
-      "--verbose",
-      "--tunnel-name=my-tunnel",
-      "--user=foo",
-      "--api-key=bar",
+      "run",
+      "--proxy-tunnel=abc",
+      "--verbose=true",
+      "--username=foo",
+      "--access-key=bar",
+      "--proxy=http://example.com:8080",
+      "--proxy-sauce=http://example.com",
+      "--metadata=runner=example",
+      "--api-address=:8032",
       "--region=eu-central-1",
+      "--tunnel-name=my-tunnel",
     ],
   ],
 ]

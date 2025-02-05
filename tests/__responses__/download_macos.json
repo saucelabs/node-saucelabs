@@ -1,0 +1,12 @@
+{
+  "download": {
+    "checksums": [
+      {
+        "value": "1384bb85b2d29d177933fc8e894c8f6ac60d83b666435d12e9fca7f50b350459",
+        "algorithm": "sha256"
+      }
+    ],
+    "url": "https://saucelabs.com/downloads/sauce-connect/5.2.2/sauce-connect-5.2.2_darwin.all.zip",
+    "version": "5.2.2"
+  }
+}

@@ -185,12 +185,12 @@ The following commands are available via package or cli tool:
     </tr>
     <tr>
       <td>
-        <b>GET</b> <code>/v1/public/tunnels/info/versions</code><br>
-        Get tunnels for the user or all the users in the team
+        <b>GET</b> <code>/v1/public/tunnels/sauce-connect/download</code><br>
+        Get Sauce Connect download information for the latest version
         <h3>Example:</h3>
-        <code>api.scVersions({ ...options })</code>
+        <code>api.scDownload({ ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>client_version</b>: SC client version</li>          <li><b>client_host</b>: SC client host OS and CPU arch</li>          <li><b>all</b>: Should the response contain the same team user data</li>        </ul>      </td>
+        <ul>          <li><b>arch</b>: SC client host CPU architecture</li>          <li><b>os</b>: SC client host OS</li>        <li><b>version</b>: Optional. Return the newest version matching this minimal version</li>        </ul>      </td>
     </tr>
     <tr>
       <td>

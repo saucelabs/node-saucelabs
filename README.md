@@ -1,7 +1,7 @@
 # Node Sauce Labs [![Test Changes](https://github.com/saucelabs/node-saucelabs/actions/workflows/test.yml/badge.svg)](https://github.com/saucelabs/node-saucelabs/actions/workflows/test.yml)
 
 Wrapper around all Sauce Labs REST APIs for [Node.js](http://nodejs.org/) (v18 or higher) including support for
-[Sauce Connect Proxy](https://docs.saucelabs.com/secure-connections/sauce-connect/) and TypeScript definitions.
+[Sauce Connect Proxy](https://docs.saucelabs.com/secure-connections/sauce-connect-5/) and TypeScript definitions.
 
 ## Install
 
@@ -104,12 +104,12 @@ or start Sauce Connect Proxy in EU datacenter:
 # start Sauce Connect tunnel for eu-central-1 region
 $ sl sc --region eu --tunnel-name "my-tunnel"
 # run a specific Sauce Connect version
-$ sl sc --scVersion 4.9.1
+$ sl sc --scVersion 5.2.2
 # see all available Sauce Connect parameters via:
 $ sl sc --help
 ```
 
-You can see all available Sauce Connect parameters on the [Sauce Labs Docs](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/).
+You can see all available Sauce Connect parameters on the [Sauce Labs Docs](https://docs.saucelabs.com/dev/cli/sauce-connect-5/run/).
 
 ### As NPM Package
 
@@ -179,7 +179,7 @@ import SauceLabs from 'saucelabs';
      */
     logger: (stdout) => console.log(stdout),
     /**
-     * see all available parameters here: https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/
+     * see all available parameters here: https://docs.saucelabs.com/dev/cli/sauce-connect-5/run/
      * all parameters have to be applied camel cased instead of with hyphens, e.g.
      * to apply the `--tunnel-name` parameter, set:
      */
@@ -219,6 +219,7 @@ const myAccount = new SauceLabs({
   user: 'YOUR-USER',
   key: 'YOUR-ACCESS-KEY',
   region: 'eu', // run in EU datacenter
+  tunnelName: 'my-tunnel',
 });
 
 // get full webdriver url from the client depending on `region` option:
