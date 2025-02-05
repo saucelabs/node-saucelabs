@@ -6,7 +6,7 @@ export default class SauceConnectHealthCheck {
       signal: AbortSignal.timeout(SC_HEALTHCHECK_TIMEOUT),
     });
     if (response.status !== 200) {
-      throw new Error(`response status code ${response.status} != 200`);
+      throw new TypeError(`response status code ${response.status} != 200`);
     }
   }
 }
