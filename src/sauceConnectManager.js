@@ -6,10 +6,10 @@ import {
 import SauceConnectHealthCheck from './sauceConnectHealthcheck';
 
 export class SauceConnectManager {
-  constructor(cp, logger) {
+  constructor(cp, logger, healthcheck) {
     this.cp = cp;
     this.logger = logger || (() => {});
-    this.healthcheck = new SauceConnectHealthCheck();
+    this.healthcheck = healthcheck || new SauceConnectHealthCheck();
     this._healthcheckInterval = null;
     this._readyTimeout = null;
   }
@@ -41,10 +41,18 @@ export class SauceConnectManager {
 
         this.healthcheck
           .perform(apiAddress)
-          .then(() => clearInterval(this._healthcheckInterval))
-          .then(() => clearTimeout(this._readyTimeout))
-          .then(resolve)
-          .catch(() => {});
+          .then(() => {
+            clearInterval(this._healthcheckInterval);
+            clearTimeout(this._readyTimeout);
+            resolve();
+          })
+          .catch((err) => {
+            if (err.name !== 'TypeError') {
+              clearInterval(this._healthcheckInterval);
+              clearTimeout(this._readyTimeout);
+              reject(err);
+            }
+          });
       }, SC_HEALTHCHECK_TIMEOUT);
 
       this._readyTimeout = setTimeout(() => {

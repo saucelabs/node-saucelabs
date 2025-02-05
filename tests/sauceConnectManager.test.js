@@ -19,6 +19,27 @@ describe('SauceConnectManager', () => {
       );
     });
 
+    test('error when requesting healthcheck', async () => {
+      const manager = new SauceConnectManager(
+        {
+          stderr: {
+            on: jest.fn(),
+          },
+          stdout: {
+            on: jest.fn(),
+          },
+        },
+        undefined,
+        {
+          async perform() {
+            throw new Error('custom error');
+          },
+        }
+      );
+      const error = await manager.waitForReady(':8042').catch((err) => err);
+      expect(error.message).toBe('custom error');
+    });
+
     describe('waiting too long for healthcheck', () => {
       let origTimeout = constants.SC_READY_TIMEOUT;
       beforeEach(() => {
