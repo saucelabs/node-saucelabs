@@ -30,15 +30,12 @@ import {
   SYMBOL_ITERATOR,
   TO_STRING_TAG,
   SC_PARAMS_TO_STRIP,
-  SC_READY_MESSAGE,
-  SC_CLOSE_MESSAGE,
-  SC_CLOSE_TIMEOUT,
   DEFAULT_SAUCE_CONNECT_VERSION,
-  SC_FAILURE_MESSAGES,
   SC_BOOLEAN_CLI_PARAMS,
   DEFAULT_RUNNER_NAME,
 } from './constants';
 import SauceConnectLoader from './sauceConnectLoader';
+import {SauceConnectManager} from './sauceConnectManager';
 
 export default class SauceLabs {
   constructor(options) {
@@ -249,16 +246,6 @@ export default class SauceLabs {
       );
     }
 
-    // Provide a default runner name. It's used for identifying the tunnel's initiation method.
-    if (!argv['metadata']) {
-      argv = {...argv, metadata: `runner=${DEFAULT_RUNNER_NAME}`};
-    } else if (!argv['metadata'].includes('runner=')) {
-      argv = {
-        ...argv,
-        metadata: `runner=${DEFAULT_RUNNER_NAME},${argv['metadata']}`,
-      };
-    }
-
     const scUpstreamProxy = argv.scUpstreamProxy;
     const args = Object.entries(argv)
       /**
@@ -269,6 +256,8 @@ export default class SauceLabs {
           ![
             '_',
             '$0',
+            'api-address',
+            'metadata',
             'sc-version',
             'sc-upstream-proxy',
             'tunnel-name',
@@ -289,6 +278,7 @@ export default class SauceLabs {
       );
     args.push(`--username=${this.username}`);
     args.push(`--access-key=${this._accessKey}`);
+
     if (scUpstreamProxy) {
       // map `--sc-upstream-proxy` to sc's `--proxy`. It's done because the app CLI
       // conflicts with sc's CLI, `--proxy` here is equivalent to `--proxy-sauce` in sc.
@@ -300,6 +290,18 @@ export default class SauceLabs {
     if (this.proxy) {
       args.push(`--proxy-sauce=${this.proxy}`);
     }
+
+    // Provide a default runner name. It's used for identifying the tunnel's initiation method.
+    let metadata = argv.metadata || '';
+    if (!metadata.includes('runner=')) {
+      metadata = [metadata, `runner=${DEFAULT_RUNNER_NAME}`]
+        .filter(Boolean)
+        .join(',');
+    }
+    args.push(`--metadata=${metadata}`);
+
+    const apiAddress = argv.apiAddress || ':8032';
+    args.push(`--api-address=${apiAddress}`);
 
     const region = argv.region || this.region;
     if (region) {
@@ -337,60 +339,20 @@ export default class SauceLabs {
       args.unshift('run');
     }
 
+    const logger = fromCLI
+      ? process.stdout.write.bind(process.stdout)
+      : argv.logger;
     const cp = spawn(scLoader.path, args);
-    return new Promise((resolve, reject) => {
-      const close = () =>
-        new Promise((resolveClose) => {
-          process.kill(cp.pid, 'SIGINT');
-          const timeout = setTimeout(resolveClose, SC_CLOSE_TIMEOUT);
-          cp.stdout.on('data', (data) => {
-            const output = data.toString();
-            if (output.includes(SC_CLOSE_MESSAGE)) {
-              clearTimeout(timeout);
-              return resolveClose(returnObj);
-            }
-          });
-        });
-      const returnObj = {cp, close};
+    const manager = new SauceConnectManager(cp, logger);
+    process.on('SIGINT', () => manager.close());
 
-      cp.stderr.on('data', (data) => {
-        const output = data.toString();
-        return reject(new Error(output));
-      });
-      cp.stdout.on('data', (data) => {
-        const logger = fromCLI
-          ? process.stdout.write.bind(process.stdout)
-          : argv.logger;
-        const output = data.toString();
-        /**
-         * print to stdout if called via CLI
-         */
-        if (typeof logger === 'function') {
-          logger(output);
-        }
-
-        /**
-         * fail if SauceConnect could not establish a connection
-         */
-        if (
-          SC_FAILURE_MESSAGES.find((msg) =>
-            escape(output).includes(escape(msg))
-          )
-        ) {
-          return reject(new Error(output));
-        }
-
-        /**
-         * continue if connection was established
-         */
-        if (output.includes(SC_READY_MESSAGE)) {
-          return resolve(returnObj);
-        }
-      });
-
-      process.on('SIGINT', close);
-      return returnObj;
-    });
+    try {
+      await manager.waitForReady(apiAddress);
+      return {cp, close: () => manager.close()};
+    } catch (err) {
+      await manager.close();
+      throw err;
+    }
   }
 
   /**
