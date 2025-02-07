@@ -19,51 +19,45 @@ describe('SauceConnectManager', () => {
       );
     });
 
-    test('error when requesting healthcheck', async () => {
-      const manager = new SauceConnectManager(
-        {
-          stderr: {
-            on: jest.fn(),
-          },
-          stdout: {
-            on: jest.fn(),
-          },
-        },
-        undefined,
-        {
-          async perform() {
-            throw new Error('custom error');
-          },
-        }
-      );
-      const error = await manager.waitForReady(':8042').catch((err) => err);
-      expect(error.message).toBe('custom error');
-    });
-
-    describe('waiting too long for healthcheck', () => {
-      let origTimeout = constants.SC_READY_TIMEOUT;
+    describe('short ready timeout', () => {
+      let origHealthcheckTimeout = constants.SC_HEALTHCHECK_TIMEOUT;
+      let origReadyTimeout = constants.SC_READY_TIMEOUT;
       beforeEach(() => {
         // eslint-disable-next-line no-import-assign
-        Object.defineProperty(constants, 'SC_READY_TIMEOUT', {value: 10});
+        Object.defineProperty(constants, 'SC_HEALTHCHECK_TIMEOUT', {value: 10});
+        // eslint-disable-next-line no-import-assign
+        Object.defineProperty(constants, 'SC_READY_TIMEOUT', {value: 100});
       });
 
-      test('waiting too long for healthcheck', async () => {
-        const manager = new SauceConnectManager({
-          stderr: {
-            on: jest.fn(),
+      test('error when requesting healthcheck', async () => {
+        const manager = new SauceConnectManager(
+          {
+            stderr: {
+              on: jest.fn(),
+            },
+            stdout: {
+              on: jest.fn(),
+            },
           },
-          stdout: {
-            on: jest.fn(),
-          },
-        });
+          undefined,
+          {
+            async perform() {
+              throw new Error('custom error');
+            },
+          }
+        );
         const error = await manager.waitForReady(':8042').catch((err) => err);
-        expect(error.message).toBe('Timeout waiting for healthcheck endpoint');
+        expect(error.message).toBe('custom error');
       });
 
       afterEach(() => {
         // eslint-disable-next-line no-import-assign
+        Object.defineProperty(constants, 'SC_HEALTHCHECK_TIMEOUT', {
+          value: origHealthcheckTimeout,
+        });
+        // eslint-disable-next-line no-import-assign
         Object.defineProperty(constants, 'SC_READY_TIMEOUT', {
-          value: origTimeout,
+          value: origReadyTimeout,
         });
       });
     });

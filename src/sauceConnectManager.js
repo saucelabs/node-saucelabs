@@ -15,6 +15,7 @@ export class SauceConnectManager {
   }
 
   waitForReady(apiAddress) {
+    let lastHealthcheckErr = null;
     apiAddress = this._parseApiAddress(apiAddress);
 
     return new Promise((resolve, reject) => {
@@ -47,17 +48,19 @@ export class SauceConnectManager {
             resolve();
           })
           .catch((err) => {
-            if (err.name !== 'TypeError') {
-              clearInterval(this._healthcheckInterval);
-              clearTimeout(this._readyTimeout);
-              reject(err);
-            }
+            lastHealthcheckErr = err;
           });
       }, SC_HEALTHCHECK_TIMEOUT);
 
       this._readyTimeout = setTimeout(() => {
         clearInterval(this._healthcheckInterval);
-        reject(new Error('Timeout waiting for healthcheck endpoint'));
+        console.error(
+          `Timeout waiting for healthcheck endpoint, err=${lastHealthcheckErr?.message}, code=${lastHealthcheckErr?.code}`
+        );
+        reject(
+          lastHealthcheckErr ||
+            new Error('Timeout waiting for healthcheck endpoint')
+        );
       }, SC_READY_TIMEOUT);
     });
   }
