@@ -1,29 +1,32 @@
 import SauceConnectHealthCheck from '../src/sauceConnectHealthcheck';
-
-const fetchMock = jest.fn();
-global.fetch = fetchMock;
+import http from 'http';
 
 describe('SauceConnectHealthcheck', () => {
+  let mockHttpGet;
   beforeEach(() => {
-    fetchMock.mockClear();
+    mockHttpGet = jest.spyOn(http, 'get');
   });
 
   describe('perform', () => {
     test('raises error if response code != 200', async () => {
-      fetchMock.mockImplementation(async () => ({
-        status: 503,
-      }));
+      mockHttpGet.mockImplementation((url, options, callback) => {
+        callback({statusCode: 503});
+        return {on: jest.fn()};
+      });
       const healthcheck = new SauceConnectHealthCheck();
-      const error = await healthcheck.perform(':8042').catch((err) => err);
+      const error = await healthcheck
+        .perform('http://localhost:8042')
+        .catch((err) => err);
       expect(error.message).toBe('response status code 503 != 200');
     });
 
     test('all good when response code == 200', async () => {
-      fetchMock.mockImplementation(async () => ({
-        status: 200,
-      }));
+      mockHttpGet.mockImplementation((url, options, callback) => {
+        callback({statusCode: 200});
+        return {on: jest.fn()};
+      });
       const healthcheck = new SauceConnectHealthCheck();
-      const result = await healthcheck.perform(':8042');
+      const result = await healthcheck.perform('http://localhost:8042');
       expect(result).toBe(undefined);
     });
   });
