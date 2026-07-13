@@ -106,7 +106,14 @@ describe('SauceConnectLoader', () => {
           .spyOn(fs.promises, 'rename')
           .mockImplementation(() => Promise.resolve());
         scl = new SauceConnectLoader('1.2.3');
-        mockHttpsGet = jest.spyOn(https, 'get');
+        mockHttpsGet = jest
+          .spyOn(https, 'get')
+          .mockImplementation((url, callback) => {
+            // fake response: pipe finishes the write stream without
+            // touching the network
+            callback({pipe: (destStream) => destStream.end()});
+            return {on: jest.fn()};
+          });
 
         mockCompressingLinux = jest
           .spyOn(compressing.tgz, 'uncompress')
