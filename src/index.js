@@ -20,7 +20,6 @@ import {
   getStrictSsl,
   getRegionSubDomain,
 } from './utils';
-import queryString from 'query-string';
 
 import {
   PROTOCOL_MAP,
@@ -600,7 +599,17 @@ export default class SauceLabs {
      * stringify queryParams if stringifyOptions exists within description
      */
     const modifiedParams = description.stringifyOptions
-      ? queryString.stringify(body, description.stringifyOptions)
+      ? new URLSearchParams(
+          Object.entries(body)
+            .map(([key, value]) => {
+              if (Array.isArray(value)) return value.map((v) => [key, v]);
+              return [[key, value]];
+            })
+            .flat()
+            .sort()
+        )
+          .toString()
+          .replace(/\+/g, '%20') // Replace + with %20 for spaces
       : body;
 
     /**
