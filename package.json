@@ -14,6 +14,12 @@
     "sl": "./bin/sl"
   },
   "typings": "./build/index.d.ts",
+  "files": [
+    "apis",
+    "bin",
+    "build",
+    "!build/sc-loader"
+  ],
   "scripts": {
     "build": "run-s clean compile generate:typings",
     "clean": "rm -rf ./build ./coverage",
