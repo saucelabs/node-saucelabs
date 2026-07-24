@@ -99,7 +99,7 @@ export class SauceConnectManager {
 function killSilently(pid, signal) {
   try {
     process.kill(pid, signal);
-  } catch (err) {
+  } catch {
     // ignore
   }
 }

@@ -2,8 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import {spawn} from 'child_process';
 
-// https://github.com/import-js/eslint-plugin-import/issues/2352
-// eslint-disable-next-line import/no-unresolved
 import got from 'got';
 import FormData from 'form-data';
 import {camelCase} from 'change-case';
@@ -219,7 +217,8 @@ export default class SauceLabs {
       return user;
     } catch (err) {
       throw new Error(
-        `There was an error while fetching user information: ${err.message}`
+        `There was an error while fetching user information: ${err.message}`,
+        {cause: err}
       );
     }
   }
@@ -369,7 +368,7 @@ export default class SauceLabs {
   async _getSauceConnectDownload(version) {
     const platform = getPlatform();
     const cpuArch = getCPUArch();
-    var response = {};
+    let response;
     try {
       response = await this._callAPI('scDownload', {
         os: platform,
@@ -378,7 +377,9 @@ export default class SauceLabs {
       });
     } catch (err) {
       // if this endpoint is down, the start tunnels endpoint is likely down as well.
-      throw new Error(`Failed to retrieve Sauce Connect download. ${err}`);
+      throw new Error(`Failed to retrieve Sauce Connect download. ${err}`, {
+        cause: err,
+      });
     }
 
     if (response.error) {
@@ -443,7 +444,8 @@ export default class SauceLabs {
       return res.body;
     } catch (err) {
       throw new Error(
-        `There was an error downloading asset ${assetName}: ${err.message}`
+        `There was an error downloading asset ${assetName}: ${err.message}`,
+        {cause: err}
       );
     }
   }
@@ -508,7 +510,9 @@ export default class SauceLabs {
 
       return res.body;
     } catch (err) {
-      throw new Error(`There was an error uploading assets: ${err.message}`);
+      throw new Error(`There was an error uploading assets: ${err.message}`, {
+        cause: err,
+      });
     }
   }
 
@@ -619,7 +623,8 @@ export default class SauceLabs {
       throw new Error(
         `Failed calling ${propName}: ${err.message}, ${
           err.response && JSON.stringify(err.response.body)
-        }`
+        }`,
+        {cause: err}
       );
     }
   }
