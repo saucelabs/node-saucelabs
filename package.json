@@ -60,6 +60,7 @@
     "@babel/node": "^7.22.10",
     "@babel/preset-env": "^7.22.15",
     "@babel/register": "^7.15.3",
+    "@types/node": "^20.19.43",
     "babel-plugin-source-map-support": "^2.2.0",
     "eslint": "^8.48.0",
     "eslint-config-prettier": "^9.1.2",
@@ -73,7 +74,7 @@
     "rimraf": "^5.0.10",
     "source-map-support": "^0.5.20",
     "swagger-typescript-codegen": "^3.2.4",
-    "typescript": "^4.4.4"
+    "typescript": "^7.0.2"
   },
   "lint-staged": {
     "*.js": [
