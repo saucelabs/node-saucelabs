@@ -1,5 +1,3 @@
-// https://github.com/import-js/eslint-plugin-import/issues/2352
-// eslint-disable-next-line import/no-unresolved
 import got from 'got';
 import util from 'util';
 import {spawn} from 'child_process';
