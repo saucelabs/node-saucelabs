@@ -37,6 +37,9 @@ jobs:
   release:
     needs: test
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - name: Clone Repository
         uses: actions/checkout@v3
@@ -45,6 +48,8 @@ jobs:
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org/
+      - name: Update npm to a version that supports Trusted Publishing
+        run: npm install -g npm@latest
       - name: Setup Git
         run: |
           git config --global user.name "oss-sauce-bot"
