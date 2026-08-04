@@ -1,5 +1,4 @@
-import http from 'http';
-import https from 'https';
+import {ProxyAgent} from 'undici';
 import sauceAPI from '../apis/sauce.json';
 import {
   createHMAC,
@@ -149,45 +148,22 @@ test('isValidType', () => {
 });
 
 describe('createProxyAgent', () => {
-  expect(createProxyAgent('http://my.proxy.com:8080')).toEqual({
-    https: {
-      _events: expect.anything(),
-      _eventsCount: 1,
-      createSocket: expect.anything(),
-      defaultPort: 443,
-      maxSockets: Infinity,
-      options: {proxy: {host: 'my.proxy.com', port: '8080'}},
-      requests: [],
-      sockets: [],
-      proxyOptions: {
-        host: 'my.proxy.com',
-        port: '8080',
-      },
-      request: http.request,
-    },
+  test('returns a ProxyAgent for http and https proxies', () => {
+    expect(createProxyAgent('http://my.proxy.com:8080')).toBeInstanceOf(
+      ProxyAgent
+    );
+    expect(createProxyAgent('https://my.proxy.com:443')).toBeInstanceOf(
+      ProxyAgent
+    );
   });
-  expect(createProxyAgent('https://my.proxy.com:443')).toEqual({
-    https: {
-      _events: expect.anything(),
-      _eventsCount: 1,
-      createSocket: expect.anything(),
-      defaultPort: 443,
-      maxSockets: Infinity,
-      options: {proxy: {host: 'my.proxy.com', port: '443'}},
-      requests: [],
-      sockets: [],
-      proxyOptions: {
-        host: 'my.proxy.com',
-        port: '443',
-      },
-      request: https.request,
-    },
+
+  test('throws for unsupported protocols', () => {
+    expect(() => {
+      createProxyAgent('ftp://my.proxy.com:21');
+    }).toThrowError(
+      /Only http and https protocols are supported for proxying traffic./
+    );
   });
-  expect(() => {
-    createProxyAgent('ftp://my.proxy.com:21');
-  }).toThrowError(
-    /Only http and https protocols are supported for proxying traffic./
-  );
 });
 
 describe('getStrictSsl', () => {

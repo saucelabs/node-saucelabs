@@ -1,4 +1,4 @@
-import got from 'got';
+import {MockAgent} from 'undici';
 import util from 'util';
 import {spawn} from 'child_process';
 import FormData from 'form-data';
@@ -63,13 +63,38 @@ jest.mock('../src/constants.js', () => ({
 const stdoutEmitter = spawn().stdout;
 const stderrEmitter = spawn().stderr;
 const origKill = process.kill;
+
+/**
+ * fresh MockAgent per test, injected via the constructor's undocumented
+ * `dispatcher` option (see src/index.js) since the constructor returns a
+ * Proxy over a plain object, not `this` - there's no `_dispatcher` field
+ * reachable from outside once a SauceLabs instance is built.
+ */
+let mockAgent;
+let apiPool;
+let assetsPool;
+
+function createApi(options) {
+  return new SauceLabs({...options, dispatcher: mockAgent});
+}
+
 beforeEach(() => {
   spawn.mockClear();
   process.kill = jest.fn();
-  // clean instances array
   instances.splice(0, instances.length);
-  // scHealthcheckPerformMock.mockRejectedValue(new Error("failure"))
+
+  mockAgent = new MockAgent();
+  mockAgent.disableNetConnect();
+  apiPool = mockAgent.get('https://api.us-west-1.saucelabs.com');
+  assetsPool = mockAgent.get('https://assets.saucelabs.com');
 });
+
+afterEach(async () => {
+  fs.writeFileSync.mockClear();
+  process.kill = origKill;
+  await mockAgent.close();
+});
+
 test('should be inspectable', () => {
   const api = new SauceLabs({user: 'foo', key: 'bar'});
   /**
@@ -170,53 +195,59 @@ test('should throw if API command is unknown', () => {
 });
 
 test('should allow to call an API method with param in url', async () => {
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
-  await api.getUserConcurrency('someuser');
-  expect(got.mock.calls[0][0]).toBe(
-    'https://api.us-west-1.saucelabs.com/rest/v1.2/users/someuser/concurrency'
-  );
+  apiPool
+    .intercept({path: '/rest/v1.2/users/someuser/concurrency', method: 'GET'})
+    .reply(200, {});
+  const api = createApi({user: 'foo', key: 'bar'});
+  await expect(api.getUserConcurrency('someuser')).resolves.toEqual({});
 });
 
 test('should allow to call an API method with param as option', async () => {
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
-  await api.listJobs('someuser', {
-    limit: 123,
-    full: true,
-  });
-
-  const uri = got.mock.calls[0][0];
-  const req = got.mock.calls[0][1];
-  expect(uri).toBe(
-    'https://api.us-west-1.saucelabs.com/rest/v1.1/someuser/jobs'
-  );
-  expect(req.searchParams).toEqual({
-    limit: 123,
-    full: true,
-  });
+  apiPool
+    .intercept({
+      path: '/rest/v1.1/someuser/jobs',
+      method: 'GET',
+      query: {limit: 123, full: true},
+    })
+    .reply(200, {});
+  const api = createApi({user: 'foo', key: 'bar'});
+  await expect(
+    api.listJobs('someuser', {limit: 123, full: true})
+  ).resolves.toEqual({});
 });
 
 test('should allow to make a request with body param', async () => {
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
+  apiPool
+    .intercept({
+      path: '/rest/v1/foobaruser/jobs/690c5877710c422d8be4c622b40c747f',
+      method: 'PUT',
+    })
+    .reply((opts) => {
+      expect(JSON.parse(opts.body)).toEqual({passed: true});
+      return {statusCode: 200, data: JSON.stringify({})};
+    });
+  const api = createApi({user: 'foo', key: 'bar'});
   await api.updateJob('foobaruser', '690c5877710c422d8be4c622b40c747f', {
     passed: true,
   });
-
-  const req = got.mock.calls[0][1];
-  expect(got.put).toBeCalled();
-  expect(req.json).toEqual({passed: true});
 });
 
 test('should allow to make a request with body param via CLI call', async () => {
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
+  apiPool
+    .intercept({
+      path: '/rest/v1/foobaruser/jobs/690c5877710c422d8be4c622b40c747f',
+      method: 'PUT',
+    })
+    .reply((opts) => {
+      expect(JSON.parse(opts.body)).toEqual({passed: false});
+      return {statusCode: 200, data: JSON.stringify({})};
+    });
+  const api = createApi({user: 'foo', key: 'bar'});
   await api.updateJob(
     'foobaruser',
     '690c5877710c422d8be4c622b40c747f',
     '{ "passed": false }'
   );
-
-  const req = got.mock.calls[0][1];
-  expect(got.put).toBeCalled();
-  expect(req.json).toEqual({passed: false});
 });
 
 test('should fail if param has wrong type', async () => {
@@ -246,56 +277,67 @@ test('should fail if option has wrong type', async () => {
 });
 
 test('should handle error case', async () => {
-  const response = new Error('Not Found');
-  response.statusCode = 404;
-  response.body = {message: 'Not Found'};
-  got.get.mockReturnValueOnce(Promise.reject(response));
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
+  apiPool
+    .intercept({
+      path: '/rest/v1.1/someuser/jobs',
+      method: 'GET',
+      query: {limit: 123, full: true},
+    })
+    .reply(404, {message: 'Not Found'});
+  const api = createApi({user: 'foo', key: 'bar'});
   const error = await api
     .listJobs('someuser', {
       limit: 123,
       full: true,
     })
     .catch((err) => err);
-  expect(error.message).toContain('Failed calling listJobs: Not Found');
+  expect(error.message).toContain(
+    'Failed calling listJobs: Response code 404 (Not Found)'
+  );
 });
 
 test('should be able to download assets', async () => {
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
+  assetsPool
+    .intercept({
+      path: (path) => path.startsWith('/jobs/some-id/performance.json'),
+      method: 'GET',
+    })
+    .reply((opts) => {
+      expect(opts.path).toContain('auth=a2600100e3d1990721be97c093f64567');
+      return {statusCode: 200, data: ''};
+    });
+  const api = createApi({user: 'foo', key: 'bar'});
   await api.downloadJobAsset('some-id', 'performance.json');
-  const uri = got.get.mock.calls[0][0];
-  expect(uri).toContain(
-    'https://assets.saucelabs.com/jobs/some-id/performance.json'
-  );
-  expect(uri).toContain('auth=a2600100e3d1990721be97c093f64567');
 });
 
 test('should handle errors when downloading assets', async () => {
-  const response = new Error('Not Found');
-  response.statusCode = 404;
-  response.body = {message: 'Not Found'};
-  got.get.mockReturnValueOnce(Promise.reject(response));
+  assetsPool
+    .intercept({
+      path: (path) => path.startsWith('/jobs/some-id/performance.json'),
+      method: 'GET',
+    })
+    .reply(404, {message: 'Not Found'});
 
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
+  const api = createApi({user: 'foo', key: 'bar'});
   const error = await api
     .downloadJobAsset('some-id', 'performance.json')
     .catch((err) => err);
   expect(error.message).toBe(
-    'There was an error downloading asset performance.json: Not Found'
+    'There was an error downloading asset performance.json: Response code 404 (Not Found)'
   );
 });
 
 test('should parse text responses if headers expect json', async () => {
   const reqRespond = {foo: 'bar'};
-  got.get.mockReturnValueOnce(
-    Promise.resolve({
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(reqRespond),
+  assetsPool
+    .intercept({
+      path: (path) => path.startsWith('/jobs/some-id/performance.json'),
+      method: 'GET',
     })
-  );
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
+    .reply(200, JSON.stringify(reqRespond), {
+      headers: {'content-type': 'application/json'},
+    });
+  const api = createApi({user: 'foo', key: 'bar'});
   const result = await api.downloadJobAsset('some-id', 'performance.json');
   expect(result).toEqual(reqRespond);
 });
@@ -312,32 +354,55 @@ test('should fail if parameters are not given properly', async () => {
 
 test('should support proxy options', async () => {
   const proxy = 'http://my.proxy.com:8080';
-  const api = new SauceLabs({user: 'foo', key: 'bar', proxy});
-  await api.downloadJobAsset('some-id', 'performance.json');
-  const requestOptions = got.extend.mock.calls[1][0];
-
-  await expect(requestOptions.agent).toBeDefined();
+  assetsPool
+    .intercept({
+      path: (path) => path.startsWith('/jobs/some-id/performance.json'),
+      method: 'GET',
+    })
+    .reply(200, '');
+  const api = createApi({user: 'foo', key: 'bar', proxy});
+  expect(api.proxy).toBe(proxy);
+  await expect(
+    api.downloadJobAsset('some-id', 'performance.json')
+  ).resolves.toBeDefined();
 });
 
 test('should put asset into file as binary', async () => {
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
-  await api.downloadJobAsset('some-id', 'performance.json', {
+  assetsPool
+    .intercept({
+      path: (path) => path.startsWith('/jobs/some-id/video.mp4'),
+      method: 'GET',
+    })
+    .reply(200, Buffer.from('binary-video-data'));
+  const api = createApi({user: 'foo', key: 'bar'});
+  await api.downloadJobAsset('some-id', 'video.mp4', {
     filepath: '/asset.json',
   });
-  expect(fs.writeFileSync).toBeCalledWith('/asset.json', undefined, {
-    encoding: 'binary',
-  });
+  expect(fs.writeFileSync).toBeCalledWith(
+    '/asset.json',
+    Buffer.from('binary-video-data'),
+    {encoding: 'binary'}
+  );
 });
 
 test('should put asset into file as json file', async () => {
-  got.setHeader({'content-type': 'application/json'});
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
+  assetsPool
+    .intercept({
+      path: (path) => path.startsWith('/jobs/some-id/performance.json'),
+      method: 'GET',
+    })
+    .reply(200, JSON.stringify({foo: 'bar'}), {
+      headers: {'content-type': 'application/json'},
+    });
+  const api = createApi({user: 'foo', key: 'bar'});
   await api.downloadJobAsset('some-id', 'performance.json', {
     filepath: '/asset.json',
   });
-  expect(fs.writeFileSync).toBeCalledWith('/asset.json', undefined, {
-    encoding: 'utf8',
-  });
+  expect(fs.writeFileSync).toBeCalledWith(
+    '/asset.json',
+    JSON.stringify({foo: 'bar'}, null, 4),
+    {encoding: 'utf8'}
+  );
 });
 
 test('should allow to upload files', async () => {
@@ -346,16 +411,17 @@ test('should allow to upload files', async () => {
     path: 'somepath',
   });
 
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
   const body = {foo: 'bar'};
-  got.mockReturnValue(
-    Promise.resolve({
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(body),
+  apiPool
+    .intercept({
+      path: '/v1/testcomposer/jobs/some-id/assets',
+      method: 'PUT',
     })
-  );
+    .reply(200, JSON.stringify(body), {
+      headers: {'content-type': 'application/json'},
+    });
+
+  const api = createApi({user: 'foo', key: 'bar'});
   const result = await api.uploadJobAssets('some-id', {
     files: [
       'log.json',
@@ -394,11 +460,6 @@ test('should allow to upload files', async () => {
     'foobar.json'
   );
 
-  const uri = got.mock.calls[0][0];
-  expect(uri).toBe(
-    'https://api.us-west-1.saucelabs.com/v1/testcomposer/jobs/some-id/assets'
-  );
-
   expect(result).toEqual(body);
 });
 
@@ -408,8 +469,14 @@ test('should throw if custom error if upload fails', async () => {
     path: 'somepath',
   });
 
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
-  got.mockReturnValue(Promise.reject(new Error('uups')));
+  apiPool
+    .intercept({
+      path: '/v1/testcomposer/jobs/some-id/assets',
+      method: 'PUT',
+    })
+    .replyWithError(new Error('uups'));
+
+  const api = createApi({user: 'foo', key: 'bar'});
   const result = await api
     .uploadJobAssets('some-id', {
       files: ['log.json', '/selenium-server.json'],
@@ -438,20 +505,20 @@ test('should fail if file parameter is invalid', async () => {
 });
 
 test('should contain expected macos download link', async () => {
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
-  got.mockReturnValue(
-    Promise.resolve({
-      body: {
-        ...downloadMacos,
-      },
+  apiPool
+    .intercept({
+      path: (p) =>
+        p.startsWith('/rest/v1/public/tunnels/sauce-connect/download'),
+      method: 'GET',
+      query: {version: '5.2.2', os: 'macos', arch: 'x86_64'},
     })
-  );
+    .reply(200, downloadMacos);
+  const api = createApi({user: 'foo', key: 'bar'});
   const scDownload = await api.scDownload({
     version: '5.2.2',
     os: 'macos',
     arch: 'x86_64',
   });
-  expect(got.mock.calls).toMatchSnapshot();
   expect(scDownload.download).toMatchObject({
     checksums: [
       {
@@ -466,20 +533,20 @@ test('should contain expected macos download link', async () => {
 });
 
 test('should contain expected windows download link', async () => {
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
-  got.mockReturnValue(
-    Promise.resolve({
-      body: {
-        ...downloadWindows,
-      },
+  apiPool
+    .intercept({
+      path: (p) =>
+        p.startsWith('/rest/v1/public/tunnels/sauce-connect/download'),
+      method: 'GET',
+      query: {version: '5.2.2', os: 'windows', arch: 'x86_64'},
     })
-  );
+    .reply(200, downloadWindows);
+  const api = createApi({user: 'foo', key: 'bar'});
   const scDownload = await api.scDownload({
     version: '5.2.2',
     os: 'windows',
     arch: 'x86_64',
   });
-  expect(got.mock.calls).toMatchSnapshot();
   expect(scDownload.download).toMatchObject({
     checksums: [
       {
@@ -496,7 +563,14 @@ test('should contain expected windows download link', async () => {
 describe('startSauceConnect', () => {
   it('should start sauce connect with proper parsed args', async () => {
     const logs = [];
-    const api = new SauceLabs({
+    apiPool
+      .intercept({
+        path: (p) =>
+          p.startsWith('/rest/v1/public/tunnels/sauce-connect/download'),
+        method: 'GET',
+      })
+      .reply(200, downloadMacos);
+    const api = createApi({
       user: 'foo',
       key: 'bar',
       proxy: 'http://example.com',
@@ -528,14 +602,14 @@ describe('startSauceConnect', () => {
 
   it('should throw an error if there is an error response from the download API', async () => {
     const logs = [];
-    const api = new SauceLabs({user: 'foo', key: 'bar'});
-    got.mockReturnValue(
-      Promise.resolve({
-        body: {
-          ...downloadError,
-        },
+    apiPool
+      .intercept({
+        path: (p) =>
+          p.startsWith('/rest/v1/public/tunnels/sauce-connect/download'),
+        method: 'GET',
       })
-    );
+      .reply(200, downloadError);
+    const api = createApi({user: 'foo', key: 'bar'});
     const err = await api
       .startSauceConnect({
         tunnelName: 'my-tunnel',
@@ -548,12 +622,14 @@ describe('startSauceConnect', () => {
 
   it('should throw an error if there is an invalid response from the download API', async () => {
     const logs = [];
-    const api = new SauceLabs({user: 'foo', key: 'bar'});
-    got.mockReturnValue(
-      Promise.resolve({
-        body: {}, // empty response
+    apiPool
+      .intercept({
+        path: (p) =>
+          p.startsWith('/rest/v1/public/tunnels/sauce-connect/download'),
+        method: 'GET',
       })
-    );
+      .reply(200, {}); // empty response
+    const api = createApi({user: 'foo', key: 'bar'});
     const err = await api
       .startSauceConnect({
         tunnelName: 'my-tunnel',
@@ -566,10 +642,14 @@ describe('startSauceConnect', () => {
 
   it('should throw an error if the call to the download API failed', async () => {
     const logs = [];
-    const api = new SauceLabs({user: 'foo', key: 'bar'});
-    got.mockImplementation(() => {
-      throw new Error('Endpoint not available!');
-    });
+    apiPool
+      .intercept({
+        path: (p) =>
+          p.startsWith('/rest/v1/public/tunnels/sauce-connect/download'),
+        method: 'GET',
+      })
+      .replyWithError(new Error('Endpoint not available!'));
+    const api = createApi({user: 'foo', key: 'bar'});
     const err = await api
       .startSauceConnect({
         tunnelName: 'my-tunnel',
@@ -582,14 +662,14 @@ describe('startSauceConnect', () => {
 
   it('should start sauce connect with the default version if no version is specified in the args', async () => {
     const logs = [];
-    const api = new SauceLabs({user: 'foo', key: 'bar'});
-    got.mockReturnValue(
-      Promise.resolve({
-        body: {
-          ...downloadMacos,
-        },
+    apiPool
+      .intercept({
+        path: (p) =>
+          p.startsWith('/rest/v1/public/tunnels/sauce-connect/download'),
+        method: 'GET',
       })
-    );
+      .reply(200, downloadMacos);
+    const api = createApi({user: 'foo', key: 'bar'});
     await api.startSauceConnect({
       tunnelName: 'my-tunnel',
       'proxy-tunnel': 'abc',
@@ -598,14 +678,28 @@ describe('startSauceConnect', () => {
   });
 
   it('should close sauce connect', async () => {
-    const api = new SauceLabs({user: 'foo', key: 'bar'});
+    apiPool
+      .intercept({
+        path: (p) =>
+          p.startsWith('/rest/v1/public/tunnels/sauce-connect/download'),
+        method: 'GET',
+      })
+      .reply(200, downloadMacos);
+    const api = createApi({user: 'foo', key: 'bar'});
     const sc = await api.startSauceConnect({tunnelName: 'my-tunnel'}, true);
     await sc.close();
     expect(process.kill).toBeCalledWith(123, 'SIGINT');
   });
 
   it('should fail if stderr is emitted', async () => {
-    const api = new SauceLabs({user: 'foo', key: 'bar'});
+    apiPool
+      .intercept({
+        path: (p) =>
+          p.startsWith('/rest/v1/public/tunnels/sauce-connect/download'),
+        method: 'GET',
+      })
+      .reply(200, downloadMacos);
+    const api = createApi({user: 'foo', key: 'bar'});
     setTimeout(() => stderrEmitter.emit('data', 'Uuups'), 50);
     const res = await api
       .startSauceConnect({tunnelName: 'my-tunnel'})
@@ -647,12 +741,11 @@ it('should fail when tunnelName is not given', async () => {
 });
 
 test('should output failure msg for createJob API', async () => {
-  const response = new Error('Response code 422 (Unprocessable Entity)');
-  response.statusCode = 422;
-  response.response = {body: 'empty framework'};
-  got.post.mockReturnValue(Promise.reject(response));
+  apiPool
+    .intercept({path: '/v1/testcomposer/reports', method: 'POST'})
+    .reply(422, 'empty framework');
 
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
+  const api = createApi({user: 'foo', key: 'bar'});
   const error = await api.createJob({framework: ''}).catch((err) => err);
 
   expect(error.message).toBe(
@@ -661,20 +754,27 @@ test('should output failure msg for createJob API', async () => {
 });
 
 test('should get user by username', async () => {
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
-  got.mockReturnValue(
-    Promise.resolve({
-      body: {results: [{id: 'foo-id'}]},
+  apiPool
+    .intercept({
+      path: '/team-management/v1/users',
+      method: 'GET',
+      query: {username: 'fooUser'},
     })
-  );
+    .reply(200, {results: [{id: 'foo-id'}]});
+  const api = createApi({user: 'foo', key: 'bar'});
   const result = await api.getUserByUsername({username: 'fooUser'});
   expect(result).toEqual({id: 'foo-id'});
-  expect(got.mock.calls[0]).toMatchSnapshot();
 });
 
 test('should get user by username fail when api fails', async () => {
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
-  got.mockReturnValue(Promise.reject(new Error('example')));
+  apiPool
+    .intercept({
+      path: '/team-management/v1/users',
+      method: 'GET',
+      query: {username: 'fooUser'},
+    })
+    .replyWithError(new Error('example'));
+  const api = createApi({user: 'foo', key: 'bar'});
   const error = await api
     .getUserByUsername({username: 'fooUser'})
     .catch((err) => err);
@@ -686,115 +786,119 @@ test('should get user by username fail when api fails', async () => {
 });
 
 test('should get list of builds', async () => {
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
-  got
-    .mockReturnValueOnce(
-      Promise.resolve({
-        body: {results: [{id: 'foo-id'}]},
-      })
-    )
-    .mockReturnValue(
-      Promise.resolve({
-        body: {builds: [{id: 'build-id'}]},
-      })
-    );
+  apiPool
+    .intercept({
+      path: '/team-management/v1/users',
+      method: 'GET',
+      query: {username: 'fooUser'},
+    })
+    .reply(200, {results: [{id: 'foo-id'}]});
+  apiPool
+    .intercept({
+      path: '/v2/builds/vdc/',
+      method: 'GET',
+      query: {user_id: 'foo-id', offset: 5, limit: 10},
+    })
+    .reply(200, {builds: [{id: 'build-id'}]});
+  const api = createApi({user: 'foo', key: 'bar'});
   const builds = await api.listBuilds('fooUser', {offset: 5, limit: 10});
-  expect(got.mock.calls).toMatchSnapshot();
   expect(builds).toEqual([{id: 'build-id'}]);
 });
 
 test('should get builds failed jobs', async () => {
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
-  got
-    .mockReturnValueOnce(
-      Promise.resolve({
-        body: {results: [{id: 'foo-id'}]},
-      })
-    )
-    .mockReturnValueOnce(
-      Promise.resolve({
-        body: {jobs: [{id: 'job-1'}, {id: 'job-2'}]},
-      })
-    )
-    .mockReturnValue(
-      Promise.resolve({
-        body: {
-          jobs: [
-            {id: 'job-1', name: 'foo-job', status: 'failed'},
-            {id: 'job-2', name: 'bar-job', status: 'errored'},
-          ],
-        },
-      })
-    );
+  apiPool
+    .intercept({
+      path: '/team-management/v1/users',
+      method: 'GET',
+      query: {username: 'fooUser'},
+    })
+    .reply(200, {results: [{id: 'foo-id'}]});
+  apiPool
+    .intercept({
+      path: '/v2/builds/vdc/build-1/jobs/',
+      method: 'GET',
+      query: {user_id: 'foo-id', faulty: true, offset: 5, limit: 10},
+    })
+    .reply(200, {jobs: [{id: 'job-1'}, {id: 'job-2'}]});
+  apiPool
+    .intercept({
+      path: '/rest/v1.1/jobs?full=true&id=job-1&id=job-2',
+      method: 'GET',
+    })
+    .reply(200, {
+      jobs: [
+        {id: 'job-1', name: 'foo-job', status: 'failed'},
+        {id: 'job-2', name: 'bar-job', status: 'errored'},
+      ],
+    });
+  const api = createApi({user: 'foo', key: 'bar'});
   const failedJobs = await api.listBuildFailedJobs('fooUser', 'build-1', {
     offset: 5,
     limit: 10,
   });
-  expect(got.mock.calls).toMatchSnapshot();
   expect(failedJobs).toMatchSnapshot();
 });
 
 test('should get builds jobs', async () => {
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
-  got
-    .mockReturnValueOnce(
-      Promise.resolve({
-        body: {jobs: [{id: 'job-1'}, {id: 'job-2'}]},
-      })
-    )
-    .mockReturnValue(
-      Promise.resolve({
-        body: {
-          jobs: [
-            {id: 'job-1', name: 'foo-job', status: 'failed'},
-            {id: 'job-2', name: 'bar-job', status: 'errored'},
-          ],
-        },
-      })
-    );
-  const failedJobs = await api.listBuildJobs('build-1', {offset: 5, limit: 10});
-  expect(got.mock.calls).toMatchSnapshot();
+  apiPool
+    .intercept({
+      path: '/v2/builds/vdc/build-1/jobs/',
+      method: 'GET',
+      query: {offset: 5, limit: 10},
+    })
+    .reply(200, {jobs: [{id: 'job-1'}, {id: 'job-2'}]});
+  apiPool
+    .intercept({
+      path: '/rest/v1.1/jobs?full=true&id=job-1&id=job-2',
+      method: 'GET',
+    })
+    .reply(200, {
+      jobs: [
+        {id: 'job-1', name: 'foo-job', status: 'failed'},
+        {id: 'job-2', name: 'bar-job', status: 'errored'},
+      ],
+    });
+  const api = createApi({user: 'foo', key: 'bar'});
+  const failedJobs = await api.listBuildJobs('build-1', {
+    offset: 5,
+    limit: 10,
+  });
   expect(failedJobs).toMatchSnapshot();
 });
 
-test('should stringify searchParams', () => {
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
-  got.mockReturnValue(
-    Promise.resolve({
-      body: {
-        jobs: [
-          {id: 'job-1', name: 'foo-job', status: 'failed'},
-          {id: 'job-2', name: 'bar-job', status: 'errored'},
-        ],
-      },
-    })
-  );
-  api.getJobsV1_1({id: ['job-1', 'job-2']});
-  expect(got.mock.calls[0][1].searchParams).toEqual('id=job-1&id=job-2');
+test('should stringify searchParams', async () => {
+  apiPool
+    .intercept({path: '/rest/v1.1/jobs?id=job-1&id=job-2', method: 'GET'})
+    .reply(200, {
+      jobs: [
+        {id: 'job-1', name: 'foo-job', status: 'failed'},
+        {id: 'job-2', name: 'bar-job', status: 'errored'},
+      ],
+    });
+  const api = createApi({user: 'foo', key: 'bar'});
+  await expect(
+    api.getJobsV1_1({id: ['job-1', 'job-2']})
+  ).resolves.toBeDefined();
 });
 
 test('should get HTTPValidationError when posting test-runs failed', async () => {
-  const api = new SauceLabs({user: 'foo', key: 'bar'});
-  got.mockReturnValue(
-    Promise.resolve({
-      body: {
-        detail: [
-          {
-            loc: ['body', 14],
-            msg: 'Expecting property name enclosed in double quotes: line 1 column 15 (char 14)',
-            type: 'value_error.jsondecode',
-            ctx: {
-              msg: 'Expecting property name enclosed in double quotes',
-              doc: '...',
-              pos: 14,
-              lineno: 1,
-              colno: 15,
-            },
-          },
-        ],
+  apiPool.intercept({path: '/test-runs/v1/', method: 'POST'}).reply(200, {
+    detail: [
+      {
+        loc: ['body', 14],
+        msg: 'Expecting property name enclosed in double quotes: line 1 column 15 (char 14)',
+        type: 'value_error.jsondecode',
+        ctx: {
+          msg: 'Expecting property name enclosed in double quotes',
+          doc: '...',
+          pos: 14,
+          lineno: 1,
+          colno: 15,
+        },
       },
-    })
-  );
+    ],
+  });
+  const api = createApi({user: 'foo', key: 'bar'});
   const failedResp = await api.createTestRunsV1({testRuns: []});
   expect(failedResp.detail.length).toEqual(1);
   const detail = failedResp.detail[0];
@@ -802,13 +906,4 @@ test('should get HTTPValidationError when posting test-runs failed', async () =>
   expect(detail.msg).toEqual(
     'Expecting property name enclosed in double quotes: line 1 column 15 (char 14)'
   );
-});
-
-afterEach(() => {
-  fs.writeFileSync.mockClear();
-  got.mockClear();
-  got.extend.mockClear();
-  got.put.mockClear();
-  got.get.mockClear();
-  process.kill = origKill;
 });

@@ -13,7 +13,6 @@ jest.setTimeout(120 * 1000); // 120s should be sufficient to run all SC tests
 jest
   .unmock('https')
   .unmock('form-data')
-  .unmock('got')
   .unmock('yargs')
   .unmock('compressing')
   .unmock('zlib');

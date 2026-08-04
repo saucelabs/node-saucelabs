@@ -1,71 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should contain expected macos download link 1`] = `
-[
-  [
-    "https://api.us-west-1.saucelabs.com/rest/v1/public/tunnels/sauce-connect/download",
-    {
-      "responseType": "json",
-      "searchParams": {
-        "arch": "x86_64",
-        "os": "macos",
-        "version": "5.2.2",
-      },
-    },
-  ],
-]
-`;
-
-exports[`should contain expected windows download link 1`] = `
-[
-  [
-    "https://api.us-west-1.saucelabs.com/rest/v1/public/tunnels/sauce-connect/download",
-    {
-      "responseType": "json",
-      "searchParams": {
-        "arch": "x86_64",
-        "os": "windows",
-        "version": "5.2.2",
-      },
-    },
-  ],
-]
-`;
-
 exports[`should get builds failed jobs 1`] = `
-[
-  [
-    "https://api.us-west-1.saucelabs.com/team-management/v1/users",
-    {
-      "responseType": "json",
-      "searchParams": {
-        "username": "fooUser",
-      },
-    },
-  ],
-  [
-    "https://api.us-west-1.saucelabs.com/v2/builds/vdc/build-1/jobs/",
-    {
-      "responseType": "json",
-      "searchParams": {
-        "faulty": true,
-        "limit": 10,
-        "offset": 5,
-        "user_id": "foo-id",
-      },
-    },
-  ],
-  [
-    "https://api.us-west-1.saucelabs.com/rest/v1.1/jobs",
-    {
-      "responseType": "json",
-      "searchParams": "full=true&id=job-1&id=job-2",
-    },
-  ],
-]
-`;
-
-exports[`should get builds failed jobs 2`] = `
 [
   {
     "id": "job-1",
@@ -82,28 +17,6 @@ exports[`should get builds failed jobs 2`] = `
 
 exports[`should get builds jobs 1`] = `
 [
-  [
-    "https://api.us-west-1.saucelabs.com/v2/builds/vdc/build-1/jobs/",
-    {
-      "responseType": "json",
-      "searchParams": {
-        "limit": 10,
-        "offset": 5,
-      },
-    },
-  ],
-  [
-    "https://api.us-west-1.saucelabs.com/rest/v1.1/jobs",
-    {
-      "responseType": "json",
-      "searchParams": "full=true&id=job-1&id=job-2",
-    },
-  ],
-]
-`;
-
-exports[`should get builds jobs 2`] = `
-[
   {
     "id": "job-1",
     "name": "foo-job",
@@ -113,43 +26,6 @@ exports[`should get builds jobs 2`] = `
     "id": "job-2",
     "name": "bar-job",
     "status": "errored",
-  },
-]
-`;
-
-exports[`should get list of builds 1`] = `
-[
-  [
-    "https://api.us-west-1.saucelabs.com/team-management/v1/users",
-    {
-      "responseType": "json",
-      "searchParams": {
-        "username": "fooUser",
-      },
-    },
-  ],
-  [
-    "https://api.us-west-1.saucelabs.com/v2/builds/vdc/",
-    {
-      "responseType": "json",
-      "searchParams": {
-        "limit": 10,
-        "offset": 5,
-        "user_id": "foo-id",
-      },
-    },
-  ],
-]
-`;
-
-exports[`should get user by username 1`] = `
-[
-  "https://api.us-west-1.saucelabs.com/team-management/v1/users",
-  {
-    "responseType": "json",
-    "searchParams": {
-      "username": "fooUser",
-    },
   },
 ]
 `;

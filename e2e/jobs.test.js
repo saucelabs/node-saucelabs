@@ -10,7 +10,7 @@ jest.setTimeout(60 * 1000); // 60s should be sufficient to boot SC
 /**
  * unmock
  */
-jest.unmock('https').unmock('got').unmock('yargs');
+jest.unmock('https').unmock('yargs');
 
 test('should receive 400', async () => {
   if (SKIP_TEST) {
