@@ -1,8 +1,9 @@
 import fs from 'fs';
+import http from 'http';
 import path from 'path';
 import {spawn} from 'child_process';
 
-import got from 'got';
+import {request, Agent, interceptors} from 'undici';
 import FormData from 'form-data';
 import {camelCase} from 'change-case';
 import {
@@ -40,29 +41,32 @@ export default class SauceLabs {
     this._options = Object.assign({}, DEFAULT_OPTIONS, options);
     this.username = this._options.user;
     this._accessKey = this._options.key;
-    this._api = got.extend({
-      username: this.username,
-      password: this._accessKey,
-      https: {rejectUnauthorized: getStrictSsl()},
-      followRedirect: true,
-      headers: {
-        ...this._options.headers,
-        Authorization: `Basic ${Buffer.from(
-          `${this.username}:${this._accessKey}`
-        ).toString('base64')}`,
-      },
-    });
+    this._headers = {
+      ...this._options.headers,
+      Authorization: `Basic ${Buffer.from(
+        `${this.username}:${this._accessKey}`
+      ).toString('base64')}`,
+    };
 
     if (typeof this._options.proxy === 'string') {
       this.proxy = this._options.proxy;
-      const proxyAgent = createProxyAgent(this.proxy);
-      this._api = got.extend(
-        {
-          agent: proxyAgent,
-        },
-        this._api
-      );
     }
+
+    /**
+     * `_options.dispatcher` is an internal, undocumented seam used by tests
+     * to inject an `undici.MockAgent`. The public constructor is wrapped in
+     * a `Proxy` below (which only re-exposes a fixed set of fields), so
+     * there's no way for external code to reach into `this` after
+     * construction to swap the dispatcher.
+     */
+    this._dispatcher =
+      this._options.dispatcher ||
+      (this.proxy
+        ? createProxyAgent(this.proxy)
+        : new Agent({connect: {rejectUnauthorized: getStrictSsl()}}).compose(
+            interceptors.redirect({maxRedirections: 5}),
+            interceptors.retry()
+          ));
 
     /**
      * public fields
@@ -395,6 +399,76 @@ export default class SauceLabs {
     return response.download;
   }
 
+  /**
+   * make an HTTP request through the configured undici dispatcher,
+   * mirroring got's response shape (`{headers, body, statusCode}`) and
+   * its behavior of throwing on non-2xx responses with a parsed body
+   * attached as `err.response.body`.
+   */
+  async _request(
+    uri,
+    {method = 'GET', headers, query, json, body, responseType = 'json'} = {}
+  ) {
+    let url = uri;
+    if (query) {
+      const qs =
+        typeof query === 'string' ? query : queryString.stringify(query);
+      if (qs) {
+        url = `${url}?${qs}`;
+      }
+    }
+
+    const reqHeaders = {...this._headers, ...headers};
+    let reqBody = body;
+    if (typeof json !== 'undefined') {
+      reqHeaders['content-type'] = 'application/json';
+      reqBody = JSON.stringify(json);
+    }
+
+    const res = await request(url, {
+      method: method.toUpperCase(),
+      headers: reqHeaders,
+      body: reqBody,
+      dispatcher: this._dispatcher,
+    });
+
+    if (res.statusCode >= 400) {
+      const text = await res.body.text();
+      let parsedBody = text;
+      try {
+        parsedBody = JSON.parse(text);
+      } catch {
+        /* leave as text */
+      }
+      const err = new Error(
+        `Response code ${res.statusCode} (${
+          http.STATUS_CODES[res.statusCode] || ''
+        })`.trim()
+      );
+      err.response = {
+        body: parsedBody,
+        statusCode: res.statusCode,
+        headers: res.headers,
+      };
+      throw err;
+    }
+
+    let responseBody;
+    if (responseType === 'buffer') {
+      responseBody = Buffer.from(await res.body.arrayBuffer());
+    } else if (responseType === 'json') {
+      responseBody = await res.body.json();
+    } else {
+      responseBody = await res.body.text();
+    }
+
+    return {
+      headers: res.headers,
+      body: responseBody,
+      statusCode: res.statusCode,
+    };
+  }
+
   async _downloadJobAsset(jobId, assetName, {filepath} = {}) {
     /**
      * check job id
@@ -411,7 +485,7 @@ export default class SauceLabs {
     const uri = `${host}/jobs/${jobId}/${assetName}?ts=${Date.now()}&auth=${hmac}`;
 
     try {
-      const res = await this._api.get(uri, {responseType});
+      const res = await this._request(uri, {method: 'GET', responseType});
 
       /**
        * parse asset as json if proper content type is given
@@ -496,7 +570,12 @@ export default class SauceLabs {
     }
 
     try {
-      const res = await this._api(uri, {method, body});
+      const res = await this._request(uri, {
+        method,
+        body,
+        headers: body.getHeaders(),
+        responseType: 'text',
+      });
 
       /**
        * parse asset as json if proper content type is given
@@ -612,9 +691,10 @@ export default class SauceLabs {
      */
     const uri = getAPIHost(servers, basePath, this._options) + url;
     try {
-      const response = await this._api[method](uri, {
+      const response = await this._request(uri, {
+        method,
         ...(method === 'get'
-          ? {searchParams: modifiedParams}
+          ? {query: modifiedParams}
           : {json: modifiedParams}),
         responseType: 'json',
       });
