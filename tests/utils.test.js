@@ -1,4 +1,4 @@
-import {ProxyAgent} from 'undici';
+import {Dispatcher} from 'undici';
 import sauceAPI from '../apis/sauce.json';
 import {
   createHMAC,
@@ -148,12 +148,12 @@ test('isValidType', () => {
 });
 
 describe('createProxyAgent', () => {
-  test('returns a ProxyAgent for http and https proxies', () => {
+  test('returns a dispatcher for http and https proxies', () => {
     expect(createProxyAgent('http://my.proxy.com:8080')).toBeInstanceOf(
-      ProxyAgent
+      Dispatcher
     );
     expect(createProxyAgent('https://my.proxy.com:443')).toBeInstanceOf(
-      ProxyAgent
+      Dispatcher
     );
   });
 
