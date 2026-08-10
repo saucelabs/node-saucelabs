@@ -907,3 +907,9 @@ test('should get HTTPValidationError when posting test-runs failed', async () =>
     'Expecting property name enclosed in double quotes: line 1 column 15 (char 14)'
   );
 });
+
+test('should resolve a 204 No Content response instead of throwing', async () => {
+  apiPool.intercept({path: '/test-runs/v1/', method: 'POST'}).reply(204, '');
+  const api = createApi({user: 'foo', key: 'bar'});
+  await expect(api.createTestRunsV1({testRuns: []})).resolves.toBeUndefined();
+});

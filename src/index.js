@@ -457,7 +457,8 @@ export default class SauceLabs {
     if (responseType === 'buffer') {
       responseBody = Buffer.from(await res.body.arrayBuffer());
     } else if (responseType === 'json') {
-      responseBody = await res.body.json();
+      const text = await res.body.text();
+      responseBody = text ? JSON.parse(text) : undefined;
     } else {
       responseBody = await res.body.text();
     }

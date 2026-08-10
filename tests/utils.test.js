@@ -164,6 +164,19 @@ describe('createProxyAgent', () => {
       /Only http and https protocols are supported for proxying traffic./
     );
   });
+
+  test('throws the actionable error, not a raw URL parsing error, for a schemeless proxy string', () => {
+    expect(() => {
+      createProxyAgent('my.proxy.com');
+    }).toThrowError(
+      /Only http and https protocols are supported for proxying traffic./
+    );
+    expect(() => {
+      createProxyAgent('');
+    }).toThrowError(
+      /Only http and https protocols are supported for proxying traffic./
+    );
+  });
 });
 
 describe('getStrictSsl', () => {

@@ -150,10 +150,15 @@ export function isValidType(option, expectedType) {
 /**
  * get an undici ProxyAgent for tunneling requests through a proxy
  * @param  {string}  proxy  proxy URL that traffic will be tunneled with
- * @return {ProxyAgent} proxy dispatcher
+ * @return {Dispatcher} proxy dispatcher
  */
 export function createProxyAgent(proxy) {
-  const proxyURL = new URL(proxy);
+  let proxyURL;
+  try {
+    proxyURL = new URL(proxy);
+  } catch {
+    proxyURL = {protocol: null};
+  }
   if (proxyURL.protocol !== 'http:' && proxyURL.protocol !== 'https:') {
     throw new Error(
       'Only http and https protocols are supported for proxying traffic.' +
