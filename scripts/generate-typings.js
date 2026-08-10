@@ -18,7 +18,7 @@ function generateTypingsForApi(file) {
   if (swagger.swagger !== '2.0') {
     return console.log(
       `Specification for ${file} has not the Swagger v2 format.\n` +
-        'TypeScript generation currently is only supported for Swagger v2.0.'
+        'TypeScript generation currently is only supported for Swagger v2.0.',
     );
   }
 
@@ -41,7 +41,7 @@ function generateTypingsForApi(file) {
 
   return {
     defintions: definitions.replace(/~~~(.*)~~~/g, (_, group) =>
-      camelCase(group)
+      camelCase(group),
     ),
     methods: methods.replace(/~~~(.*)~~~/g, (_, group) => camelCase(group)),
   };
@@ -58,15 +58,15 @@ function sanitizeIndividualMethods(result) {
   return result
     .replace(
       /readBatchReport\(\n([\s\S]*?)\): Promise<BatchReport >/,
-      readBatchReport
+      readBatchReport,
     )
     .replace(
       /junitStyleXmlReport\(\n([\s\S]*?)\): Promise<JunitXMLReport >/,
-      junitStyleXmlReport
+      junitStyleXmlReport,
     );
 }
 
-fs.readdir(path.join(__dirname, '../apis'), (err, files) => {
+fs.readdir(path.join(__dirname, '../apis'), async (err, files) => {
   if (err) {
     throw err;
   }
@@ -103,11 +103,11 @@ export default SauceLabs;`;
   result = result
     .replace(
       / \| ResponseWithBody < (number|\d{3}), (Error|ErrorResponse|void) >/g,
-      ''
+      '',
     )
     .replace(
       /Promise < ResponseWithBody < (?:\d{3}|number), ([\s\S]*?)>>\n(\n|})/g,
-      'Promise<$1>\n$2'
+      'Promise<$1>\n$2',
     );
 
   // fix duplicate body params
@@ -115,7 +115,7 @@ export default SauceLabs;`;
 
   fs.writeFileSync(
     'build/index.d.ts',
-    prettier.format(result, {parser: 'typescript'}),
-    {encoding: 'utf-8'}
+    await prettier.format(result, {parser: 'typescript'}),
+    {encoding: 'utf-8'},
   );
 });
