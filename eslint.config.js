@@ -34,7 +34,7 @@ module.exports = [
     },
   },
   {
-    files: ['tests/**/*.js'],
+    files: ['tests/**/*.js', 'e2e/**/*.js'],
     languageOptions: {
       globals: {
         ...globals.jest,

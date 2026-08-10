@@ -14,6 +14,9 @@
     "sl": "./bin/sl"
   },
   "typings": "./build/index.d.ts",
+  "engines": {
+    "node": ">=22.19.0"
+  },
   "files": [
     "apis",
     "bin",
@@ -48,10 +51,9 @@
     "change-case": "^4.1.2",
     "compressing": "^1.10.5",
     "form-data": "^4.0.6",
-    "got": "^11.8.6",
     "hash.js": "^1.1.7",
     "query-string": "^7.1.3",
-    "tunnel": "^0.0.6",
+    "undici": "^8.10.0",
     "yargs": "^18.1.0"
   },
   "devDependencies": {
