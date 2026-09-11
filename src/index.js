@@ -2,6 +2,7 @@ import fs from 'fs';
 import http from 'http';
 import path from 'path';
 import {spawn} from 'child_process';
+import {stringify as stringifyQuery} from 'querystring';
 
 import {request, Agent, interceptors} from 'undici';
 import FormData from 'form-data';
@@ -19,7 +20,6 @@ import {
   getStrictSsl,
   getRegionSubDomain,
 } from './utils';
-import queryString from 'query-string';
 
 import {
   PROTOCOL_MAP,
@@ -44,7 +44,7 @@ export default class SauceLabs {
     this._headers = {
       ...this._options.headers,
       Authorization: `Basic ${Buffer.from(
-        `${this.username}:${this._accessKey}`
+        `${this.username}:${this._accessKey}`,
       ).toString('base64')}`,
     };
 
@@ -65,7 +65,7 @@ export default class SauceLabs {
         ? createProxyAgent(this.proxy)
         : new Agent({connect: {rejectUnauthorized: getStrictSsl()}}).compose(
             interceptors.redirect({maxRedirections: 5}),
-            interceptors.retry()
+            interceptors.retry(),
           ));
 
     /**
@@ -74,21 +74,21 @@ export default class SauceLabs {
     this.region = this._options.region;
     this.tld = this._options.tld;
     this.webdriverEndpoint = `https://ondemand.${getRegionSubDomain(
-      options
+      options,
     )}.saucelabs.com/`;
 
     return new Proxy(
       {
         username: this.username,
         key: `XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX${(this._accessKey || '').slice(
-          -6
+          -6,
         )}`,
         region: this._options.region,
         proxy: this._options.proxy,
         webdriverEndpoint: this.webdriverEndpoint,
         headers: this._options.headers,
       },
-      {get: this.get.bind(this)}
+      {get: this.get.bind(this)},
     );
   }
 
@@ -190,7 +190,7 @@ export default class SauceLabs {
       'getBuildsJobsV2',
       'vdc',
       buildId,
-      params
+      params,
     );
     const jobIds = buildJobs.map(({id}) => id);
     const {jobs} = await this._callAPI('getJobsV1_1', {id: jobIds, full: true});
@@ -202,7 +202,7 @@ export default class SauceLabs {
       'getBuildsJobsV2',
       'vdc',
       buildId,
-      args
+      args,
     );
     const jobIds = buildJobs.map(({id}) => id);
     const {jobs} = await this._callAPI('getJobsV1_1', {
@@ -222,7 +222,7 @@ export default class SauceLabs {
     } catch (err) {
       throw new Error(
         `There was an error while fetching user information: ${err.message}`,
-        {cause: err}
+        {cause: err},
       );
     }
   }
@@ -245,7 +245,7 @@ export default class SauceLabs {
     const sauceConnectVersion = argv.scVersion || DEFAULT_SAUCE_CONNECT_VERSION;
     if (sauceConnectVersion.startsWith('4')) {
       throw new Error(
-        `This Sauce Connect version (${sauceConnectVersion}) is no longer supported. Please use Sauce Connect 5.`
+        `This Sauce Connect version (${sauceConnectVersion}) is no longer supported. Please use Sauce Connect 5.`,
       );
     }
 
@@ -266,7 +266,7 @@ export default class SauceLabs {
             'tunnel-name',
             'logger',
             ...SC_PARAMS_TO_STRIP,
-          ].includes(k)
+          ].includes(k),
       )
       /**
        * remove duplicate params by yargs
@@ -277,7 +277,7 @@ export default class SauceLabs {
        * no pass it along when we deal with a boolean param
        */
       .map(([k, v]) =>
-        SC_BOOLEAN_CLI_PARAMS.includes(k) ? `--${k}` : `--${k}=${v}`
+        SC_BOOLEAN_CLI_PARAMS.includes(k) ? `--${k}` : `--${k}=${v}`,
       );
     args.push(`--username=${this.username}`);
     args.push(`--access-key=${this._accessKey}`);
@@ -389,7 +389,7 @@ export default class SauceLabs {
     if (response.error) {
       // likely an input value error. some platform/arch combinations may not be supported.
       throw new Error(
-        `Failed to retrieve Sauce Connect download. code: ${response.error.code} message: ${response.error.message}`
+        `Failed to retrieve Sauce Connect download. code: ${response.error.code} message: ${response.error.message}`,
       );
     }
     if (!response.download) {
@@ -407,12 +407,11 @@ export default class SauceLabs {
    */
   async _request(
     uri,
-    {method = 'GET', headers, query, json, body, responseType = 'json'} = {}
+    {method = 'GET', headers, query, json, body, responseType = 'json'} = {},
   ) {
     let url = uri;
     if (query) {
-      const qs =
-        typeof query === 'string' ? query : queryString.stringify(query);
+      const qs = typeof query === 'string' ? query : stringifyQuery(query);
       if (qs) {
         url = `${url}?${qs}`;
       }
@@ -443,7 +442,7 @@ export default class SauceLabs {
       const err = new Error(
         `Response code ${res.statusCode} (${
           http.STATUS_CODES[res.statusCode] || ''
-        })`.trim()
+        })`.trim(),
       );
       err.response = {
         body: parsedBody,
@@ -476,7 +475,7 @@ export default class SauceLabs {
      */
     if (typeof jobId !== 'string' || typeof assetName !== 'string') {
       throw new Error(
-        'You need to define a job id and the file name of the asset as a string'
+        'You need to define a job id and the file name of the asset as a string',
       );
     }
 
@@ -520,7 +519,7 @@ export default class SauceLabs {
     } catch (err) {
       throw new Error(
         `There was an error downloading asset ${assetName}: ${err.message}`,
-        {cause: err}
+        {cause: err},
       );
     }
   }
@@ -561,11 +560,11 @@ export default class SauceLabs {
         body.append(
           'file[]',
           Buffer.from(JSON.stringify(file.data)),
-          file.filename
+          file.filename,
         );
       } else {
         throw new Error(
-          'Invalid file parameter! Expected either a file path or a file object containing "filename" and "data" property.'
+          'Invalid file parameter! Expected either a file path or a file object containing "filename" and "data" property.',
         );
       }
     }
@@ -614,7 +613,7 @@ export default class SauceLabs {
         throw new Error(
           `Expected parameter for url param '${
             urlParam.name
-          }' from type '${type}', found '${typeof param}'`
+          }' from type '${type}', found '${typeof param}'`,
         );
       }
 
@@ -660,7 +659,7 @@ export default class SauceLabs {
         !isValidType(optionValue, expectedType)
       ) {
         throw new Error(
-          `Expected parameter for option '${optionName}' from type '${expectedType}', found '${typeof optionValue}'`
+          `Expected parameter for option '${optionName}' from type '${expectedType}', found '${typeof optionValue}'`,
         );
       }
 
@@ -684,7 +683,7 @@ export default class SauceLabs {
      * stringify queryParams if stringifyOptions exists within description
      */
     const modifiedParams = description.stringifyOptions
-      ? queryString.stringify(body, description.stringifyOptions)
+      ? stringifyQuery(body)
       : body;
 
     /**
@@ -705,7 +704,7 @@ export default class SauceLabs {
         `Failed calling ${propName}: ${err.message}, ${
           err.response && JSON.stringify(err.response.body)
         }`,
-        {cause: err}
+        {cause: err},
       );
     }
   }
