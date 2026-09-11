@@ -127,7 +127,7 @@ export const CLI_PARAMS = [
 ];
 const CLI_PARAM_KEYS = CLI_PARAMS.map((param) => param.name);
 const CLI_PARAM_ALIASES = CLI_PARAMS.map((param) => param.alias).filter(
-  Boolean
+  Boolean,
 );
 
 export const SAUCE_CONNECT_CLI_PARAMS = [
@@ -314,14 +314,14 @@ export const SAUCE_CONNECT_CLI_PARAMS = [
   },
 ];
 export const SC_BOOLEAN_CLI_PARAMS = SAUCE_CONNECT_CLI_PARAMS.filter(
-  (p) => p.type === 'boolean'
+  (p) => p.type === 'boolean',
 ).map((p) => p.name);
 
 const SAUCE_CONNECT_CLI_PARAM_ALIASES = SAUCE_CONNECT_CLI_PARAMS.map(
-  (param) => param.alias
+  (param) => param.alias,
 ).filter(Boolean);
 export const SC_CLI_PARAM_KEYS = SAUCE_CONNECT_CLI_PARAMS.map(
-  (param) => param.name
+  (param) => param.name,
 );
 export const SC_PARAMS_TO_STRIP = [
   ...CLI_PARAM_KEYS,
@@ -330,5 +330,5 @@ export const SC_PARAMS_TO_STRIP = [
 ];
 
 export const SC_CLOSE_TIMEOUT = 10000;
-export const SC_READY_TIMEOUT = 60000;
+export const SC_READY_TIMEOUT = 120000;
 export const SC_HEALTHCHECK_TIMEOUT = 1000;
