@@ -12,7 +12,6 @@ const protocols = [
   require('../apis/performance.json'),
   require('../apis/testcomposer.json'),
   require('../apis/datastore.json'),
-  require('../apis/autonomiq.json'),
   require('../apis/teamManagement.json'),
   require('../apis/builds.json'),
   require('../apis/testruns.json'),
