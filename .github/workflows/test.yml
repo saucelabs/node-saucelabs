@@ -8,9 +8,11 @@ env:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
+      max-parallel: 1
       matrix:
+        os: [ubuntu-latest, windows-latest]
         node-version: [22.x, 24.x]
     steps:
       - name: Clone Repository

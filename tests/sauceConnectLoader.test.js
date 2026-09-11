@@ -6,26 +6,27 @@ import compressing from 'compressing';
 
 describe('SauceConnectLoader', () => {
   describe('constructor', () => {
-    test('should have .exe path for windows platform', () => {
+    test('should use sauce-connect.exe for windows platform', () => {
       // Enable monkey patching process.platform.
       const originalPlatform = process.platform;
       let platform = 'win32';
       Object.defineProperty(process, 'platform', {get: () => platform});
 
       const scl = new SauceConnectLoader('1.2.3');
-      expect(scl.path).toContain('exe');
+      expect(scl.path.endsWith('sauce-connect.exe')).toBe(true);
 
       // Restore the original value of process.platform.
       platform = originalPlatform;
     });
 
-    test('should not have .exe path for non-windows platform', () => {
+    test('should use sc for non-windows platform', () => {
       // Enable monkey patching process.platform.
       const originalPlatform = process.platform;
       let platform = 'linux';
       Object.defineProperty(process, 'platform', {get: () => platform});
 
       const scl = new SauceConnectLoader('1.2.3');
+      expect(scl.path.endsWith('sc')).toBe(true);
       expect(scl.path).not.toContain('exe');
 
       // Restore the original value of process.platform.

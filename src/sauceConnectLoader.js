@@ -34,12 +34,12 @@ export default class SauceConnectLoader {
     this.destSC = join(
       __dirname,
       'sc-loader',
-      `.sc-v${version}-${getPlatform()}-${getCPUArch()}`
+      `.sc-v${version}-${getPlatform()}-${getCPUArch()}`,
     );
-    let scBinary = 'sc';
-    if (isWindows()) {
-      scBinary += '.exe';
-    }
+    // The Sauce Connect 5 executable is named `sauce-connect.exe` on
+    // Windows, but `sc` on macOS/Linux.
+    // See: https://github.com/saucelabs/node-saucelabs/issues/285
+    const scBinary = isWindows() ? 'sauce-connect.exe' : 'sc';
     this.path = join(this.destSC, scBinary);
   }
 

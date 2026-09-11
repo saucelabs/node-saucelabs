@@ -1,5 +1,6 @@
 import {MockAgent} from 'undici';
 import util from 'util';
+import path from 'path';
 import {spawn} from 'child_process';
 import FormData from 'form-data';
 
@@ -379,7 +380,7 @@ test('should put asset into file as binary', async () => {
     filepath: '/asset.json',
   });
   expect(fs.writeFileSync).toHaveBeenCalledWith(
-    '/asset.json',
+    path.resolve(process.cwd(), '/asset.json'),
     Buffer.from('binary-video-data'),
     {encoding: 'binary'},
   );
@@ -399,7 +400,7 @@ test('should put asset into file as json file', async () => {
     filepath: '/asset.json',
   });
   expect(fs.writeFileSync).toHaveBeenCalledWith(
-    '/asset.json',
+    path.resolve(process.cwd(), '/asset.json'),
     JSON.stringify({foo: 'bar'}, null, 4),
     {encoding: 'utf8'},
   );
