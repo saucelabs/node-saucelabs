@@ -1,4 +1,5 @@
-# SauceLabs Interface
+SauceLabs Interface
+===================
 
 The following commands are available via package or cli tool:
 
@@ -190,7 +191,7 @@ The following commands are available via package or cli tool:
         <h3>Example:</h3>
         <code>api.scDownload({ ...options })</code>
         <br><h4>Options</h4>
-        <ul>          <li><b>arch</b>: SC client host CPU architecture</li>          <li><b>os</b>: SC client host OS</li>        <li><b>version</b>: Optional. Return the newest version matching this minimal version</li>        </ul>      </td>
+        <ul>          <li><b>arch</b>: SC client host CPU arch</li>          <li><b>os</b>: SC client host OS</li>          <li><b>version</b>: SC client version</li>        </ul>      </td>
     </tr>
     <tr>
       <td>
@@ -334,174 +335,6 @@ The following commands are available via package or cli tool:
         create test result job via data store
         <h3>Example:</h3>
         <code>api.createResultJob(parameters)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>GET</b> <code>/v1/getprojects</code><br>
-        Get all enabled projects for the user account
-        <h3>Example:</h3>
-        <code>api.getProjects()</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>GET</b> <code>/v1/projects/{projectId}/getproject</code><br>
-        Get project information by projectId
-        <h3>Example:</h3>
-        <code>api.getProject(projectId)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>GET</b> <code>/v1/projects/{projectName}/getprojectbyname</code><br>
-        Get project information by project name.
-        <h3>Example:</h3>
-        <code>api.getProjectByName(projectName)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>GET</b> <code>/testSuites/{accountId}/{projectId}/getTestSuites</code><br>
-        Get test suites and associated test case  info for the testsuite for the requested project.
-        <h3>Example:</h3>
-        <code>api.getTestsuitesByProjects(accountId, projectId)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>POST</b> <code>/v1/projects/{projectId}/testcases/{testcaseId}/updateLveAndRecoverSteps</code><br>
-        It updates test steps to a test case
-        <h3>Example:</h3>
-        <code>api.updateLveAndRecoverSteps(projectId, testcaseId, steps)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>POST</b> <code>/v1/projects/{projectId}/execute</code><br>
-        It Executes a single test script.
-        <h3>Example:</h3>
-        <code>api.executeTestsuiteTest(Body, projectId)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>POST</b> <code>/v1/test_suite/create</code><br>
-        It creates a test suite.
-        <h3>Example:</h3>
-        <code>api.createTestSuite(Body)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>POST</b> <code>/v1/test_suite/{testSuiteId}/update</code><br>
-        Updates a test suite.
-        <h3>Example:</h3>
-        <code>api.updateTestSuite(testSuiteId, Body)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>POST</b> <code>/v1/testSuites/delete</code><br>
-        Deletes test suite.
-        <h3>Example:</h3>
-        <code>api.deleteTestSuites(Body)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>POST</b> <code>/testCases/associate</code><br>
-        Associates test cases with test suites.
-        <h3>Example:</h3>
-        <code>api.associateTestcases(Body)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>POST</b> <code>/testCases/create/{accountId}/{projectId}</code><br>
-        Associates test cases with test suites.
-        <h3>Example:</h3>
-        <code>api.createTestcase(accountId, projectId, Body)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>POST</b> <code>/v1/projects/{projectId}/testcases/{testcaseId}/updateSteps</code><br>
-        Update steps assigned to a testcase.
-        <h3>Example:</h3>
-        <code>api.updateTestcaseSteps(projectId, testcaseId, Body)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>POST</b> <code>/v1/testsuite/{testSuiteId}/execute</code><br>
-        It executes a test suite
-        <h3>Example:</h3>
-        <code>api.executeTestsuite(testSuiteId, Body)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>POST</b> <code>/v1/auth</code><br>
-        No description available.
-        <h3>Example:</h3>
-        <code>api.getAuth(Body)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>GET</b> <code>/v1/jobs/{jobId}/get_status</code><br>
-        It returns status of execution of test suite
-        <h3>Example:</h3>
-        <code>api.getExecutionStatus(jobId)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>GET</b> <code>/v1/projects/{projectId}/testcases</code><br>
-        Get Test Cases For ProjectId
-        <h3>Example:</h3>
-        <code>api.getTestcases(projectId)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>GET</b> <code>/testCases/getTestCaseInfo/{testcaseId}/{stepId}</code><br>
-        Get test steps for a specific test case
-        <h3>Example:</h3>
-        <code>api.getTestSteps(testcaseId, stepId)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>GET</b> <code>/v1/testcases/{testcaseId}/isgenerating</code><br>
-        generating test cases
-        <h3>Example:</h3>
-        <code>api.isGenerating(testcaseId)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>GET</b> <code>/blocks/getAll/{accountId}/{blockId}</code><br>
-        Get test steps for a specific test case block
-        <h3>Example:</h3>
-        <code>api.getTestStepBlocks(accountId, blockId)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>GET</b> <code>/v1/downloadFile</code><br>
-        It downloades the html report
-        <h3>Example:</h3>
-        <code>api.downloadReport(fileURL)</code>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>GET</b> <code>/testScriptExecutions/{executionId}/executions</code><br>
-        It returns execution details for the executing script.
-        <h3>Example:</h3>
-        <code>api.getExecutions(executionId)</code>
       </td>
     </tr>
     <tr>
