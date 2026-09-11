@@ -14,7 +14,7 @@ import {
 
 test('createHMAC', async () => {
   expect(await createHMAC('foo', 'bar', 'loo123')).toBe(
-    'b975a69fa344ed43e1035b0698788705'
+    'b975a69fa344ed43e1035b0698788705',
   );
 });
 
@@ -63,41 +63,43 @@ test('getCPUArch', () => {
 
 test('getAPIHost', () => {
   expect(getAPIHost(sauceAPI.servers, sauceAPI.basePath, {})).toBe(
-    'https://api.us-west-1.saucelabs.com/rest'
+    'https://api.us-west-1.saucelabs.com/rest',
   );
   expect(getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'eu'})).toBe(
-    'https://api.eu-central-1.saucelabs.com/rest'
+    'https://api.eu-central-1.saucelabs.com/rest',
   );
   expect(
-    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'eu-central-1'})
+    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'eu-central-1'}),
   ).toBe('https://api.eu-central-1.saucelabs.com/rest');
   expect(getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'us'})).toBe(
-    'https://api.us-west-1.saucelabs.com/rest'
+    'https://api.us-west-1.saucelabs.com/rest',
   );
   expect(
-    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'us-west-1'})
+    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'us-west-1'}),
   ).toBe('https://api.us-west-1.saucelabs.com/rest');
   expect(
-    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'us-east-4'})
+    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'us-east-4'}),
   ).toBe('https://api.us-east-4.saucelabs.com/rest');
   expect(
-    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {host: 'http://foobar.com'})
+    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {
+      host: 'http://foobar.com',
+    }),
   ).toBe('http://foobar.com/rest');
   expect(() =>
-    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'foobar'})
+    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'foobar'}),
   ).toThrow();
 
   expect(getAPIHost(sauceAPI.servers, sauceAPI.basePath, {tld: 'net'})).toBe(
-    'https://api.us-west-1.saucelabs.net/rest'
+    'https://api.us-west-1.saucelabs.net/rest',
   );
   expect(
     getAPIHost(sauceAPI.servers, sauceAPI.basePath, {
       tld: 'net',
       region: 'staging',
-    })
+    }),
   ).toBe('https://api.staging.saucelabs.net/rest');
   expect(() =>
-    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {tld: 'info'})
+    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {tld: 'info'}),
   ).toThrow();
 });
 
@@ -105,22 +107,22 @@ test('getAssetHost', () => {
   expect(getAssetHost({})).toBe('https://assets.saucelabs.com');
   expect(getAssetHost({region: 'us'})).toBe('https://assets.saucelabs.com');
   expect(getAssetHost({region: 'us-west-1'})).toBe(
-    'https://assets.saucelabs.com'
+    'https://assets.saucelabs.com',
   );
   expect(getAssetHost({region: 'eu'})).toBe(
-    'https://assets.eu-central-1.saucelabs.com'
+    'https://assets.eu-central-1.saucelabs.com',
   );
   expect(getAssetHost({region: 'eu-central-1'})).toBe(
-    'https://assets.eu-central-1.saucelabs.com'
+    'https://assets.eu-central-1.saucelabs.com',
   );
   expect(getAssetHost({region: 'us-east-4'})).toBe(
-    'https://assets.us-east-4.saucelabs.com'
+    'https://assets.us-east-4.saucelabs.com',
   );
   expect(getAssetHost({region: 'staging'})).toBe(
-    'https://assets.staging.saucelabs.net'
+    'https://assets.staging.saucelabs.net',
   );
   expect(getAssetHost({region: 'staging', tld: 'com'})).toBe(
-    'https://assets.staging.saucelabs.com'
+    'https://assets.staging.saucelabs.com',
   );
 });
 
@@ -130,7 +132,7 @@ test('toString', () => {
       username: 'foobar',
       _accessKey: '50fc1a11-3231-4240-9707-8f34682b17b0',
       _options: {region: 'us'},
-    })
+    }),
   ).toBe(`SauceLabs API Client {
   username: 'foobar',
   key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXX2b17b0',
@@ -150,31 +152,31 @@ test('isValidType', () => {
 describe('createProxyAgent', () => {
   test('returns a dispatcher for http and https proxies', () => {
     expect(createProxyAgent('http://my.proxy.com:8080')).toBeInstanceOf(
-      Dispatcher
+      Dispatcher,
     );
     expect(createProxyAgent('https://my.proxy.com:443')).toBeInstanceOf(
-      Dispatcher
+      Dispatcher,
     );
   });
 
   test('throws for unsupported protocols', () => {
     expect(() => {
       createProxyAgent('ftp://my.proxy.com:21');
-    }).toThrowError(
-      /Only http and https protocols are supported for proxying traffic./
+    }).toThrow(
+      /Only http and https protocols are supported for proxying traffic./,
     );
   });
 
   test('throws the actionable error, not a raw URL parsing error, for a schemeless proxy string', () => {
     expect(() => {
       createProxyAgent('my.proxy.com');
-    }).toThrowError(
-      /Only http and https protocols are supported for proxying traffic./
+    }).toThrow(
+      /Only http and https protocols are supported for proxying traffic./,
     );
     expect(() => {
       createProxyAgent('');
-    }).toThrowError(
-      /Only http and https protocols are supported for proxying traffic./
+    }).toThrow(
+      /Only http and https protocols are supported for proxying traffic./,
     );
   });
 });
