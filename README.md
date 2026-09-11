@@ -233,4 +233,4 @@ This module was originally created by [Dan Jenkins](https://github.com/danjenkin
 
 ## License
 
-Copyright 2012 Sauce Labs, Inc. Licensed Apache-2.0
+Copyright 2026 Sauce Labs, Inc. Licensed Apache-2.0
