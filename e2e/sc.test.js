@@ -5,7 +5,7 @@ const ID = process.env.GITHUB_RUN_ID ?? '(local)';
 // in GitHub Actions, otherwise it fails for untrusted PRs
 const SKIP_TEST = process.env.GITHUB_RUN_ID && !process.env.SAUCE_USERNAME;
 
-jest.setTimeout(120 * 1000); // 120s should be sufficient to run all SC tests
+jest.setTimeout(150 * 1000); // 150s to allow for the 120s SC ready timeout plus close overhead
 
 /**
  * unmock
@@ -45,7 +45,7 @@ test('should not be able to run Sauce Connect due to invalid credentials', async
     })
     .catch((err) => err);
   expect(err.message).toContain(
-    'Sauce Connect exited before reaching a ready state'
+    'Sauce Connect exited before reaching a ready state',
   );
 });
 
