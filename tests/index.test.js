@@ -34,10 +34,10 @@ jest.mock('child_process', () => {
 jest.mock('../src/sauceConnectLoader.js', () => {
   class SauceConnectLoaderMock {
     constructor() {
-      (this.verifyAlreadyDownloaded = jest
+      ((this.verifyAlreadyDownloaded = jest
         .fn()
         .mockReturnValue(Promise.resolve())),
-        (this.path = '/foo/bar');
+        (this.path = '/foo/bar'));
       instances.push(this);
     }
   }
@@ -111,12 +111,12 @@ test('should be inspectable', () => {
 test('should expose a webdriverEndpoint', () => {
   const api = new SauceLabs({user: 'foo', key: 'bar'});
   expect(api.webdriverEndpoint).toBe(
-    'https://ondemand.us-west-1.saucelabs.com/'
+    'https://ondemand.us-west-1.saucelabs.com/',
   );
 
   const api2 = new SauceLabs({user: 'foo', key: 'bar', region: 'eu'});
   expect(api2.webdriverEndpoint).toBe(
-    'https://ondemand.eu-central-1.saucelabs.com/'
+    'https://ondemand.eu-central-1.saucelabs.com/',
   );
 
   const api3 = new SauceLabs({
@@ -125,18 +125,18 @@ test('should expose a webdriverEndpoint', () => {
     region: 'us-east-4',
   });
   expect(api3.webdriverEndpoint).toBe(
-    'https://ondemand.us-east-4.saucelabs.com/'
+    'https://ondemand.us-east-4.saucelabs.com/',
   );
 
   const api4 = new SauceLabs({user: 'foo', key: 'bar', region: 'us-central-3'});
   expect(api4.webdriverEndpoint).toBe(
-    'https://ondemand.us-central-3.saucelabs.com/'
+    'https://ondemand.us-central-3.saucelabs.com/',
   );
 });
 
 test('should have to string tag', () => {
   expect(
-    Object.prototype.toString.call(new SauceLabs({user: 'foo', key: 'bar'}))
+    Object.prototype.toString.call(new SauceLabs({user: 'foo', key: 'bar'})),
   ).toBe('[object SauceLabs API Client]');
 });
 
@@ -166,7 +166,7 @@ test('should grab username and access key from env variable', () => {
   const api = new SauceLabsNew();
   expect(util.inspect(api)).toContain("username: 'barfoo'");
   expect(util.inspect(api)).toContain(
-    "key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXfoobar'"
+    "key: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXfoobar'",
   );
 });
 
@@ -190,7 +190,7 @@ test('should grab https proxy from env variable', () => {
 test('should throw if API command is unknown', () => {
   const api = new SauceLabs({user: 'foo', key: 'bar'});
   expect(() => api.doSomethingCool(123, {foo: 'bar'})).toThrow(
-    'Couldn\'t find API endpoint for command "doSomethingCool"'
+    'Couldn\'t find API endpoint for command "doSomethingCool"',
   );
 });
 
@@ -212,7 +212,7 @@ test('should allow to call an API method with param as option', async () => {
     .reply(200, {});
   const api = createApi({user: 'foo', key: 'bar'});
   await expect(
-    api.listJobs('someuser', {limit: 123, full: true})
+    api.listJobs('someuser', {limit: 123, full: true}),
   ).resolves.toEqual({});
 });
 
@@ -246,7 +246,7 @@ test('should allow to make a request with body param via CLI call', async () => 
   await api.updateJob(
     'foobaruser',
     '690c5877710c422d8be4c622b40c747f',
-    '{ "passed": false }'
+    '{ "passed": false }',
   );
 });
 
@@ -259,7 +259,7 @@ test('should fail if param has wrong type', async () => {
     })
     .catch((err) => err);
   expect(error.message).toBe(
-    "Expected parameter for url param 'username' from type 'string', found 'number'"
+    "Expected parameter for url param 'username' from type 'string', found 'number'",
   );
 });
 
@@ -272,7 +272,7 @@ test('should fail if option has wrong type', async () => {
     })
     .catch((err) => err);
   expect(error.message).toBe(
-    "Expected parameter for option 'limit' from type 'number', found 'string'"
+    "Expected parameter for option 'limit' from type 'number', found 'string'",
   );
 });
 
@@ -292,7 +292,7 @@ test('should handle error case', async () => {
     })
     .catch((err) => err);
   expect(error.message).toContain(
-    'Failed calling listJobs: Response code 404 (Not Found)'
+    'Failed calling listJobs: Response code 404 (Not Found)',
   );
 });
 
@@ -323,7 +323,7 @@ test('should handle errors when downloading assets', async () => {
     .downloadJobAsset('some-id', 'performance.json')
     .catch((err) => err);
   expect(error.message).toBe(
-    'There was an error downloading asset performance.json: Response code 404 (Not Found)'
+    'There was an error downloading asset performance.json: Response code 404 (Not Found)',
   );
 });
 
@@ -345,7 +345,7 @@ test('should parse text responses if headers expect json', async () => {
 test('should fail if parameters are not given properly', async () => {
   const api = new SauceLabs({user: 'foo', key: 'bar'});
   const error = new Error(
-    'You need to define a job id and the file name of the asset as a string'
+    'You need to define a job id and the file name of the asset as a string',
   );
   await expect(api.downloadJobAsset()).rejects.toEqual(error);
   await expect(api.downloadJobAsset('foo')).rejects.toEqual(error);
@@ -363,7 +363,7 @@ test('should support proxy options', async () => {
   const api = createApi({user: 'foo', key: 'bar', proxy});
   expect(api.proxy).toBe(proxy);
   await expect(
-    api.downloadJobAsset('some-id', 'performance.json')
+    api.downloadJobAsset('some-id', 'performance.json'),
   ).resolves.toBeDefined();
 });
 
@@ -378,10 +378,10 @@ test('should put asset into file as binary', async () => {
   await api.downloadJobAsset('some-id', 'video.mp4', {
     filepath: '/asset.json',
   });
-  expect(fs.writeFileSync).toBeCalledWith(
+  expect(fs.writeFileSync).toHaveBeenCalledWith(
     '/asset.json',
     Buffer.from('binary-video-data'),
-    {encoding: 'binary'}
+    {encoding: 'binary'},
   );
 });
 
@@ -398,10 +398,10 @@ test('should put asset into file as json file', async () => {
   await api.downloadJobAsset('some-id', 'performance.json', {
     filepath: '/asset.json',
   });
-  expect(fs.writeFileSync).toBeCalledWith(
+  expect(fs.writeFileSync).toHaveBeenCalledWith(
     '/asset.json',
     JSON.stringify({foo: 'bar'}, null, 4),
-    {encoding: 'utf8'}
+    {encoding: 'utf8'},
   );
 });
 
@@ -438,8 +438,8 @@ test('should allow to upload files', async () => {
   });
 
   const {instances} = new FormData();
-  expect(instances[0].append).toBeCalledTimes(4);
-  expect(instances[0].append).toBeCalledWith(
+  expect(instances[0].append).toHaveBeenCalledTimes(4);
+  expect(instances[0].append).toHaveBeenCalledWith(
     'file[]',
     {name: '/somefile', path: 'somepath'},
     {
@@ -447,17 +447,17 @@ test('should allow to upload files', async () => {
       filename: 'log.json',
       filepath: expect.any(String),
       knownLength: 123,
-    }
+    },
   );
-  expect(instances[0].append).toBeCalledWith(
+  expect(instances[0].append).toHaveBeenCalledWith(
     'file[]',
     Buffer.from('my-raw-data', 'utf8'),
-    'raw-file.json'
+    'raw-file.json',
   );
-  expect(instances[0].append).toBeCalledWith(
+  expect(instances[0].append).toHaveBeenCalledWith(
     'file[]',
     Buffer.from(JSON.stringify({foo: 'bar'})),
-    'foobar.json'
+    'foobar.json',
   );
 
   expect(result).toEqual(body);
@@ -579,9 +579,9 @@ describe('startSauceConnect', () => {
       () =>
         stdoutEmitter.emit(
           'data',
-          'Sauce Connect is up, you may start your tests'
+          'Sauce Connect is up, you may start your tests',
         ),
-      50
+      50,
     );
     await api.startSauceConnect({
       scVersion: '1.2.3',
@@ -593,7 +593,7 @@ describe('startSauceConnect', () => {
       scUpstreamProxy: 'http://example.com:8080',
       logger: (log) => logs.push(log),
     });
-    expect(spawn).toBeCalledTimes(1);
+    expect(spawn).toHaveBeenCalledTimes(1);
     expect(spawn.mock.calls).toMatchSnapshot();
 
     expect(logs).toHaveLength(1);
@@ -688,7 +688,7 @@ describe('startSauceConnect', () => {
     const api = createApi({user: 'foo', key: 'bar'});
     const sc = await api.startSauceConnect({tunnelName: 'my-tunnel'}, true);
     await sc.close();
-    expect(process.kill).toBeCalledWith(123, 'SIGINT');
+    expect(process.kill).toHaveBeenCalledWith(123, 'SIGINT');
   });
 
   it('should fail if stderr is emitted', async () => {
@@ -718,8 +718,8 @@ describe('startSauceConnect', () => {
       .catch((err) => err);
     expect(res).toEqual(
       new Error(
-        `This Sauce Connect version (${scVersion}) is no longer supported. Please use Sauce Connect 5.`
-      )
+        `This Sauce Connect version (${scVersion}) is no longer supported. Please use Sauce Connect 5.`,
+      ),
     );
   });
 });
@@ -749,7 +749,7 @@ test('should output failure msg for createJob API', async () => {
   const error = await api.createJob({framework: ''}).catch((err) => err);
 
   expect(error.message).toBe(
-    'Failed calling createJob: Response code 422 (Unprocessable Entity), "empty framework"'
+    'Failed calling createJob: Response code 422 (Unprocessable Entity), "empty framework"',
   );
 });
 
@@ -780,8 +780,8 @@ test('should get user by username fail when api fails', async () => {
     .catch((err) => err);
   expect(error).toEqual(
     new Error(
-      'There was an error while fetching user information: Failed calling getUsersV1: example, undefined'
-    )
+      'There was an error while fetching user information: Failed calling getUsersV1: example, undefined',
+    ),
   );
 });
 
@@ -877,7 +877,7 @@ test('should stringify searchParams', async () => {
     });
   const api = createApi({user: 'foo', key: 'bar'});
   await expect(
-    api.getJobsV1_1({id: ['job-1', 'job-2']})
+    api.getJobsV1_1({id: ['job-1', 'job-2']}),
   ).resolves.toBeDefined();
 });
 
@@ -904,7 +904,7 @@ test('should get HTTPValidationError when posting test-runs failed', async () =>
   const detail = failedResp.detail[0];
   expect(detail.type).toEqual('value_error.jsondecode');
   expect(detail.msg).toEqual(
-    'Expecting property name enclosed in double quotes: line 1 column 15 (char 14)'
+    'Expecting property name enclosed in double quotes: line 1 column 15 (char 14)',
   );
 });
 

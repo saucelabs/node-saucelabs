@@ -17,11 +17,11 @@ jest.mock('../src/index.js', () => {
 
 test('should be able to execute a command', async () => {
   run();
-  expect(yargs.usage).toBeCalledTimes(1);
-  expect(yargs.epilog).toBeCalledTimes(1);
-  expect(yargs.demandCommand).toBeCalledTimes(1);
-  expect(yargs.help).toBeCalledTimes(1);
-  expect(yargs.option).toBeCalledWith('user', {
+  expect(yargs.usage).toHaveBeenCalledTimes(1);
+  expect(yargs.epilog).toHaveBeenCalledTimes(1);
+  expect(yargs.demandCommand).toHaveBeenCalledTimes(1);
+  expect(yargs.help).toHaveBeenCalledTimes(1);
+  expect(yargs.option).toHaveBeenCalledWith('user', {
     alias: 'u',
     name: 'user',
     description: 'your Sauce Labs username',
@@ -32,16 +32,16 @@ test('should be able to execute a command', async () => {
   expect(description).toBe('Get all of a users jobs');
 
   handler(yargs);
-  expect(yargs.positional).toBeCalledWith('username', {
+  expect(yargs.positional).toHaveBeenCalledWith('username', {
     describe: 'username',
     type: 'string',
   });
-  expect(yargs.positional).toBeCalledWith('limit', {
+  expect(yargs.positional).toHaveBeenCalledWith('limit', {
     describe: 'Number of results to return',
     type: 'number',
     default: 50,
   });
-  expect(yargs.positional).toBeCalledWith('subaccounts', {
+  expect(yargs.positional).toHaveBeenCalledWith('subaccounts', {
     describe: 'Include subaccounts in list of jobs',
     type: 'boolean',
     default: false,
@@ -63,5 +63,5 @@ test('should be able to execute a command', async () => {
     key: 'barfookey',
     region: 'eu',
   });
-  expect(api.listJobs).toBeCalledWith('username-param', params);
+  expect(api.listJobs).toHaveBeenCalledWith('username-param', params);
 });

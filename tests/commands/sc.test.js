@@ -17,11 +17,11 @@ jest.mock('../../src/index', () => {
 test('builder', () => {
   const yargs = {option: jest.fn()};
   builder(yargs);
-  expect(yargs.option).toBeCalledWith('tunnel-name', expect.any(Object));
+  expect(yargs.option).toHaveBeenCalledWith('tunnel-name', expect.any(Object));
 });
 
 test('handler', async () => {
   const api = await handler({region: 'eu'});
   expect(api.scStarted).toBe(true);
-  expect(api.startSauceConnect).toBeCalledWith({region: 'eu'}, true);
+  expect(api.startSauceConnect).toHaveBeenCalledWith({region: 'eu'}, true);
 });
