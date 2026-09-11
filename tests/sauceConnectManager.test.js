@@ -15,7 +15,7 @@ describe('SauceConnectManager', () => {
       });
       const error = await manager.waitForReady(':8042').catch((err) => err);
       expect(error.message).toBe(
-        'Sauce Connect exited before reaching a ready state'
+        'Sauce Connect exited before reaching a ready state',
       );
     });
 
@@ -44,7 +44,7 @@ describe('SauceConnectManager', () => {
             async perform() {
               throw new Error('custom error');
             },
-          }
+          },
         );
         const error = await manager.waitForReady(':8042').catch((err) => err);
         expect(error.message).toBe('custom error');
