@@ -38,7 +38,7 @@
     "test": "run-s build test:*",
     "test:lint": "eslint ./src ./tests",
     "test:typings": "run-s test:typings:*",
-    "test:typings:setup": "mkdir -p ./tests/typings/node_modules/saucelabs && cp ./package.json ./tests/typings/node_modules/saucelabs && cp -r ./build ./tests/typings/node_modules/saucelabs",
+    "test:typings:setup": "shx mkdir -p ./tests/typings/node_modules/saucelabs && shx cp ./package.json ./tests/typings/node_modules/saucelabs && shx cp -r ./build ./tests/typings/node_modules/saucelabs",
     "test:typings:run": "cd ./tests/typings && tsc --incremental",
     "test:typings:cleanup": "rm -r ./tests/typings/node_modules",
     "test:unit": "jest --config ./jest.config.js",
@@ -75,6 +75,7 @@
     "prettier": "^3.9.6",
     "release-it": "^21.0.0",
     "rimraf": "^5.0.10",
+    "shx": "^0.4.0",
     "source-map-support": "^0.5.20",
     "swagger-typescript-codegen": "^3.2.4",
     "typescript": "^7.0.2"
