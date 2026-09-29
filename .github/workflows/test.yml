@@ -1,6 +1,9 @@
 name: Test Changes
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
 
 env:
   SAUCE_USERNAME: ${{secrets.SAUCE_USERNAME}}
