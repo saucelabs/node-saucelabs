@@ -12,7 +12,13 @@
         "region": {
           "default": "us-west-1",
           "description": "region of datacenter",
-          "enum": ["us-west-1", "eu-central-1", "us-east-4", "staging"]
+          "enum": [
+            "us-west-1",
+            "eu-central-1",
+            "us-east-4",
+            "asia-south-2",
+            "staging"
+          ]
         },
         "tld": {
           "default": "com",
