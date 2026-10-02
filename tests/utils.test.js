@@ -81,6 +81,9 @@ test('getAPIHost', () => {
     getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'us-east-4'}),
   ).toBe('https://api.us-east-4.saucelabs.com/rest');
   expect(
+    getAPIHost(sauceAPI.servers, sauceAPI.basePath, {region: 'asia-south-2'}),
+  ).toBe('https://api.asia-south-2.saucelabs.com/rest');
+  expect(
     getAPIHost(sauceAPI.servers, sauceAPI.basePath, {
       host: 'http://foobar.com',
     }),
@@ -117,6 +120,9 @@ test('getAssetHost', () => {
   );
   expect(getAssetHost({region: 'us-east-4'})).toBe(
     'https://assets.us-east-4.saucelabs.com',
+  );
+  expect(getAssetHost({region: 'asia-south-2'})).toBe(
+    'https://assets.asia-south-2.saucelabs.com',
   );
   expect(getAssetHost({region: 'staging'})).toBe(
     'https://assets.staging.saucelabs.net',

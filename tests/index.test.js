@@ -129,6 +129,15 @@ test('should expose a webdriverEndpoint', () => {
     'https://ondemand.us-east-4.saucelabs.com/',
   );
 
+  const apiAsiaSouth2 = new SauceLabs({
+    user: 'foo',
+    key: 'bar',
+    region: 'asia-south-2',
+  });
+  expect(apiAsiaSouth2.webdriverEndpoint).toBe(
+    'https://ondemand.asia-south-2.saucelabs.com/',
+  );
+
   const api4 = new SauceLabs({user: 'foo', key: 'bar', region: 'us-central-3'});
   expect(api4.webdriverEndpoint).toBe(
     'https://ondemand.us-central-3.saucelabs.com/',

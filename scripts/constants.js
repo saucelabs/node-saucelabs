@@ -26,6 +26,7 @@ export interface SauceLabsOptions {
      * - us-west-1 (short 'us')
      * - eu-central-1 (short 'eu')
      * - us-east-4
+     * - asia-south-2
      */
     region?: ${regions};
     /**
@@ -48,13 +49,13 @@ ${SAUCE_CONNECT_CLI_PARAMS.map(
   (option) => `
     /**
      * ${option.description} ${
-    option.default ? `(default: ${option.default})` : ''
-  }
+       option.default ? `(default: ${option.default})` : ''
+     }
      */
     ${option.name.replace(/-[a-z]/g, (r) => r.slice(1).toUpperCase())}?: ${
-    option.type || 'string'
-  };
-`
+      option.type || 'string'
+    };
+`,
 ).join('\n')}
 }
 `;
