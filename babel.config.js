@@ -7,6 +7,7 @@ module.exports = {
           node: 22,
         },
         shippedProposals: true,
+        modules: 'commonjs',
       },
     ],
   ],

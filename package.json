@@ -56,11 +56,11 @@
     "yargs": "^18.1.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.22.10",
-    "@babel/core": "^7.22.15",
-    "@babel/node": "^7.22.10",
-    "@babel/preset-env": "^7.22.15",
-    "@babel/register": "^7.15.3",
+    "@babel/cli": "^8.0.6",
+    "@babel/core": "^8.0.6",
+    "@babel/node": "^8.0.6",
+    "@babel/preset-env": "^8.0.6",
+    "@babel/register": "^8.0.6",
     "@eslint/js": "^10.0.1",
     "@types/node": "^26.5.0",
     "babel-plugin-source-map-support": "^2.2.0",
